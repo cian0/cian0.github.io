@@ -20,19 +20,33 @@ var vs = {
 		return  hash;
 	},
 	sendAppEvent: function(eventName, currentContext, data) {
-		var event = new api.client.AppEvent(eventName, currentContext, data);
-		connObj.send(event);
+
+		if(app.settings.simulateSendEvents){
+			var testID = $('#' + app.data.lastPageRendered + ' .tests-select').val();
+			app.tests[app.data.lastPageRendered][testID].events[eventName]();
+		} else {
+			var event = new api.client.AppEvent(eventName, currentContext, data);
+			connObj.send(event);
+		}
 	},
 	display: function(page, vars){
 
 		$.getScript( 'app/pages/' + page + '.js' )
 			.done(function( script, textStatus ) {
+
+				vs.showPage(page,vars);
+
+				app.data.lastPageRendered = page;
+
 				if(app.modules[page]){
 					app.modules[page].init(vars);
 				}
-			});
+			})
+			.fail(function(){
+				vs.showPage(page,vars);
 
-		vs.showPage(page,vars);
+				app.data.lastPageRendered = page;
+			});
 	},
 	defaultTo: function(param, defaultValue){
 		param = typeof param !== 'undefined' ? param : defaultValue;
@@ -48,7 +62,7 @@ var vs = {
 
 			//set data
 			for(var varName in vars){
-				vs.setVar(id, varName, vars[varName]);
+				vs.setVarByControllerID(id, varName, vars[varName]);
 			}
 	    }
 
@@ -109,7 +123,19 @@ var vs = {
 		$pageElement.removeClass('hidden');
 		$('html,body').animate({scrollTop: 0}, 1);
 	},
-	setVar: function(id, varName, val){
+	setVar: function(varName, val){
+		var id = app.data.lastPageRendered;
+		var scope = angular.element($('#' + id )).scope();
+		
+		if(scope){
+			scope.$apply(function(){
+				scope[varName] = val;
+	    	});
+
+	    	$('#' + id + ' .form-group[rel="' + varName + '"] textarea').html(val);
+	    }
+	},
+	setVarByControllerID: function(id, varName, val){
 		var scope = angular.element($('#' + id )).scope();
 		
 		if(scope){
@@ -140,7 +166,7 @@ var vs = {
 			var pageUnbindedVars = [];
 
 			for(var varName in vars){
-				vs.setVar(id, varName, vars[varName]);
+				vs.setVarByControllerID(id, varName, vars[varName]);
 
 				if(pageBindedVars.indexOf(varName) <= -1){
 					pageUnbindedVars.push(varName);
@@ -251,7 +277,7 @@ var vs = {
 							}
 						}
 
-						vs.showPage(targetId);
+						vs.display(targetId);
 					}
 				});
 				
@@ -270,7 +296,7 @@ var vs = {
 				$testsSelect.on({
 					'change': function(){
 						var targetTestId = $(this).val();
-						vs.showPage(id, app.tests[id][targetTestId]);
+						vs.showPage(id, app.tests[id][targetTestId].data);
 					}
 				});
 

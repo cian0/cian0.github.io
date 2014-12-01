@@ -1,6 +1,10 @@
 /* App Data */
 app.data = angular.module('App', []);
 
+app.data.controller('template', function ($scope){
+  $scope.title 		= "";
+});
+
 app.data.controller('md_login', function ($scope){
   $scope.test1 		= "apple";
   $scope.test2 		= "banana";
