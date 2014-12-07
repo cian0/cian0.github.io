@@ -2,7 +2,6 @@ var vs = {
 	init: function(){
 
 		$.when(
-		    $.getScript( 'app/settings.js' ),
 		    $.getScript( 'app/tests.js' ),
 		    $.Deferred(function( deferred ){
 		        $( deferred.resolve );
@@ -13,6 +12,8 @@ var vs = {
 				vs.developer.setPageMenuItems();
 				vs.developer.init();
 			}
+
+
 		});
 	},
 	getURLHash: function(){
@@ -21,9 +22,9 @@ var vs = {
 	},
 	sendAppEvent: function(eventName, currentContext, data) {
 
-		if(app.settings.simulateSendEvents){
+		if(app.settings.demoMode){
 			var testID = $('#' + app.data.lastPageRendered + ' .tests-select').val();
-			app.tests[app.data.lastPageRendered][testID].events[eventName]();
+			app.tests[app.data.lastPageRendered].events[eventName]();
 		} else {
 			var event = new api.client.AppEvent(eventName, currentContext, data);
 			connObj.send(event);
@@ -135,6 +136,12 @@ var vs = {
 	    	$('#' + id + ' .form-group[rel="' + varName + '"] textarea').html(val);
 	    }
 	},
+	getVar: function(varName){
+		var id = app.data.lastPageRendered;
+		var scope = angular.element($('#' + id )).scope();
+		
+		return scope[varName];
+	},
 	setVarByControllerID: function(id, varName, val){
 		var scope = angular.element($('#' + id )).scope();
 		
@@ -176,6 +183,7 @@ var vs = {
 			return pageUnbindedVars;
 		},
 		btnShowVarsHandler: function(){
+			$('#btn-showvars').removeClass('hidden');
 			$('#btn-showvars').on({
 				click: function(){
 					var obj = $(this);
@@ -222,6 +230,10 @@ var vs = {
 		        str += '<div class="col-xs-10 col-xs-offset-1 text-xl">';
 		        str += '	<form class="variables-form" role="form">';
 		        str += '		<div class="form-group">';
+				str += '			<label class="heading">DEMO MODE</label>';
+		        str += '			<input type="checkbox" class="demo-mode" />';
+		        str += '		</div>';
+		        str += '		<div class="form-group">';
 				str += '			<label class="heading">PAGE ID</label>';
 		        str += '			<select class="pages-select"></select>';
 		        str += '		</div>';
@@ -245,6 +257,23 @@ var vs = {
 		        str += '</div>';
 
 		        var $variablesFormHTML = $(str);
+
+		        //build demo mode check box
+		        $demoBox = $variablesFormHTML.find('.demo-mode');
+
+		        if(app.settings.demoMode){
+		        	$demoBox.get(0).checked = true;
+		        } else {
+		        	$demoBox.get(0).checked = false;
+		        }
+
+		        $demoBox.on({
+		        	change: function(){
+		        		var state = $(this).get(0).checked;
+
+		        		app.settings.demoMode = state;
+		        	}
+		        })
 
 
 		        //build pages select box
@@ -285,8 +314,13 @@ var vs = {
 				//build tests select box
 				var testsOptionsHTML = '';
 
-				for(var i in app.tests[id]){
-					testsOptionsHTML += '<option ' + selected + ' >' + i + '</option>';
+				console.log(app.tests);
+				console.log(id);
+
+				if(app.tests[id]){
+					for(var i in app.tests[id].data){
+						testsOptionsHTML += '<option ' + selected + ' >' + i + '</option>';
+					}
 				}
 
 				$testsSelect = $variablesFormHTML.find('.tests-select');
@@ -296,7 +330,7 @@ var vs = {
 				$testsSelect.on({
 					'change': function(){
 						var targetTestId = $(this).val();
-						vs.showPage(id, app.tests[id][targetTestId].data);
+						vs.showPage(id, app.tests[id].data[targetTestId]);
 					}
 				});
 

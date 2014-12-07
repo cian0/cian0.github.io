@@ -127,3 +127,68 @@ body {
   background-color: transparent;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+/*Patient Info Styles*/
+
+.form-container > .row { margin-bottom: 25px; }
+.form-container > .row .row { margin-bottom: 15px; }
+
+
+
+
+.form-group label {
+	font-weight: bold;
+	display: block;
+	clear: both;
+}
+
+.patient-info tr:hover {
+	cursor: pointer;
+}
+
+.fixed-table-body { background-color: #fff; }
+.fixed-table-container thead th { border-left: 1px solid #5291C1; }
+.th-inner { background-color: #255fa9; color: #fff; }
+
+/* Landscape phones and smaller - display cells that are only needed on mobile */
+@media (max-width: 480px) {
+
+/*	.patient-info tr th:not(:first-child),
+	.patient-info tr td:not(:first-child) { display: none; }
+
+	.patient-info tr th:not(:last-child),
+	.patient-info tr td:not(:last-child) { display: none; }*/
+	
+	.patient-info tr th, .patient-info tr td { display: none; }
+	.patient-info tr th:first-child,
+	.patient-info tr td:first-child,
+	.patient-info tr th:last-child,
+	.patient-info tr td:last-child,
+	.patient-info tr th:nth-child(2),
+	.patient-info tr td:nth-child(2)
+	{
+		display: table-cell;
+		empty-cells: show;
+	}
+}
+
+/* BS modal fade override */
+.modal.fade .modal-dialog {
+  -webkit-transform: translate(0, 0%);
+      -ms-transform: translate(0, 0%);
+          transform: translate(0, 0%);
+  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+     -moz-transition: -moz-transform 0.2s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+       -o-transition: -o-transform 0.2s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+          transition: transform 0.2s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+}

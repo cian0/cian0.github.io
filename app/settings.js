@@ -1,3 +1,5 @@
 app.settings = {
-	debugMode: true
+	debugMode: false,
+	demoMode: true,
+	firstPage: 'login'
 }

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="RWD Form">
+	<meta name="author" content="Eric de Felix">
+	<link rel="icon" href="favicon.ico">
+
+	<title>Otsuka Web Form</title>
+
+	<!-- Bootstrap and Font Awesome core CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- Component -->
+	<link rel="stylesheet" href="bower_components/bootstrap-table/dist/bootstrap-table.min.css">
+	<link rel="stylesheet" href="bower_components/select2/select2.css">
+
+	<!-- Custom styles for this template -->
+	<link href="css/build.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+
+	<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+	<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+	<script src="js/ie-emulation-modes-warning.js"></script>
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top navbar-blue" role="navigation">
+	<div class="container">
+		<div class="navbar-header" style="text-align: center;">
+			<h1 class="navbar-brand">Patient Information - <span>PT</span></h1>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row" style="margin-top: 70px;">
+		<div class="col-xs-12 col-md-12">
+			<h4 class="bordered-heading">Welcome, <span>Eric de Felix</span></h4>
+		</div>
+	</div>
+	<div class="row">
+
+		<div class="col-xs-12 col-md-12">
+			<!-- Table -->
+			<table id="patientinfo" class="patient-info" data-query-params="queryParams">
+			    <thead>
+				    <tr >
+				        <th data-field="padstroke">PAD/Stroke</th>
+				        <th data-field="patientname">Patient Name</th>
+				        <th data-field="datereceived">Date Received</th>
+				        <th data-field="lastupdated">Last Updated</th>
+				        <th data-field="assignedtopt">Assigned to PT</th>
+				        <th data-field="status">Status</th>
+				    </tr>
+			    </thead>
+			</table>
+			<!-- Table -->
+		</div>
+
+		<div class="modal fade" id="data_index" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						<h4 class="modal-title">PT Approval</h4>
+					</div>
+
+					<div class="modal-body">
+						<!-- Fields -->
+						<div class="well">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label for="">Type</label>
+									<span>PAD</span>
+								</div>
+
+								<div class="form-group">
+									<label for="">Patient</label>
+									<span></span>
+								</div>
+								<div class="form-group">
+									<label for="">Date Received</label>
+									<span>10/25/2014</span><span>04:43 PM</span>
+								</div>
+								<div class="form-group">
+									<label for="">Last Updated</label>
+									<span>N/A</span>
+								</div>
+								<div class="form-group">
+									<label for="">Updated By</label>
+									<span>N/A</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<div class="form-group">
+									<label for="">Assigned to PT</label>
+									<input type="text" id="select_pt" class="btn-block">
+								</div>
+								<div class="form-group">
+									<label for="">Status</label>
+									<span>Pending</span>
+								</div>
+								<div class="row form-group">
+									<div class="col-xs-12 col-md-12">
+										<button class="btn btn-default btn-block"><i class="fa fa-edit fa-lg"></i> View/Edit Initial Evaluation Form</button>
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-xs-12 col-md-12 ">
+										<button class="btn btn-default btn-block"><i class="fa fa-search fa-lg"></i> View Patient Information Details</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Fields -->
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<!-- Button -->
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+								<button class="btn btn-primary btn-block btn-lg" type="button">
+									<i class="fa fa thumbs-up fa-lg"></i>
+									Approve
+								</button>
+							</div>
+						</div>
+						<!-- Button -->
+					</div>
+
+				</div>
+			</div>
+		</div>
+		
+		<footer>
+			<div class="row form-group">
+				<div class="col-xs-12">
+					<hr>
+					<button class="btn btn-sm btn-danger pull-right" style="margin-right: 15px;" type="button">Log Out</button>
+				</div>
+			</div>
+		</footer>
+	</div>
+</div>
+
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- Component -->
+<script src="bower_components/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="bower_components/select2/select2.min.js"></script>
+
+<!-- App -->
+<script src="js/main.js"></script>
+
+</body>
+</html>

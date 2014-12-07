@@ -5,6 +5,11 @@ app.data.controller('template', function ($scope){
   $scope.title 		= "";
 });
 
+app.data.controller('login', function ($scope){
+  $scope.username 		= "test@test.com";
+  $scope.password 		= "mypass";
+});
+
 app.data.controller('md_login', function ($scope){
   $scope.test1 		= "apple";
   $scope.test2 		= "banana";
