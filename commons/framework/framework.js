@@ -53,6 +53,14 @@ var vs = {
 		param = typeof param !== 'undefined' ? param : defaultValue;
 		return param;
 	},
+	setVars: function(vars){
+		
+		var id = app.data.lastPageRendered;
+
+		for(var varName in vars){
+			vs.setVarByControllerID(id, varName, vars[varName]);
+		}
+	},
 	showPage: function(id, vars){
 
 		var scope = angular.element($('#' + id )).scope();

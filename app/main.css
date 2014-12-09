@@ -22,13 +22,28 @@ h1,h2,h3,h4,h5,h6 { font-weight: 400; }
 .text-primary { color: #255fa9; }
 .navbar-blue , .btn-primary{
 	background-color: #255fa9;
-	background-image: -moz-linear-gradient( 90deg, rgb(34,92,166) 0%, rgb(37,95,169) 100%);
-	background-image: -webkit-linear-gradient( 90deg, rgb(34,92,166) 0%, rgb(37,95,169) 100%);
-	background-image: -ms-linear-gradient( 90deg, rgb(34,92,166) 0%, rgb(37,95,169) 100%);
 }
+
+.btn-blue{
+	background-color: #255fa9;
+}
+
+.navbar-red{
+	background-color: #c00311;
+}
+
+.btn-red{
+	background-color: #c00311;
+	border: solid 1px #c00311;
+}
+
+.red .th-inner{
+	background: #c00311;	
+}
+
 .navbar-toggle { margin-left: 0; margin-right: 0; margin-top: 5px; position: absolute; left: 10px; }
-.navbar-blue .navbar-toggle { color: #fff; }
-.navbar-blue h1.navbar-brand {
+.navbar .navbar-toggle { color: #fff; }
+.navbar h1.navbar-brand {
 	margin: auto;
 	float: none !important;
 	text-align: center;

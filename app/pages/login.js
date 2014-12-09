@@ -1,7 +1,6 @@
 app.modules.login = {
 
 	init: function(vars){
-		vs.setVarByControllerID('template','title','MD Login');
 
 		loginForm();
 
