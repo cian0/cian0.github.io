@@ -29,7 +29,23 @@ app.tests = {
 		},
 		events:{
 			'user.validate': function(){
-				return true;
+
+				var sampleResponse = [];
+
+				sampleResponse.push({"response":{"code":"00","message":"Authentication successful."},"authToken":"chs3jg7cks8fur0"});
+
+				sampleResponse.push({"response":{"code":"99","message":"There was an unexpected error on the server."}});
+
+				sampleResponse.push({"response":{"code":"01","message":"Invalid input for field: 'email'"}});
+
+				sampleResponse.push({"response":{"code":"02","message":"Missing required field: 'lastname'"}});
+
+				sampleResponse.push({"response":{"code":"201","message":"Username/Password is incorrect."}});
+
+				var choice = vs.developer.createTestResponsePicker(sampleResponse);
+
+				return choice;
+
 			}
 		}
 	},

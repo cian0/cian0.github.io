@@ -41,6 +41,21 @@
     <link rel="stylesheet" type="text/css" href="commons/framework/framework.css" />
   </head>
   <body>
+    <div class="modal fade" id="generic_popup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            Generic Popup
+          </div>
+          <div class="modal-body">
+            /* Some content here */
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>    
+
     <div class="navbar navbar-fixed-top navbar-{{theme_color}}" role="navigation">
       <div class="container">
         <div class="navbar-header" style="text-align: center;">
@@ -62,10 +77,10 @@
                           <img src="app/img/logo-otsuka.jpg" alt="Otsuka" class="img-responsive center-block img-logo">
                           <div class="login-form-fields">
                               <div class="form-group">
-                                  <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Username" value="{{username}}">
+                                  <input required name="email" id="email" class="form-control input-lg" placeholder="Username" value="{{username}}">
                               </div>
                               <div class="form-group">
-                                  <input type="password" name="password" id="password" class="form-control input-lg login-field-password password" placeholder="Password" value="{{password}}">
+                                  <input required type="password" name="password" id="password" class="form-control input-lg login-field-password password" placeholder="Password" value="{{password}}">
                               </div>
                             </div>
                             <button type="submit" id="btn-login" class="btn btn-primary btn-lg btn-block btn-{{theme_color}}">Log In</button>
@@ -103,7 +118,7 @@
                   </thead>
               </table>
               <!-- Table -->
-            </div>
+            </div>                      
 
             <div class="modal fade" id="patientinfo-details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg">
@@ -2443,6 +2458,7 @@
     <script type="text/javascript" src="commons/framework/framework.js"></script>
     <script type="text/javascript" src="app/integrate.js"></script>
     <script type="text/javascript" src="app/app.js"></script>
+    <script type="text/javascript" src="app/commons.js"></script>
     <script type="text/javascript" src="app/settings.js"></script>
     <script type="text/javascript" src="app/data.js"></script>
     <script src="commons/hideShowPassword/hideShowPassword.min.js"></script>

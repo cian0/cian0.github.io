@@ -175,6 +175,29 @@ var vs = {
 			vs.developer.btnShowVarsHandler();
 			vs.developer.buildVars("ThankYou");
 		},
+		createTestResponsePicker: function(selection){
+			var selectStr = "You are currently on Dev Mode.\n\n";
+			selectStr += "Please choose a sample response:\n\n";
+
+
+			for(var i = 0; i < selection.length; i++){
+				selectStr += selection[i].response['code'] + ' - ' + selection[i].response['message'] + '\n';
+			}
+
+			selectStr += "\n\n";
+
+			var choice = prompt(selectStr);
+
+			if(choice){
+				for(var i = 0; i < selection.length; i++){
+					if(selection[i].response['code'] == choice){
+						return(selection[i]);
+					}
+				}
+			}
+
+
+		},
 		getPageUnbindedVars: function(id, vars){
 
 			var pageBindedVars = vs.developer.getPageBindedVars(id);
