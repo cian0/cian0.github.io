@@ -32,7 +32,150 @@ app.modules.patient_information = {
 		});
 
 
-		
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Submitted"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"For Approval"
+			});			
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Assigned"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Pending"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Submitted"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"For Approval"
+			});			
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Assigned"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Pending"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Submitted"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"For Approval"
+			});			
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Assigned"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Pending"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Submitted"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"For Approval"
+			});			
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"PAD",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Assigned"
+			});	
+			$('#patientinfo').bootstrapTable('append', {
+				"padstroke":"Stroke",
+				"patientname":"test",
+				"datereceived":"12312",
+				"lastupdated":"7",
+				"updatedby":"98",
+				"assignedtopt":"1231",
+				"status":"Pending"
+			});			
 			$('#patientinfo').bootstrapTable('append', {
 				"padstroke":"PAD",
 				"patientname":"test",
