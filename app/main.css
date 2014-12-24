@@ -174,6 +174,10 @@ body {
 .fixed-table-body { background-color: #fff; }
 .fixed-table-container thead th { border-left: 1px solid #5291C1; }
 .th-inner { background-color: #255fa9; color: #fff; }
+.logout { position: absolute; right: 15px;}
+.margin-bottom {
+	margin-bottom: 25px;
+}
 
 /* Landscape phones and smaller - display cells that are only needed on mobile */
 @media (max-width: 480px) {
@@ -196,6 +200,8 @@ body {
 		empty-cells: show;
 	}
 }
+
+.modal-footer button.btn { margin-top: 10px; margin-bottom: 10px; }
 
 /* BS modal fade override */
 .modal.fade .modal-dialog {

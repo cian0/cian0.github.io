@@ -17,8 +17,8 @@ var vs = {
 		});
 	},
 	getURLHash: function(){
-		var hash = window.location.hash.replace("#!/",'');
-		return  hash;
+		var hash = window.location.hash.replace("#!/",'').split('?');
+		return  hash[0];
 	},
 	sendAppEvent: function(eventName, currentContext, data) {
 
@@ -26,11 +26,31 @@ var vs = {
 			var testID = $('#' + app.data.lastPageRendered + ' .tests-select').val();
 			app.tests[app.data.lastPageRendered].events[eventName]();
 		} else {
+
 			var event = new api.client.AppEvent(eventName, currentContext, data);
 			connObj.send(event);
 		}
 	},
+	getParameters: function(name) {
+		var hash = window.location.hash.replace("#!/",'').split('?');
+
+
+	    var urlParams = {};
+
+	    if(hash[1]){
+			var sURLVariables = hash[1].split('&');
+
+		    for (var i = 0; i < sURLVariables.length; i++){
+		        var sParameterName = sURLVariables[i].split('=');
+		        urlParams[sParameterName[0]] = sParameterName[1];;
+		    }
+
+			return urlParams;
+	    }
+	},
 	display: function(page, vars){
+
+		var getParams = vs.getParameters();
 
 		$.getScript( 'app/pages/' + page + '.js' )
 			.done(function( script, textStatus ) {
@@ -40,7 +60,7 @@ var vs = {
 				app.data.lastPageRendered = page;
 
 				if(app.modules[page]){
-					app.modules[page].init(vars);
+					app.modules[page].init(vars, getParams);
 				}
 			})
 			.fail(function(){
@@ -52,6 +72,12 @@ var vs = {
 	defaultTo: function(param, defaultValue){
 		param = typeof param !== 'undefined' ? param : defaultValue;
 		return param;
+	},
+	setVarsByControllerID: function(id, vars){
+
+		for(var varName in vars){
+			vs.setVarByControllerID(id, varName, vars[varName]);
+		}
 	},
 	setVars: function(vars){
 		

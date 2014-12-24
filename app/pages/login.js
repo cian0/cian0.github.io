@@ -1,12 +1,26 @@
 app.modules.login = {
 
-	init: function(vars){
+	init: function(vars, req){
 
 		loginForm();
 
+		switch(req['status']){
+			case 'registered':
+				app.commons.showDialog({
+					body: "You have successfully registered. You may now log in below."
+				});
+			break;
+			case 'logged-out':
+				$.cookie('auth_token', '', { expires: 7, path: '/' });
+				app.commons.showDialog({
+					body: "You have been logged out."
+				});
+			break;
+		}
+
 		function loginForm(){
 
-			$('#login-form').on({
+			$('#login-form').off('submit').on({
 				submit: function(){
 					var response = api.get('user.validate');
 
@@ -24,14 +38,6 @@ app.modules.login = {
 							})
 						break;
 					}
-
-					/*
-					if(response){
-						window.location.hash= "#!/patient_information";
-					} else {
-						alert('Not authorized!');
-					}
-					*/
 				}
 			})
 		}

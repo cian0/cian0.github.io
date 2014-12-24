@@ -9,19 +9,19 @@ license: MIT
 author: bootply.com
 */
 
-#sidebar-scrollspy.affix-top {
+.sidebar-scrollspy.affix-top {
 	position: absolute;
 	margin-top:30px;
 }
 
-#sidebar-scrollspy.affix {
+.sidebar-scrollspy.affix {
 	position: fixed;
 	top:70px;
 }
 
-#sidebar-scrollspy li.active {
+.sidebar-scrollspy li.active {
 	border-right: 3px solid #d3d3d3;
 }
 
-@media  (max-width: 991px) { #sidebar-scrollspy.affix { width: 150px; } }
-@media  (max-width: 767px) { #sidebar-scrollspy.affix { width: 150px; } .nav>li>a {font-size: 0.8em;} }
+@media  (max-width: 991px) { .sidebar-scrollspy.affix { width: 150px; } }
+@media  (max-width: 767px) { .sidebar-scrollspy.affix { width: 150px; } .nav>li>a {font-size: 0.8em;} }

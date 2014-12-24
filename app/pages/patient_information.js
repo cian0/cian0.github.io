@@ -19,6 +19,7 @@ app.modules.patient_information = {
 
 		vs.setVarByControllerID('template','theme_color', theme_color);
 		vs.setVar('theme_color', theme_color);
+		vs.setVar('user_type', user_type);
 		
 
 		$('#patientinfo').bootstrapTable({
@@ -90,7 +91,12 @@ app.modules.patient_information = {
 		}
 
 		$(document).on('click', '#patientinfo tr', function(event) {
-			$('#data_index').modal('show');
+			
+			$('#data_index').modal({
+				show: true,
+				keyboard: false,
+				backdrop: 'static'
+			});
 
 			var $tr = $(this);
 			var dataArray = [];
@@ -110,17 +116,18 @@ app.modules.patient_information = {
 				ptinfo_last_updated: dataArray[3]
 			});
 
-					$(document).on('click', '#btn-initial-evaluation-form', function(event) {
-						$('#data_index').modal('hide');	
-						switch(type){
-							case 'PAD':
-								window.location.hash= "#!/initial_evaluation_form_pad";
-							break;
-							case 'Stroke':
-								window.location.hash= "#!/initial_evaluation_form";
-							break;
-						}
-					});			
+
+			$(document).on('click', '#btn-initial-evaluation-form', function(event) {
+				$('#data_index').modal('hide');	
+				switch(type){
+					case 'PAD':
+						window.location.hash= "#!/initial_evaluation_form_pad";
+					break;
+					case 'Stroke':
+						window.location.hash= "#!/initial_evaluation_form";
+					break;
+				}
+			});			
 
 			
 
@@ -156,6 +163,17 @@ app.modules.patient_information = {
 			$('#data_index').modal('hide');
 			$('#patientinfo-details').modal('show');
 		});
+
+		$(document).on('click', '#view_patient_info', function(event) {
+			$('#data_index').modal('hide');
+			$('#patient_info').modal('show');
+		});
+
+		$(document).on('click', '#back_patient_info', function(event) {
+			$('#data_index').modal('show');
+			$('#patient_info').modal('hide');
+		});
+
 
 
 		var data=[

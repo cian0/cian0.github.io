@@ -1,12 +1,15 @@
 app.modules.initial_evaluation_form_pad = {
 
 	init: function(vars){
+
+		vs.setVarByControllerID('template','title','Final Evaluation Form');
+
 		$('[data-toggle="offcanvas"]').click(function () {
 			$('.row-offcanvas').toggleClass('active');
 		});
 
 		/* activate sidebar */
-		$('#sidebar-scrollspy').affix({ offset: { top: 50 } });
+		$('.sidebar-scrollspy').affix({ offset: { top: 50 } });
 
 		/* activate scrollspy menu */
 		var $body   = $(document.body);

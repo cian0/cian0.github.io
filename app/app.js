@@ -17,5 +17,8 @@ var api = {
 	},
 	'user.validate': function(){
 		return false;
-	}
+	},
+	'user.register': function(){
+		return false;
+	},
 }

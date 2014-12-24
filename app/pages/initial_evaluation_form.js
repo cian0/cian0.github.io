@@ -1,14 +1,15 @@
 app.modules.initial_evaluation_form = {
 
 	init: function(vars){
-		vs.setVarByControllerID('template','title','Initial Evaluation Form');
 
+		vs.setVarByControllerID('template','title','Initial Evaluation Form');
+		
 		$('[data-toggle="offcanvas"]').click(function () {
 			$('.row-offcanvas').toggleClass('active');
 		});
 
 		/* activate sidebar */
-		$('#sidebar-scrollspy').affix({ offset: { top: 50 } });
+		$('.sidebar-scrollspy').affix({ offset: { top: 50 } });
 
 		/* activate scrollspy menu */
 		var $body   = $(document.body);
@@ -66,6 +67,6 @@ app.modules.initial_evaluation_form = {
 		$('#select_non_ambulatory').change(function() {
 			$('#assistive_device_choices').hide();
 			$('#fa_ambulation_non_ambulatory').prop('checked',true);
-		});		
+		});	
 	}
 }

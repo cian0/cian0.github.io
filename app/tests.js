@@ -49,6 +49,35 @@ app.tests = {
 			}
 		}
 	},
+	'register': {
+		events: {
+			'user.register': function(){
+
+				var sampleResponse = [];
+
+				sampleResponse.push({"response":{"code":"00","message":"Operation successful."}});
+
+				sampleResponse.push({"response":{"code":"99","message":"There was an unexpected error on the server."}});
+
+				sampleResponse.push({"response":{"code":"01","message":"Invalid input for field: 'email'"}});
+
+				sampleResponse.push({"response":{"code":"02","message":"Missing required field: 'lastname'"}});
+
+				sampleResponse.push({"response":{"code":"101","message":"Passcode doesn't match user-type."}});
+
+				sampleResponse.push({"response":{"code":"102","message":"Username already in use."}});
+
+				sampleResponse.push({"response":{"code":"103","message":"City not found on database."}});
+
+				sampleResponse.push({"response":{"code":"104","message":"Invalid passcode."}});
+
+				var choice = vs.developer.createTestResponsePicker(sampleResponse);
+
+				return choice;
+
+			}
+		}
+	},
 	'patient_info': {
 		data: {
 			test1: {
