@@ -1,0 +1,168 @@
+      <section id="patient_information" ng-controller="patient_information" class="page container">
+        <div class="row" style="margin-top: 70px;">
+          <div class="col-xs-12 col-md-12">
+            <a id="btn-logout">
+              <button class="btn btn-primary logout" type="button"><i class="fa fa-sign-out"></i>Log Out</button>
+            </a>
+            <h4 class="bordered-heading">Welcome, <span>{{name}}</span></h4>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-xs-12 col-md-12">
+            <!-- Table -->
+            <table id="patientinfo" class="patient-info" data-query-params="queryParams">
+                <thead>
+                      <th data-field="padstroke">PAD/Stroke</th>
+                      <th data-field="patientname">Patient Name</th>
+                      <th data-field="datereceived">Date Received</th>
+                      <th data-field="lastupdated">Last Updated</th>
+                      <th data-field="updatedby">Updated By</th>
+                      <th data-field="assignedtopt">Assigned to <span style="text-transform: uppercase">{{user_type}}</span></th>
+                      <th data-field="status">Status</th>
+                </thead>
+            </table>
+            <!-- Table -->
+          </div>
+
+          <div class="modal" id="data_index" tabindex="-1" role="dialog" aria-labelledby="PT_Record" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h3 class="modal-title text-primary">PT Approval</h3>
+                </div>
+
+                <div class="modal-body">
+                  <!-- Fields -->
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-group">
+                        <label for="">Type</label>
+                        <span>{{ptinfo_type}}</span>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="">Patient</label>
+                        <span>{{ptinfo_name}}</span>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Date Received</label>
+                        <span>{{ptinfo_date_received}}</span>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Last Updated</label>
+                        <span>{{ptinfo_last_updated}}</span>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Updated By</label>
+                        <span>{{ptinfo_updated_by}}</span>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-group">
+                        <label for="">Assigned to PT</label>
+                        <input type="text" id="select_pt" class="btn-block">
+                      </div>
+                      <div class="form-group">
+                        <label for="">Status</label>
+                        <span>Pending</span>
+                      </div>
+                      <div class="row form-group">
+                        <div class="col-xs-12 col-md-12">
+                          <button id="btn-initial-evaluation-form" class="btn btn-default btn-block" type="button"><i class="fa fa-edit fa-lg"></i> View/Edit Initial Evaluation Form</button>
+                        </div>
+                      </div>
+                      <div class="row form-group">
+                        <div class="col-xs-12 col-md-12 ">
+                          <button class="btn btn-default btn-block" id="view_patient_info" data-keyboard="false" data-backdrop="static" type="button"><i class="fa fa-search fa-lg"></i> View Patient Information Details</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Fields -->
+                </div>
+
+                <div class="modal-footer">
+                  <!-- Button -->
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                      <button id="btn-approve" class="btn btn-primary btn-block btn-lg" type="button">
+                        Approve
+                      </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <button id="btn-close-patient-info" class="btn btn-primary btn-block btn-lg" type="button" data-dismiss="modal">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Button -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="modal" id="patient_info" tabindex="-1" role="dialog" aria-labelledby="PT_Record" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h3 class="modal-title text-primary">Patient Information</h3>
+                </div>
+
+                <div class="modal-body">
+                  <h4 class="bordered-heading text-primary">Patient Information</h4>
+                  <div class="row margin-bottom">
+                    <div class="col-xs-4">
+                      <label class="btn-block">First Name</label><span>{{ptdetails.profile.firstname}}</span>
+                    </div>
+                    <div class="col-xs-4">
+                      <label class="btn-block">Last Name</label><span>{{ptdetails.profile.lastname}}</span>
+                    </div>
+                    <div class="col-xs-4">
+                      <label class="btn-block">Middle Initial</label><span>{{ptdetails.profile.mi}}.</span>
+                    </div>
+                  </div>
+                  <h4 class="bordered-heading text-primary">Clinical Diagnosis</h4>
+                  <div class="row margin-bottom">
+                    <div class="col-xs-12">
+                      <label class="btn-block">Diagnostic Test</label> <strong><span>{{ptdetails.clinicalDiagnosis}}</span></strong>
+                    </div>
+                  </div>
+                  <h4 class="bordered-heading text-primary">Details of Clinical Diagnosis</h4>
+                  <div class="row margin-bottom">
+                    <div ng-repeat="detail in ptdetails.details" class="col-xs-12">
+                      <label class="btn-block">{{detail.title}}</label>
+                      <ul class="fa-ul">
+                        <li  ng-repeat="value in detail.values"><i class="fa-li fa fa-angle-right"></i> <span>{{value}}</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <!-- Button -->
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                      <button class="btn btn-primary btn-block btn-lg" type="button" id="back_patient_info">
+                        Back to PT Record
+                      </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <button class="btn btn-primary btn-block btn-lg" type="button" data-dismiss="modal">
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Button -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        </div>
+      </section>

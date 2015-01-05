@@ -17,5 +17,32 @@ app.commons = {
 		}
 
 		$('#generic_popup').modal('show');
+	},
+	'logout': function(){
+
+		var response = api.get('destroyAuthToken', {
+			"username" : vs.getVar('username'),
+			"password" : vs.getVar('password'),
+			"usertype" : vs.getVar('user_type')
+		});
+
+		if(response){
+			switch(response.response.code){
+				case '00':
+					var user_type = $.cookie('user_type');
+					window.location.hash= "#!/login?type=" + user_type + "&status=logged-out";
+				break;
+				case '99':
+				case '01':
+				case '02':
+				case '201':
+					app.commons.showDialog({
+						body: response.response.message
+					})
+				break;
+			}						
+		}
+
+		return false;	
 	}
 }

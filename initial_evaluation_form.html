@@ -1,0 +1,1958 @@
+    <div id="initial_evaluation_form" ng-controller="initial_evaluation_form" class="page container">
+      <div class="row row-offcanvas row-offcanvas-left">
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas leftCol" id="sidebar" role="navigation">
+          <nav class="navbar-collapse" role="navigation" >
+            <ul class="nav nav-stacked" id="sidebar-scrollspy">
+              <li class="toggle" onclick="showSection('initial_eval')">
+                <a>
+                  <small class="step-label">STEP 1</small>
+                  <span class="badge badge-nav">Done</span>
+                  <h5 class="step-header">Initial Evaluation</h5>
+                </a>
+
+                <!-- Display if Initial Evaluation is enabled -->
+                <ul class="nav nav-stacked initial_eval section">
+                  <li><a href="#initial_eval_subjective" tabIndex="-1"><h5 class="bordered-heading-no-margin">Subjective</h5></a></li>
+                  <li><a href="#initial_eval_chiefcomplaints" tabIndex="-1">Chief Complaints</a></li>
+                  <li><a href="#initial_eval_objective" tabIndex="-1"><h5 class="bordered-heading-no-margin">Objective</h5></a></li>
+                  <li><a href="#initial_eval_bp" tabIndex="-1">Blood Pressure & Pulse Rate</a></li>
+                  <li><a href="#initial_eval_med" tabIndex="-1">Medications</a></li>
+                  <li><a href="#initial_eval_loc" tabIndex="-1">Level of Consciousness</a></li>
+                  <li><a href="#initial_eval_rom" tabIndex="-1">Range of Motion (ROM)</a></li>
+                  <li><a href="#initial_eval_fmt" tabIndex="-1">Functional Muscle Testing (FMT)</a></li>
+                  <li><a href="#initial_eval_fa" tabIndex="-1">Functional Activities</a></li>
+                  <li><a href="#initial_eval_assess" tabIndex="-1"><h5 class="bordered-heading-no-margin">Assessment</h5></a></li>
+                  <li><a href="#initial_eval_plan" tabIndex="-1"><h5 class="bordered-heading-no-margin">Plan</h5></a></li>
+                  <li><a href="#initial_eval_goals" tabIndex="-1"><h5 class="bordered-heading-no-margin">Goals</h5></a></li>
+                </ul>
+              </li>
+
+              <li class="toggle" onclick="showSection('final_eval')">
+              <!-- use class 'disabled' on li.toggle if the step has not been done -->
+                <a>
+                  <small class="step-label">STEP 2</small>
+                  <span class="badge badge-nav">In Progress</span>
+                  <h5 class="step-header">Final Evaluation</h5>
+                </a>
+
+                <!-- Display if Initial Evaluation is enabled -->
+                <ul class="nav nav-stacked final_eval section">
+                  <li><a href="#final_eval_subjective" tabIndex="-1"><h5 class="bordered-heading-no-margin">Subjective</h5></a></li>
+                  <li><a href="#final_eval_chiefcomplaints" tabIndex="-1">Chief Complaints</a></li>
+                  <li><a href="#final_eval_objective" tabIndex="-1"><h5 class="bordered-heading-no-margin">Objective</h5></a></li>
+                  <li><a href="#final_eval_bp" tabIndex="-1">Blood Pressure & Pulse Rate</a></li>
+                  <li><a href="#final_eval_med" tabIndex="-1">Medications</a></li>
+                  <li><a href="#final_eval_loc" tabIndex="-1">Level of Consciousness</a></li>
+                  <li><a href="#final_eval_rom" tabIndex="-1">Range of Motion (ROM)</a></li>
+                  <li><a href="#final_eval_fmt" tabIndex="-1">Functional Muscle Testing (FMT)</a></li>
+                  <li><a href="#final_eval_fa" tabIndex="-1">Functional Activities</a></li>
+                  <li><a href="#final_eval_assess" tabIndex="-1"><h5 class="bordered-heading-no-margin">Assessment</h5></a></li>
+                  <li><a href="#final_eval_goals" tabIndex="-1"><h5 class="bordered-heading-no-margin">Goals</h5></a></li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div><!--/span-->
+
+
+        <div class="col-xs-12 col-sm-9">
+
+          <div class="row">
+            <button class="btn btn-xs btn-primary pull-right" onclick="showMessage()">Test Message: Remove this later</button>
+            <button class="btn btn-xs btn-primary pull-right" onclick="showLoading()">Test Loading button: Remove this later</button>
+            <div class="col-xs-12">
+              <h2 class="text-primary">Patient Information</h2>
+            </div>
+
+            <div class="col-xs-12">
+              <div class="well well-gray">
+                <div class="btn-block"><label class="form-label-static" for="patient_name">Patient's Name</label><span>Eric de Felix</span></div>
+                <div class="btn-block"><label class="form-label-static" for="age">Age</label><span>31</span></div>
+                <div class="btn-block"><label class="form-label-static" for="gender">Gender</label><span>Male</span></div>
+                <div class="btn-block"><label class="form-label-static" for="birthday">Date of Birth</label><span>June 26, 1983</span></div>
+                <div class="btn-block"><label class="form-label-static" for="conctacnumber">Contact Number</label><span>239-72-01</span></div>
+                <div class="btn-block"><label class="form-label-static" for="status">Civil Status</label><span>Single</span></div>
+                <div class="btn-block"><label class="form-label-static" for="address">Address</label><span>Kasipagan St. Mandaluyong City</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Initial Evaluation -->
+          <form action="" class="form-container initial_eval section">
+            <h2 class="text-primary">Initial Evaluation 
+              <span class="badge badge-done" data-toggle="tooltip" data-placement="right" title="This section is Done">Done</span>
+            </h2>
+                    
+            <!-- Subjective -->
+            <div class="row">
+              <div class="col-xs-12"><h3 id="initial_eval_subjective" class="bordered-heading text-primary">Subjective</h3></div>
+              <div class="col-xs-12"><label id="initial_eval_chiefcomplaints"><i class="fa fa-circle "></i> Chief Complaints</label></div>
+
+              <div class="col-md-2">
+                <div class="row">
+                  <div class="col-md-12 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary" style="min-height: 30px;">
+                                  <input type="checkbox" id="ie_pain" value="option1">
+                                  <label for="ie_pain" class="text-success"> Pain </label>
+                              </div>
+                  </div>
+                  <div class="col-md-12 col-sm-8 col-xs-9">
+                    <small>* Pain Scale</small>
+                    <input type="number" max="10" min="1" value="1" class="form-control" placeholder="Pain Scale">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_pain_ue" value="upper_extremity">
+                                  <label for="ie_pain_ue"> Upper Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary pull-left">
+                                  <input type="checkbox" id="ie_pain_le" value="upper_extremity">
+                                  <label for="ie_pain_le"> Lower Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="row">
+                  <div class="col-md-12 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_muscle_weakness" value="option1">
+                                  <label for="ie_muscle_weakness" class="text-success"> Muscle Weakness </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_muscle_weakness_ue" value="upper_extremity">
+                                  <label for="ie_muscle_weakness_ue"> Upper Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary pull-left">
+                                  <input type="checkbox" id="ie_muscle_weakness_le" value="upper_extremity">
+                                  <label for="ie_muscle_weakness_le"> Lower Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2">
+                <div class="row">
+                  <div class="col-md-12 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_others" value="option1">
+                                  <label for="ie_others" class="text-success"> Others </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="row"><div class="col-xs-12"><textarea name="ie_others" id="others" rows="4" class="form-control"></textarea></div></div>
+              </div>
+            </div>
+            <!-- Subjective -->
+
+            <!-- Objective -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3 id="initial_eval_objective" class="bordered-heading text-primary">Objective</h3>
+              </div>
+              <div class="col-xs-6 col-md-6">
+                <label id="initial_eval_bp" for="blood_pressure">Blood Pressure <sup>(mmHg)</sup></label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="col-xs-6 col-md-6">
+                <label for="ie_blood_pressure">Pulse Rate <sup>(bpm)</sup></label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-md-12">
+                <label id="initial_eval_med" for="medications"><i class="fa fa-circle "></i> Medications</label>
+                <div class="table-responsive">
+                  <table class="table table-condensed">
+                    <thead>
+                      <tr>
+                        <th><button onclick="addNewRow(this)" class="btn btn-success btn-sm" type="button"><i class="fa fa-plus"></i> Add New Line</button></th>
+                        <th>Dosage</th>
+                        <th>Frequency</th>
+                        <th>AM</th>
+                        <th>NN</th>
+                        <th>PM</th>
+                        <th width="50px;"></th>
+                      </tr>
+                    </thead>
+                    <tbody class="med_body">
+                      <tr>
+                        <td><input type="text" class="form-control" style="min-width: 250px;"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <label id="initial_eval_loc"><i class="fa fa-circle "></i> Level of Consciousness</label>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_alert" value="alert" name="ie_loc1">
+                                  <label for="ie_alert"> Alert </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_lethargic" value="lethargic" name="ie_loc1">
+                                  <label for="ie_lethargic"> Lethargic </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_obtunded" value="obtunded" name="ie_loc1">
+                                  <label for="ie_obtunded"> Obtunded </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_stupor" value="stupor" name="ie_loc1">
+                                  <label for="ie_stupor"> Stupor </label>
+                              </div>  
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_coma" value="coma" name="ie_loc1">
+                                  <label for="ie_coma"> Coma </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_cooperative" value="cooperative" name="ie_loc2">
+                                  <label for="ie_cooperative"> Cooperative </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_uncooperative" value="uncooperative" name="ie_loc2">
+                                  <label for="ie_uncooperative"> Uncooperative </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_coherent" value="coherent" name="ie_loc3">
+                                  <label for="ie_coherent"> Coherent </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_incoherent" value="incoherent" name="ie_loc3">
+                                  <label for="ie_incoherent"> Incoherent </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12">
+                <label id="initial_eval_rom"><i class="fa fa-circle "></i> Range of Motion (ROM)</label>
+              </div>
+              <div class="col-xs-12">
+                <h6>Upper Extremity</h6>
+                <div class="row">
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_ue_from" value="ue_from">
+                                  <label for="ie_ue_from"> Full Range of Motion </label>
+                              </div>
+                  </div>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_ue_wlom" value="ue_wlom">
+                                  <label for="ie_ue_wlom"> with LOM (pls.specify) </label>
+                              </div>
+                              <input type="text" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <h6>Lower Extremity</h6>
+                <div class="row">
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_le_from" value="le_from">
+                                  <label for="ie_le_from"> Full Range of Motion </label>
+                              </div>
+                  </div>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="ie_le_wlom" value="le_wlom">
+                                  <label for="ie_le_wlom"> with LOM (pls.specify) </label>
+                              </div>
+                              <input type="text" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12"><label id="initial_eval_fmt"><i class="fa fa-circle "></i> Functional Muscle Testing (FMT)</label></div>
+              <div class="col-xs-12">
+
+                <!-- Upper Ex -->
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Upper Extremity</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Functional</small></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Weak Functional</small> </div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Non-functional</small> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Shoulder Shrug</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_shoulder_shrug_good" value="ue_shoulder_shrug_good" name="ie_ue_shoulder_shrug">
+                                  <label for="ie_ue_shoulder_shrug_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_shoulder_shrug_fair" value="ue_shoulder_shrug_fair" name="ie_ue_shoulder_shrug">
+                                  <label for="ie_ue_shoulder_shrug_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_shoulder_shrug_poor" value="ue_shoulder_shrug_poor" name="ie_ue_shoulder_shrug">
+                                  <label for="ie_ue_shoulder_shrug_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Reach opposite shoulder</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_reach_good" value="ue_reach_good" name="ie_ue_reach">
+                                  <label for="ie_ue_reach_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_reach_fair" value="ue_reach_fair" name="ie_ue_reach">
+                                  <label for="ie_ue_reach_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_reach_poor" value="ue_reach_poor" name="ie_ue_reach">
+                                  <label for="ie_ue_reach_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Bring hand to mouth</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_bring_good" value="ue_bring_good" name="ie_ue_bring">
+                                  <label for="ie_ue_bring_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_bring_fair" value="ue_bring_fair" name="ie_ue_bring">
+                                  <label for="ie_ue_bring_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_bring_poor" value="ue_bring_poor" name="ie_ue_bring">
+                                  <label for="ie_ue_bring_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Close and open hand</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_close_good" value="ue_close_good" name="ie_ue_close">
+                                  <label for="ie_ue_close_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_close_fair" value="ue_close_fair" name="ie_ue_close">
+                                  <label for="ie_ue_close_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_ue_close_poor" value="ue_close_poor" name="ie_ue_close">
+                                  <label for="ie_ue_close_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <!-- Upper Ex -->
+                <hr>
+                <!-- Lower Ex -->
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Lower Extremity</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Functional</small></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Weak Functional</small> </div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Non-functional</small> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Flex hip in sitting</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_flex_good" value="le_flex_good" name="ie_le_flex">
+                                  <label for="ie_le_flex_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_flex_fair" value="le_flex_fair" name="ie_le_flex">
+                                  <label for="ie_le_flex_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_flex_poor" value="le_flex_poor" name="ie_le_flex">
+                                  <label for="ie_le_flex_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Flexion of knee in sitting</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_flexion_good" value="le_flexion_good" name="ie_le_flexion">
+                                  <label for="ie_le_flexion_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_flexion_fair" value="le_flexion_fair" name="ie_le_flexion">
+                                  <label for="ie_le_flexion_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_flexion_poor" value="le_flexion_poor" name="ie_le_flexion">
+                                  <label for="ie_le_flexion_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Extension of knee in sitting</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_extension_good" value="le_extension_good" name="ie_le_extension">
+                                  <label for="ie_le_extension_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_extension_fair" value="le_extension_fair" name="ie_le_extension">
+                                  <label for="ie_le_extension_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_extension_poor" value="le_extension_poor" name="ie_le_extension">
+                                  <label for="ie_le_extension_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Heal to opposite knee</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_heal_good" value="le_heal_good" name="ie_le_heal">
+                                  <label for="ie_le_heal_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_heal_fair" value="le_heal_fair" name="ie_le_heal">
+                                  <label for="ie_le_heal_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_heal_poor" value="le_heal_poor" name="ie_le_heal">
+                                  <label for="ie_le_heal_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Extension of knee then ankle dorsiflex</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_dorsiflex_good" value="le_dorsiflex_good" name="ie_le_dorsiflex">
+                                  <label for="ie_le_dorsiflex_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_dorsiflex_fair" value="le_dorsiflex_fair" name="ie_le_dorsiflex">
+                                  <label for="ie_le_dorsiflex_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_le_dorsiflex_poor" value="le_dorsiflex_poor" name="ie_le_dorsiflex">
+                                  <label for="ie_le_dorsiflex_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <!-- Lower Ex -->
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12"><label id="initial_eval_fa"><i class="fa fa-circle "></i> Functional Activities</label></div>
+              <div class="col-xs-12">
+                <label>a) Bed Mobility Skills</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_bed_can_perform" value="fa_bed_can_perform" name="ie_fa_bed">
+                                  <label for="ie_fa_bed_can_perform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_bed_difficulty" value="fa_bed_difficulty" name="ie_fa_bed">
+                                  <label for="ie_fa_bed_difficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_bed_cant_initiate" value="fa_bed_cant_initiate" name="ie_fa_bed">
+                                  <label for="ie_fa_bed_cant_initiate">can't initiate/perform task</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12">
+                <label>b) Sitting Ability</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_onbed" value="fa_sitting_onbed" name="ie_fa_sitting">
+                                  <label for="ie_fa_sitting_onbed">on bed</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_onwheelchair" value="fa_sitting_onwheelchair" name="ie_fa_sitting">
+                                  <label for="ie_fa_sitting_onwheelchair">on chair or wheelchair</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_canperform" value="fa_sitting_canperform" name="ie_fa_sitting">
+                                  <label for="ie_fa_sitting_canperform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_withdifficulty" value="fa_sitting_withdifficulty" name="ie_fa_sitting">
+                                  <label for="ie_fa_sitting_withdifficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Balance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_balance_good" value="fa_sitting_balance_good" name="ie_fa_sitting_balance">
+                                  <label for="ie_fa_sitting_balance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_balance_fair" value="fa_sitting_balance_fair" name="ie_fa_sitting_balance">
+                                  <label for="ie_fa_sitting_balance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_balance_poor" value="fa_sitting_balance_poor" name="ie_fa_sitting_balance">
+                                  <label for="ie_fa_sitting_balance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Tolerance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_tolerance_good" value="fa_sitting_tolerance_good" name="ie_fa_sitting_tolerance">
+                                  <label for="ie_fa_sitting_tolerance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_tolerance_fair" value="fa_sitting_tolerance_fair" name="ie_fa_sitting_tolerance">
+                                  <label for="ie_fa_sitting_tolerance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_sitting_tolerance_poor" value="fa_sitting_tolerance_poor" name="ie_fa_sitting_tolerance">
+                                  <label for="ie_fa_sitting_tolerance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12">
+                <label>c) Transfers</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_transfers_canperform" value="fa_transfers_canperform" name="ie_fa_transfers">
+                                  <label for="ie_fa_transfers_canperform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_transfers_withdifficulty" value="fa_transfers_withdifficulty" name="ie_fa_transfers">
+                                  <label for="ie_fa_transfers_withdifficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_transfers_cantinitiate" value="fa_transfers_cantinitiate" name="ie_fa_transfers">
+                                  <label for="ie_fa_transfers_cantinitiate">can't initiate/perform task</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12">
+                <label>d) Standing Activities</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_canperform" value="fa_standing_canperform" name="ie_fa_standing">
+                                  <label for="ie_fa_standing_canperform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_withdifficulty" value="fa_standing_withdifficulty" name="ie_fa_standing">
+                                  <label for="ie_fa_standing_withdifficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Balance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_balance_good" value="fa_standing_balance_good" name="ie_fa_standing_balance">
+                                  <label for="ie_fa_standing_balance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_balance_fair" value="fa_standing_balance_fair" name="ie_fa_standing_balance">
+                                  <label for="ie_fa_standing_balance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_balance_poor" value="fa_standing_balance_poor" name="ie_fa_standing_balance">
+                                  <label for="ie_fa_standing_balance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Tolerance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_tolerance_good" value="fa_standing_tolerance_good" name="ie_fa_standing_tolerance">
+                                  <label for="ie_fa_standing_tolerance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_tolerance_fair" value="fa_standing_tolerance_fair" name="ie_fa_standing_tolerance">
+                                  <label for="ie_fa_standing_tolerance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="ie_fa_standing_tolerance_poor" value="fa_standing_tolerance_poor" name="ie_fa_standing_tolerance">
+                                  <label for="ie_fa_standing_tolerance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12 ambulation_parent">
+
+                <label>e) Ambulation</label>
+                <div class="row">
+                  <div class="assist_selection col-xs-3 col-sm-4">
+                              <div class="radio radio-inline radio-primary">
+                                  <input class="fa_ambulation_ambulatory" onchange="checkAmbulation(this)" type="radio" id="ie_fa_ambulation_ambulatory" value="fa_ambulation_ambulatory" name="ie_fa_ambulation">
+                                  <label for="ie_fa_ambulation_ambulatory">Ambulatory
+                        <select class="select_ambulatory form-control" onchange="checkAssist(this)">
+                          <option value="withassist">with Assist</option>
+                          <option value="without_assist">without Assist</option>
+                          <option value="without_assistive_device">without Assistive Device</option>
+                          <option value="with_assistive_device">with Assistive Device</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+
+                  <div class="col-xs-9 col-sm-8 assistive_device_choices">
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="ie_with_assistive_device_tipcane" value="with_assistive_device_tipcane" name="ie_with_assistive_device">
+                                      <label for="ie_with_assistive_device_tipcane">Single Tip Cane</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="ie_with_assistive_device_quadcane" value="with_assistive_device_quadcane" name="ie_with_assistive_device">
+                                      <label for="ie_with_assistive_device_quadcane">Quad Cane</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="ie_with_assistive_device_hemi" value="with_assistive_device_hemi" name="ie_with_assistive_device">
+                                      <label for="ie_with_assistive_device_hemi">Hemi Walker</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="ie_with_assistive_device_walker" value="with_assistive_device_walker" name="ie_with_assistive_device">
+                                      <label for="ie_with_assistive_device_walker">Walker</label>
+                                  </div>
+                      </div>
+                      <div class="col-xs-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="ie_with_assistive_device_others" value="with_assistive_device_others" name="ie_with_assistive_device">
+                                      <label for="ie_with_assistive_device_others">Others (pls. specify)</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-12"><input type="text" class="form-control"></div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-xs-3 col-sm-4">
+                              <div class="radio radio-inline radio-primary">
+                                  <input class="fa_ambulation_non_ambulatory" onchange="checkAmbulation(this)" type="radio" id="ie_fa_ambulation_non_ambulatory" value="fa_ambulation_non_ambulatory" name="ie_fa_ambulation">
+                                  <label for="ie_fa_ambulation_non_ambulatory">Non-ambulatory
+                        <select id="select_non_ambulatory" class="form-control" onchange="selectNonAmbulatory(this)">
+                          <option value="bed_ridden">Bed ridden</option>
+                          <option value="wheelchair_bound">Wheelchair bound/borne</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <!-- Objective -->
+
+            <!-- Assessment -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3  id="initial_eval_assess" class="text-primary bordered-heading">Assessment</h3>
+              </div>
+              <div class="col-xs-12">
+                <textarea id="assessment" rows="7" class="form-control"></textarea>
+              </div>
+            </div>
+            <!-- Assessment -->
+
+            <!-- Plan -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3  id="initial_eval_plan" class="text-primary bordered-heading">Plan</h3>
+              </div>
+              <div class="col-xs-12">
+                <p>Patient will be seen for Homecare PT <input type="number" max="7" min="1" value="1" class="form-control" style="width: 55px; display: inline;"> times a week for <input type="number" max="300" min="1" value="1" class="form-control" style="width: 55px; display: inline;"> treatment session(s).</p>
+              </div>
+            </div>
+            <!-- Plan -->
+
+            <!-- Goals -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3  id="initial_eval_goals" class="text-primary bordered-heading">Goals</h3>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_decrease_pain" value="goals_decrease_pain" name="ie_goals">
+                              <label for="ie_goals_decrease_pain">Decrease Pain</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_range_motion" value="goals_range_motion" name="ie_goals">
+                              <label for="ie_goals_range_motion">Increase Range of Motion</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_muscle_power" value="goals_muscle_power" name="ie_goals">
+                              <label for="ie_goals_muscle_power">Increase Muscle Power or Muscle Strength</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_endurance" value="goals_endurance" name="ie_goals">
+                              <label for="ie_goals_endurance">Increase Endurance</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_mobility" value="goals_mobility" name="ie_goals">
+                              <label for="ie_goals_mobility">Improve Bed Mobility Skills</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_sitting_ability" value="goals_sitting_ability" name="ie_goals">
+                              <label for="ie_goals_sitting_ability">Improve Sitting Ability Skills</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_sitting_balance" value="goals_sitting_balance" name="ie_goals">
+                              <label for="ie_goals_sitting_balance">Improve Sitting Balance & Tolerance</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_transfer" value="goals_transfer" name="ie_goals">
+                              <label for="ie_goals_transfer">Improve Transfer Skills</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_standing" value="goals_standing" name="ie_goals">
+                              <label for="ie_goals_standing">Improve Standing Activities</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_standing_balance" value="goals_standing_balance" name="ie_goals">
+                              <label for="ie_goals_standing_balance">Improve Standing Balance & Tolerance</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="ie_goals_ambulation" value="goals_ambulation" name="ie_goals">
+                              <label for="ie_goals_ambulation">Improve Ambulation</label>
+                          </div>
+              </div>
+            </div>
+            <!-- Goals -->
+            
+            <!-- Therapist -->
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="well well-blue">
+
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <label>Physical Therapist In-charge</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <label>PRC License Number</label>
+                      <input type="text" class="form-control">
+                    </div>
+                    <div class="col-xs-6">
+                      <label>Contact Number</label>
+                      <input type="tel" class="form-control"> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Therapist -->
+
+            <!-- Final Buttons -->
+            <div class="row">
+              <div class="col-xs-6">
+                <button class="btn btn-lg btn-block btn-primary" type="submit">Next</button>
+              </div>
+              <div class="col-xs-6">
+                <button class="btn btn-lg btn-block btn-primary" type="reset">Clear</button>
+              </div>
+            </div>
+            <!-- Final Buttons -->
+          </form>
+          <!-- Initial Evaluation -->
+
+          <!-- Final Evaluation -->
+          <form action="" class="form-container final_eval section">
+            <h2 class="text-primary">Final Evaluation 
+              <span class="badge badge-pending" data-toggle="tooltip" data-placement="right" title="This section is In Progress">In Progress</span>
+            </h2>
+                    
+            <!-- Subjective -->
+            <div class="row">
+              <div class="col-xs-12"><h3 id="final_eval_subjective" class="bordered-heading text-primary">Subjective</h3></div>
+              <div class="col-xs-12"><label id="final_eval_chiefcomplaints"><i class="fa fa-circle "></i> Chief Complaints</label></div>
+
+              <div class="col-md-2">
+                <div class="row">
+                  <div class="col-md-12 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary" style="min-height: 30px;">
+                                  <input type="checkbox" id="fe_pain" value="option1">
+                                  <label for="fe_pain" class="text-success"> Pain </label>
+                              </div>
+                  </div>
+                  <div class="col-md-12 col-sm-8 col-xs-9">
+                    <small>* Pain Scale</small>
+                    <input type="number" max="10" min="1" value="1" class="form-control" placeholder="Pain Scale">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_pain_ue" value="upper_extremity">
+                                  <label for="fe_pain_ue"> Upper Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary pull-left">
+                                  <input type="checkbox" id="fe_pain_le" value="upper_extremity">
+                                  <label for="fe_pain_le"> Lower Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="row">
+                  <div class="col-md-12 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_muscle_weakness" value="option1">
+                                  <label for="fe_muscle_weakness" class="text-success"> Muscle Weakness </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_muscle_weakness_ue" value="upper_extremity">
+                                  <label for="fe_muscle_weakness_ue"> Upper Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-3">
+                              <div class="checkbox checkbox-inline checkbox-primary pull-left">
+                                  <input type="checkbox" id="fe_muscle_weakness_le" value="upper_extremity">
+                                  <label for="fe_muscle_weakness_le"> Lower Extremity </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-9"><input type="text" class="form-control"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2">
+                <div class="row">
+                  <div class="col-md-12 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_others" value="option1">
+                                  <label for="fe_others" class="text-success"> Others </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="row"><div class="col-xs-12"><textarea name="fe_others" id="others" rows="4" class="form-control"></textarea></div></div>
+              </div>
+            </div>
+            <!-- Subjective -->
+
+            <!-- Objective -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3 id="final_eval_objective" class="bordered-heading text-primary">Objective</h3>
+              </div>
+              <div class="col-xs-6 col-md-6">
+                <label id="final_eval_bp" for="blood_pressure">Blood Pressure <sup>(mmHg)</sup></label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="col-xs-6 col-md-6">
+                <label for="fe_blood_pressure">Pulse Rate <sup>(bpm)</sup></label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-md-12">
+                <label id="final_eval_med" for="medications"><i class="fa fa-circle "></i> Medications</label>
+                <div class="table-responsive">
+                  <table class="table table-condensed">
+                    <thead>
+                      <tr>
+                        <th><button onclick="addNewRow(this)" class="btn btn-success btn-sm" type="button"><i class="fa fa-plus"></i> Add New Line</button></th>
+                        <th>Dosage</th>
+                        <th>Frequency</th>
+                        <th>AM</th>
+                        <th>NN</th>
+                        <th>PM</th>
+                        <th width="50px;"></th>
+                      </tr>
+                    </thead>
+                    <tbody class="med_body">
+                      <tr>
+                        <td><input type="text" class="form-control" style="min-width: 250px;"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <label id="final_eval_loc"><i class="fa fa-circle "></i> Level of Consciousness</label>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_alert" value="alert" name="fe_loc1">
+                                  <label for="fe_alert"> Alert </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_lethargic" value="lethargic" name="fe_loc1">
+                                  <label for="fe_lethargic"> Lethargic </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_obtunded" value="obtunded" name="fe_loc1">
+                                  <label for="fe_obtunded"> Obtunded </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_stupor" value="stupor" name="fe_loc1">
+                                  <label for="fe_stupor"> Stupor </label>
+                              </div>  
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_coma" value="coma" name="fe_loc1">
+                                  <label for="fe_coma"> Coma </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_cooperative" value="cooperative" name="fe_loc2">
+                                  <label for="fe_cooperative"> Cooperative </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_uncooperative" value="uncooperative" name="fe_loc2">
+                                  <label for="fe_uncooperative"> Uncooperative </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_coherent" value="coherent" name="fe_loc3">
+                                  <label for="fe_coherent"> Coherent </label>
+                              </div>
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_incoherent" value="incoherent" name="fe_loc3">
+                                  <label for="fe_incoherent"> Incoherent </label>
+                              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12">
+                <label id="final_eval_rom"><i class="fa fa-circle "></i> Range of Motion (ROM)</label>
+              </div>
+              <div class="col-xs-12">
+                <h6>Upper Extremity</h6>
+                <div class="row">
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_ue_from" value="ue_from">
+                                  <label for="fe_ue_from"> Full Range of Motion </label>
+                              </div>
+                  </div>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_ue_wlom" value="ue_wlom">
+                                  <label for="fe_ue_wlom"> with LOM (pls.specify) </label>
+                              </div>
+                              <input type="text" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <h6>Lower Extremity</h6>
+                <div class="row">
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_le_from" value="le_from">
+                                  <label for="fe_le_from"> Full Range of Motion </label>
+                              </div>
+                  </div>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                              <div class="checkbox checkbox-inline checkbox-primary">
+                                  <input type="checkbox" id="fe_le_wlom" value="le_wlom">
+                                  <label for="fe_le_wlom"> with LOM (pls.specify) </label>
+                              </div>
+                              <input type="text" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12"><label id="final_eval_fmt"><i class="fa fa-circle "></i> Functional Muscle Testing (FMT)</label></div>
+              <div class="col-xs-12">
+
+                <!-- Upper Ex -->
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Upper Extremity</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Functional</small></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Weak Functional</small> </div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Non-functional</small> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Shoulder Shrug</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_shoulder_shrug_good" value="ue_shoulder_shrug_good" name="fe_ue_shoulder_shrug">
+                                  <label for="fe_ue_shoulder_shrug_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_shoulder_shrug_fair" value="ue_shoulder_shrug_fair" name="fe_ue_shoulder_shrug">
+                                  <label for="fe_ue_shoulder_shrug_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_shoulder_shrug_poor" value="ue_shoulder_shrug_poor" name="fe_ue_shoulder_shrug">
+                                  <label for="fe_ue_shoulder_shrug_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Reach opposite shoulder</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_reach_good" value="ue_reach_good" name="fe_ue_reach">
+                                  <label for="fe_ue_reach_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_reach_fair" value="ue_reach_fair" name="fe_ue_reach">
+                                  <label for="fe_ue_reach_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_reach_poor" value="ue_reach_poor" name="fe_ue_reach">
+                                  <label for="fe_ue_reach_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Bring hand to mouth</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_bring_good" value="ue_bring_good" name="fe_ue_bring">
+                                  <label for="fe_ue_bring_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_bring_fair" value="ue_bring_fair" name="fe_ue_bring">
+                                  <label for="fe_ue_bring_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_bring_poor" value="ue_bring_poor" name="fe_ue_bring">
+                                  <label for="fe_ue_bring_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Close and open hand</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_close_good" value="ue_close_good" name="fe_ue_close">
+                                  <label for="fe_ue_close_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_close_fair" value="ue_close_fair" name="fe_ue_close">
+                                  <label for="fe_ue_close_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_ue_close_poor" value="ue_close_poor" name="fe_ue_close">
+                                  <label for="fe_ue_close_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <!-- Upper Ex -->
+                <hr>
+                <!-- Lower Ex -->
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Lower Extremity</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Functional</small></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Weak Functional</small> </div>
+                  <div class="col-md-3 col-sm-3 col-xs-3"><small>Non-functional</small> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Flex hip in sitting</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_flex_good" value="le_flex_good" name="fe_le_flex">
+                                  <label for="fe_le_flex_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_flex_fair" value="le_flex_fair" name="fe_le_flex">
+                                  <label for="fe_le_flex_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_flex_poor" value="le_flex_poor" name="fe_le_flex">
+                                  <label for="fe_le_flex_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Flexion of knee in sitting</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_flexion_good" value="le_flexion_good" name="fe_le_flexion">
+                                  <label for="fe_le_flexion_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_flexion_fair" value="le_flexion_fair" name="fe_le_flexion">
+                                  <label for="fe_le_flexion_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_flexion_poor" value="le_flexion_poor" name="fe_le_flexion">
+                                  <label for="fe_le_flexion_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Extension of knee in sitting</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_extension_good" value="le_extension_good" name="fe_le_extension">
+                                  <label for="fe_le_extension_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_extension_fair" value="le_extension_fair" name="fe_le_extension">
+                                  <label for="fe_le_extension_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_extension_poor" value="le_extension_poor" name="fe_le_extension">
+                                  <label for="fe_le_extension_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Heal to opposite knee</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_heal_good" value="le_heal_good" name="fe_le_heal">
+                                  <label for="fe_le_heal_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_heal_fair" value="le_heal_fair" name="fe_le_heal">
+                                  <label for="fe_le_heal_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_heal_poor" value="le_heal_poor" name="fe_le_heal">
+                                  <label for="fe_le_heal_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Extension of knee then ankle dorsiflex</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_dorsiflex_good" value="le_dorsiflex_good" name="fe_le_dorsiflex">
+                                  <label for="fe_le_dorsiflex_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_dorsiflex_fair" value="le_dorsiflex_fair" name="fe_le_dorsiflex">
+                                  <label for="fe_le_dorsiflex_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_le_dorsiflex_poor" value="le_dorsiflex_poor" name="fe_le_dorsiflex">
+                                  <label for="fe_le_dorsiflex_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <!-- Lower Ex -->
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12"><label id="final_eval_fa"><i class="fa fa-circle "></i> Functional Activities</label></div>
+              <div class="col-xs-12">
+                <label>a) Bed Mobility Skills</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_bed_can_perform" value="fa_bed_can_perform" name="fe_fa_bed">
+                                  <label for="fe_fa_bed_can_perform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_bed_difficulty" value="fa_bed_difficulty" name="fe_fa_bed">
+                                  <label for="fe_fa_bed_difficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_bed_cant_initiate" value="fa_bed_cant_initiate" name="fe_fa_bed">
+                                  <label for="fe_fa_bed_cant_initiate">can't initiate/perform task</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12">
+                <label>b) Sitting Ability</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_onbed" value="fa_sitting_onbed" name="fe_fa_sitting">
+                                  <label for="fe_fa_sitting_onbed">on bed</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_onwheelchair" value="fa_sitting_onwheelchair" name="fe_fa_sitting">
+                                  <label for="fe_fa_sitting_onwheelchair">on chair or wheelchair</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_canperform" value="fa_sitting_canperform" name="fe_fa_sitting">
+                                  <label for="fe_fa_sitting_canperform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_withdifficulty" value="fa_sitting_withdifficulty" name="fe_fa_sitting">
+                                  <label for="fe_fa_sitting_withdifficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Balance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_balance_good" value="fa_sitting_balance_good" name="fe_fa_sitting_balance">
+                                  <label for="fe_fa_sitting_balance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_balance_fair" value="fa_sitting_balance_fair" name="fe_fa_sitting_balance">
+                                  <label for="fe_fa_sitting_balance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_balance_poor" value="fa_sitting_balance_poor" name="fe_fa_sitting_balance">
+                                  <label for="fe_fa_sitting_balance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Tolerance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_tolerance_good" value="fa_sitting_tolerance_good" name="fe_fa_sitting_tolerance">
+                                  <label for="fe_fa_sitting_tolerance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_tolerance_fair" value="fa_sitting_tolerance_fair" name="fe_fa_sitting_tolerance">
+                                  <label for="fe_fa_sitting_tolerance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_sitting_tolerance_poor" value="fa_sitting_tolerance_poor" name="fe_fa_sitting_tolerance">
+                                  <label for="fe_fa_sitting_tolerance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12">
+                <label>c) Transfers</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_transfers_canperform" value="fa_transfers_canperform" name="fe_fa_transfers">
+                                  <label for="fe_fa_transfers_canperform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_transfers_withdifficulty" value="fa_transfers_withdifficulty" name="fe_fa_transfers">
+                                  <label for="fe_fa_transfers_withdifficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_transfers_cantinitiate" value="fa_transfers_cantinitiate" name="fe_fa_transfers">
+                                  <label for="fe_fa_transfers_cantinitiate">can't initiate/perform task</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12">
+                <label>d) Standing Activities</label>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_canperform" value="fa_standing_canperform" name="fe_fa_standing">
+                                  <label for="fe_fa_standing_canperform">can perform without difficulty & without assist</label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_withdifficulty" value="fa_standing_withdifficulty" name="fe_fa_standing">
+                                  <label for="fe_fa_standing_withdifficulty">with difficulty performing tasks and requires
+                        <select id="" class="form-control">
+                          <option value="minimal_assist">Minimal Assist</option>
+                          <option value="moderate_assist">Moderate Assist</option>
+                          <option value="maximum_assist">Maximum Assist</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Balance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_balance_good" value="fa_standing_balance_good" name="fe_fa_standing_balance">
+                                  <label for="fe_fa_standing_balance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_balance_fair" value="fa_standing_balance_fair" name="fe_fa_standing_balance">
+                                  <label for="fe_fa_standing_balance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_balance_poor" value="fa_standing_balance_poor" name="fe_fa_standing_balance">
+                                  <label for="fe_fa_standing_balance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3 col-sm-3 col-xs-3"><label>Tolerance</label></div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_tolerance_good" value="fa_standing_tolerance_good" name="fe_fa_standing_tolerance">
+                                  <label for="fe_fa_standing_tolerance_good">Good</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_tolerance_fair" value="fa_standing_tolerance_fair" name="fe_fa_standing_tolerance">
+                                  <label for="fe_fa_standing_tolerance_fair">Fair</label>
+                              </div>
+                  </div>
+
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                              <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_fa_standing_tolerance_poor" value="fa_standing_tolerance_poor" name="fe_fa_standing_tolerance">
+                                  <label for="fe_fa_standing_tolerance_poor">Poor</label>
+                              </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+
+              <div class="col-xs-12 ambulation_parent">
+
+                <label>e) Ambulation</label>
+                <div class="row">
+                  <div class="assist_selection col-xs-3 col-sm-4">
+                              <div class="radio radio-inline radio-primary">
+                                  <input class="fa_ambulation_ambulatory" onchange="checkAmbulation(this)" type="radio" id="fe_fa_ambulation_ambulatory" value="fa_ambulation_ambulatory" name="fe_fa_ambulation">
+                                  <label for="fe_fa_ambulation_ambulatory">Ambulatory
+                        <select class="select_ambulatory form-control" onchange="checkAssist(this)">
+                          <option value="withassist">with Assist</option>
+                          <option value="without_assist">without Assist</option>
+                          <option value="without_assistive_device">without Assistive Device</option>
+                          <option value="with_assistive_device">with Assistive Device</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+
+                  <div class="col-xs-9 col-sm-8 assistive_device_choices">
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="fe_with_assistive_device_tipcane" value="with_assistive_device_tipcane" name="fe_with_assistive_device">
+                                      <label for="fe_with_assistive_device_tipcane">Single Tip Cane</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="fe_with_assistive_device_quadcane" value="with_assistive_device_quadcane" name="fe_with_assistive_device">
+                                      <label for="fe_with_assistive_device_quadcane">Quad Cane</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="fe_with_assistive_device_hemi" value="with_assistive_device_hemi" name="fe_with_assistive_device">
+                                      <label for="fe_with_assistive_device_hemi">Hemi Walker</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="fe_with_assistive_device_walker" value="with_assistive_device_walker" name="fe_with_assistive_device">
+                                      <label for="fe_with_assistive_device_walker">Walker</label>
+                                  </div>
+                      </div>
+                      <div class="col-xs-6">
+                                  <div class="radio radio-inline radio-primary">
+                                      <input type="radio" id="fe_with_assistive_device_others" value="with_assistive_device_others" name="fe_with_assistive_device">
+                                      <label for="fe_with_assistive_device_others">Others (pls. specify)</label>
+                                  </div>
+                      </div>
+                      <div class="col-md-12"><input type="text" class="form-control"></div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-xs-3 col-sm-4">
+                              <div class="radio radio-inline radio-primary">
+                                  <input class="fa_ambulation_non_ambulatory" onchange="checkAmbulation(this)" type="radio" id="fe_fa_ambulation_non_ambulatory" value="fa_ambulation_non_ambulatory" name="fe_fa_ambulation">
+                                  <label for="fe_fa_ambulation_non_ambulatory">Non-ambulatory
+                        <select id="select_non_ambulatory" class="form-control" onchange="selectNonAmbulatory(this)">
+                          <option value="bed_ridden">Bed ridden</option>
+                          <option value="wheelchair_bound">Wheelchair bound/borne</option>
+                        </select>
+                                  </label>
+                              </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <!-- Objective -->
+
+            <!-- Assessment -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3  id="final_eval_assess" class="text-primary bordered-heading">Assessment</h3>
+              </div>
+              <div class="col-xs-12">
+                <textarea id="assessment" rows="7" class="form-control"></textarea>
+              </div>
+            </div>
+            <!-- Assessment -->
+
+            <!-- Goals -->
+            <div class="row">
+              <div class="col-xs-12">
+                <h3  id="final_eval_goals" class="text-primary bordered-heading">Goals</h3>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_decrease_pain" value="goals_decrease_pain" name="fe_goals">
+                              <label for="fe_goals_decrease_pain">Decrease Pain</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_range_motion" value="goals_range_motion" name="fe_goals">
+                              <label for="fe_goals_range_motion">Increase Range of Motion</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_muscle_power" value="goals_muscle_power" name="fe_goals">
+                              <label for="fe_goals_muscle_power">Increase Muscle Power or Muscle Strength</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_endurance" value="goals_endurance" name="fe_goals">
+                              <label for="fe_goals_endurance">Increase Endurance</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_mobility" value="goals_mobility" name="fe_goals">
+                              <label for="fe_goals_mobility">Improve Bed Mobility Skills</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_sitting_ability" value="goals_sitting_ability" name="fe_goals">
+                              <label for="fe_goals_sitting_ability">Improve Sitting Ability Skills</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_sitting_balance" value="goals_sitting_balance" name="fe_goals">
+                              <label for="fe_goals_sitting_balance">Improve Sitting Balance & Tolerance</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_transfer" value="goals_transfer" name="fe_goals">
+                              <label for="fe_goals_transfer">Improve Transfer Skills</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_standing" value="goals_standing" name="fe_goals">
+                              <label for="fe_goals_standing">Improve Standing Activities</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_standing_balance" value="goals_standing_balance" name="fe_goals">
+                              <label for="fe_goals_standing_balance">Improve Standing Balance & Tolerance</label>
+                          </div>
+              </div>
+              <div class="col-xs-6">
+                          <div class="checkbox checkbox-inline checkbox-primary">
+                              <input type="checkbox" id="fe_goals_ambulation" value="goals_ambulation" name="fe_goals">
+                              <label for="fe_goals_ambulation">Improve Ambulation</label>
+                          </div>
+              </div>
+            </div>
+            <!-- Goals -->
+            
+            <!-- Therapist -->
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="well well-blue">
+
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <label>Physical Therapist In-charge</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <label>PRC License Number</label>
+                      <input type="text" class="form-control">
+                    </div>
+                    <div class="col-xs-6">
+                      <label>Contact Number</label>
+                      <input type="tel" class="form-control"> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Therapist -->
+
+            <!-- Final Buttons -->
+            <div class="row">
+              <div class="col-xs-6">
+                <button class="btn btn-lg btn-block btn-primary" type="submit">Finalize</button>
+              </div>
+              <div class="col-xs-6">
+                <button class="btn btn-lg btn-block btn-primary" type="reset">Clear</button>
+              </div>
+            </div>
+            <!-- Final Buttons -->
+          </form>
+          <!-- Final Evaluation -->
+
+        </div>
+
+      </div><!--/row-->
+
+
+      <footer>
+        <p class="text-center">&copy; Otsuka 2014</p>
+      </footer>
+    </div>

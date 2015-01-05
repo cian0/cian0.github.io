@@ -50,6 +50,8 @@ h1,h2,h3,h4,h5,h6 { font-weight: 400; }
 	display: inline-block;
 	margin-top: 15px; padding: 0; padding-left: 15px; color: #fff; height: auto; font-weight: 300; 
 }
+
+
 .nav>li>a { padding: 5px 15px; font-weight: 300; font-size: 0.9em;}
 .nav>li>a:hover { border-right: 3px solid #255fa9; background-color: transparent;}
 .bordered-heading { padding-bottom: 10px; border-bottom: 1px solid #d3d3d3; }

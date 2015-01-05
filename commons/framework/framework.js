@@ -50,23 +50,12 @@ var vs = {
 	},
 	display: function(page, vars){
 
-		var getParams = vs.getParameters();
-
 		$.getScript( 'app/pages/' + page + '.js' )
 			.done(function( script, textStatus ) {
-
 				vs.showPage(page,vars);
-
-				app.data.lastPageRendered = page;
-
-				if(app.modules[page]){
-					app.modules[page].init(vars, getParams);
-				}
 			})
 			.fail(function(){
 				vs.showPage(page,vars);
-
-				app.data.lastPageRendered = page;
 			});
 	},
 	defaultTo: function(param, defaultValue){
@@ -75,8 +64,10 @@ var vs = {
 	},
 	setVarsByControllerID: function(id, vars){
 
-		for(var varName in vars){
-			vs.setVarByControllerID(id, varName, vars[varName]);
+		if(vars){
+			for(var varName in vars){
+				vs.setVarByControllerID(id, varName, vars[varName]);
+			}
 		}
 	},
 	setVars: function(vars){
@@ -87,76 +78,143 @@ var vs = {
 			vs.setVarByControllerID(id, varName, vars[varName]);
 		}
 	},
-	showPage: function(id, vars){
+	showPage: function(id, vars){	
 
-		var scope = angular.element($('#' + id )).scope();
-		var pageBindedVars = vs.developer.getPageBindedVars(id);
-		var pageUnbindedVars = vs.developer.getPageUnbindedVars(id, vars);
+		$.ajax({
+			url: id + '.html',
+			context: document.body,
+			dataType: 'html',
+			cache: false
+		}).done(function(resp) {
 
-		if(vars){
+			app.data.lastPageRendered = id;
 
-			//set data
-			for(var varName in vars){
-				vs.setVarByControllerID(id, varName, vars[varName]);
-			}
-	    }
+			$('#' + id).remove();
 
-	    //set unbinded server data
-	    if(app.settings.debugMode && scope && pageUnbindedVars.length > 0){
+			$('.page').remove();
 
-			$('#' + id + ' .static-container .error').remove();
+			$('body').prepend(resp);
 
-			for(var i=0; i < pageUnbindedVars.length; i++){
+	    	var $pageElement = $('#' + id);
 
-				var varName = pageUnbindedVars[i];
-				//build input element that is binded to this variable
-				var str = "";
-				str += '<div class="form-group">';
-				str += '	<label>' + varName + '</label>';
-				str += '	<input type="text" class="form-control" disabled="disabled" value="' + scope[varName] + '" ng-model="' + varName + '">';
-				str += '</div>';
+			$('html,body').animate({scrollTop: 0}, 1);
 
-				//do binding of input element and variable
-				var $formGroup = $(str);
-				$formGroup.attr('rel', varName);
-				$formGroup.find('input').on({
-					keyup: function(){
-						var scope = angular.element($('#' + id )).scope();
-						var val = $(this).val();
-						var varName = $(this).parent().attr('rel');
+			var content = $pageElement;
 
-						scope.$apply(function(){
-							scope[varName] = val;
-				    	});
-					},
-					change: function(){
-						var scope = angular.element($('#' + id )).scope();
-						var val = $(this).val();
-						var varName = $(this).parent().attr('rel');
+			angular.element(document).injector().invoke(
+			[
+			    "$compile", function($compile) {
+			        var scope = angular.element(content).scope();
+			        $compile(content)(scope);
+			    }
+			]);
 
-						scope.$apply(function(){
-							scope[varName] = val;
-				    	});
-					}
+			var scope = angular.element($('#' + id )).scope();
+		
+			if(scope){
+				scope.$apply(function(){
+
 				});
+		    }
 
-				//append this form to group
-				$('#' + id + ' .static-container').append($formGroup);
+			if(app.modules[id]){
+
+				var getParams = vs.getParameters();	
+
+				app.modules[id].init(vars, getParams);
 			}
-	    }
-
-	    //show the page
-    	$('.page').addClass('hidden');
-
-    	var $pageElement = $('#' + id);
 
 
-    	if($pageElement.length == 0){
-			window.location.hash= "#!/page_not_found";
-    	}
 
-		$pageElement.removeClass('hidden');
-		$('html,body').animate({scrollTop: 0}, 1);
+
+/*
+
+
+			var scope = angular.element($('#' + id )).scope();
+			var pageBindedVars = vs.developer.getPageBindedVars(id);
+			var pageUnbindedVars = vs.developer.getPageUnbindedVars(id, vars);
+
+			if(vars){
+
+				//set data
+				for(var varName in vars){
+					vs.setVarByControllerID(id, varName, vars[varName]);
+				}
+		    }
+
+
+
+		    //show the page
+
+
+
+
+	    	if($pageElement.length == 0){
+				//window.location.hash= "#!/page_not_found";
+	    	}
+
+			
+
+			var getParams = vs.getParameters();				
+
+			app.data.lastPageRendered = id;
+
+
+
+
+
+*/
+
+		    /*
+
+		    //set unbinded server data
+		    if(app.settings.debugMode && scope && pageUnbindedVars.length > 0){
+
+				$('#' + id + ' .static-container .error').remove();
+
+				for(var i=0; i < pageUnbindedVars.length; i++){
+
+					var varName = pageUnbindedVars[i];
+					//build input element that is binded to this variable
+					var str = "";
+					str += '<div class="form-group">';
+					str += '	<label>' + varName + '</label>';
+					str += '	<input type="text" class="form-control" disabled="disabled" value="' + scope[varName] + '" ng-model="' + varName + '">';
+					str += '</div>';
+
+					//do binding of input element and variable
+					var $formGroup = $(str);
+					$formGroup.attr('rel', varName);
+					$formGroup.find('input').on({
+						keyup: function(){
+							var scope = angular.element($('#' + id )).scope();
+							var val = $(this).val();
+							var varName = $(this).parent().attr('rel');
+
+							scope.$apply(function(){
+								scope[varName] = val;
+					    	});
+						},
+						change: function(){
+							var scope = angular.element($('#' + id )).scope();
+							var val = $(this).val();
+							var varName = $(this).parent().attr('rel');
+
+							scope.$apply(function(){
+								scope[varName] = val;
+					    	});
+						}
+					});
+
+					//append this form to group
+					$('#' + id + ' .static-container').append($formGroup);
+				}
+		    }
+
+			*/
+
+
+		});
 	},
 	setVar: function(varName, val){
 		var id = app.data.lastPageRendered;
@@ -201,9 +259,10 @@ var vs = {
 			vs.developer.btnShowVarsHandler();
 			vs.developer.buildVars("ThankYou");
 		},
-		createTestResponsePicker: function(selection){
+		createTestResponsePicker: function(selection, title){
 			var selectStr = "You are currently on Dev Mode.\n\n";
-			selectStr += "Please choose a sample response:\n\n";
+			selectStr += "Pick a sample response for API:\n\n";
+			selectStr += title + "\n\n";
 
 
 			for(var i = 0; i < selection.length; i++){
@@ -212,7 +271,14 @@ var vs = {
 
 			selectStr += "\n\n";
 
-			var choice = prompt(selectStr);
+
+			var choice;
+
+			if(app.settings.demoAlwaysSuccess){
+				choice = "00";
+			} else {
+				choice = prompt(selectStr);
+			}
 
 			if(choice){
 				for(var i = 0; i < selection.length; i++){

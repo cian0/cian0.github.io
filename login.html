@@ -1,0 +1,19 @@
+      <section id="login" ng-controller="login" class="page container">
+        <div class="row">
+            <div class="col-xs-12 col-ts-6 col-ts-offset-6 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-custom-6 col-lg-custom-offset-3">
+                    <form role="form" action="" method="post" class="login-form text-center" id="login-form" autocomplete="off">
+                      <img src="app/img/logo-otsuka.jpg" alt="Otsuka" class="img-responsive center-block img-logo">
+                      <div class="login-form-fields">
+                          <div class="form-group">
+                              <input required name="email" id="email" class="form-control input-lg" placeholder="Username" value="{{username}}" ng-model="username">
+                          </div>
+                          <div class="form-group">
+                              <input required type="password" name="password" id="password" class="form-control input-lg login-field-password password" placeholder="Password" value="{{password}}" ng-model="password">
+                          </div>
+                        </div>
+                        <button type="submit" id="btn-login" class="btn btn-primary btn-lg btn-block btn-{{theme_color}}">Log In</button>
+                        <a class="text-primary login-no-account" href="#!/register?type={{user_type}}">No account yet? Register here</a>
+                    </form>
+          </div> <!-- /.col-xs-12 -->
+        </div> <!-- /.row -->
+      </section>

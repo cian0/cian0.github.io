@@ -1,0 +1,79 @@
+      <section id="register" class="page container">
+        <form id="form-register" role="form" action="" method="post" autocomplete="off" style="margin-top: 70px;">
+          <section class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <div class="well well-blue text-center register-account-check">
+              <span>Already have an account? Login <a href="#!/login?type={{user_type}}" class="">here</a></span>
+            </div>
+          </section>
+          <section class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <h3 class="bordered-heading text-primary"><i class="fa fa-user-md"></i> User Profile</h3>
+            <div class="form-group">
+              <label for="Username">Username</label>
+              <input required pattern="^[a-zA-Z0-9_]{6,20}" maxlength="20" type="text" class="form-control" title="Username should have at least 6 characters no longer than 20. with alphanumeric and underscore" ng-model="username" value="{{username}}">
+            </div>
+            <div class="form-group">
+              <label for="Password" pattern=".{6,20}" maxlength="20" title="Should be 6-20 characters">Password</label>
+              <input required type="password" name="password" id="password" class="form-control password" title="Password should be at least 6 characters up to 20. Can have special characters." ng-model="password">
+            </div>
+            <div class="form-group">
+              <label for="Password" pattern=".{6,20}" maxlength="20" title="Should be 6-20 characters">Confirm Password</label>
+              <input required type="password" class="form-control password" value="{{password_confirm}}">
+            </div>
+            <div class="form-group">
+              <label for="Email">Email</label>
+              <input required type="email" name="email" class="form-control" type="email" ng-model="email">
+            </div>
+            <div class="form-group">
+              <label for="Passcode">Passcode</label>
+              <input required type="text" class="form-control" maxlength="20" pattern="^[a-zA-Z0-9]{20,20}" title="Passcode can only have 20 characters alphanumeric, case sensitive" ng-model="passcode">
+            </div>
+          </section>
+          <section class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <h3 class="bordered-heading text-primary"><i class="fa fa-briefcase"></i> Contact Information</h3>
+            <div class="row">
+              <div class="form-group col-xs-12 col-sm-5">
+                <label for="FirstName">First Name</label>
+                <input required type="text" class="form-control" maxlength="50" pattern=".{1,50}" title="Should not exceed 50 characters" ng-model="first_name">
+              </div>
+              <div class="form-group col-xs-12 col-sm-5">
+                <label for="LastName">Last Name</label>
+                <input required type="text" class="form-control" maxlength="50" pattern=".{1,50}" title="Should not exceed 50 characters" ng-model="last_name">
+              </div>
+              <div class="form-group col-xs-12 col-sm-2">
+                <label for="MI">M.I.</label>
+                <input required type="text" class="form-control" maxlength="1" pattern=".{1,1}" title="Should not exceed 1 character" ng-model="mi">
+              </div>
+              <div class="form-group col-xs-12">
+                <label for="address">Address</label>
+                <input required type="text" class="form-control" pattern=".{1,250}" maxlength="250" title="Should not exceed 250 characters" ng-model="address">
+              </div>
+              <div class="form-group col-xs-12 col-sm-6">
+                <label for="Province">Province</label>
+                <select class="form-control" id="selector-province"  ng-model="province">
+                  <option value="" >Choose a province</option>
+                  <option ng-repeat="province in provinces" value="{{province.id}}" >{{province.name}}</option>
+                </select>
+              </div>
+              <div class="form-group col-xs-12 col-sm-6">
+                <label for="City">City</label>
+                <select class="form-control" ng-model="city_id">
+                  <option value="" >Choose a city</option>
+                  <option ng-repeat="city in cities" value="{{city.id}}" maxlength="250" >{{city.name}}</option>
+                </select>
+              </div>
+              <div class="form-group col-xs-12">
+                <label for="ContactNumber">Contact Number</label>
+                <input required class="form-control" pattern="^[\+0-9\-\(\)\s]*$" title="Contact number valid characters: ( ) - + 0 1 2 3 4 5 6 7 8 9" ng-model="contact_no">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-4 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary btn-lg btn-block btn-{{theme_color}}" style="margin: 5px 0">Create Account</button>
+              </div>
+              <div type="reset" class="col-xs-12 col-sm-4">
+                <button class="btn btn-default btn-lg btn-block" style="margin: 5px 0">Clear</button>
+              </div>
+            </div>
+          </section>
+        </form>
+      </section>
