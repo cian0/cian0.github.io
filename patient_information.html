@@ -2,7 +2,7 @@
         <div class="row" style="margin-top: 70px;">
           <div class="col-xs-12 col-md-12">
             <a id="btn-logout">
-              <button class="btn btn-primary logout" type="button"><i class="fa fa-sign-out"></i>Log Out</button>
+              <button class="btn btn-{{theme_color}} logout" type="button"><i class="fa fa-sign-out"></i>Log Out</button>
             </a>
             <h4 class="bordered-heading">Welcome, <span>{{name}}</span></h4>
           </div>
@@ -11,7 +11,7 @@
 
           <div class="col-xs-12 col-md-12">
             <!-- Table -->
-            <table id="patientinfo" class="patient-info" data-query-params="queryParams">
+            <table id="patientinfo" class="patient-info table-{{theme_color}}" data-query-params="queryParams">
                 <thead>
                       <th data-field="padstroke">PAD/Stroke</th>
                       <th data-field="patientname">Patient Name</th>
@@ -30,7 +30,7 @@
               <div class="modal-content">
 
                 <div class="modal-header">
-                  <h3 class="modal-title text-primary">PT Approval</h3>
+                  <h3 class="modal-title text-primary">Patient Information</h3>
                 </div>
 
                 <div class="modal-body">
@@ -66,7 +66,7 @@
                       </div>
                       <div class="form-group">
                         <label for="">Status</label>
-                        <span>Pending</span>
+                        <span>{{ptinfo_status}}</span>
                       </div>
                       <div class="row form-group">
                         <div class="col-xs-12 col-md-12">
@@ -86,9 +86,18 @@
                 <div class="modal-footer">
                   <!-- Button -->
                   <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
-                      <button id="btn-approve" class="btn btn-primary btn-block btn-lg" type="button">
+                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+					<button id="btn-assign" class="btn btn-primary btn-block btn-lg" type="button">
+                        Assign
+                     </button>
+					 <button id="btn-approve" class="btn btn-primary btn-block btn-lg" type="button">
                         Approve
+                      </button>
+					  <button id="btn-validate" class="btn btn-primary btn-block btn-lg" type="button">
+                        Validate
+                      </button>
+					   <button id="btn-submit" class="btn btn-primary btn-block btn-lg" type="button">
+                        Submit {{ptinfo_submit_status}}
                       </button>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">

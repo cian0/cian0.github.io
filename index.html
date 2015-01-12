@@ -41,7 +41,7 @@
 
     <link rel="stylesheet" type="text/css" href="commons/framework/framework.css" />
   </head>
-  <body>
+  <body class='theme-{{theme_color}}'>
 
     <!-- Directive markup for loading -->
     <div class="loading-overlay fade" loading-overlay id="loadingOverlay">
@@ -54,7 +54,12 @@
         <button class="btn btn-xs btn-primary testbutton" onclick="hideLoading()">Hide Loading overlay: Remove this later</button>
         <!-- Remove this button: for testing purposes only -->
     </div>
-    <!-- Directive markup for loading -->
+    <!-- Directive markup for preloader -->
+	 <div id="generic_preloader">
+        <div class="preloader-box">
+          <span class="loading-icon"><i class="fa fa-refresh fa-spin fa-2x"></i></span>
+        </div>
+    </div>
 
     <!-- Directive markup for messages -->
     <div class="alert" alert id="alert">
@@ -80,7 +85,7 @@
       </div>
     </div>
 
-    <div class="navbar navbar-fixed-top navbar-blue" role="navigation">
+    <div class="navbar navbar-fixed-top navbar-{{theme_color}}" role="navigation">
       <div class="container">
         <div class="navbar-header" style="text-align: center;">
           <h1 class="navbar-brand">{{title}}</h1>

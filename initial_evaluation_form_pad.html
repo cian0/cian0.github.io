@@ -1,4 +1,46 @@
+    
+
+
     <section id="initial_evaluation_form_pad" ng-controller="initial_evaluation_form_pad" class="page container">
+      
+<!-- Edit Medication Modal -->
+<div class="modal fade" id="editMedication" tabindex="-1" role="dialog" aria-labelledby="editMedicationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="removeEmptyMedications()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editMedicationLabel">Edit Medication</h4>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive" style="background: #fff;">
+          <table class="table table-condensed table-striped">
+            <thead>
+              <tr>
+                <th><button ng-click="addMedication()" class="btn btn-success btn-sm" type="button"><i class="fa fa-plus"></i> Add New Line</button></th>
+                <th class="text-center">Dosage</th>
+                <th class="text-center">Frequency</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody class="med_body">
+              <tr ng-repeat="medication in initial_evaluation_form.medicationsList">
+                <td class="text-center"><input type="text" class="form-control" ng-model="medication.medicine"></td>
+                <td class="text-center"><input type="text" class="form-control" ng-model="medication.dosage"></td>
+                <td class="text-center"><input type="text" class="form-control" ng-model="medication.frequency"></td>
+                <td><button class="btn btn-danger removeRow" type="button" ng-click="removeMedication(medication)"><i class="fa fa-times"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="removeEmptyMedications()" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit Medication Modal -->
       <div class="row row-offcanvas row-offcanvas-left">
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas leftCol" id="sidebar" role="navigation">
@@ -73,18 +115,18 @@
 
             <div class="col-xs-12">
               <div class="well well-gray">
-                <div class="btn-block"><label class="form-label-static" for="patient_name">Patient's Name</label><span>Eric de Felix</span></div>
-                <div class="btn-block"><label class="form-label-static" for="age">Age</label><span>31</span></div>
-                <div class="btn-block"><label class="form-label-static" for="gender">Gender</label><span>Male</span></div>
-                <div class="btn-block"><label class="form-label-static" for="birthday">Date of Birth</label><span>June 26, 1983</span></div>
-                <div class="btn-block"><label class="form-label-static" for="conctacnumber">Contact Number</label><span>239-72-01</span></div>
-                <div class="btn-block"><label class="form-label-static" for="status">Civil Status</label><span>Single</span></div>
-                <div class="btn-block"><label class="form-label-static" for="address">Address</label><span>Kasipagan St. Mandaluyong City</span></div>
+                <div class="btn-block"><label class="form-label-static" for="patient_name">Patient's Name</label><span>{{patient_info.patient_name}}</span></div>
+                <div class="btn-block"><label class="form-label-static" for="age">Age</label><span>{{patient_info.age}}</span></div>
+                <div class="btn-block"><label class="form-label-static" for="gender">Gender</label><span>{{patient_info.gender}}</span></div>
+                <div class="btn-block"><label class="form-label-static" for="birthday">Date of Birth</label><span>{{patient_info.date_of_birth}}</span></div>
+                <div class="btn-block"><label class="form-label-static" for="conctacnumber">Contact Number</label><span>{{patient_info.contact_number}}</span></div>
+                <div class="btn-block"><label class="form-label-static" for="status">Civil Status</label><span>{{patient_info.civil_status}}</span></div>
+                <div class="btn-block"><label class="form-label-static" for="address">Address</label><span>{{patient_info.address}}</span></div>
                 <div class="btn-block"><label class="form-label-static" for="diagnosis">Diagnosis</label><span>Diagnosis placeholder</span></div>
                 <div class="btn-block">
                   <label class="form-label-static" for="firstvisit">Date of First Visit</label>
                   <div class="form-data form-data-static">
-                    <span>06/23/2014</span>
+                    <span>{{patient_info.date_of_first_visit}}</span>
                     <button class="btn btn-default btn-xs push-right" onclick="editData(this)"><i class="fa fa-edit"></i> Edit</button>
                   </div>
 
@@ -97,7 +139,7 @@
                 <div class="btn-block">
                   <label class="form-label-static" for="referringdoctor">Referring Doctor</label>
                   <div class="form-data form-data-static">
-                    <span>Dr. John Doe</span>
+                    <span>{{patient_info.referring_doctor}}</span>
                     <button class="btn btn-default btn-xs push-right" onclick="editData(this)"><i class="fa fa-edit"></i> Edit</button>
                   </div>
 
@@ -111,30 +153,30 @@
                     <button class="btn btn-default btn-xs push-right" onclick="undoEditData(this)"><i class="fa fa-undo"></i> Cancel</button>
                   </div>
                 </div>
-
-                <h4 class="bordered-heading text-primary">Medication <button class="btn btn-default btn-xs" style="position: absolute; right: 35px;" data-toggle="modal" data-target="#editMedication" data-backdrop="static"><i class="fa fa-edit"></i> Edit</button></h4>
-                <div class="table-responsive" style="background: #fff;">
-                  <table class="table table-condensed table-striped">
-                    <thead>
-                      <tr>
-                        <th class="text-center">Medicine</th>
-                        <th class="text-center">Dosage</th>
-                        <th class="text-center">Frequency</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="text-center">Sample Medicine</td>
-                        <td class="text-center">500g</td>
-                        <td class="text-center">2x a day</td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">Sample Medicine</td>
-                        <td class="text-center">500g</td>
-                        <td class="text-center">2x a day</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div>
+                  <h4 class="bordered-heading text-primary">{{initial_evaluation_form.details[0].title}} 
+                    <a href="#{{initial_evaluation_form.details[0].id}}">
+                      <button class="btn btn-default btn-xs" style="position: absolute; right: 35px;" data-toggle="modal" data-target="#editMedication" data-backdrop="static"><i class="fa fa-edit"></i> Edit</button>
+                    </a>
+                  </h4>
+                  <div class="table-responsive" style="background: #fff;">
+                    <table class="table table-condensed table-striped">
+                      <thead>
+                        <tr>
+                          <th class="text-center">Medicine</th>
+                          <th class="text-center">Dosage</th>
+                          <th class="text-center">Frequency</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="medication in initial_evaluation_form.medicationsList">
+                          <td class="text-center">{{medication.medicine}}</td>
+                          <td class="text-center">{{medication.dosage}}</td>
+                          <td class="text-center">{{medication.frequency}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -155,35 +197,35 @@
 
             <div class="row">
               <div class="col-xs-12">
-                <div class="row">
+                <div class="row" ng-init="val=0">
                   <div class="col-md-2 col-sm-4 col-xs-6">
-                              <div class="radio radio-inline radio-primary">
-                                  <input type="radio" id="ie_no_pain" value="no_pain" name="ie_loc1">
-                                  <label for="ie_no_pain"> No Pain </label>
+                      <div class="radio radio-inline radio-primary">
+                                  <input type="radio" id="fe_no_pain" value="0" name="fe_loc1" ng-model="initial_evaluation_form.selectedClaudicationPainScale">
+                                  <label for="fe_no_pain"> No Pain </label>
                               </div>
                   </div>
                   <div class="col-md-2 col-sm-4 col-xs-6">
                               <div class="radio radio-inline radio-primary">
-                                  <input type="radio" id="ie_onset_pain" value="onset_pain" name="ie_loc1">
-                                  <label for="ie_onset_pain"> Onset of Pain </label>
+                                  <input type="radio" id="fe_onset_pain" value="1" name="fe_loc1" ng-model="initial_evaluation_form.selectedClaudicationPainScale">
+                                  <label for="fe_onset_pain"> Onset of Pain </label>
                               </div>
                   </div>
                   <div class="col-md-2 col-sm-4 col-xs-6">
                               <div class="radio radio-inline radio-primary">
-                                  <input type="radio" id="ie_mild_pain" value="mild_pain" name="ie_loc1">
-                                  <label for="ie_mild_pain"> Mild Pain </label>
+                                  <input type="radio" id="fe_mild_pain" value="2" name="fe_loc1" ng-model="initial_evaluation_form.selectedClaudicationPainScale">
+                                  <label for="fe_mild_pain"> Mild Pain </label>
                               </div>
                   </div>
                   <div class="col-md-2 col-sm-4 col-xs-6">
                               <div class="radio radio-inline radio-primary">
-                                  <input type="radio" id="ie_moderate_pain" value="moderate_pain" name="ie_loc1">
-                                  <label for="ie_moderate_pain"> Moderate Pain </label>
+                                  <input type="radio" id="fe_moderate_pain" value="3" name="fe_loc1" ng-model="initial_evaluation_form.selectedClaudicationPainScale">
+                                  <label for="fe_moderate_pain"> Moderate Pain </label>
                               </div>  
                   </div>
                   <div class="col-md-2 col-sm-4 col-xs-6">
                               <div class="radio radio-inline radio-primary">
-                                  <input type="radio" id="ie_severe_pain" value="severe_pain" name="ie_loc1">
-                                  <label for="ie_severe_pain"> Severe Pain </label>
+                                  <input type="radio" id="fe_severe_pain" value="4" name="fe_loc1" ng-model="initial_evaluation_form.selectedClaudicationPainScale">
+                                  <label for="fe_severe_pain"> Severe Pain </label>
                               </div>
                   </div>
                 </div>
@@ -1170,13 +1212,13 @@
             <div class="row">
               <div class="col-xs-12">
                 <div class="row">
-                  <div class="col-md-2 col-sm-4 col-xs-6">
+                  <div ng-repeat="claudication in final_evaluation_form.claudicationPainScaleValues" class="col-md-2 col-sm-4 col-xs-6">
                               <div class="radio radio-inline radio-primary">
-                                  <input type="radio" id="fe_no_pain" value="no_pain" name="fe_loc1">
-                                  <label for="fe_no_pain"> No Pain </label>
+                                  <input type="radio" id="fe_no_pain" value="{{claudication.value}}" name="fe_loc1" ng-value="{{claudication.selected}}">
+                                  <label for="fe_no_pain">{{claudication.label}}</label>
                               </div>
                   </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6">
+                  <!-- <div class="col-md-2 col-sm-4 col-xs-6">
                               <div class="radio radio-inline radio-primary">
                                   <input type="radio" id="fe_onset_pain" value="onset_pain" name="fe_loc1">
                                   <label for="fe_onset_pain"> Onset of Pain </label>
@@ -1199,7 +1241,7 @@
                                   <input type="radio" id="fe_severe_pain" value="severe_pain" name="fe_loc1">
                                   <label for="fe_severe_pain"> Severe Pain </label>
                               </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

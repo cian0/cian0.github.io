@@ -93,7 +93,10 @@ app.data.controller('patient_information', function ($scope){
 
 
 app.data.controller('initial_evaluation_form_pad', function ($scope){
-
+  $scope.clinical_diagnosis = "",
+  $scope.patient_info = {};
+  $scope.initial_evaluation_form = {};
+  $scope.final_evaluation_form = {};
 });
 
 app.data.controller('initial_evaluation_form', function ($scope){

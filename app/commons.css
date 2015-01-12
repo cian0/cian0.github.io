@@ -10,3 +10,21 @@
 .page {
 	margin-top: 60px;
 }
+.navbar-brand,.btn-red,.btn-red:hover{color:#fff;}
+.table-red  thead th{ border: 1px solid #9E0914;}
+.table-red .th-inner{ background-color: #c00311;}
+h1.navbar-brand{
+	margin: auto;
+	float: none !important;
+	text-align: center;
+	display: inline-block;
+	margin-top: 15px;
+	padding: 0;
+	padding-left: 15px;
+	color: #fff;
+	height: auto;
+	font-weight: 300;
+}
+.theme-red .text-primary,.theme-red .pagination>li:not(.disabled)>a{color: #c00311;}
+.theme-red .btn-primary,.theme-red .btn-primary.active{background-color: #c00311;background-image: -webkit-linear-gradient( 90deg, #c00311 0%, #c00311 100%);border-color:#d43f3a;}
+#generic_preloader{position: fixed; right: 2%; bottom: 4%; display:none;} #generic_preloader.in{display:block;}

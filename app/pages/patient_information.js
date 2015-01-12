@@ -1,7 +1,6 @@
 app.modules.patient_information = {
 
 	init: function(vars){
-
 		/***Summary of components below***/
 
 		if(checkUserSession()){
@@ -85,10 +84,13 @@ app.modules.patient_information = {
 							placeholder: args.assigned_to,
 							allowClear: true,
 						});
-
+						
 						$("#select_pt").on({
-							change: function(e){
-
+							change: function(e){ 
+								
+								$('#btn-assign').removeAttr('disabled');
+								if(e) if(!e.val) $('#btn-assign').attr('disabled',true); //Disable ASSIGN button if no PT is selected
+								
 								var response = api.get('assignPatientInformation',{
 									"patient_info_id" : "1",
 									"web_pt_id" : "2"
@@ -227,15 +229,42 @@ app.modules.patient_information = {
 				keyboard: false,
 				backdrop: 'static'
 			});
-
+			
+			/***Literal constants***/
+			var MD = 'md';
+			var PT = 'pt';
+			var SUBMITTED = 'Submitted';
+			var FORAPPROVAL = 'For Approval';
+			var FORVALIDATION = 'For Validation';
+			var PENDING = 'Pending';
+			var ASSIGNED = 'Assigned';
+			var VALIDATED = 'Validated';
+		
+		
+			var status = row.status;
+			var isForFinalApproval =false;
+			var submit_status ='';
+			switch(status){
+				case ASSIGNED: submit_status = FORVALIDATION; break;
+				case VALIDATED: 
+					if(isForFinalApproval){
+						submit_status = FORAPPROVAL;
+					}else{
+						submit_status = FORVALIDATION;
+					}
+				break;
+				
+			}
 			vs.setVars({
 				ptinfo_type: row.padstroke,
 				ptinfo_name: row.patientname,
 				ptinfo_date_received: row.datereceived,
 				ptinfo_last_updated: row.lastupdated,
-				ptinfo_updated_by: row.updatedby
+				ptinfo_updated_by: row.updatedby,
+				ptinfo_status: status,
+				ptinfo_submit_status: submit_status
 			});
-
+			
 			selectPT({
 				assigned_to: row.assignedtopt
 			});
@@ -247,30 +276,51 @@ app.modules.patient_information = {
 			btnInitialEvaluationForm(row.padstroke);			
 
 			var userType = $.cookie('user_type');
-
-			if(userType == 'md'){
-				switch(status){
-					case 'Submitted':
-						$('#select_pt').attr('disabled','true');
-						$('#btn-approve').hide();
-						$('#btn-assign').hide();
-					break;
-					case 'For Approval':
-						$('#select_pt').attr('disabled','true');
-						$('#btn-approve').show();
-						$('#btn-assign').hide();
-					break;
-					case 'Assigned':
-						$('#select_pt').attr('disabled','true');
-						$('#btn-approve').hide();
-						$('#btn-assign').hide();
-					break;
-					case 'Pending':
-						$('#select_pt').removeAttr('disabled');
-						$('#btn-approve').hide();
-						$('#btn-assign').show();
-					break;
-				}
+			//Display and hide dropdown and buttons
+			$('#select_pt').attr('disabled','true');
+			$('#btn-assign,#btn-approve,#btn-submit,#btn-validate').hide().removeAttr('disabled');
+			switch(userType){
+				case MD: // Medical Doctor display logic
+					switch(status){
+						case PENDING:
+							$('#select_pt').removeAttr('disabled');
+							$('#btn-assign').show().attr('disabled','true');
+							break;
+						case ASSIGNED:
+							//NO BUTTON
+						break;
+						case FORVALIDATION:
+							$('#btn-validate').show();
+						break;
+						case VALIDATED:
+							//NO BUTTON
+						break;
+						case FORAPPROVAL:
+							$('#btn-approve').show();
+						break;
+						case SUBMITTED:
+							//NO BUTTON
+						break;
+					}
+				break;
+				case PT: //Physical Therapist display logic
+					switch(status){
+						case ASSIGNED:
+							$('#btn-submit').show();
+						break;
+						case FORVALIDATION:
+							//NO BUTTON
+						break;
+						case VALIDATED:
+							$('#btn-submit').show();
+						break;
+						case FORAPPROVAL:
+							//NO BUTTON
+						break;
+						case SUBMITTED:
+							//NO BUTTON
+						break;
+					}
 			}
 		}
 

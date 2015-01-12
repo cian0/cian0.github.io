@@ -11,10 +11,11 @@ var app = {
 
 var api = {
 	get: function(path, args, headers, type){
-
+		app.commons.showPreloader(true);
 		if(!app.settings.demoMode){
 			return api[path](args, headers, type);
 		} else {
+			app.commons.showPreloader(false);
 			return app.tests[app.data.lastPageRendered].events[path]();
 		}
 	},
@@ -39,7 +40,7 @@ var api = {
 			console.log('args: ' + JSON.stringify(params.args));
 			console.log('header: ' + JSON.stringify(params.headers));
 		}
-
+		
 		$.ajax({
 			type: (params.type ? params.type : "POST"),
 			url: params.url,
@@ -54,7 +55,7 @@ var api = {
 		.fail(function(){
 			api.errormsg();
 		});
-		
+		app.commons.showPreloader(false);
 		return response;
 	},
 	'authenticateUser': function(args){

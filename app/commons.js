@@ -44,5 +44,17 @@ app.commons = {
 		}
 
 		return false;	
+	},
+	'showPreloader':function(show){
+		if(show) $('#generic_preloader').addClass('in');
+		else{
+			var delay = app.settings.demoMode?2000:0;
+			if(app.settings.demoMode)
+			window.setTimeout(
+				function(){
+					 $('#generic_preloader').removeClass('in');
+				} ,delay
+			);
+		}
 	}
 }
