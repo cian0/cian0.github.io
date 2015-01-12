@@ -127,6 +127,7 @@ app.modules.patient_information = {
 		function templateVariables(){
 
 			var user_type = $.cookie('user_type');
+			var label = "Assigned to PT";
 
 			vs.setVarByControllerID('template','title','Patient Information - ' + user_type.toUpperCase());
 
@@ -136,9 +137,11 @@ app.modules.patient_information = {
 			switch(user_type){
 				case 'md':
 					theme_color = 'blue';
+					label = "Assigned to PT";
 				break;
 				case 'pt':
 					theme_color = 'red';
+					label = "Assigned by MD";
 				break;
 			}
 
@@ -153,6 +156,7 @@ app.modules.patient_information = {
 
 			vs.setVar('theme_color', theme_color);
 			vs.setVar('user_type', user_type);
+			vs.setVar('header_assigned_to_label', label);
 		}
 		
 
@@ -239,6 +243,10 @@ app.modules.patient_information = {
 			var PENDING = 'Pending';
 			var ASSIGNED = 'Assigned';
 			var VALIDATED = 'Validated';
+			var userType = $.cookie('user_type');
+
+			var label_assignto =  (userType === 'md') ? 'Assigned to PT' : 'Assigned by MD';
+
 		
 		
 			var status = row.status;
@@ -262,7 +270,8 @@ app.modules.patient_information = {
 				ptinfo_last_updated: row.lastupdated,
 				ptinfo_updated_by: row.updatedby,
 				ptinfo_status: status,
-				ptinfo_submit_status: submit_status
+				ptinfo_submit_status: submit_status,
+				ptinfo_label_assignto: label_assignto
 			});
 			
 			selectPT({
@@ -275,7 +284,7 @@ app.modules.patient_information = {
 
 			btnInitialEvaluationForm(row.padstroke);			
 
-			var userType = $.cookie('user_type');
+			
 			//Display and hide dropdown and buttons
 			$('#select_pt').attr('disabled','true');
 			$('#btn-assign,#btn-approve,#btn-submit,#btn-validate').hide().removeAttr('disabled');
