@@ -5,10 +5,19 @@
 //Declare Other App Variables
 $bootstrap-sass-asset-helper: false !default;
 
+.bg-cover {
+	background-image: url(../img/bg-cover.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.header {
+	background-color: #fff;
+}
+
 .form-signin {
 	// max-width: 350px;
-	padding: $grid-gutter-width*2;
-	padding-top: $grid-gutter-width;
+	padding: $grid-gutter-width $grid-gutter-width*2;
 	margin: 0 auto;
 	.form-signin-heading {
 		margin-bottom: 10px;
@@ -44,11 +53,17 @@ $bootstrap-sass-asset-helper: false !default;
 	}
 }
 .account-wall {
-	margin-top: 20px;
+	margin-top: 40px;
 	padding: 40px 0 20px;
-	background-color: #F7F7F7;
+	background-color: #EFEFEF;
 	box-shadow: 0 2px 2px $black_30;
 	border-radius: $border-radius-base;
+
+	img {
+		width: 60%;
+		height: auto;
+		padding: $grid-gutter-width;
+	}
 }
 .login-title {
 	color: $color_fuscous_gray_approx;
@@ -56,17 +71,21 @@ $bootstrap-sass-asset-helper: false !default;
 	font-weight: 400;
 	display: block;
 }
-.profile-img {
-	width: auto;
-	max-height: 200px;
-	margin: 0 auto 10px;
-	display: block;
-	border-radius: 50%;
-}
 .need-help {
 	margin-top: 10px;
 }
 .new-account {
 	display: block;
 	margin-top: 10px;
+}
+
+.well-cover {
+	background-color: rgba(255,255,255,0.75);
+	margin-top: $navbar-height + ($navbar-height/2-15);
+	border-radius: 20px; 
+
+	.list-group, .panel {
+		box-shadow: 0 1px 20px rgba(0,0,0,0.3);
+		-webkit-box-shadow: 0 1px 20px rgba(0,0,0,0.3);
+	}
 }

@@ -14,7 +14,7 @@ $gray:                   #98978B;
 $gray-light:             #DFD7CA;
 $gray-lighter:           #F8F5F0;
 
-$brand-primary:         #088480;
+$brand-primary:         #00366F;
 $brand-success:         #93C54B;
 $brand-info:            #29ABE0;
 $brand-warning:         #F47C3C;
@@ -29,7 +29,7 @@ $color_fuscous_gray_approx: #555;
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               $brand-primary;
+$body-bg:               #fff;
 $body-bg-img:           url(../img/bg.png);
 //** Global text color on `<body>`.
 $text-color:            #3E3F3A;
@@ -46,7 +46,7 @@ $link-hover-decoration: underline;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif:  "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-sans-serif:  "PTSans-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -352,7 +352,7 @@ $container-lg:                 $container-large-desktop;
 //##
 
 // Basics of a navbar
-$navbar-height:                    60px;
+$navbar-height:                    90px;
 $navbar-margin-bottom:             $line-height-computed;
 $navbar-border-radius:             $border-radius-base;
 $navbar-padding-horizontal:        floor(($grid-gutter-width / 2));
@@ -360,8 +360,8 @@ $navbar-padding-vertical:          (($navbar-height - $line-height-computed) / 2
 $navbar-collapse-max-height:       340px;
 
 $navbar-default-color:             $gray-dark;
-$navbar-default-bg:                $gray-darker;
-$navbar-default-border:            $gray-darker;
+$navbar-default-bg:                #fff;
+$navbar-default-border:            transparent;
 
 // Navbar links
 $navbar-default-link-color:                $gray;
