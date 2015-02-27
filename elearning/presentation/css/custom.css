@@ -1,0 +1,16 @@
+
+.font-yellow{
+  color: yellow;
+}
+
+.font-size30{
+  font-size: 30px !important;
+}
+
+.inline-image{
+  display: inherit;
+}
+
+.navigator{
+  border: 1px solid #fff !important;
+}
