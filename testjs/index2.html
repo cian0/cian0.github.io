@@ -37,16 +37,30 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+    
     <![endif]-->
 
     <link rel="stylesheet" type="text/css" href="commons/framework/framework.css" />
   </head>
   <body class='theme-{{theme_color}}'>
-    <input type="button" value="Say hello" onClick="showAndroidToast('Hello Android!')" />
+    <input type="button" value="Sa y hello" onClick="showAndroidToast('Hello Android!')" />
+
+    <input type="button" value="Cancel Convo" onClick="cancelConvo()" />
+
+    <input type="button" value="Finish Convo" onClick="finishConvo()" /> 
 
     <script type="text/javascript">
         function showAndroidToast(toast) {
-            Android.showToast(toast);
+            Android.makeToast(toast);
+        }
+
+        function cancelConvo() {
+            Android.cancelConvo();
+        }
+
+        function finishConvo() {
+            Android.finishConvo();
         }
     </script>
 
