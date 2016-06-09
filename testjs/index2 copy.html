@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html id="template" ng-controller="template" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="RWD Form">
+    <meta name="author" content="Eric de Felix">
+    <link rel="icon" href="favicon.ico">
+
+    <title>{{title}}</title>
+
+    <!-- Bootstrap and Font Awesome core CSS -->
+    <link href="commons/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="commons/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Patient Information-->
+    <link rel="stylesheet" href="commons/bootstrap-table/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="commons/select2/select2.css">
+
+    <!-- Initial Evaluation Form -->
+    <link href="commons/off-canvas/off-canvas.css" rel="stylesheet">
+    <link href="commons/affix/affix.css" rel="stylesheet">
+    <link href="app/build.css" rel="stylesheet">
+
+    <link href="app/commons.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{main_css_path}}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="commons/ie-emulation-modes-warning/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+    
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="commons/framework/framework.css" />
+  </head>
+  <body class='theme-{{theme_color}}'>
+    <input type="button" value="Sa y hello" onClick="showAndroidToast('Hello Android!')" />
+
+    <input type="button" value="Cancel Convo" onClick="cancelConvo()" />
+
+    <input type="button" value="Finish Convo" onClick="finishConvo()" /> 
+
+    <script type="text/javascript">
+        function showAndroidToast(toast) {
+            Android.makeToast(toast);
+        }
+
+        function cancelConvo() {
+            Android.cancelConvo();
+        }
+
+        function finishConvo() {
+            Android.finishConvo();
+        }
+    </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="commons/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="commons/jquery/jquery.cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="commons/angular/angular.js"></script>
+    <script type="text/javascript" src="commons/fastdom/fastdom.js"></script>
+    <script type="text/javascript" src="commons/jqache/jqache-0.1.1.min.js"></script>
+    <script type="text/javascript" src="commons/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="commons/framework/framework.js"></script>
+    <script type="text/javascript" src="app/integrate.js"></script>
+    <script type="text/javascript" src="app/app.js"></script>
+    <script type="text/javascript" src="app/lang.js"></script>
+    <script type="text/javascript" src="app/commons.js"></script>
+    <script type="text/javascript" src="app/settings.js"></script>
+    <script type="text/javascript" src="app/data.js"></script>
+    <script src="commons/hideShowPassword/hideShowPassword.min.js"></script>
+
+        <!-- Component -->
+    <script src="commons/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script src="commons/select2/select2.min.js"></script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="commons/ie10-viewport-bug-workaround/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
