@@ -44,7 +44,7 @@
     <link rel="stylesheet" type="text/css" href="commons/framework/framework.css" />
   </head>
   <body class='theme-{{theme_color}}'>
-    <input type="button" value="Sa y hello" onClick="showAndroidToast('Hello Android!')" />
+    <input type="button" value="Say hello" onClick="showAndroidToast('Hello Android!')" />
 
     <input type="button" value="Cancel Convo" onClick="cancelConvo()" />
 
@@ -52,7 +52,7 @@
 
     <script type="text/javascript">
         function showAndroidToast(toast) {
-            Android.makeToast(toast);
+            Android.makeToast(toast, true);
         }
 
         function cancelConvo() {
