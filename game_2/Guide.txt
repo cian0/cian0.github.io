@@ -1,0 +1,200 @@
+1. Update convo details for GA
+
+    1.1 Change brand name
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration var brandName = '...'
+        c. change the value of 'brandName'
+
+    1.2 Change convo folder name
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration var folderName = '...'
+        c. change the value of 'folderName'
+
+    1.3 Change convo type
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration var metric = '...'
+        c. change the value of 'metric' true or false
+
+    1.4 Set max number of item to be shown on page
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration var maxItem = '...'
+        c. change the value of 'maxItem' to maximum items/questions on the page eg. maxItem = 3;
+
+    1.5 Set tutorial/instuction on page load.
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration var isTutorial = '...'
+        c. change the value of 'isTutorial' to true / false  to turn on and off the instruction on page load. eg. isTutorial = true;
+
+    1.6 Set thank you message after the activity.
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration var isThankYou = '...'
+        c. change the value of 'isThankYou' to true / false  to turn on and off the thank you message after the activity. eg. isThankYou = true;
+
+    1.7 Set delay timer on bot message / question, and user response.
+
+        a. Open 'template/config/script.js'
+        b. In 'script.js', you will find the declaration 
+            var BotFirstMsgTimer = 1500; // 1000 millisecond = 1 second - Set timer delay for bot first message on load to the page
+            var BotNextMsgTimer = 2000; // 1000 millisecond = 1 second - Set timer delay for bot next message / question on the page
+            var myResponseTimer = 2500; // 1000 millisecond = 1 second - Set timer delay for user response on the page
+
+2. Changing Assets
+	
+	2.1 Changing Images
+
+        a. Open the folder named 'template/img' inside the convo directory.
+        b. Change the corresponding images you wanted to replace:
+
+        	- background.jpg 				         --> The image for background
+			
+            - tutorial.jpg                           --> The image for instruction or question
+			
+			- bot-pic.png                            --> profile image of the bot
+			
+            - endConvo.png                  	     --> The image of the End Convo button
+
+            - cancelConvo.png               	     --> The image of the Cancel Convo button
+
+        c. If the extension has changed, for ex. from .jpg to .png and Vise Versa, you will have to change the extension of the image on template/index.html.
+
+3. Update the content message / question, response and options.
+
+    3.1 Set the first bot initial message.
+
+        a. Open 'template/index.html'. Look for the code similar below:
+
+            <div id="chat-message-board" data-initial-bot-msg="Chikahin mo muna ako, please. :)" data-first-bot-question="Kapag ikaw ay nag-iinternet, alin sa mga ito ang pinaka madalas na ginagamit mo?">
+                <span id="loader">● ● ●</span>  
+            </div>
+
+            Note: 
+                data-initial-bot-msg - This where you set the 1st message bot will say / print on the page.
+
+                data-first-bot-question - This where you set the 1st question bot will say / print on the page.
+
+    3.2 Set the options(choices), response and next bot message / questions.
+
+        a. Open 'template/index.html'. Look for the code similar below:
+
+            <div id="chat-options">
+                <div class="button-group btn-itm-1" data-button-group="1" data-bot-question="">
+                    <button class="btn" data-bot-response="uso pa ba un? :p" data-my-response="Desktop">Desktop</button>            
+                    <button class="btn" data-bot-response="keri werever" data-my-response="Laptop">Laptop</button>
+                    <button class="btn" data-bot-response="pinag-iisipan pa" data-my-response="Tablet">Tablet</button>
+                    <button class="btn" data-bot-response="e di ikaw na ang smart" data-my-response="Smartphone">Smartphone</button>
+                </div>
+                <div class="button-group btn-itm-2" data-button-group="2" data-bot-question="Paano ka naman nakakapag internet?">
+                    <button class="btn" data-bot-response="budget budget pag me time... :)" data-my-response="Load">Load</button>           
+                    <button class="btn" data-bot-response="ay, soshal!" data-my-response="Wifi at home/office">Wifi at home/office</button>
+                    <button class="btn" data-bot-response="naks, madiskarte!" data-my-response="Wifi ng kapit-bahay">Wifi ng kapit-bahay</button>
+                    <button class="btn" data-bot-response="naks, madiskarte!" data-my-response="Free wifi sa mall/cafe">Free wifi sa mall/cafe</button>                         
+                    <button class="btn" data-bot-response="budget budget pag me time... :)" data-my-response="Internet shop">Internet shop</button>
+                    <button class="btn" data-bot-response="ay, soshal!" data-my-response="Post-paid plan">Post-paid plan</button>
+                </div>
+            </div>
+
+            Note:
+                when adding new button group need to have a unique class and data-button-group values. eg. when we add to new button group just set an incremental value to have a unique class and data attribute: 
+                <div class="button-group btn-itm-4" data-button-group="4">
+
+                data-button-group - Set button group number this usually incremental.
+                                    eg. 1st button group to be shown must be set to 1.
+
+                class="button-group btn-itm-1" - This need to added incremental just like the button group.
+                                                eg. inside the class add btn-item-* number base on which button group.
+
+                data-bot-question - This where you set the next question that the bot will print on the page.
+                                    eg. initial or first button group it is okey to leave this blank or empty.
+
+                data-bot-response - This where you set the bot response and print on the page for each button the user select.
+
+                data-my-response - This where you set the user picked/reponse on the each button the user select.
+                                 - This also the one we store on the payload after the convo.
+
+                <button ...>text here</button> - This where you set the button text that will print on the page.
+
+    3.3 Update Style of buttons, messages, backgrounds, and fonts in 'template/config/style.css'
+        
+        3.3.1 Update fonts of paragraph on chat board
+            a. Open 'template/config/style.css' file
+            b. In the 'style.css' file, you will find the declaration '#chat #chat-message-board p'
+            c. Below is the code snippet from 'style.css':  
+
+                #chat #chat-message-board p { /* Change font-size and font-family of all the paragraph inside #chat-message-board */
+                  font-size: 16px;
+                  font-family: Arial;
+                }   
+
+        3.3.2 Update background color and border-radius of paragraph of bot on chat board
+            a. Open 'template/config/style.css' file
+            b. In the 'style.css' file, you will find the declaration '#chat #chat-message-board p.bot-msg'
+            c. Below is the code snippet from 'style.css':  
+            
+                #chat #chat-message-board p.bot-msg { /* Change background-color and border-radius each side of bot-msg inside #chat-message-board */
+                  background-color: #ffffff;
+                  border-top-right-radius: 8px;
+                  border-top-left-radius: 0;
+                  border-bottom-right-radius: 8px;
+                  border-bottom-left-radius: 8px;
+                }    
+
+        3.3.3 Update background color and border-radius of paragraph of user response on chat board
+            a. Open 'template/config/style.css' file
+            b. In the 'style.css' file, you will find the declaration '#chat #chat-message-board p.my-response'
+            c. Below is the code snippet from 'style.css':  
+            
+                #chat #chat-message-board p.my-response { /* Change background-color and border-radius each side of my-response inside #chat-message-board */
+                  background-color: #00D8FF;
+                  border-top-right-radius: 0;
+                  border-top-left-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  border-bottom-left-radius: 8px;
+                }
+
+        3.3.4 Update color and position of the loader(...) on chat board
+            a. Open 'template/config/style.css' file
+            b. In the 'style.css' file, you will find the declaration '#chat #chat-message-board span#loader'
+            c. Below is the code snippet from 'style.css':  
+            
+                #chat #chat-message-board span#loader { /* Change color and position of loader(...) inside #chat-message-board */
+                  color: #00D8FF;
+                  bottom: 18%;
+                  left: -36%;
+                }                                              
+
+        3.3.5 Update background color and position of the options buttons on chat option section
+            a. Open 'template/config/style.css' file
+            b. In the 'style.css' file, you will find the declaration '.btn'
+            c. Below is the code snippet from 'style.css':  
+            
+                .btn { /* Change background-color and and border-radius each side of button option/choices inside #chat-options */
+                  border-top-right-radius: 0;
+                  border-top-left-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                  border-bottom-left-radius: 8px;
+                  background-color: #ffffff;
+                } 
+   
+
+4. Updating End Convo button, same for the buttons
+
+    4.1 Changing button position
+
+        a. Open 'template/config/style.css' file
+        b. In the 'style.css' file, you will find the declaration '#endConvo'
+        c. There are four properties, namely: 'top', 'bottom', 'left', 'right', that can be used to adjust the position of the button
+        d. For ex., if you want to adjust the position of the button from the left of the screen, you can declare
+           left: 15%;
+        e. Below is the code snippet from 'style.css':
+
+            #endConvo {
+              bottom: 6%;
+              left: 40%;
+            }
+

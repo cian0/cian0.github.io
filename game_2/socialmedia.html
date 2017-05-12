@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chatbot - Social Media</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	
+	<link rel="stylesheet" href="css/animate.min.css">
+	<link rel="stylesheet" href="css/main.min.css">
+	<link rel="stylesheet" href="config/style.css">
+	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="js/main.min.js"></script>
+	<script type="text/javascript" src="config/script.js"></script>
+	
+</head>
+<body>
+	<div class="container">
+	
+		<div class="page loading"></div>
+
+		<div class="page page-1">
+			<div class="page-wrapper">
+
+				<div id="tutorial">
+					<h1> </h1>
+					<p></p>
+				</div>
+
+				<div id="chat">
+					<div id="chat-profile">
+						<img src="img/tl/chatbot.gif" alt="bot-pic" class="bot-pic">
+					</div>
+					<div id="chat-message-board" 
+						 data-initial-bot-msg="Chikahin mo muna ako, please. <i class='em em-smile'></i>" 
+						 data-first-bot-question="Kapag ikaw ay nag-iinternet, alin sa mga ito ang pinaka madalas na ginagamit mo?">				
+						<span id="loader">● ● ●</span>	
+					</div>
+					<div id="chat-options">
+						<div class="button-group qid-1" 
+							 data-qid="1"
+							 data-bot-msg=""
+							 data-bot-question="">
+							<button class="btn" data-bot-response="uso pa ba un? <i class='em em-stuck_out_tongue'></i>" data-my-response="Desktop" data-goto="2">Desktop</button>			
+							<button class="btn" data-bot-response="keri werever" data-my-response="Laptop" data-goto="2">Laptop</button>
+							<button class="btn" data-bot-response="pinag-iisipan pa" data-my-response="Tablet" data-goto="2">Tablet</button>
+							<button class="btn" data-bot-response="e di ikaw na ang smart" data-my-response="Smartphone" data-goto="2">Smartphone</button>
+						</div>
+						<div class="button-group qid-2" 
+							 data-qid="2"
+							 data-bot-msg="" 
+							 data-bot-question="Paano ka naman nakakapag internet?">
+							<button class="btn" data-bot-response="budget budget pag me time... <i class='em em-smile'></i>" data-my-response="Load" data-goto="3">Load</button>			
+							<button class="btn" data-bot-response="ay, soshal!" data-my-response="Wifi at home/office" data-goto="3">Wifi at home/office</button>
+							<button class="btn" data-bot-response="naks, madiskarte!" data-my-response="Wifi ng kapit-bahay" data-goto="3">Wifi ng kapit-bahay</button>
+							<button class="btn" data-bot-response="naks, madiskarte!" data-my-response="Free wifi sa mall/cafe" data-goto="3">Free wifi sa mall/cafe</button>							
+							<button class="btn" data-bot-response="budget budget pag me time... <i class='em em-smile'></i>" data-my-response="Internet shop" data-goto="3">Internet shop</button>
+							<button class="btn" data-bot-response="ay, soshal!" data-my-response="Post-paid plan" data-goto="3">Post-paid plan</button>
+						</div>
+						<div class="button-group qid-3" 
+							 data-qid="3"
+							 data-bot-msg="" 
+							 data-bot-question="Gumagamit ka ba ng social media?">
+							<button class="btn" data-bot-response="social butterfly ka pala" data-my-response="Oo" data-goto="5">Oo</button>			
+							<button class="btn" data-bot-response="my life ka ba?" data-my-response="Hindi" data-goto="4">Hindi</button>	
+						</div>
+						<div class="button-group qid-4" 
+							 data-qid="4"
+							 data-bot-msg="" 
+							 data-bot-question="##endConvo">
+						</div>						
+						<div class="button-group qid-5" 
+							  data-qid="5"
+							  data-button-group="5" 
+							  data-bot-question="Ano anong social media ang ginagamit mo?">
+							<button class="btn" data-bot-response="faney na faney" data-my-response="Twitter" data-goto="6">Twitter</button>			
+							<button class="btn" data-bot-response="wow, bagets!" data-my-response="Snapchat" data-goto="6">Snapchat</button>							
+							<button class="btn" data-bot-response="dameng friends?! <i class='em em-wink'></i>" data-my-response="Facebook" data-goto="6">Facebook</button>			
+							<button class="btn" data-bot-response="ay mahilig sa selfie, hihi" data-my-response="Instagram" data-goto="6">Instagram</button>							
+						</div>
+						<div class="button-group qid-6" 
+							 data-qid="6"
+							 data-bot-msg="" 
+							 data-bot-question="##endConvo">
+						</div>																																			
+					</div>
+				</div>
+
+				<div id="thankyou">
+					<h1> Thank you! </h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et quam metus. Fusce convallis nisl a purus scelerisque eleifend. Suspendisse mollis leo a turpis tincidunt rhoncus. Vestibulum ultrices purus id metus volutpat tristique. Duis bibendum maximus nunc, ac tincidunt neque molestie non.</p>
+				</div>
+
+				<button id="endConvo">
+					<img src="img/endConvo.png" alt="">
+				</button>
+				<button id="cancelConvo">
+					<img src="img/cancelConvo.png" alt="">
+				</button>				
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

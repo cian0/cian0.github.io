@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chatbot - Health Related - Cigarette</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	
+	<link rel="stylesheet" href="css/animate.min.css">
+	<link rel="stylesheet" href="css/main.min.css">
+	<link rel="stylesheet" href="config/style.css">
+	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="js/main.min.js"></script>
+	<script type="text/javascript" src="config/script.js"></script>
+	
+</head>
+<body>
+	<div class="container">
+	
+		<div class="page loading"></div>
+
+		<div class="page page-1">
+			<div class="page-wrapper">
+
+				<div id="tutorial">
+					<h1> </h1>
+					<p></p>
+				</div>
+
+				<div id="chat">
+					<div id="chat-profile">
+						<img src="img/tl/chatbot.gif" alt="bot-pic" class="bot-pic">
+					</div>
+					<div id="chat-message-board" 
+						data-initial-bot-msg="" 
+						data-first-bot-question="Uy parang pagod ka na magsagot a. <br>Break muna o. <br>Naninigarilyo ka ba?">
+						<span id="loader">● ● ●</span>	
+					</div>
+					<div id="chat-options">
+						<div class="button-group qid-1" 
+							 data-qid="1" 
+							 data-bot-msg=""
+							 data-bot-question="">
+							<button class="btn" data-bot-response="" data-my-response="Oo" data-goto="4"">Oo</button>			
+							<button class="btn" data-bot-response="Naks naman. Ikaw na healthy living <i class='em em-smile'></i>" data-my-response="Hindi" data-goto="2"">Hindi</button>	
+						</div>
+						<div class="button-group qid-2" 
+							 data-qid="2" 
+							 data-bot-msg=""
+							 data-bot-question="Talaga? Kahit minsan hindi pa?">
+							<button class="btn" data-bot-response="Tama yan. Healthy living nga naman dapat." data-my-response="Hindi ko pa talaga nasubukan" data-goto="3">Hindi ko pa talaga nasubukan</button>			
+							<button class="btn" data-bot-response="" data-my-response="Tinigilan ko na manigarilyo" data-goto="9">Tinigilan ko na manigarilyo</button>	
+						</div>
+						<div class="button-group qid-3" 
+							 data-qid="3" 
+							 data-bot-msg=""
+							 data-bot-question="##endConvo">
+						</div>
+						<div class="button-group qid-4" 
+							 data-qid="4" 
+							 data-bot-msg="" 
+							 data-bot-question="Ga'no ka kadalas manigarilyo?">
+							<button class="btn" data-bot-response="So happy ka naman? <i class='em em-smile'></i>" data-my-response="Araw-araw" data-goto="5">Araw-araw</button>			
+							<button class="btn" data-bot-response="So happy ka naman? <i class='em em-smile'></i>" data-my-response="Mga 4-6 na beses sa isang liggo" data-goto="5">Mga 4-6 na beses sa isang liggo</button>
+							<button class="btn" data-bot-response="Uy, pa social smoker <i class='em em-wink'></i>" data-my-response="Mga 1-3 beses sa isang linggo" data-goto="5">Mga 1-3 beses sa isang linggo</button>
+							<button class="btn" data-bot-response="So happy ka naman? <i class='em em-smile'></i>" data-my-response="Minsan sa isang buwan" data-goto="5">Minsan sa isang buwan</button>
+							<button class="btn" data-bot-response="So happy ka naman? <i class='em em-smile'></i>" data-my-response="Tumigil na ako" data-goto="5">Tumigil na ako</button>
+							<button class="btn" data-bot-response="Ay, secretive? <i class='em em-wink'></i>" data-my-response="Ayaw ko sagutin" data-goto="5">Ayaw ko sagutin</button>
+						</div>
+						<div class="button-group qid-5" 
+							 data-qid="5" 
+							 data-bot-msg="" 
+							 data-bot-question="Nakaka-ilang stick ka naman sa isang araw?">
+							<button class="btn" data-bot-response="Ah, keri <i class='em em-smile'></i>" data-my-response="1-3 sticks" data-goto="6">1-3 sticks</button>			
+							<button class="btn" data-bot-response="Ah, keri <i class='em em-smile'></i>" data-my-response="4-6 sticks" data-goto="6">4-6 sticks</button>
+							<button class="btn" data-bot-response="Ah, keri <i class='em em-smile'></i>" data-my-response="7-10 sticks" data-goto="6">7-10 sticks</button>		
+							<button class="btn" data-bot-response="Ah, keri <i class='em em-smile'></i>" data-my-response="31 to 40 siguro" data-goto="6">31 to 40 siguro</button>			
+							<button class="btn" data-bot-response="Yosi pa like there's no more tomorrow <i class='em em-wink'></i>" data-goto="6" data-my-response="Mahigit isang kaha">Mahigit isang kaha</button>	
+							<button class="btn" data-bot-response="" data-my-response="Di ko alam e" data-goto="6">'Di ko alam e</button>			
+						</div>
+						<div class="button-group qid-6" 
+							  data-qid="6" 
+							  data-bot-msg="" 
+							  data-bot-question="Ito secret lang natin. Anong edad ka ba nagsimula manigarilyo?">
+							<button class="btn" data-bot-response="" data-my-response="Bago ako mag 18" data-goto="7">Bago ako mag 18</button>			
+							<button class="btn" data-bot-response="" data-my-response="Nung I think 18 - 23 ako" data-goto="7">Nung I think 18 - 23 ako</button>		
+							<button class="btn" data-bot-response="" data-my-response="Mga 24 - 30 ata ako" data-goto="7">Mga 24 - 30 ata ako</button>		
+							<button class="btn" data-bot-response="" data-my-response="31 to 40 siguro" data-goto="7">31 to 40 siguro</button>			
+							<button class="btn" data-bot-response="" data-my-response="Parang nung 40 pataas" data-goto="7">Parang nung 40 pataas</button>
+						</div>	
+						<div class="button-group qid-7" 
+							  data-qid="7" 
+							  data-bot-msg="" 
+							  data-bot-question="Matanong ko lang din. Bakit ka nga ba naninigarilyo?">
+							<button class="btn" data-bot-response="" data-my-response="Sabi ng mga kasama ko e" data-goto="8">Sabi ng mga kasama ko e</button>			
+							<button class="btn" data-bot-response="" data-my-response="Nakikita ko lang sa iba" data-goto="8">Nakikita ko lang sa iba</button>		
+							<button class="btn" data-bot-response="" data-my-response="Pampawala ng stress" data-goto="8">Pampawala ng stress</button>		
+							<button class="btn" data-bot-response="" data-my-response="Para lang masaya" data-goto="8">Para lang masaya</button>			
+							<button class="btn" data-bot-response="" data-my-response="Na-curious ako e" data-goto="8">Na-curious ako e</button>
+							<button class="btn" data-bot-response="" data-my-response="Ibang dahilan" data-goto="8">Ibang dahilan</button>
+						</div>					
+						<div class="button-group qid-8" 
+							  data-qid="8" 
+							  data-bot-msg="" 
+							  data-bot-question="Nasubukan mo na ba na tumigil manigarilyo?">
+							<button class="btn" data-bot-response="" data-my-response="Oo" data-goto="9">Oo</button>
+							<button class="btn" data-bot-response="" data-my-response="Hindi" data-goto="9">Hindi</button>		
+							<button class="btn" data-bot-response="" data-my-response="'Di ko na maalala" data-goto="9">'Di ko naisip</button>									
+						</div>
+						<div class="button-group qid-9" 
+							  data-qid="9" 
+							  data-bot-msg="" 
+							  data-bot-question="Ga'no katagal ka na tumigil manigarilyo?">
+							<button class="btn" data-bot-response="" data-my-response="Ngayong buwan lang" data-goto="10">Ngayong buwan lang</button>			
+							<button class="btn" data-bot-response="" data-my-response="Mga tatlong buwan na" data-goto="10">Mga tatlong buwan na</button>		
+							<button class="btn" data-bot-response="" data-my-response="Mga anim na buwan na" data-goto="10">Mga anim na buwan na</button>				
+							<button class="btn" data-bot-response="" data-my-response="Isang taon na" data-goto="10">Isang taon na</button>			
+							<button class="btn" data-bot-response="" data-my-response="May limang taon na" data-goto="10">May limang taon na</button>		
+							<button class="btn" data-bot-response="" data-my-response="May 15 taon na" data-goto="10">May 15 taon na</button>							
+							<button class="btn" data-bot-response="" data-my-response="Mahigit 15 taon na" data-goto="10">Mahigit 15 taon na</button>
+						</div>						
+						<div class="button-group qid-10" 
+							  data-qid="10" 
+							  data-bot-msg="" 
+							  data-bot-question="Ang galing naman. Bakit ka tumigil?">
+							<button class="btn" data-bot-response="" data-my-response="Sabi ni doc e" data-goto="11">Sabi ni doc e</button>			
+							<button class="btn" data-bot-response="" data-my-response="Sakit sa baga" data-goto="11">Sakit sa baga</button>			
+							<button class="btn" data-bot-response="" data-my-response="Sakit sa puso" data-goto="11">Sakit sa puso</button>			
+							<button class="btn" data-bot-response="" data-my-response="May kakilala kasi ako na namatay dahil sa lung cancer" data-goto="11" >May kakilala kasi ako na namatay dahil sa lung cancer</button>			
+							<button class="btn" data-bot-response="" data-my-response="Tumigil na din mga kaibigan ko e" data-goto="11">Tumigil na din mga kaibigan ko e</button>			
+							<button class="btn" data-bot-response="" data-my-response="Para mas healthy" data-goto="11">Para mas healthy</button>			
+							<button class="btn" data-bot-response="" data-my-response="Ibang dahilan" data-goto="11">Ibang dahilan</button>
+						</div>							
+						<div class="button-group qid-11" 
+							  data-qid="11" 
+							  data-bot-msg="O tara na. Kahit isang stick lang.| Hanap na lang tayo ng ibang magawa ngayong break." 
+							  data-bot-question="##endConvo">
+						</div>																														
+					</div>
+				</div>
+
+				<div id="thankyou">
+					<h1> Thank you! </h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et quam metus. Fusce convallis nisl a purus scelerisque eleifend. Suspendisse mollis leo a turpis tincidunt rhoncus. Vestibulum ultrices purus id metus volutpat tristique. Duis bibendum maximus nunc, ac tincidunt neque molestie non.</p>
+				</div>
+
+				<button id="endConvo">
+					<img src="img/endConvo.png" alt="">
+				</button>
+				<button id="cancelConvo">
+					<img src="img/cancelConvo.png" alt="">
+				</button>				
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

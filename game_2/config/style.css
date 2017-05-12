@@ -1,0 +1,64 @@
+.container .page-1 {
+  /*background-url ('../img/tl/bg.jpg');*/
+}
+.page-1 #chat #chat-profile {
+     background: #F0FBFF;
+    -webkit-box-shadow: 0 5px 5px 0 rgba(0,0,0,.09);
+    -moz-box-shadow: 0 5px 5px 0 rgba(0,0,0,.09);
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,.09);
+}
+.page-1 #chat #chat-message-board p { /* Change font-size and font-family of all the paragraph inside #chat-message-board */
+  font-size: 16px;
+  font-family: Arial;
+}
+.page-1 #chat #chat-message-board p.bot-msg { /* Change background-color and border-radius each side of bot-msg inside #chat-message-board */
+  background-color: #ffffff;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.page-1 #chat #chat-message-board p.my-response { /* Change background-color and border-radius each side of my-response inside #chat-message-board */
+  background-color: #ffbcd9;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.page-1 #chat #chat-message-board span#loader { /* Change color and position of loader(...) inside #chat-message-board */
+  color: #7a0135;
+  bottom: 18%;
+  left: -36%;
+}
+.page-1 #chat #chat-options {
+     background-color: #7a0135; 
+}
+.page-1 .btn { /* Change background-color and and border-radius each side of button option/choices inside #chat-options */
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #ffffff;
+}
+.page-1 #endConvo {
+  bottom: 3%;
+  left: 40%;
+}
+.page-1 #cancelConvo {
+  top: 1.5%;
+  right: 1.5%;
+}
+.page-1 #tutorial {
+  /*background-image: url(../img/tl/tutorial.jpg);*/
+}
+.page-1 #tutorial h1, 
+.page-1 #tutorial p {
+  color: #fff;
+}
+.page-1 #thankyou {
+  /*background-image: url(../img/tl/thankyou.jpg);*/
+}
+.page-1 #thankyou h1, 
+.page-1 #thankyou p {
+  color: #fff;
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chatbot - IMFREE hostess</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	
+	<link rel="stylesheet" href="css/animate.min.css">
+	<link rel="stylesheet" href="css/main.min.css">
+	<link rel="stylesheet" href="config/style.css">
+	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="js/main.min.js"></script>
+	<script type="text/javascript" src="config/script.js"></script>
+	
+</head>
+<body>
+	<div class="container">
+	
+		<div class="page loading"></div>
+
+		<div class="page page-1">
+			<div class="page-wrapper">
+
+				<div id="tutorial">
+					<h1> </h1>
+					<p></p>
+				</div>
+
+				<div id="chat">
+					<div id="chat-profile">
+						<img src="img/tl/chatbot.gif" alt="bot-pic" class="bot-pic">
+					</div>
+					<div id="chat-message-board" 
+						data-initial-bot-msg="Hi. Let me introduce myself. I'm your IMFREE hostess <i class='em em-wink'></i>
+											  | Let's play a game where I guess who you are." 
+						data-first-bot-question="What's the first letter of your name?">
+						<span id="loader">● ● ●</span>	
+					</div>
+					<div id="chat-options">
+						<div class="button-group qid-1" 
+							 data-qid="1"
+							 data-bot-msg=""
+							 data-bot-question="">
+							<button class="btn" data-bot-response="Hi Wayne, you're handsome. <i class='em em-heart'></i>" data-my-response="W" data-goto="2">W</button>			
+							<button class="btn" data-bot-response="Hi David, you're handsome. <i class='em em-heart'></i>" data-my-response="D" data-goto="2">D</button>
+							<button class="btn" data-bot-response="Hi Stewart, you're handsome. <i class='em em-heart'></i>" data-my-response="S" data-goto="2">S</button>
+							<button class="btn" data-bot-response="Hi Amer, you're handsome. <i class='em em-heart'></i>" data-my-response="A" data-goto="2">A</button>
+							<button class="btn" data-bot-response="Hi Jeff, you're handsome. <i class='em em-heart'></i>" data-my-response="J" data-goto="2">J</button>
+						</div>
+						<div class="button-group qid-2" 
+							 data-qid="2"
+							 data-bot-msg="Cris told me you're really awesome so I'm going to work hard to know you better <i class='em em-wink'></i> 
+							 				| Tell me, you're on a long drive and hunger hits." 
+							 data-bot-question="Which of these restaurants would you drive through?">
+							<button class="btn" data-bot-response="Are you a big mac guy?" data-my-response="McDonald's" data-goto="3">McDonald's</button>			
+							<button class="btn" data-bot-response="I know you were a whopper!!" data-my-response="Burger King" data-goto="3">Burger King</button>
+							<button class="btn" data-bot-response="Finger lick'in good choice" data-my-response="KFC" data-goto="3">KFC</button>							
+						</div>
+						<div class="button-group qid-3" 
+							 data-qid="3"
+							 data-bot-msg="Now I know the worst choice you can make for your diet. 
+							 				| Tell me what you'd pour into a glass for me if I invited you to dinner?" 
+							 data-bot-question="Oh, and I'd order the fish <i class='em em-wink'></i>">
+							<button class="btn" data-bot-response="I'm reassured by your expensive taste." data-my-response="Stella Artois" data-goto="4">Stella Artois</button>			
+							<button class="btn" data-bot-response="You forgot I'm having fish <i class='em em-disappointed'></i>" data-my-response="A cheeky pinot noir" data-goto="4">A cheeky pinot noir</button>		
+							<button class="btn" data-bot-response="Now I know you're listening to me <i class='em em-wink'></i>" data-my-response="A fruity sauvignon blanc" data-goto="4">A fruity sauvignon blanc</button>		
+							<button class="btn" data-bot-response="What sort of girl do you think I am!!" data-my-response="A lychee martini" data-goto="4">A lychee martini</button>
+						</div>
+						<div class="button-group qid-4" 
+							  data-qid="4"
+							  data-button-group="4" 
+							  data-bot-msg="Interesting how fast you can feel comfortable talking to me <i class='em em-smile'></i> 
+							  				| I feel the same way too <i class='em em-wink'></i> 
+							  				| By talking, I can get to know you deeply and quickly, 
+							  				| generating infinite real time possibilities 
+							  				| to excite and reward you. 
+							  				| I also build a valuable and scalable way to monetise our time  
+							  				| together which clients love." 
+							  data-bot-question="##endConvo">
+						</div>																													
+					</div>
+				</div>
+
+				<div id="thankyou">
+					<h1> Thank you! </h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et quam metus. Fusce convallis nisl a purus scelerisque eleifend. Suspendisse mollis leo a turpis tincidunt rhoncus. Vestibulum ultrices purus id metus volutpat tristique. Duis bibendum maximus nunc, ac tincidunt neque molestie non.</p>
+				</div>
+
+				<button id="endConvo">
+					<img src="img/endConvo.png" alt="">
+				</button>
+				<button id="cancelConvo">
+					<img src="img/cancelConvo.png" alt="">
+				</button>				
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

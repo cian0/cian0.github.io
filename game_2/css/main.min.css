@@ -1,0 +1,51 @@
+.page,body .container{height:100%;width:100%}body{padding:0;margin:0;background:#FFF}body *{outline:0;background:0 0;border:none;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}body .container{position:absolute;display:flex;align-items:center;text-align:center}.page-1 img,.page.loading{display:block}body .container .page-wrapper{margin:0 auto;position:relative;overflow:hidden}.page{position:absolute;top:0}.page *{width:100%;height:auto}.page img{max-height:100%;max-width:100%}.page.loading{z-index:2;background:#FFF}.container .page-1,.container .page-1 #thankyou,.container .page-1 #tutorial{background-repeat:no-repeat;background-size:cover;background-position:center}.page.loading .wrapper{opacity:0;position:absolute;top:41%;width:90%;margin:0 5%}.page.loading .wrapper p{color:#FFF;font-family:helvetica;font-size:1em;text-align:center;margin:0;width:100%}.page-1 #thankyou h1,.page-1 #thankyou p,.page-1 #tutorial h1,.page-1 #tutorial p{color:#fff}.loader{margin:5px auto;font-size:2px;position:relative;text-indent:-9999em;border-top:1.1em solid rgba(255,255,255,.2);border-right:1.1em solid rgba(255,255,255,.2);border-bottom:1.1em solid rgba(255,255,255,.2);border-left:1.1em solid #fff;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-animation:load8 1.1s infinite linear;animation:load8 1.1s infinite linear}.loader,.loader:after{border-radius:50%;width:10em;height:10em}@-webkit-keyframes load8{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes load8{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.container .page-1 #thankyou,.container .page-1 #tutorial{position:absolute;width:100%;height:100%;top:0}.page-1 .endConvo{position:absolute;bottom:2%;width:100%;text-align:center;display:none}.page-1 .endConvo img{width:100%}.page-1 #tutorial{position:absolute;top:0;left:0;z-index:100}.page-1 #endConvo.active,.page-1 #tutorial.active{display:block}.page-1 #thankyou,.page-1 #tutorial{display:none}.page-1 #endConvo{position:absolute;bottom:6%;left:40%;width:20%;padding:0;display:none}.page-1 #cancelConvo{position:absolute;top:1.5%;right:1.5%;width:7%;padding:0}.page-1 #thankyou p,.page-1 #tutorial p{padding:5%;width:auto;text-align:left}.page-1 #thankyou.active,.page-1 #tutorial.active{display:block}.page-1 #chat{position:relative;padding:0;height:100%;overflow-y:auto}.page-1 #chat #chat-profile{display:block;background:#F0FBFF;-webkit-box-shadow:0 5px 5px 0 rgba(0,0,0,.09);-moz-box-shadow:0 5px 5px 0 rgba(0,0,0,.09);box-shadow:0 5px 5px 0 rgba(0,0,0,.09)}.page-1 #chat #chat-message-board p.bot-msg,.page-1 #chat #chat-message-board p.my-response{max-width:80%;-webkit-box-shadow:0 5px 5px 0 rgba(0,0,0,.25);-moz-box-shadow:0 5px 5px 0 rgba(0,0,0,.25);clear:both}.page-1 #chat #chat-profile img{width:75%;margin:0 auto}.page-1 #chat #chat-message-board{display:block;height:40vh;overflow:hidden;overflow-y:auto;padding-top:4%}.page-1 #chat #chat-message-board p{font-size:16px;font-family:Arial;padding:2%;float:left}.page-1 #chat #chat-message-board p.bot-msg{margin:0 0 4% 5%;width:auto;text-align:left;background-color:#fff;box-shadow:0 5px 5px 0 rgba(0,0,0,.25);border-radius:0 8px 8px}.page-1 #chat #chat-message-board p.my-response{margin:0 5% 4% 0;width:auto;text-align:right;background-color:#00D8FF;box-shadow:0 5px 5px 0 rgba(0,0,0,.25);float:right;border-radius:8px 0 8px 8px}.page-1 #chat #chat-message-board span#loader{color:#00D8FF;position:absolute;bottom:18%;left:-36%;font-size:22px;display:none}.page-1 #chat #chat-options{display:block;background-color:#7a0135;height:auto;padding:3% 0;min-height:15%}.page-1 #chat #chat-options .button-group{display:none;text-align:right}.page-1 #chat #chat-options .button-group.active{display:block}.page-1 .btn{display:inline-block;padding:6px 12px;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:normal;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;-webkit-box-shadow:0 5px 5px 0 rgba(0,0,0,.25);-moz-box-shadow:0 5px 5px 0 rgba(0,0,0,.25);box-shadow:0 5px 5px 0 rgba(0,0,0,.25);width:auto;background-color:#fff;margin:1%;border-radius:8px 0 8px 8px}
+
+
+
+
+/*Ed edits*/
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#efe9ef+0,ffffff+99 */
+.page,body .container{
+	background: #efe9ef; /* Old browsers */
+	background: -moz-linear-gradient(top, #efe9ef 0%, #ffffff 99%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #efe9ef 0%,#ffffff 99%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #efe9ef 0%,#ffffff 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efe9ef', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+.page-1 #chat #chat-profile {
+	background:none !important;
+	box-shadow: none !important;
+}
+
+.page-wrapper {
+	width: 100%;
+    height: 250px;
+    background: #391447;
+}
+
+.bubble 
+{
+position: relative;
+width: 255px;
+height: 45px;
+padding: 0px;
+background: #FFFFFF;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+.bubble:after 
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 7px 12px 7px 0;
+border-color: transparent #FFFFFF;
+display: block;
+width: 0;
+z-index: 1;
+left: -12px;
+top: 13px;
+}
