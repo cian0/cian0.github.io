@@ -51,6 +51,8 @@
     <input type="button" value="Finish Convo" onClick="finishConvo()" /> 
 
     <input type="button" value="Get Reward" onClick="alertReward()" /> 
+
+    <input type="button" value="End Convo Gracefully" onClick="finishConvoWebview()" /> 
     
     <p>
         <a href="http://app.babygalaxy.com/en-us/changepassword/CV2VWQ/en_US" >Link Here</a>
@@ -70,6 +72,10 @@
 
         function finishConvo() {
             Android.finishConvo("{'noop':false}");
+        }
+
+        function finishConvoWebview() {
+            Android.closeFinishedConvo();
         }
 
         function alertReward() {
