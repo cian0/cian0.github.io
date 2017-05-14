@@ -50,6 +50,8 @@
 
     <input type="button" value="Finish Convo" onClick="finishConvo()" /> 
 
+    <input type="button" value="Finish Convo Webview only" onClick="finishConvoWebviewOnly()" /> 
+
     <input type="button" value="Get Reward" onClick="alertReward()" /> 
 
     <input type="button" value="End Convo Gracefully" onClick="finishConvoWebview()" /> 
@@ -72,6 +74,10 @@
 
         function finishConvo() {
             Android.finishConvo("{'noop':false}");
+        }
+
+        function finishConvoWebviewOnly() {
+            Android.finishConvo("{'noop':false}", true);
         }
 
         function finishConvoWebview() {
