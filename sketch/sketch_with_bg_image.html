@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>p5.js Sketch</title>
+        <script src="p5.min.js"></script>
+        <style>
+            
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #f0f0f0;
+            }
+            /* #controls {
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 10px;
+                max-width: 960px;
+                margin: 0 auto;
+            } */
+            #controls {
+                position: fixed; /* Make the controls stick to a fixed position on the screen */
+                bottom: 0; /* Align the controls at the bottom of the viewport */
+                left: 50%; /* Center the controls horizontally */
+                transform: translateX(-50%); /* Adjust the horizontal position to truly center it */
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 10px;
+                max-width: 960px;
+                z-index: 10; /* Ensure it's above other content */
+            }
+
+            #controls label {
+                display: flex;
+                flex-direction: column;
+                font-size: 14px;
+            }
+            #controls input, #controls button {
+                padding: 8px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            #controls button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            #controls button:hover {
+                background-color: #0056b3;
+            }
+            #canvasContainer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 0; /* Make sure the canvas is above the image container */
+            }
+
+
+
+            #imageContainer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%; /* Adjust this if you want a specific size or based on canvas input */
+                height: 100%; /* Adjust this if you want a specific size or based on canvas input */
+                overflow: hidden; /* Ensures no part of the image spills out of the container */
+                display: flex; /* Enables center alignment of its children */
+                justify-content: center; /* Horizontally centers the child image */
+                align-items: center; /* Vertically centers the child image */
+            }
+
+            #imageContainer img {
+                max-width: 100%; /* Limits the image size to the container's width */
+                max-height: 100%; /* Limits the image size to the container's height */
+                object-fit: contain; /* Ensures the image aspect ratio is preserved */
+                object-position: center; /* Centers the image within the container */
+            }
+
+
+
+        </style>
+    </head>
+    <body>
+        <div id="controls">
+            <!-- <label>Message: <input type="text" id="message" value="you spin me right round"></label> -->
+            <label>Message: <textarea id="message" rows="4" cols="50">you spin me right round</textarea></label>
+
+            <label>Font Size: <input type="number" id="fontSize" value="100"></label>
+            <label>Canvas Width: <input type="number" id="canvasWidth" value="512"></label>
+            <label>Canvas Height: <input type="number" id="canvasHeight" value="512"></label>
+            <label>Background Color: <input type="color" id="bgColor" value="#ffffff"></label>
+            <label>Text Color: <input type="color" id="textColor" value="#000000"></label>
+            <label>Max Text Width %: <input type="number" id="maxTextWidthPct" step="0.01" value="0.8"></label>
+            <label>Thickness: <input type="number" id="thickness" value="20"></label>
+            <label>Start X: <input type="number" id="startX" value="0"></label>
+            <label>Start Y: <input type="number" id="startY" value="0"></label>
+            <label>Rotate X: <input type="number" id="rotateX" value="0"></label>
+            <label>Rotate Y: <input type="number" id="rotateY" value="0"></label>
+            <label>Rotate Z: <input type="number" id="rotateZ" value="0"></label>
+            <!-- <label>Background Image URL: <input type="text" id="imageUrl" placeholder="http://"></label>
+            <label>Or Upload Image: <input type="file" id="imageUpload" accept="image/*"></label> -->
+            <label>Background Image URL: <input type="text" id="bgImageUrl" placeholder="Enter image URL"></label>
+            <button onclick="updateBackgroundImage()">Update Background Image</button>
+            <label>Upload Image: <input type="file" id="imageUpload" accept="image/*"></label>
+
+            <button onclick="updateSketch(true)">Update Sketch</button>
+        </div>
+        <div id="imageContainer" style="position: absolute; top: 0; left: 0; z-index: -1;">
+            <img id="backgroundImage" src="" style="width: 100%; height: auto;">
+        </div>
+
+        <div id="canvasContainer"></div>
+
+    <script>
+
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById('backgroundImage');
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+        let font;
+        let canvas;
+
+        let rotX = 0;
+        let rotY = 0;
+        let rotZ = 0;
+
+        let message = document.getElementById('message').value;
+        // for url params with multiline: ?message=First%20Line%0ASecond%20Line
+
+        let fontSize = parseInt(document.getElementById('fontSize').value, 10);
+        let canvasWidth = parseInt(document.getElementById('canvasWidth').value, 10);
+        let canvasHeight = parseInt(document.getElementById('canvasHeight').value, 10);
+        let bg = document.getElementById('bgColor').value;
+        let textColor = document.getElementById('textColor').value;
+        let maxTextWidthPct = parseFloat(document.getElementById('maxTextWidthPct').value);
+        let thickness = parseInt(document.getElementById('thickness').value, 10);
+        let startX = parseFloat(document.getElementById('startX').value);
+        let startY = parseFloat(document.getElementById('startY').value);
+        let rotateXDegrees = parseFloat(document.getElementById('rotateX').value);
+        let rotateYDegrees = parseFloat(document.getElementById('rotateY').value);
+        let rotateZDegrees = parseFloat(document.getElementById('rotateZ').value);
+        let bgImage = null; // Holds the p5 Image object for the background
+
+        function updateBackgroundImage() {
+            const imageUrl = document.getElementById('bgImageUrl').value;
+            if (imageUrl) {
+                document.getElementById('backgroundImage').src = imageUrl;
+            }
+        }
+
+
+        // document.getElementById('imageUpload').addEventListener('change', loadImageBackground);
+
+        // function loadImageBackground() {
+        //     const imageUrl = document.getElementById('imageUrl').value;
+        //     const imageUpload = document.getElementById('imageUpload').files[0];
+
+        //     if (imageUrl) {
+        //         // Load from URL
+        //         loadImage(imageUrl, img => {
+        //             bgImage = img;
+        //             canvasWidth = img.width;
+        //             canvasHeight = img.height;
+        //             updateSketch(true);
+        //         }, () => console.error('Failed to load image from URL'));
+        //     } else if (imageUpload) {
+        //         // Load from uploaded file using createObjectURL
+        //         const objectURL = URL.createObjectURL(imageUpload);
+        //         loadImage(objectURL, img => {
+        //             bgImage = img;
+        //             canvasWidth = img.width;
+        //             canvasHeight = img.height;
+        //             updateSketch(true);
+        //         }, () => console.error('Failed to load uploaded image'));
+        //     }
+        // }
+
+        // Adjust your updateSketch function to call loadImageBackground when initializing
+
+
+        function mouseWheel(event) {
+            // Adjust the scale to control how much the font size changes
+            let scale = 0.02;
+            fontSize += event.delta * scale;
+
+            // Prevent the font size from becoming too small or too large
+            fontSize = constrain(fontSize, 5, 200);
+
+            // Update the font size input field
+            document.getElementById('fontSize').value = Math.round(fontSize);
+
+            // Redraw the scene with the new font size
+            updateSketch();
+
+            // Prevent default scrolling behavior
+            return false;
+        }
+
+
+        function mouseDragged() {
+            if (keyIsDown(SHIFT)) {
+                // When shift key is pressed, adjust startX and startY based on mouse movement
+                let moveSpeed = 0.05; // Adjust this value to control the sensitivity of movement
+                startX -= (pmouseX - mouseX) * moveSpeed;
+                startY -= (pmouseY - mouseY) * moveSpeed;
+
+                // Update the input fields with the new startX and startY values
+                document.getElementById('startX').value = startX.toFixed(2);
+                document.getElementById('startY').value = startY.toFixed(2);
+            } else {
+                // Regular dragging for rotation
+                let rotateSpeed = 0.0005; // Adjust this value to control the sensitivity
+                rotY -= (pmouseX - mouseX) * rotateSpeed;
+                rotX -= (pmouseY - mouseY) * rotateSpeed;
+
+                // Update the rotation input fields
+                document.getElementById('rotateX').value = degrees(rotX).toFixed(2);
+                document.getElementById('rotateY').value = degrees(rotY).toFixed(2);
+                document.getElementById('rotateZ').value = degrees(rotZ).toFixed(2);
+            }
+            // Redraw the scene with the new positions or angles
+            updateSketch();
+        }
+
+
+        function initializeSketch() {
+            updateSketch(true); // Pass a flag indicating it's an initialization call
+        }
+
+        function updateSketch(initialize = false) {
+            if (initialize) {
+                // Only remove the canvas and read inputs if initializing
+                if (canvas) canvas.remove(); // Removes the existing canvas
+
+                // Update global variables with new values from the input fields
+                message = document.getElementById('message').value;
+                fontSize = parseInt(document.getElementById('fontSize').value, 10);
+                canvasWidth = parseInt(document.getElementById('canvasWidth').value, 10);
+                canvasHeight = parseInt(document.getElementById('canvasHeight').value, 10);
+                bg = document.getElementById('bgColor').value;
+                textColor = document.getElementById('textColor').value;
+                maxTextWidthPct = parseFloat(document.getElementById('maxTextWidthPct').value);
+                thickness = parseInt(document.getElementById('thickness').value, 10);
+                startX = parseFloat(document.getElementById('startX').value);
+                startY = parseFloat(document.getElementById('startY').value);
+                rotateXDegrees = parseFloat(document.getElementById('rotateX').value);
+                rotateYDegrees = parseFloat(document.getElementById('rotateY').value);
+                rotateZDegrees = parseFloat(document.getElementById('rotateZ').value);
+
+                // Reset rotations if you want to use the input fields to set initial rotation values
+                rotX = radians(rotateXDegrees);
+                rotY = radians(rotateYDegrees);
+                rotZ = radians(rotateZDegrees);
+
+                // Adjust the image container or img element dimensions to match canvas
+                var imgContainer = document.getElementById('imageContainer');
+                imgContainer.style.width = canvasWidth + 'px';
+                imgContainer.style.height = canvasHeight + 'px';
+
+
+                // loadImageBackground();
+            }
+
+            console.log("Updating");
+            setupSketch(message, fontSize, canvasWidth, canvasHeight, bg, textColor, maxTextWidthPct, thickness, startX, startY, rotX, rotY, rotZ);
+        }
+
+
+        function setupSketch(message, fontSize, canvasWidth, canvasHeight, bg, textColor, maxTextWidthPct, thickness, startX, startY, rotateXDegrees, rotateYDegrees, rotateZDegrees) {
+            // canvas = createCanvas(canvasWidth, canvasHeight, WEBGL);
+            canvas = createCanvas(canvasWidth, canvasHeight, WEBGL);
+            canvas.parent('canvasContainer'); // This positions the canvas inside the div with id="canvasContainer"
+    
+
+            // background(bg);
+            clear(); 
+            
+            textFont(font);
+            textSize(fontSize);
+            fill(textColor);
+            textAlign(CENTER, CENTER);
+            translate(startX, startY);
+
+            // Inside setupSketch function, replace the rotation lines with:
+            rotateX(rotX);
+            rotateY(rotY);
+            rotateZ(rotZ);
+
+
+            push();
+            let startR = 150;
+            let startG = 150;
+            let startB = 150;
+
+
+            // New start positions
+
+            let initialZTranslation = -0.5 * (thickness - 1);
+
+            // Apply the initial translation before starting the loop
+            translate(startX, startY, initialZTranslation); // Apply the start X, Y, and initial Z translation here
+
+            // textSize(fontSize);
+
+            let adjustedFontSize = adjustFontSizeToFit(message, fontSize, canvasWidth * maxTextWidthPct); // Use 80% of canvas width as max
+            textSize(adjustedFontSize);
+
+            for(let i=0; i<thickness; i++) {
+                // fill(map(i,0,100,0,255),80,215);
+                // fill(map(i, 0, thickness - 1, 0, 255),80,215);
+                if(i == thickness - 1) {
+                    // fill(0, 0, 0); // Set the font color to white for the last layer
+                    fill(textColor);
+                } else {
+                    // fill(map(i, 0, thickness, 0, 255), 80, 215); // Original gradient fill for other layers
+                    let r = map(i, 0, thickness-2, startR, 255); // startR is the red component of your start color
+                    let g = map(i, 0, thickness-2, startG, 255); // startG is the green component
+                    let b = map(i, 0, thickness-2, startB, 255); // startB is the blue component
+                    fill(r, g, b);
+                }
+                
+                translate(0,0,.5);
+                // text(message,0,0);
+                drawText(message,0,0);
+            }
+            pop();
+            noLoop();
+        }
+
+        function drawText(message, x, y) {
+            let lines = message.split('\n'); // Split the message into lines
+            for (let i = 0; i < lines.length; i++) {
+                text(lines[i], x, y + (fontSize * i)); // Draw each line
+            }
+        }
+
+        function adjustFontSizeToFit(text, initialFontSize, maxWidth) {
+            let currentFontSize = initialFontSize;
+            textSize(currentFontSize); // Apply initial font size to start measurement
+            let currentTextWidth = textWidth(text); // Correctly call textWidth() function to get the width of the text
+            
+            while (currentTextWidth > maxWidth && currentFontSize > 0) {
+                currentFontSize--; // Decrease the font size
+                textSize(currentFontSize); // Apply the new font size to adjust measurement
+                currentTextWidth = textWidth(text); // Measure the text width again with the updated font size
+            }
+            
+            return currentFontSize;
+        }
+
+        function preload() {
+            font = loadFont('Staatliches-Regular.ttf'); // Adjust the font path as needed
+        }
+
+        function setup() {
+            initializeSketch(); // This initializes and draws your sketch initially
+        }
+    </script>
+</body>
+</html>

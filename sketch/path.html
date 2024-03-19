@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>p5.js Sketch</title>
+    <script src="p5.min.js"></script>
+    <style>
+        body { margin: 0; }
+    </style>
+</head>
+<body>
+    <script>
+        let drawing = [];
+        let currentPath = [];
+
+        function setup() {
+            createCanvas(800, 600);
+            background(255);
+        }
+
+        function mouseDragged() {
+            let point = {
+                // x: mouseX-400,
+                // y: mouseY-300
+                x: mouseX,
+                y: mouseY
+            };
+            currentPath.push(point);
+        }
+
+        function mousePressed() {
+            currentPath = [];
+            drawing.push(currentPath);
+        }
+
+        function draw() {
+            const bg = '#3C2350'; // Default message
+            background(bg);
+            
+            stroke(0);
+            strokeWeight(2);
+            noFill();
+            for (let path of drawing) {
+                beginShape();
+                for (let point of path) {
+                    // vertex(point.x+400, point.y+300);
+                    vertex(point.x, point.y);
+                }
+                endShape();
+            }
+        }
+
+        function mouseReleased() {
+            // Convert the drawing array into a JSON string
+            let data = JSON.stringify(drawing[0]);
+            console.log(data)
+            // Create a blob with the JSON data and specify the type as JSON
+            let blob = new Blob([data], {type: "application/json"});
+            // Create a URL for the blob
+            let url = window.URL.createObjectURL(blob);
+            // Create an anchor (<a>) element
+            let a = document.createElement('a');
+            // Set the download attribute of the anchor to specify the filename
+            a.download = 'path-data.json';
+            // Set the href of the anchor to the blob URL
+            a.href = url;
+            // Append the anchor to the body
+            document.body.appendChild(a);
+            // Simulate a click on the anchor to trigger the download
+            a.click();
+            // Remove the anchor from the body
+            document.body.removeChild(a);
+            // Free the blob URL
+            window.URL.revokeObjectURL(url);
+        }
+
+    </script>
+</body>
+</html>
