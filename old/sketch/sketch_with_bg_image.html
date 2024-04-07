@@ -12,17 +12,6 @@
                 padding: 20px;
                 background-color: #f0f0f0;
             }
-            /* #controls {
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                gap: 10px;
-                max-width: 960px;
-                margin: 0 auto;
-            } */
             #controls {
                 position: fixed; /* Make the controls stick to a fixed position on the screen */
                 bottom: 0; /* Align the controls at the bottom of the viewport */
@@ -165,36 +154,6 @@
             }
         }
 
-
-        // document.getElementById('imageUpload').addEventListener('change', loadImageBackground);
-
-        // function loadImageBackground() {
-        //     const imageUrl = document.getElementById('imageUrl').value;
-        //     const imageUpload = document.getElementById('imageUpload').files[0];
-
-        //     if (imageUrl) {
-        //         // Load from URL
-        //         loadImage(imageUrl, img => {
-        //             bgImage = img;
-        //             canvasWidth = img.width;
-        //             canvasHeight = img.height;
-        //             updateSketch(true);
-        //         }, () => console.error('Failed to load image from URL'));
-        //     } else if (imageUpload) {
-        //         // Load from uploaded file using createObjectURL
-        //         const objectURL = URL.createObjectURL(imageUpload);
-        //         loadImage(objectURL, img => {
-        //             bgImage = img;
-        //             canvasWidth = img.width;
-        //             canvasHeight = img.height;
-        //             updateSketch(true);
-        //         }, () => console.error('Failed to load uploaded image'));
-        //     }
-        // }
-
-        // Adjust your updateSketch function to call loadImageBackground when initializing
-
-
         function mouseWheel(event) {
             // Adjust the scale to control how much the font size changes
             let scale = 0.02;
@@ -215,28 +174,47 @@
 
 
         function mouseDragged() {
-            if (keyIsDown(SHIFT)) {
-                // When shift key is pressed, adjust startX and startY based on mouse movement
-                let moveSpeed = 0.05; // Adjust this value to control the sensitivity of movement
-                startX -= (pmouseX - mouseX) * moveSpeed;
-                startY -= (pmouseY - mouseY) * moveSpeed;
 
-                // Update the input fields with the new startX and startY values
-                document.getElementById('startX').value = startX.toFixed(2);
-                document.getElementById('startY').value = startY.toFixed(2);
-            } else {
-                // Regular dragging for rotation
-                let rotateSpeed = 0.0005; // Adjust this value to control the sensitivity
-                rotY -= (pmouseX - mouseX) * rotateSpeed;
-                rotX -= (pmouseY - mouseY) * rotateSpeed;
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                // Your existing mouseWheel code
 
-                // Update the rotation input fields
-                document.getElementById('rotateX').value = degrees(rotX).toFixed(2);
-                document.getElementById('rotateY').value = degrees(rotY).toFixed(2);
-                document.getElementById('rotateZ').value = degrees(rotZ).toFixed(2);
-            }
-            // Redraw the scene with the new positions or angles
-            updateSketch();
+                if (keyIsDown(SHIFT)) {
+                    // When shift key is pressed, adjust startX and startY based on mouse movement
+                    // let moveSpeed = 0.05; // Adjust this value to control the sensitivity of movement
+                    // startX -= (pmouseX - mouseX) * moveSpeed;
+                    // startY -= (pmouseY - mouseY) * moveSpeed;
+
+                    // // Update the input fields with the new startX and startY values
+                    // document.getElementById('startX').value = startX.toFixed(2);
+                    // document.getElementById('startY').value = startY.toFixed(2);
+
+                    // Adjust the sensitivity of movement
+                    let moveSpeed = 0.001; // Consider tweaking this value based on testing
+                    
+                    // Update startX and startY based on mouse movement
+                    // Add the deltas to move the content in the same direction as the mouse drag
+                    startX += (mouseX - pmouseX) * moveSpeed;
+                    startY += (mouseY - pmouseY) * moveSpeed;
+
+                    // Ensure the updated values are reflected in the input fields
+                    document.getElementById('startX').value = startX.toFixed(2);
+                    document.getElementById('startY').value = startY.toFixed(2);
+                } else {
+                    // Regular dragging for rotation
+                    let rotateSpeed = 0.000005; // Adjust this value to control the sensitivity
+                    rotY -= (pmouseX - mouseX) * rotateSpeed;
+                    rotX -= (pmouseY - mouseY) * rotateSpeed;
+
+                    // Update the rotation input fields
+                    document.getElementById('rotateX').value = degrees(rotX).toFixed(2);
+                    document.getElementById('rotateY').value = degrees(rotY).toFixed(2);
+                    document.getElementById('rotateZ').value = degrees(rotZ).toFixed(2);
+                }
+                // Redraw the scene with the new positions or angles
+                updateSketch();
+            }, 1000); // Adjust delay as needed
+            return false;
         }
 
 
