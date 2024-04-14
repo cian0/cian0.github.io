@@ -17,14 +17,14 @@
                 bottom: 0; /* Align the controls at the bottom of the viewport */
                 left: 50%; /* Center the controls horizontally */
                 transform: translateX(-50%); /* Adjust the horizontal position to truly center it */
-                background-color: #fff;
+                background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
                 border-radius: 8px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 padding: 20px;
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
                 gap: 10px;
-                max-width: 960px;
+                max-width: 1024px;
                 z-index: 10; /* Ensure it's above other content */
             }
 
@@ -50,26 +50,33 @@
             #controls button:hover {
                 background-color: #0056b3;
             }
-            #canvasContainer {
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 0; /* Make sure the canvas is above the image container */
-            }
-
 
 
             #imageContainer {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%; /* Adjust this if you want a specific size or based on canvas input */
-                height: 100%; /* Adjust this if you want a specific size or based on canvas input */
-                overflow: hidden; /* Ensures no part of the image spills out of the container */
-                display: flex; /* Enables center alignment of its children */
-                justify-content: center; /* Horizontally centers the child image */
-                align-items: center; /* Vertically centers the child image */
+                position: absolute; /* Position it absolutely to align with the canvas */
+                top: 0%; /* Center it vertically */
+                left: 50%; /* Center it horizontally */
+                transform: translate(-50%, 0%); /* Offset the container by half its size */
+                z-index: -1; /* Ensure it's behind the canvas */
+                width: 512px; /* Explicit width */
+                height: 512px; /* Explicit height */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
             }
+
+            #canvasContainer {
+                position: absolute; /* Also positioned absolutely */
+                top: 0%; /* Aligned to be over the image container */
+                left: 50%; /* Aligned to be over the image container */
+                transform: translate(-50%, 0%); /* Offset by half its size to center */
+                z-index: 1; /* Higher z-index to be on top */
+                width: 512px; /* Match the size of the image container */
+                height: 512px; /* Match the size of the image container */
+                overflow: hidden;
+            }
+
 
             #imageContainer img {
                 max-width: 100%; /* Limits the image size to the container's width */
@@ -104,10 +111,14 @@
             <label>Background Image URL: <input type="text" id="bgImageUrl" placeholder="Enter image URL"></label>
             <button onclick="updateBackgroundImage()">Update Background Image</button>
             <label>Upload Image: <input type="file" id="imageUpload" accept="image/*"></label>
+            
 
             <button onclick="updateSketch(true)">Update Sketch</button>
         </div>
-        <div id="imageContainer" style="position: absolute; top: 0; left: 0; z-index: -1;">
+        <div>
+            <label id="xy"></label>
+        </div>
+        <div id="imageContainer"">
             <img id="backgroundImage" src="" style="width: 100%; height: auto;">
         </div>
 
@@ -146,6 +157,7 @@
         let rotateYDegrees = parseFloat(document.getElementById('rotateY').value);
         let rotateZDegrees = parseFloat(document.getElementById('rotateZ').value);
         let bgImage = null; // Holds the p5 Image object for the background
+        let debounceTimeout = null;
 
         function updateBackgroundImage() {
             const imageUrl = document.getElementById('bgImageUrl').value;
@@ -174,46 +186,43 @@
 
 
         function mouseDragged() {
-
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                // Your existing mouseWheel code
+            console.log('dragging')
 
                 if (keyIsDown(SHIFT)) {
-                    // When shift key is pressed, adjust startX and startY based on mouse movement
-                    // let moveSpeed = 0.05; // Adjust this value to control the sensitivity of movement
-                    // startX -= (pmouseX - mouseX) * moveSpeed;
-                    // startY -= (pmouseY - mouseY) * moveSpeed;
-
-                    // // Update the input fields with the new startX and startY values
-                    // document.getElementById('startX').value = startX.toFixed(2);
-                    // document.getElementById('startY').value = startY.toFixed(2);
-
-                    // Adjust the sensitivity of movement
-                    let moveSpeed = 0.001; // Consider tweaking this value based on testing
-                    
-                    // Update startX and startY based on mouse movement
-                    // Add the deltas to move the content in the same direction as the mouse drag
-                    startX += (mouseX - pmouseX) * moveSpeed;
-                    startY += (mouseY - pmouseY) * moveSpeed;
-
-                    // Ensure the updated values are reflected in the input fields
-                    document.getElementById('startX').value = startX.toFixed(2);
-                    document.getElementById('startY').value = startY.toFixed(2);
-                } else {
                     // Regular dragging for rotation
-                    let rotateSpeed = 0.000005; // Adjust this value to control the sensitivity
-                    rotY -= (pmouseX - mouseX) * rotateSpeed;
-                    rotX -= (pmouseY - mouseY) * rotateSpeed;
+                    // let rotateSpeed = 0.00008; // Adjust this value to control the sensitivity
+                    // rotY -= (pmouseX - mouseX) * rotateSpeed;
+                    // rotX -= (pmouseY - mouseY) * rotateSpeed;
+
+                    // // Update the rotation input fields
+                    // document.getElementById('rotateX').value = degrees(rotX).toFixed(2);
+                    // document.getElementById('rotateY').value = degrees(rotY).toFixed(2);
+                    // document.getElementById('rotateZ').value = degrees(rotZ).toFixed(2);
+
+                    let centerX = width / 2;
+                    let centerY = height / 2;
+                    let rotateSpeed = 0.0008; // Adjust this value to control the sensitivity
+
+                    // Calculate difference from center for a more intuitive rotation effect
+                    rotY += (centerX - mouseX) * rotateSpeed;
+                    rotX += (centerY - mouseY) * rotateSpeed;
 
                     // Update the rotation input fields
                     document.getElementById('rotateX').value = degrees(rotX).toFixed(2);
                     document.getElementById('rotateY').value = degrees(rotY).toFixed(2);
                     document.getElementById('rotateZ').value = degrees(rotZ).toFixed(2);
+                } else {
+                    startX = mouseX - width / 2;
+                    startY = mouseY - height / 2;
+                    // Update the values displayed in the input elements
+                    document.getElementById('startX').value = startX.toFixed(2);
+                    document.getElementById('startY').value = startY.toFixed(2);
+
+                    document.getElementById('xy').value = startY.toFixed(2) + "," + startY.toFixed(2);
                 }
                 // Redraw the scene with the new positions or angles
                 updateSketch();
-            }, 1000); // Adjust delay as needed
+            // }, 1000); // Adjust delay as needed
             return false;
         }
 
