@@ -35,6 +35,8 @@ export function create() {
 
     // Setup input handlers after player is initialized
     cursors = setupInputHandlers(this, handlePlayerMove);
+
+
 }
 
 export function update() {

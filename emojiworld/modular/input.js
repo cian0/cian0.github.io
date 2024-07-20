@@ -14,10 +14,9 @@ export function setupInputHandlers(scene, movePlayerCallback) {
         console.log('Touch event detected');
         console.log(`Raw touch coordinates: (${pointer.x}, ${pointer.y})`);
         
-        // Calculate the touch position relative to the game canvas
-        const canvasBounds = scene.scale.canvasBounds;
-        const relativeX = pointer.x - canvasBounds.x;
-        const relativeY = pointer.y - canvasBounds.y;
+        // Use Phaser's built-in methods to get the correct touch coordinates
+        const relativeX = pointer.x - scene.cameras.main.scrollX;
+        const relativeY = pointer.y - scene.cameras.main.scrollY;
         
         console.log(`Relative touch coordinates: (${relativeX}, ${relativeY})`);
         
@@ -27,6 +26,11 @@ export function setupInputHandlers(scene, movePlayerCallback) {
         console.log(`Calculated tile coordinates: (${touchX}, ${touchY})`);
         console.log('Scene object:', scene);
         console.log('Player object:', scene.player);
+        
+        // Additional logging
+        console.log('Camera scroll:', scene.cameras.main.scrollX, scene.cameras.main.scrollY);
+        console.log('Camera zoom:', scene.cameras.main.zoom);
+        console.log('Camera bounds:', scene.cameras.main.getBounds());
         
         handleTouchInput(touchX, touchY, scene.player, movePlayerCallback, scene.map);
     });
