@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Emoji Quest: Phaser 3 Edition with Virtual Joystick</title>
+    <title>Responsive Emoji Quest: Phaser 3 Edition with Improved Virtual Joystick</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
         body {
@@ -83,11 +83,7 @@
         let inventory = [];
         let isMonsterDefeated = false;
         let isFairyCaptured = false;
-
-        // Joystick variables
-        let joystick;
-        let joystickBase;
-        let joystickThumb;
+        let joyStick;
 
         const config = {
             type: Phaser.AUTO,
@@ -113,8 +109,7 @@
         const game = new Phaser.Game(config);
 
         function preload() {
-            this.load.image('joystick-base', 'https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/controllers/joystick-base.png');
-            this.load.image('joystick-thumb', 'https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/controllers/joystick-thumb.png');
+            this.load.plugin('rexvirtualjoystickplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js', true);
         }
 
         function create() {
@@ -126,14 +121,26 @@
             cursors = this.input.keyboard.createCursorKeys();
 
             // Create virtual joystick
-            joystickBase = this.add.image(100, config.scale.height - 100, 'joystick-base').setAlpha(0.5);
-            joystickThumb = this.add.image(100, config.scale.height - 100, 'joystick-thumb').setAlpha(0.5);
-            joystick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
-                x: 100,
-                y: config.scale.height - 100,
+            joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
+                x: 0,
+                y: 0,
                 radius: 50,
-                base: joystickBase,
-                thumb: joystickThumb,
+                base: this.add.circle(0, 0, 50, 0xffffff).setAlpha(0.3),
+                thumb: this.add.circle(0, 0, 25, 0xffffff).setAlpha(0.5),
+                enable: false
+            });
+
+            // Enable touch controls
+            this.input.on('pointerdown', function (pointer) {
+                joyStick.x = pointer.x;
+                joyStick.y = pointer.y;
+                joyStick.base.setPosition(pointer.x, pointer.y);
+                joyStick.thumb.setPosition(pointer.x, pointer.y);
+                joyStick.setEnable(true);
+            });
+
+            this.input.on('pointerup', function () {
+                joyStick.setEnable(false);
             });
         }
 
@@ -188,24 +195,26 @@
         }
 
         function update() {
-            const speed = 200;
+            const speed = 100; // Speed for all entities
 
-            // Keyboard controls
-            if (cursors.left.isDown) {
-                player.body.setVelocityX(-speed);
-            } else if (cursors.right.isDown) {
-                player.body.setVelocityX(speed);
-            } else if (cursors.up.isDown) {
-                player.body.setVelocityY(-speed);
-            } else if (cursors.down.isDown) {
-                player.body.setVelocityY(speed);
+            player.body.setVelocity(0);
+
+            if (joyStick.enable) {
+                const force = Math.min(joyStick.force, 1); // Limit force to 1
+                player.body.setVelocityX(joyStick.forceX * speed * force);
+                player.body.setVelocityY(joyStick.forceY * speed * force);
             } else {
-                // Joystick controls
-                if (joystick.force > 0) {
-                    player.body.setVelocityX(joystick.forceX * speed);
-                    player.body.setVelocityY(joystick.forceY * speed);
-                } else {
-                    player.body.setVelocity(0);
+                // Keyboard controls for desktop
+                if (cursors.left.isDown) {
+                    player.body.setVelocityX(-speed);
+                } else if (cursors.right.isDown) {
+                    player.body.setVelocityX(speed);
+                }
+
+                if (cursors.up.isDown) {
+                    player.body.setVelocityY(-speed);
+                } else if (cursors.down.isDown) {
+                    player.body.setVelocityY(speed);
                 }
             }
 
