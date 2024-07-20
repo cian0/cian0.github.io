@@ -122,6 +122,12 @@
                 const touchY = Math.floor(pointer.y / tileSize);
                 handleTouchInput(touchX, touchY);
             });
+
+            // Add bouncing pulsing animation to characters
+            addBouncePulseAnimation(this, player);
+            addBouncePulseAnimation(this, monster);
+            addBouncePulseAnimation(this, fairy);
+            addBouncePulseAnimation(this, castle);
         }
 
         function generateMap(scene, tileSize) {
@@ -165,6 +171,18 @@
                 element.gridY = y;
                 group.add(element);
             }
+        }
+
+        function addBouncePulseAnimation(scene, sprite) {
+            scene.tweens.add({
+                targets: sprite,
+                scaleX: 1.1,
+                scaleY: 1.1,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.easeInOut',
+                duration: 600
+            });
         }
 
         function update() {
