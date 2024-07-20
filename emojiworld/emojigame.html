@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Emoji Quest: Phaser 3 Edition</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f0f0f0; }
+        #game-container { width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    <script>
+        const MAP_WIDTH = 10;
+        const MAP_HEIGHT = 10;
+
+        const PLAYER = '🐱';
+        const WALL = '🌳';
+        const GRASS = '🟩';
+        const WEAPON = '🗡️';
+        const MONSTER = '👾';
+        const FAIRY = '🧚';
+        const CASTLE = '🏰';
+
+        let player, monster, fairy, castle;
+        let walls, weapons;
+        let cursors;
+        let map = [];
+        let inventory = [];
+        let storyText, inventoryText;
+        let isMonsterDefeated = false;
+        let isFairyCaptured = false;
+
+        const config = {
+            type: Phaser.AUTO,
+            parent: 'game-container',
+            backgroundColor: '#9CCC65',
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: MAP_WIDTH * 60,
+                height: MAP_HEIGHT * 60 + 100 // Extra space for UI
+            },
+            physics: {
+                default: 'arcade',
+                arcade: { debug: false }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        const game = new Phaser.Game(config);
+
+        function preload() {
+            // No need to preload images
+        }
+
+        function create() {
+            this.add.rectangle(0, 0, config.scale.width, config.scale.height, 0x9CCC65).setOrigin(0);
+            
+            const tileSize = Math.min(config.scale.width / MAP_WIDTH, (config.scale.height - 100) / MAP_HEIGHT);
+            
+            generateMap(this, tileSize);
+            cursors = this.input.keyboard.createCursorKeys();
+
+            storyText = this.add.text(10, config.scale.height - 90, 'Welcome to Emoji Quest: Phaser Edition!', { fontSize: '16px', fill: '#000', wordWrap: { width: config.scale.width - 20 } });
+            inventoryText = this.add.text(10, config.scale.height - 40, 'Inventory: Empty', { fontSize: '16px', fill: '#000' });
+        }
+
+        function generateMap(scene, tileSize) {
+            for (let y = 0; y < MAP_HEIGHT; y++) {
+                map[y] = [];
+                for (let x = 0; x < MAP_WIDTH; x++) {
+                    map[y][x] = GRASS;
+                    scene.add.text(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, GRASS, { fontSize: `${tileSize * 0.7}px` }).setOrigin(0.5);
+                }
+            }
+
+            walls = scene.physics.add.staticGroup();
+            weapons = scene.physics.add.staticGroup();
+
+            placeElements(scene, walls, WALL, 15, tileSize);
+            placeElements(scene, weapons, WEAPON, 1, tileSize);
+
+            castle = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), CASTLE, tileSize);
+            player = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), PLAYER, tileSize);
+            monster = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), MONSTER, tileSize);
+            fairy = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), FAIRY, tileSize);
+
+            scene.physics.add.collider(player, walls);
+            scene.physics.add.overlap(player, weapons, collectWeapon, null, scene);
+            scene.physics.add.overlap(player, monster, fightMonster, null, scene);
+            scene.physics.add.overlap(player, fairy, captureFairy, null, scene);
+            scene.physics.add.overlap(player, castle, enterCastle, null, scene);
+        }
+
+        function createEmojiSprite(scene, x, y, emoji, tileSize) {
+            const text = scene.add.text(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, emoji, { fontSize: `${tileSize * 0.7}px` }).setOrigin(0.5);
+            
+            scene.physics.add.existing(text);
+            text.body.setCollideWorldBounds(true);
+            text.body.setSize(tileSize, tileSize);
+            
+            return text;
+        }
+
+        function placeElements(scene, group, emoji, count, tileSize) {
+            for (let i = 0; i < count; i++) {
+                let x, y;
+                do {
+                    x = Phaser.Math.Between(0, MAP_WIDTH - 1);
+                    y = Phaser.Math.Between(0, MAP_HEIGHT - 1);
+                } while (map[y][x] !== GRASS);
+                map[y][x] = emoji;
+                const element = createEmojiSprite(scene, x, y, emoji, tileSize);
+                group.add(element);
+            }
+        }
+
+        function update() {
+            const speed = 200;
+            player.body.setVelocity(0);
+
+            if (cursors.left.isDown) {
+                player.body.setVelocityX(-speed);
+            } else if (cursors.right.isDown) {
+                player.body.setVelocityX(speed);
+            }
+
+            if (cursors.up.isDown) {
+                player.body.setVelocityY(-speed);
+            } else if (cursors.down.isDown) {
+                player.body.setVelocityY(speed);
+            }
+
+            moveMonster();
+            moveFairy();
+        }
+
+        function collectWeapon(player, weapon) {
+            weapon.destroy();
+            inventory.push(WEAPON);
+            updateInventory();
+            updateStory("You found a weapon! Now you can face the monster!");
+        }
+
+        function fightMonster(player, monster) {
+            if (inventory.includes(WEAPON) && !isMonsterDefeated) {
+                monster.destroy();
+                isMonsterDefeated = true;
+                inventory = inventory.filter(item => item !== WEAPON);
+                updateInventory();
+                updateStory("You defeated the monster! Now capture the fairy and reach the castle!");
+            } else if (!isMonsterDefeated) {
+                updateStory("Oh no! The monster caught you. Game Over!");
+                this.scene.restart();
+            }
+        }
+
+        function captureFairy(player, fairy) {
+            fairy.destroy();
+            isFairyCaptured = true;
+            updateStory("You captured the fairy! Now reach the castle to win!");
+        }
+
+        function enterCastle(player, castle) {
+            if (isMonsterDefeated && isFairyCaptured) {
+                updateStory("Congratulations! You've completed your quest!");
+                player.body.setVelocity(0);
+                this.physics.pause();
+            } else {
+                let message = "You need to ";
+                if (!isMonsterDefeated) message += "defeat the monster ";
+                if (!isMonsterDefeated && !isFairyCaptured) message += "and ";
+                if (!isFairyCaptured) message += "capture the fairy ";
+                message += "before entering the castle!";
+                updateStory(message);
+            }
+        }
+
+        function moveMonster() {
+            if (!isMonsterDefeated) {
+                const angle = Phaser.Math.Angle.Between(monster.x, monster.y, player.x, player.y);
+                monster.body.setVelocity(Math.cos(angle) * 100, Math.sin(angle) * 100);
+            }
+        }
+
+        function moveFairy() {
+            if (!isFairyCaptured) {
+                const angle = Phaser.Math.Angle.Between(fairy.x, fairy.y, player.x, player.y);
+                fairy.body.setVelocity(-Math.cos(angle) * 100, -Math.sin(angle) * 100);
+            }
+        }
+
+        function updateStory(message) {
+            storyText.setText(message);
+        }
+
+        function updateInventory() {
+            inventoryText.setText('Inventory: ' + (inventory.length > 0 ? inventory.join(', ') : 'Empty'));
+        }
+    </script>
+</body>
+</html>
