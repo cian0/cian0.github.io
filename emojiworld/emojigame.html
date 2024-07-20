@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Emoji Quest: Phaser 3 Edition with Touch Controls</title>
+    <title>Responsive Emoji Quest: Phaser 3 Edition with Virtual Joystick</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
         body {
@@ -84,6 +84,11 @@
         let isMonsterDefeated = false;
         let isFairyCaptured = false;
 
+        // Joystick variables
+        let joystick;
+        let joystickBase;
+        let joystickThumb;
+
         const config = {
             type: Phaser.AUTO,
             parent: 'game-canvas',
@@ -108,7 +113,8 @@
         const game = new Phaser.Game(config);
 
         function preload() {
-            // No need to preload images
+            this.load.image('joystick-base', 'https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/controllers/joystick-base.png');
+            this.load.image('joystick-thumb', 'https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/controllers/joystick-thumb.png');
         }
 
         function create() {
@@ -119,9 +125,16 @@
             generateMap(this, tileSize);
             cursors = this.input.keyboard.createCursorKeys();
 
-            // Add touch input
-            this.input.on('pointerdown', onPointerDown, this);
-            this.input.on('pointerup', onPointerUp, this);
+            // Create virtual joystick
+            joystickBase = this.add.image(100, config.scale.height - 100, 'joystick-base').setAlpha(0.5);
+            joystickThumb = this.add.image(100, config.scale.height - 100, 'joystick-thumb').setAlpha(0.5);
+            joystick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
+                x: 100,
+                y: config.scale.height - 100,
+                radius: 50,
+                base: joystickBase,
+                thumb: joystickThumb,
+            });
         }
 
         function generateMap(scene, tileSize) {
@@ -174,50 +187,26 @@
             }
         }
 
-        let touchStartX, touchStartY;
-
-        function onPointerDown(pointer) {
-            touchStartX = pointer.x;
-            touchStartY = pointer.y;
-        }
-
-        function onPointerUp(pointer) {
-            const touchEndX = pointer.x;
-            const touchEndY = pointer.y;
-            const dx = touchEndX - touchStartX;
-            const dy = touchEndY - touchStartY;
-            const absDx = Math.abs(dx);
-            const absDy = Math.abs(dy);
-
-            if (Math.max(absDx, absDy) > 50) {  // Minimum swipe distance
-                if (absDx > absDy) {
-                    // Horizontal swipe
-                    player.body.setVelocityX(dx > 0 ? 200 : -200);
-                    player.body.setVelocityY(0);
-                } else {
-                    // Vertical swipe
-                    player.body.setVelocityY(dy > 0 ? 200 : -200);
-                    player.body.setVelocityX(0);
-                }
-            }
-        }
-
         function update() {
             const speed = 200;
 
             // Keyboard controls
             if (cursors.left.isDown) {
                 player.body.setVelocityX(-speed);
-                player.body.setVelocityY(0);
             } else if (cursors.right.isDown) {
                 player.body.setVelocityX(speed);
-                player.body.setVelocityY(0);
             } else if (cursors.up.isDown) {
                 player.body.setVelocityY(-speed);
-                player.body.setVelocityX(0);
             } else if (cursors.down.isDown) {
                 player.body.setVelocityY(speed);
-                player.body.setVelocityX(0);
+            } else {
+                // Joystick controls
+                if (joystick.force > 0) {
+                    player.body.setVelocityX(joystick.forceX * speed);
+                    player.body.setVelocityY(joystick.forceY * speed);
+                } else {
+                    player.body.setVelocity(0);
+                }
             }
 
             moveMonster();
