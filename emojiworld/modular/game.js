@@ -1,12 +1,13 @@
-import { config, PLAYER, MONSTER, FAIRY, CASTLE, WEAPON, SKULL, MAP_WIDTH, MAP_HEIGHT } from './config.js';
-import { generateMap, canMoveTo } from './map.js';
-import { createCharacter, moveCharacter } from './characters.js';
+import { config, PLAYER, MONSTER, FAIRY, CASTLE, WEAPON, SKULL, MAP_WIDTH } from './config.js';
+import { generateMap, canMoveTo, getRandomEmptyPosition } from './map.js';
+import { createEmojiSprite, moveCharacter } from './characters.js';
 import { addBouncePulseAnimation } from './animations.js';
 import { setupInputHandlers } from './input.js';
 import { updateStory, updateInventory } from './ui.js';
 
 let player, monster, fairy, castle;
 let walls, weapons;
+let cursors;
 let map = [];
 let inventory = [];
 let isMonsterDefeated = false;
@@ -14,39 +15,54 @@ let isFairyCaptured = false;
 let canMove = true;
 let isGameOver = false;
 
-const game = new Phaser.Game(config);
-
-function create() {
-    console.log('Create function called');
+export function create() {
     this.add.rectangle(0, 0, config.scale.width, config.scale.height, 0x9CCC65).setOrigin(0);
     
     const tileSize = config.scale.width / MAP_WIDTH;
     
     [map, walls, weapons] = generateMap(this, tileSize);
     
-    player = createCharacter(this, PLAYER, tileSize, map);
-    monster = createCharacter(this, MONSTER, tileSize, map);
-    fairy = createCharacter(this, FAIRY, tileSize, map);
-    castle = createCharacter(this, CASTLE, tileSize, map);
+    castle = createEmojiSprite(this, getRandomEmptyPosition(map), CASTLE, tileSize);
+    player = createEmojiSprite(this, getRandomEmptyPosition(map), PLAYER, tileSize);
+    monster = createEmojiSprite(this, getRandomEmptyPosition(map), MONSTER, tileSize);
+    fairy = createEmojiSprite(this, getRandomEmptyPosition(map), FAIRY, tileSize);
+
+    // Set player on the scene so it's accessible in input handlers
+    this.player = player;
+    this.map = map;
 
     [player, monster, fairy, castle].forEach(char => addBouncePulseAnimation(this, char));
 
-    setupInputHandlers(this, handlePlayerMove);
-
-    // Add this line to check if characters are created
-    console.log('Characters created:', player, monster, fairy, castle);
+    // Setup input handlers after player is initialized
+    cursors = setupInputHandlers(this, handlePlayerMove);
 }
 
-function update() {
+export function update() {
     if (!canMove || isGameOver) return;
-    // Input handling is now in input.js
+
+    let dx = 0;
+    let dy = 0;
+
+    if (cursors.left.isDown) dx = -1;
+    else if (cursors.right.isDown) dx = 1;
+    else if (cursors.up.isDown) dy = -1;
+    else if (cursors.down.isDown) dy = 1;
+
+    if (dx !== 0 || dy !== 0) {
+        handlePlayerMove(player.gridX + dx, player.gridY + dy);
+    }
 }
 
 function handlePlayerMove(newX, newY) {
-    if (!canMoveTo(newX, newY, map)) return;
+    console.log(`Attempting to move player to (${newX}, ${newY})`);
+    if (!canMoveTo(newX, newY, map)) {
+        console.log(`Cannot move to (${newX}, ${newY})`);
+        return;
+    }
 
     canMove = false;
     moveCharacter(player, newX, newY, () => {
+        console.log(`Player moved to (${newX}, ${newY})`);
         checkCollisions();
         moveMonster();
         moveFairy();
@@ -152,4 +168,4 @@ function enterCastle() {
     }
 }
 
-export { create, update };
+const game = new Phaser.Game(config);

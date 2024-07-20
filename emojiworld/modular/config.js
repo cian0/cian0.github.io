@@ -26,5 +26,5 @@ export const config = {
     }
 };
 
-// Import these from game.js
+// These will be imported from game.js
 import { create, update } from './game.js';

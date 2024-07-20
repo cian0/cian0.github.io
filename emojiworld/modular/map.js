@@ -1,4 +1,5 @@
 import { MAP_WIDTH, MAP_HEIGHT, GRASS, WALL, WEAPON } from './config.js';
+import { createEmojiSprite } from './characters.js';
 
 export function generateMap(scene, tileSize) {
     let map = [];
@@ -22,9 +23,7 @@ function placeElements(scene, group, emoji, count, tileSize, map) {
     for (let i = 0; i < count; i++) {
         const position = getRandomEmptyPosition(map);
         map[position.y][position.x] = emoji;
-        const element = scene.add.text(position.x * tileSize + tileSize / 2, position.y * tileSize + tileSize / 2, emoji, { fontSize: `${tileSize * 0.7}px` }).setOrigin(0.5);
-        element.gridX = position.x;
-        element.gridY = position.y;
+        const element = createEmojiSprite(scene, position, emoji, tileSize);
         group.add(element);
     }
 }
