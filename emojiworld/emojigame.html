@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Emoji Quest: Phaser 3 Edition with Improved Virtual Joystick</title>
+    <title>Tile-Based Emoji Quest: Phaser 3 Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
         body {
@@ -55,12 +55,12 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>Emoji Quest</h1>
+        <h1>Tile-Based Emoji Quest</h1>
         <div class="game-border">
             <div id="game-canvas"></div>
         </div>
         <div class="game-info">
-            <div id="story">Welcome to Emoji Quest: Phaser Edition!</div>
+            <div id="story">Welcome to Tile-Based Emoji Quest!</div>
             <div id="inventory">Inventory: Empty</div>
         </div>
     </div>
@@ -83,7 +83,7 @@
         let inventory = [];
         let isMonsterDefeated = false;
         let isFairyCaptured = false;
-        let joyStick;
+        let canMove = true;
 
         const config = {
             type: Phaser.AUTO,
@@ -95,10 +95,6 @@
                 width: MAP_WIDTH * 60,
                 height: MAP_HEIGHT * 60
             },
-            physics: {
-                default: 'arcade',
-                arcade: { debug: false }
-            },
             scene: {
                 preload: preload,
                 create: create,
@@ -109,7 +105,7 @@
         const game = new Phaser.Game(config);
 
         function preload() {
-            this.load.plugin('rexvirtualjoystickplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js', true);
+            // No preload needed for this version
         }
 
         function create() {
@@ -120,31 +116,18 @@
             generateMap(this, tileSize);
             cursors = this.input.keyboard.createCursorKeys();
 
-            // Create virtual joystick
-            joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
-                x: 0,
-                y: 0,
-                radius: 50,
-                base: this.add.circle(0, 0, 50, 0xffffff).setAlpha(0.3),
-                thumb: this.add.circle(0, 0, 25, 0xffffff).setAlpha(0.5),
-                enable: false
-            });
-
-            // Enable touch controls
+            // Add touch input for mobile devices
             this.input.on('pointerdown', function (pointer) {
-                joyStick.x = pointer.x;
-                joyStick.y = pointer.y;
-                joyStick.base.setPosition(pointer.x, pointer.y);
-                joyStick.thumb.setPosition(pointer.x, pointer.y);
-                joyStick.setEnable(true);
-            });
-
-            this.input.on('pointerup', function () {
-                joyStick.setEnable(false);
+                const touchX = Math.floor(pointer.x / tileSize);
+                const touchY = Math.floor(pointer.y / tileSize);
+                handleTouchInput(touchX, touchY);
             });
         }
 
         function generateMap(scene, tileSize) {
+            walls = scene.add.group();
+            weapons = scene.add.group();
+
             for (let y = 0; y < MAP_HEIGHT; y++) {
                 map[y] = [];
                 for (let x = 0; x < MAP_WIDTH; x++) {
@@ -153,9 +136,6 @@
                 }
             }
 
-            walls = scene.physics.add.staticGroup();
-            weapons = scene.physics.add.staticGroup();
-
             placeElements(scene, walls, WALL, 15, tileSize);
             placeElements(scene, weapons, WEAPON, 1, tileSize);
 
@@ -163,21 +143,12 @@
             player = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), PLAYER, tileSize);
             monster = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), MONSTER, tileSize);
             fairy = createEmojiSprite(scene, Phaser.Math.Between(0, MAP_WIDTH - 1), Phaser.Math.Between(0, MAP_HEIGHT - 1), FAIRY, tileSize);
-
-            scene.physics.add.collider(player, walls);
-            scene.physics.add.overlap(player, weapons, collectWeapon, null, scene);
-            scene.physics.add.overlap(player, monster, fightMonster, null, scene);
-            scene.physics.add.overlap(player, fairy, captureFairy, null, scene);
-            scene.physics.add.overlap(player, castle, enterCastle, null, scene);
         }
 
         function createEmojiSprite(scene, x, y, emoji, tileSize) {
             const text = scene.add.text(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, emoji, { fontSize: `${tileSize * 0.7}px` }).setOrigin(0.5);
-            
-            scene.physics.add.existing(text);
-            text.body.setCollideWorldBounds(true);
-            text.body.setSize(tileSize, tileSize);
-            
+            text.gridX = x;
+            text.gridY = y;
             return text;
         }
 
@@ -189,47 +160,156 @@
                     y = Phaser.Math.Between(0, MAP_HEIGHT - 1);
                 } while (map[y][x] !== GRASS);
                 map[y][x] = emoji;
-                const element = createEmojiSprite(scene, x, y, emoji, tileSize);
+                const element = scene.add.text(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, emoji, { fontSize: `${tileSize * 0.7}px` }).setOrigin(0.5);
+                element.gridX = x;
+                element.gridY = y;
                 group.add(element);
             }
         }
 
         function update() {
-            const speed = 100; // Speed for all entities
+            if (!canMove) return;
 
-            player.body.setVelocity(0);
+            let dx = 0;
+            let dy = 0;
 
-            if (joyStick.enable) {
-                const force = Math.min(joyStick.force, 1); // Limit force to 1
-                player.body.setVelocityX(joyStick.forceX * speed * force);
-                player.body.setVelocityY(joyStick.forceY * speed * force);
-            } else {
-                // Keyboard controls for desktop
-                if (cursors.left.isDown) {
-                    player.body.setVelocityX(-speed);
-                } else if (cursors.right.isDown) {
-                    player.body.setVelocityX(speed);
-                }
-
-                if (cursors.up.isDown) {
-                    player.body.setVelocityY(-speed);
-                } else if (cursors.down.isDown) {
-                    player.body.setVelocityY(speed);
-                }
+            if (cursors.left.isDown) {
+                dx = -1;
+            } else if (cursors.right.isDown) {
+                dx = 1;
+            } else if (cursors.up.isDown) {
+                dy = -1;
+            } else if (cursors.down.isDown) {
+                dy = 1;
             }
 
-            moveMonster();
-            moveFairy();
+            if (dx !== 0 || dy !== 0) {
+                movePlayer(player.gridX + dx, player.gridY + dy);
+            }
         }
 
-        function collectWeapon(player, weapon) {
+        function handleTouchInput(touchX, touchY) {
+            if (!canMove) return;
+
+            const dx = touchX - player.gridX;
+            const dy = touchY - player.gridY;
+
+            // Determine the primary and secondary directions
+            let primaryDir, secondaryDir;
+            if (Math.abs(dx) > Math.abs(dy)) {
+                primaryDir = { x: Math.sign(dx), y: 0 };
+                secondaryDir = { x: 0, y: Math.sign(dy) };
+            } else {
+                primaryDir = { x: 0, y: Math.sign(dy) };
+                secondaryDir = { x: Math.sign(dx), y: 0 };
+            }
+
+            // Try to move in the primary direction
+            if (canMoveTo(player.gridX + primaryDir.x, player.gridY + primaryDir.y)) {
+                movePlayer(player.gridX + primaryDir.x, player.gridY + primaryDir.y);
+            }
+            // If can't move in primary direction, try secondary
+            else if (canMoveTo(player.gridX + secondaryDir.x, player.gridY + secondaryDir.y)) {
+                movePlayer(player.gridX + secondaryDir.x, player.gridY + secondaryDir.y);
+            }
+            // If both fail, don't move
+        }
+
+        function canMoveTo(x, y) {
+            return x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT && map[y][x] !== WALL;
+        }
+
+        function movePlayer(newX, newY) {
+            if (!canMoveTo(newX, newY)) return;
+
+            canMove = false;
+            const oldX = player.gridX;
+            const oldY = player.gridY;
+            player.gridX = newX;
+            player.gridY = newY;
+            
+            const tileSize = config.scale.width / MAP_WIDTH;
+            const duration = 200; // Animation duration in milliseconds
+
+            player.scene.tweens.add({
+                targets: player,
+                x: newX * tileSize + tileSize / 2,
+                y: newY * tileSize + tileSize / 2,
+                duration: duration,
+                ease: 'Linear',
+                onComplete: () => {
+                    checkCollisions();
+                    moveMonster();
+                    moveFairy();
+                    canMove = true;
+                }
+            });
+        }
+
+        function moveCharacter(character, newX, newY) {
+            const tileSize = config.scale.width / MAP_WIDTH;
+            const duration = 200; // Animation duration in milliseconds
+
+            character.scene.tweens.add({
+                targets: character,
+                x: newX * tileSize + tileSize / 2,
+                y: newY * tileSize + tileSize / 2,
+                duration: duration,
+                ease: 'Linear'
+            });
+
+            character.gridX = newX;
+            character.gridY = newY;
+        }
+
+        function checkCollisions() {
+            if (player.gridX === monster.gridX && player.gridY === monster.gridY) {
+                fightMonster();
+            }
+            if (player.gridX === fairy.gridX && player.gridY === fairy.gridY) {
+                captureFairy();
+            }
+            if (player.gridX === castle.gridX && player.gridY === castle.gridY) {
+                enterCastle();
+            }
+
+            weapons.children.entries.forEach(weapon => {
+                if (player.gridX === weapon.gridX && player.gridY === weapon.gridY) {
+                    collectWeapon(weapon);
+                }
+            });
+        }
+
+        function moveMonster() {
+            if (!isMonsterDefeated) {
+                const dx = Phaser.Math.Clamp(player.gridX - monster.gridX, -1, 1);
+                const dy = Phaser.Math.Clamp(player.gridY - monster.gridY, -1, 1);
+                
+                if (canMoveTo(monster.gridX + dx, monster.gridY + dy)) {
+                    moveCharacter(monster, monster.gridX + dx, monster.gridY + dy);
+                }
+            }
+        }
+
+        function moveFairy() {
+            if (!isFairyCaptured) {
+                const dx = Phaser.Math.Clamp(monster.gridX - fairy.gridX, -1, 1);
+                const dy = Phaser.Math.Clamp(monster.gridY - fairy.gridY, -1, 1);
+                
+                if (canMoveTo(fairy.gridX + dx, fairy.gridY + dy)) {
+                    moveCharacter(fairy, fairy.gridX + dx, fairy.gridY + dy);
+                }
+            }
+        }
+
+        function collectWeapon(weapon) {
             weapon.destroy();
             inventory.push(WEAPON);
             updateInventory();
             updateStory("You found a weapon! Now you can face the monster!");
         }
 
-        function fightMonster(player, monster) {
+        function fightMonster() {
             if (inventory.includes(WEAPON) && !isMonsterDefeated) {
                 monster.destroy();
                 isMonsterDefeated = true;
@@ -238,21 +318,20 @@
                 updateStory("You defeated the monster! Now capture the fairy and reach the castle!");
             } else if (!isMonsterDefeated) {
                 updateStory("Oh no! The monster caught you. Game Over!");
-                this.scene.restart();
+                setTimeout(() => { location.reload(); }, 2000);
             }
         }
 
-        function captureFairy(player, fairy) {
+        function captureFairy() {
             fairy.destroy();
             isFairyCaptured = true;
             updateStory("You captured the fairy! Now reach the castle to win!");
         }
 
-        function enterCastle(player, castle) {
+        function enterCastle() {
             if (isMonsterDefeated && isFairyCaptured) {
                 updateStory("Congratulations! You've completed your quest!");
-                player.body.setVelocity(0);
-                this.physics.pause();
+                canMove = false;
             } else {
                 let message = "You need to ";
                 if (!isMonsterDefeated) message += "defeat the monster ";
@@ -260,20 +339,6 @@
                 if (!isFairyCaptured) message += "capture the fairy ";
                 message += "before entering the castle!";
                 updateStory(message);
-            }
-        }
-
-        function moveMonster() {
-            if (!isMonsterDefeated) {
-                const angle = Phaser.Math.Angle.Between(monster.x, monster.y, player.x, player.y);
-                monster.body.setVelocity(Math.cos(angle) * 100, Math.sin(angle) * 100);
-            }
-        }
-
-        function moveFairy() {
-            if (!isFairyCaptured) {
-                const angle = Phaser.Math.Angle.Between(fairy.x, fairy.y, player.x, player.y);
-                fairy.body.setVelocity(-Math.cos(angle) * 100, -Math.sin(angle) * 100);
             }
         }
 
