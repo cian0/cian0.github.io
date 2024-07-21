@@ -1,4 +1,4 @@
-import { MAP_WIDTH, MAP_HEIGHT } from './config.js';
+import { MAP_WIDTH, MAP_HEIGHT, WALKABLE_TILES } from './config.js';
 
 export function createEmojiSprite(scene, position, emoji, tileSize) {
     const text = scene.add.text(position.x * tileSize + tileSize / 2, position.y * tileSize + tileSize / 2, emoji, { fontSize: `${tileSize * 0.7}px` }).setOrigin(0.5);
@@ -17,7 +17,7 @@ function getNeighbors(x, y, map) {
     for (const [dx, dy] of directions) {
         const newX = x + dx;
         const newY = y + dy;
-        if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT && map[newY][newX] === '🟩') {
+        if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT && WALKABLE_TILES.includes(map[newY][newX])) {
             neighbors.push({x: newX, y: newY});
         }
     }

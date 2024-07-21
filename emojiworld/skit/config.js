@@ -7,6 +7,12 @@ export const DRAGON = '🐉';
 export const HOUSE = '🏠';
 export const TREE = '🌳';
 export const GRASS = '🟩';
+export const ROAD = '🟫';
+export const FLOWER = '🌼';
+export const ROCK = '🪨';
+export const WATER = '🟦';
+
+export const WALKABLE_TILES = [GRASS, ROAD, FLOWER, WATER];
 
 export const config = {
     type: Phaser.AUTO,
