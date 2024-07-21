@@ -4,6 +4,7 @@ import { createEmojiSprite, moveCharacter } from './characters.js';
 import { addBouncePulseAnimation } from './animations.js';
 import { updateStory } from './ui.js';
 import { createChatBubble } from './chatBubble.js';
+import { initializeAudio } from './soundGenerator.js';
 
 let villager1, villager2, knight, dragon;
 let houses, trees, decorations;
@@ -31,6 +32,9 @@ export function create() {
     dragon = createEmojiSprite(this, { x: MAP_WIDTH - 1, y: Math.floor(MAP_HEIGHT / 2) }, DRAGON, tileSize);
 
     [villager1, villager2, knight, dragon].forEach(char => addBouncePulseAnimation(this, char));
+
+    // Initialize audio
+    initializeAudio();
 
     this.time.delayedCall(1000, runNextScene, [], this);
 }

@@ -1,0 +1,145 @@
+{
+  "scales": {
+    "C major": ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"],
+    "A minor": ["A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4"],
+    "F lydian": ["F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"]
+  },
+  "effects": {
+    "reverb": { "wet": 0.3, "decay": 2.5 },
+    "delay": { "delayTime": 0.25, "feedback": 0.3 },
+    "chorus": { "frequency": 1.5, "depth": 0.3, "spread": 180 }
+  },
+  "composition": [
+    {
+      "name": "Ethereal Awakening",
+      "tempo": 80,
+      "measures": 4,
+      "repeat": 2,
+      "tracks": [
+        {
+          "type": "lead",
+          "notes": ["C5", "E5", "G5", "A5", "G5", "E5", "D5", "C5"],
+          "durations": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+        },
+        {
+          "type": "pad",
+          "notes": ["C4", "E4", "G4"],
+          "pattern": [1, 0, 0, 0, 1, 0, 0, 0],
+          "arpeggio": "up"
+        },
+        {
+          "type": "bass",
+          "notes": ["C3", "G3", "A3", "F3"],
+          "durations": [1, 1, 1, 1]
+        },
+        {
+          "type": "percussion",
+          "pattern": [
+            { "type": "kick", "beats": [1, 0, 0, 0, 1, 0, 0, 0] },
+            { "type": "snare", "beats": [0, 0, 1, 0, 0, 0, 1, 0] },
+            { "type": "hihat", "beats": [0, 1, 0, 1, 0, 1, 0, 1] }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ascension",
+      "tempo": 100,
+      "measures": 4,
+      "repeat": 2,
+      "tracks": [
+        {
+          "type": "lead",
+          "notes": ["A4", "C5", "E5", "A5", "G5", "E5", "D5", "B4"],
+          "durations": [0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5]
+        },
+        {
+          "type": "harmony",
+          "notes": ["A4", "C5", "E5"],
+          "pattern": [1, 0, 1, 0, 1, 0, 1, 1],
+          "arpeggio": "upDown"
+        },
+        {
+          "type": "bass",
+          "notes": ["A2", "E3", "G3", "D3"],
+          "durations": [0.75, 0.75, 0.75, 0.75]
+        },
+        {
+          "type": "percussion",
+          "pattern": [
+            { "type": "kick", "beats": [1, 0, 1, 0, 1, 0, 1, 0] },
+            { "type": "snare", "beats": [0, 0, 1, 0, 0, 0, 1, 1] },
+            { "type": "hihat", "beats": [1, 1, 1, 1, 1, 1, 1, 1] },
+            { "type": "tom", "beats": [0, 1, 0, 0, 0, 1, 0, 1] }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Celestial Dance",
+      "tempo": 120,
+      "measures": 4,
+      "repeat": 2,
+      "tracks": [
+        {
+          "type": "lead",
+          "notes": ["F5", "G5", "A5", "B5", "C6", "B5", "A5", "G5"],
+          "durations": [0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.25, 0.25]
+        },
+        {
+          "type": "harmony",
+          "notes": ["F4", "A4", "C5", "E5"],
+          "pattern": [1, 1, 0, 1, 0, 1, 1, 0],
+          "arpeggio": "random"
+        },
+        {
+          "type": "bass",
+          "notes": ["F3", "C4", "D4", "G3"],
+          "durations": [0.5, 0.5, 0.5, 0.5]
+        },
+        {
+          "type": "percussion",
+          "pattern": [
+            { "type": "kick", "beats": [1, 0, 1, 1, 1, 0, 1, 0] },
+            { "type": "snare", "beats": [0, 1, 0, 1, 0, 1, 0, 1] },
+            { "type": "hihat", "beats": [1, 1, 1, 1, 1, 1, 1, 1] },
+            { "type": "crash", "beats": [1, 0, 0, 0, 0, 0, 0, 1] }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cosmic Finale",
+      "tempo": 140,
+      "measures": 4,
+      "repeat": 1,
+      "tracks": [
+        {
+          "type": "lead",
+          "notes": ["C6", "B5", "A5", "G5", "F5", "E5", "D5", "C5"],
+          "durations": [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25]
+        },
+        {
+          "type": "harmony",
+          "notes": ["C5", "E5", "G5", "B5"],
+          "pattern": [1, 1, 1, 1, 1, 1, 1, 1],
+          "arpeggio": "upDown"
+        },
+        {
+          "type": "bass",
+          "notes": ["C3", "G3", "F3", "C4"],
+          "durations": [0.5, 0.5, 0.5, 0.5]
+        },
+        {
+          "type": "percussion",
+          "pattern": [
+            { "type": "kick", "beats": [1, 1, 1, 1, 1, 1, 1, 1] },
+            { "type": "snare", "beats": [1, 0, 1, 0, 1, 0, 1, 1] },
+            { "type": "hihat", "beats": [1, 1, 1, 1, 1, 1, 1, 1] },
+            { "type": "crash", "beats": [1, 0, 0, 1, 0, 0, 1, 1] }
+          ]
+        }
+      ]
+    }
+  ]
+}

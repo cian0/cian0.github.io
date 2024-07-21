@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced 8-bit RPG Music Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .player {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 { margin-top: 0; }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #resetButton { background-color: #f44336; }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .progress {
+            width: 0%;
+            height: 10px;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="player">
+        <h1>Enhanced 8-bit RPG Music Player</h1>
+        <button id="playButton">Play</button>
+        <button id="resetButton">Reset</button>
+        <p id="sectionDisplay">Current Section: Intro</p>
+        <div class="progress-bar">
+            <div id="progressBar" class="progress"></div>
+        </div>
+        <p id="beatCounter">Beat: 1 / 1</p>
+    </div>
+    <script>
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let isPlaying = false;
+        let currentSectionIndex = 0;
+        let currentBeatIndex = 0;
+        let config;
+
+        // Fetch the configuration file
+        fetch('advancedmusic.json')
+            .then(response => response.json())
+            .then(data => {
+                config = data;
+                updateUI();
+            })
+            .catch(error => console.error('Error loading configuration:', error));
+
+        function createCustomOscillator(harmonics) {
+            const real = new Float32Array(harmonics.length + 1);
+            const imag = new Float32Array(harmonics.length + 1);
+            real[0] = 0;
+            imag[0] = 0;
+            for (let i = 1; i < harmonics.length + 1; i++) {
+                real[i] = harmonics[i - 1];
+                imag[i] = 0;
+            }
+            return audioContext.createPeriodicWave(real, imag);
+        }
+
+        function createNoiseBuffer() {
+            const bufferSize = audioContext.sampleRate * 2;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const output = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            return buffer;
+        }
+
+        
+        function playSound(type, note, duration, effects = []) {
+            const soundConfig = config.soundTypes[type];
+            const frequency = note ? config.noteFrequencies[note] : null;
+            
+            let sourceNode;
+            if (soundConfig.type === 'custom') {
+                const oscillator = audioContext.createOscillator();
+                oscillator.setPeriodicWave(createCustomOscillator(soundConfig.harmonics));
+                if (frequency && isFinite(frequency)) {
+                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                } else {
+                    console.warn(`Invalid frequency for note: ${note}. Using default frequency.`);
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                }
+                sourceNode = oscillator;
+            } else if (soundConfig.type === 'noise') {
+                const bufferSource = audioContext.createBufferSource();
+                bufferSource.buffer = createNoiseBuffer();
+                sourceNode = bufferSource;
+            } else {
+                const oscillator = audioContext.createOscillator();
+                oscillator.type = soundConfig.type;
+                if (frequency && isFinite(frequency)) {
+                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                } else {
+                    console.warn(`Invalid frequency for note: ${note}. Using default frequency.`);
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                }
+                sourceNode = oscillator;
+            }
+
+            const gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(soundConfig.volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+
+            let currentNode = sourceNode;
+            effects.forEach(effectName => {
+                const effect = createEffect(effectName);
+                currentNode.connect(effect);
+                currentNode = effect;
+            });
+
+            currentNode.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            sourceNode.start();
+            sourceNode.stop(audioContext.currentTime + duration);
+        }
+
+        function createEffect(effectName) {
+            const effectConfig = config.effects[effectName];
+            let effectNode;
+
+            switch (effectName) {
+                case 'reverb':
+                    effectNode = audioContext.createConvolver();
+                    // You would need to load an impulse response here
+                    break;
+                case 'delay':
+                    effectNode = audioContext.createDelay();
+                    effectNode.delayTime.value = effectConfig.delayTime;
+                    const feedback = audioContext.createGain();
+                    feedback.gain.value = effectConfig.feedback;
+                    effectNode.connect(feedback);
+                    feedback.connect(effectNode);
+                    break;
+                case 'filter':
+                    effectNode = audioContext.createBiquadFilter();
+                    effectNode.type = effectConfig.type;
+                    effectNode.frequency.value = effectConfig.frequency;
+                    effectNode.Q.value = effectConfig.Q;
+                    break;
+            }
+
+            return effectNode;
+        }
+
+        function playChord(type, chord, duration, arpeggio, effects = []) {
+            const notes = config.chordProgressions[chord];
+            if (arpeggio === 'random') {
+                notes.sort(() => Math.random() - 0.5);
+            } else if (Array.isArray(arpeggio)) {
+                const pattern = arpeggio.map(index => notes[index % notes.length]);
+                notes.forEach((note, index) => {
+                    setTimeout(() => {
+                        playSound(type, note, duration / pattern.length, effects);
+                    }, (duration * 1000 * index) / pattern.length);
+                });
+            } else {
+                notes.forEach(note => playSound(type, note, duration, effects));
+            }
+        }
+
+        function playTrack(track, tempo, measure) {
+            const beatDuration = 60 / tempo;
+            if (track.chord) {
+                playChord(track.type, measure.chordProgression, beatDuration * 4, track.arpeggio, track.effects);
+            } else if (track.notes === 'random') {
+                // Implement random note generation based on scale
+            } else {
+                track.notes.forEach((note, index) => {
+                    setTimeout(() => {
+                        playSound(track.type, note, track.durations[index] * beatDuration, track.effects);
+                    }, beatDuration * 1000 * track.durations.slice(0, index).reduce((a, b) => a + b, 0));
+                });
+            }
+        }
+
+        function playPercussion(pattern, tempo) {
+            const beatDuration = 60 / tempo;
+            pattern.forEach(instrument => {
+                instrument.beats.forEach((beat, index) => {
+                    if (beat) {
+                        setTimeout(() => {
+                            const percConfig = config.percussionTypes[instrument.type];
+                            playSound(instrument.type, null, percConfig.duration || beatDuration, []);
+                        }, beatDuration * 1000 * index);
+                    }
+                });
+            });
+        }
+
+        function playSection(sectionIndex) {
+            if (!isPlaying || !config) return;
+
+            const section = config.composition[sectionIndex];
+            section.tracks.forEach(track => {
+                if (track.type === 'percussion') {
+                    playPercussion(track.pattern, section.tempo);
+                } else {
+                    playTrack(track, section.tempo, section);
+                }
+            });
+
+            updateUI();
+
+            currentBeatIndex++;
+            if (currentBeatIndex >= section.measures * 4) {
+                currentBeatIndex = 0;
+                currentSectionIndex = (currentSectionIndex + 1) % config.composition.length;
+            }
+
+            setTimeout(() => playSection(currentSectionIndex), (60 / section.tempo) * 1000);
+        }
+
+        function updateUI() {
+            if (!config) return;
+            const totalBeats = config.composition.reduce((sum, section) => sum + section.measures * 4, 0);
+            const currentBeat = config.composition.slice(0, currentSectionIndex).reduce((sum, section) => sum + section.measures * 4, 0) + currentBeatIndex + 1;
+            document.getElementById('beatCounter').textContent = `Beat: ${currentBeat} / ${totalBeats}`;
+            document.getElementById('progressBar').style.width = `${(currentBeat / totalBeats) * 100}%`;
+            document.getElementById('sectionDisplay').textContent = `Current Section: ${getCurrentSection()}`;
+        }
+
+        function getCurrentSection() {
+            if (!config) return "Loading...";
+            for (const section of config.sections) {
+                if (currentSectionIndex >= section.start && currentSectionIndex < section.end) {
+                    return section.name;
+                }
+            }
+            return "Unknown";
+        }
+
+        document.getElementById('playButton').addEventListener('click', () => {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playSection(currentSectionIndex);
+                document.getElementById('playButton').textContent = 'Pause';
+            } else {
+                document.getElementById('playButton').textContent = 'Play';
+            }
+        });
+
+        document.getElementById('resetButton').addEventListener('click', () => {
+            isPlaying = false;
+            currentSectionIndex = 0;
+            currentBeatIndex = 0;
+            document.getElementById('playButton').textContent = 'Play';
+            updateUI();
+        });
+    </script>
+</body>
+</html>

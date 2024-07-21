@@ -1,4 +1,5 @@
 import { MAP_WIDTH, MAP_HEIGHT } from './config.js';
+import { playTalkSound } from './soundGenerator.js';
 
 export class ChatBubble {
     constructor(scene, x, y, width, height, text) {
@@ -20,6 +21,9 @@ export class ChatBubble {
 
         // Adjust position if it's beyond map boundaries
         this.adjustPosition();
+
+        // Play talk sound
+        playTalkSound(text);
     }
 
     draw() {
