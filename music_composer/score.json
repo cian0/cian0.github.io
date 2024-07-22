@@ -1,0 +1,70 @@
+{
+  "tempo": 120,
+  "timeSignature": [4, 4],
+  "tracks": [
+    {
+      "name": "Lead Synth",
+      "instrument": {
+        "type": "FMSynth",
+        "options": {
+          "harmonicity": 3,
+          "modulationIndex": 10,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.01, "decay": 0.2, "sustain": 0.8, "release": 0.1 },
+          "modulation": { "type": "square" },
+          "modulationEnvelope": { "attack": 0.5, "decay": 0, "sustain": 1, "release": 0.5 }
+        }
+      },
+      "effects": [
+        { "type": "FeedbackDelay", "options": { "delayTime": "8n", "feedback": 0.25 } },
+        { "type": "Distortion", "options": { "distortion": 0.4 } }
+      ],
+      "volume": -10,
+      "notes": [
+        { "pitch": "C4", "duration": "8n", "time": 0 },
+        { "pitch": "E4", "duration": "8n", "time": "0:0.5" },
+        { "pitch": "G4", "duration": "8n", "time": "0:1" },
+        { "pitch": "B4", "duration": "8n", "time": "0:1.5" },
+        { "pitch": "C5", "duration": "4n", "time": "0:2" },
+        { "pitch": "G4", "duration": "4n", "time": "0:3" },
+        { "pitch": "E4", "duration": "4n", "time": "1:0" },
+        { "pitch": "C4", "duration": "2n", "time": "1:1" }
+      ]
+    },
+    {
+      "name": "Bass",
+      "instrument": {
+        "type": "MonoSynth",
+        "options": {
+          "oscillator": { "type": "sawtooth" },
+          "envelope": { "attack": 0.05, "decay": 0.2, "sustain": 0.9, "release": 0.4 },
+          "filterEnvelope": { "attack": 0.05, "decay": 0.2, "sustain": 0.5, "release": 0.4, "baseFrequency": 200, "octaves": 2.6 }
+        }
+      },
+      "effects": [
+        { "type": "AutoFilter", "options": { "frequency": "8n", "baseFrequency": 200, "octaves": 4 } }
+      ],
+      "volume": -15,
+      "notes": [
+        { "pitch": "C2", "duration": "2n", "time": 0 },
+        { "pitch": "G2", "duration": "2n", "time": "0:2" },
+        { "pitch": "C2", "duration": "1m", "time": "1:0" }
+      ]
+    },
+    {
+      "name": "Drums",
+      "instrument": { "type": "MembraneSynth" },
+      "volume": -5,
+      "notes": [
+        { "pitch": "C2", "duration": "16n", "time": "0:0" },
+        { "pitch": "C2", "duration": "16n", "time": "0:1" },
+        { "pitch": "C2", "duration": "16n", "time": "0:2" },
+        { "pitch": "C2", "duration": "16n", "time": "0:3" },
+        { "pitch": "C2", "duration": "16n", "time": "1:0" },
+        { "pitch": "C2", "duration": "16n", "time": "1:1" },
+        { "pitch": "C2", "duration": "16n", "time": "1:2" },
+        { "pitch": "C2", "duration": "16n", "time": "1:3" }
+      ]
+    }
+  ]
+}
