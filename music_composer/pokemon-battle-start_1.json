@@ -1,0 +1,124 @@
+{
+  "tempo": 160,
+  "timeSignature": [4, 4],
+  "tracks": [
+    {
+      "name": "Scary Lead",
+      "instrument": {
+        "type": "FMSynth",
+        "options": {
+          "modulationIndex": 20,
+          "harmonicity": 0.5,
+          "oscillator": { "type": "square" },
+          "envelope": { "attack": 0.01, "decay": 0.2, "sustain": 0.2, "release": 0.2 }
+        }
+      },
+      "effects": [
+        { "type": "Distortion", "options": { "distortion": 0.8, "wet": 0.5 } },
+        { "type": "PingPongDelay", "options": { "delayTime": "16n", "feedback": 0.6, "wet": 0.2 } }
+      ],
+      "volume": -8,
+      "notes": [
+        { "pitch": "C5", "duration": "32n", "time": "0:0" },
+        { "pitch": "C#5", "duration": "32n", "time": "0:0.125" },
+        { "pitch": "C5", "duration": "8n", "time": "0:0.25" },
+        { "pitch": "G4", "duration": "8n", "time": "0:1" },
+        { "pitch": "G#4", "duration": "8n", "time": "0:1.5" },
+        { "pitch": "A4", "duration": "8n", "time": "0:2" },
+        { "pitch": "D#5", "duration": "8n", "time": "0:3" },
+        { "pitch": "E5", "duration": "4n", "time": "0:3.5" },
+        { "pitch": "C6", "duration": "8n", "time": "1:0" },
+        { "pitch": "G5", "duration": "8n", "time": "1:1" },
+        { "pitch": "F#5", "duration": "8n", "time": "1:2" },
+        { "pitch": "G5", "duration": "8n", "time": "1:3" }
+      ]
+    },
+    {
+      "name": "Ominous Bass",
+      "instrument": {
+        "type": "Synth",
+        "options": {
+          "oscillator": { "type": "triangle" },
+          "envelope": { "attack": 0.05, "decay": 0.3, "sustain": 0.4, "release": 0.3 }
+        }
+      },
+      "effects": [
+        { "type": "Tremolo", "options": { "frequency": 10, "depth": 0.7 } }
+      ],
+      "volume": -12,
+      "notes": [
+        { "pitch": "C2", "duration": "2n", "time": "0:0" },
+        { "pitch": "B1", "duration": "4n", "time": "0:2" },
+        { "pitch": "A#1", "duration": "4n", "time": "0:3" },
+        { "pitch": "A1", "duration": "2n", "time": "1:0" }
+      ]
+    },
+    {
+      "name": "Sudden Hits",
+      "instrument": {
+        "type": "MembraneSynth",
+        "options": {
+          "pitchDecay": 0.1,
+          "octaves": 6,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.001, "decay": 0.2, "sustain": 0 }
+        }
+      },
+      "volume": -6,
+      "notes": [
+        { "pitch": "C2", "duration": "32n", "time": "0:0" },
+        { "pitch": "C3", "duration": "32n", "time": "0:0.125" },
+        { "pitch": "C1", "duration": "8n", "time": "0:2" },
+        { "pitch": "C2", "duration": "8n", "time": "1:0" },
+        { "pitch": "C3", "duration": "8n", "time": "1:2" }
+      ]
+    },
+    {
+      "name": "Eerie Background",
+      "instrument": {
+        "type": "NoiseSynth",
+        "options": {
+          "noise": { "type": "white" },
+          "envelope": { "attack": 0.1, "decay": 0.2, "sustain": 0.5 }
+        }
+      },
+      "effects": [
+        { "type": "AutoFilter", "options": { "frequency": 4, "baseFrequency": 200, "octaves": 2.6 } }
+      ],
+      "volume": -20,
+      "notes": [
+        { "pitch": "C4", "duration": "1m", "time": "0:0" }
+      ]
+    },
+    {
+      "name": "Suspense Builder",
+      "instrument": {
+        "type": "AMSynth",
+        "options": {
+          "harmonicity": 3,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.1, "decay": 0.3, "sustain": 1, "release": 0.3 }
+        }
+      },
+      "effects": [
+        { "type": "Chorus", "options": { "frequency": 2.5, "delayTime": 3, "depth": 0.7 } },
+        { "type": "Freeverb", "options": { "roomSize": 0.9, "dampening": 3000 } }
+      ],
+      "volume": -15,
+      "notes": [
+        { "pitch": "C4", "duration": "8n", "time": "0:0" },
+        { "pitch": "C#4", "duration": "8n", "time": "0:0.5" },
+        { "pitch": "D4", "duration": "8n", "time": "0:1" },
+        { "pitch": "D#4", "duration": "8n", "time": "0:1.5" },
+        { "pitch": "E4", "duration": "8n", "time": "0:2" },
+        { "pitch": "F4", "duration": "8n", "time": "0:2.5" },
+        { "pitch": "F#4", "duration": "8n", "time": "0:3" },
+        { "pitch": "G4", "duration": "8n", "time": "0:3.5" },
+        { "pitch": "G#4", "duration": "8n", "time": "1:0" },
+        { "pitch": "A4", "duration": "8n", "time": "1:1" },
+        { "pitch": "A#4", "duration": "8n", "time": "1:2" },
+        { "pitch": "B4", "duration": "8n", "time": "1:3" }
+      ]
+    }
+  ]
+}

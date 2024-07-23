@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Music Player with JSON Score Upload and Track Visualization</title>
+    <script src="https://unpkg.com/tone"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Advanced Music Player</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div id="controls" class="flex flex-wrap justify-center items-center gap-4 mb-6">
+                <label for="fileInput" class="bg-primary text-white py-2 px-4 rounded cursor-pointer hover:bg-primary-dark transition duration-300">
+                    Upload JSON
+                    <input type="file" id="fileInput" accept=".json, text/plain" class="hidden">
+                </label>
+                <button id="playBtn" disabled class="bg-secondary text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-dark transition duration-300">Play</button>
+                <button id="stopBtn" disabled class="bg-red-500 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-600 transition duration-300">Stop</button>
+                <button id="rewindBtn" disabled class="bg-accent text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent-dark transition duration-300">Rewind</button>
+                <button id="loopBtn" disabled class="bg-purple-500 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 transition duration-300">Loop: Off</button>
+            </div>
+            
+            <div class="relative">
+                <canvas id="visualizer" class="w-full h-64 bg-gray-200 rounded"></canvas>
+                <canvas id="staticVisualizer" class="w-full h-64 bg-transparent rounded absolute top-0 left-0"></canvas>
+            </div>
+        </div>
+        
+        <div id="debug" class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto font-mono text-sm"></div>
+    </div>
+
+    <script>
+        let score;
+        let tracks;
+        const fileInput = document.getElementById('fileInput');
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const rewindBtn = document.getElementById('rewindBtn');
+        const loopBtn = document.getElementById('loopBtn');
+        const visualizer = document.getElementById('visualizer');
+        const staticVisualizer = document.getElementById('staticVisualizer');
+        const canvasContext = visualizer.getContext('2d');
+        const staticCanvasContext = staticVisualizer.getContext('2d');
+        const debugElement = document.getElementById('debug');
+
+        function log(message) {
+            console.log(message);
+            debugElement.innerHTML += message + '<br>';
+            debugElement.scrollTop = debugElement.scrollHeight;
+        }
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    score = JSON.parse(e.target.result);
+                    initializePlayer();
+                    playBtn.disabled = false;
+                    stopBtn.disabled = false;
+                    rewindBtn.disabled = false;
+                    loopBtn.disabled = false;
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    alert('Invalid JSON file. Please upload a valid score file.');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function initializePlayer() {
+            log('Initializing player with score:');
+            log(JSON.stringify(score, null, 2));
+
+            Tone.Transport.cancel();
+
+            tracks = score.tracks.map((track, index) => {
+                log(`Initializing track: ${track.name}`);
+                const instruments = [];
+                const createInstrument = () => {
+                    const instrument = new Tone[track.instrument.type](track.instrument.options).toDestination();
+                    instrument.volume.value = track.volume;
+
+                    if (track.effects && track.effects.length > 0) {
+                        const effectsChain = track.effects.map(effect => new Tone[effect.type](effect.options));
+                        instrument.chain(...effectsChain, Tone.Destination);
+                    }
+                    return instrument;
+                };
+                instruments.push(createInstrument());
+
+                return { 
+                    instruments, 
+                    name: track.name, 
+                    createInstrument,
+                    color: getRandomColor(),
+                    index
+                };
+            });
+
+            // updateTrackInfo();
+
+            Tone.Transport.timeSignature = score.timeSignature;
+            Tone.Transport.bpm.value = score.tempo;
+            log(`Set tempo to ${score.tempo} BPM and time signature to ${score.timeSignature}`);
+
+            const totalDuration = calculateTotalDuration();
+            Tone.Transport.loop = false;
+            Tone.Transport.loopEnd = totalDuration;
+            log(`Total duration: ${totalDuration}`);
+
+            scheduleNotes();
+            drawStaticVisualization();
+
+            playBtn.onclick = async () => {
+                log('Play button clicked');
+                await Tone.start();
+                log('Tone.js started');
+                Tone.Transport.start();
+                log('Transport started');
+                drawVisualizer();
+                log('Visualizer started');
+            };
+
+            stopBtn.onclick = () => {
+                log('Stop button clicked');
+                Tone.Transport.stop();
+                log('Playback stopped');
+            };
+
+            rewindBtn.onclick = () => {
+                log('Rewind button clicked');
+                Tone.Transport.position = 0;
+                log('Transport position reset to 0');
+            };
+
+            loopBtn.onclick = () => {
+                Tone.Transport.loop = !Tone.Transport.loop;
+                loopBtn.textContent = `Loop: ${Tone.Transport.loop ? 'On' : 'Off'}`;
+                log(`Looping ${Tone.Transport.loop ? 'enabled' : 'disabled'}`);
+            };
+        }
+
+        function calculateTotalDuration() {
+            let maxDuration = 0;
+            score.tracks.forEach(track => {
+                track.notes.forEach(note => {
+                    const noteEnd = Tone.Time(note.time).toSeconds() + Tone.Time(note.duration).toSeconds();
+                    if (noteEnd > maxDuration) {
+                        maxDuration = noteEnd;
+                    }
+                });
+            });
+            return maxDuration;
+        }
+
+        function scheduleNotes() {
+            score.tracks.forEach((track, trackIndex) => {
+                track.notes.forEach(note => {
+                    const startTime = note.time;
+                    const duration = note.duration;
+                    Tone.Transport.schedule((time) => {
+                        try {
+                            if (Array.isArray(note.pitch)) {
+                                log(`Playing chord: ${note.pitch.join(', ')}, duration: ${duration}, time: ${time}`);
+                                note.pitch.forEach((pitch, index) => {
+                                    if (index >= tracks[trackIndex].instruments.length) {
+                                        tracks[trackIndex].instruments.push(tracks[trackIndex].createInstrument());
+                                    }
+                                    tracks[trackIndex].instruments[index].triggerAttackRelease(pitch, duration, time);
+                                });
+                            } else {
+                                log(`Playing note: ${note.pitch}, duration: ${duration}, time: ${time}`);
+                                tracks[trackIndex].instruments[0].triggerAttackRelease(note.pitch, duration, time);
+                            }
+                        } catch (error) {
+                            console.warn(`Error playing note/chord: ${note.pitch}. Error: ${error.message}`);
+                            log(`Warning: Failed to play note/chord: ${note.pitch}. Skipping.`);
+                        }
+                    }, startTime);
+                });
+            });
+        }
+
+        function resizeCanvas() {
+            visualizer.width = visualizer.clientWidth * window.devicePixelRatio;
+            visualizer.height = visualizer.clientHeight * window.devicePixelRatio;
+            canvasContext.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            staticVisualizer.width = staticVisualizer.clientWidth * window.devicePixelRatio;
+            staticVisualizer.height = staticVisualizer.clientHeight * window.devicePixelRatio;
+            staticCanvasContext.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            if (score) {
+                drawStaticVisualization();
+            }
+        }
+
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 70%, 60%)`;
+        }
+
+        function drawVisualizer() {
+            const draw = () => {
+                requestAnimationFrame(draw);
+
+                const width = visualizer.width;
+                const height = visualizer.height;
+                const totalDuration = Tone.Transport.loopEnd;
+                const currentTime = Tone.Transport.seconds;
+
+                canvasContext.clearRect(0, 0, width, height);
+
+                // Draw time progress bar
+                canvasContext.fillStyle = 'rgba(59, 130, 246, 0.2)';
+                canvasContext.fillRect(0, 0, (currentTime / totalDuration) * width, height);
+
+                // Draw track sections
+                const trackHeight = height / tracks.length;
+                tracks.forEach((track, trackIndex) => {
+                    const y = trackIndex * trackHeight;
+                    canvasContext.fillStyle = `${track.color}80`; // 50% transparent
+
+                    score.tracks[trackIndex].notes.forEach(note => {
+                        const startX = (Tone.Time(note.time).toSeconds() / totalDuration) * width;
+                        const noteWidth = (Tone.Time(note.duration).toSeconds() / totalDuration) * width;
+                        canvasContext.fillRect(startX, y, noteWidth, trackHeight - 2);
+                    });
+
+                    // Draw track name
+                    canvasContext.font = '12px Arial';
+                    canvasContext.fillStyle = track.color;
+                    canvasContext.fillText(track.name, 10, y + 20);
+                });
+
+                // Draw playhead
+                canvasContext.strokeStyle = 'rgba(239, 68, 68, 0.8)';
+                canvasContext.lineWidth = 2;
+                canvasContext.beginPath();
+                const playheadX = (currentTime / totalDuration) * width;
+                canvasContext.moveTo(playheadX, 0);
+                canvasContext.lineTo(playheadX, height);
+                canvasContext.stroke();
+            };
+
+            draw();
+        }
+
+        function drawStaticVisualization() {
+            const width = staticVisualizer.width;
+            const height = staticVisualizer.height;
+            const totalDuration = calculateTotalDuration();
+
+            staticCanvasContext.clearRect(0, 0, width, height);
+
+            const trackHeight = height / tracks.length;
+            tracks.forEach((track, trackIndex) => {
+                const y = trackIndex * trackHeight;
+                staticCanvasContext.strokeStyle = track.color;
+                staticCanvasContext.lineWidth = 2;
+
+                let minPitch = Infinity;
+                let maxPitch = -Infinity;
+                score.tracks[trackIndex].notes.forEach(note => {
+                    const pitches = Array.isArray(note.pitch) ? note.pitch : [note.pitch];
+                    pitches.forEach(pitch => {
+                        const midiNote = Tone.Frequency(pitch).toMidi();
+                        minPitch = Math.min(minPitch, midiNote);
+                        maxPitch = Math.max(maxPitch, midiNote);
+                    });
+                });
+
+                staticCanvasContext.beginPath();
+                let prevX = 0;
+                let prevY = 0;
+                score.tracks[trackIndex].notes.forEach((note, noteIndex) => {
+                    const startX = (Tone.Time(note.time).toSeconds() / totalDuration) * width;
+                    const noteWidth = (Tone.Time(note.duration).toSeconds() / totalDuration) * width;
+                    
+                    const pitches = Array.isArray(note.pitch) ? note.pitch : [note.pitch];
+                    const avgPitch = pitches.reduce((sum, pitch) => sum + Tone.Frequency(pitch).toMidi(), 0) / pitches.length;
+                    const normalizedPitch = (avgPitch - minPitch) / (maxPitch - minPitch);
+                    const noteY = y + (1 - normalizedPitch) * (trackHeight - 4);
+                    
+                    if (noteIndex === 0) {
+                        staticCanvasContext.moveTo(startX, noteY);
+                    } else {
+                        // Create a smooth curve between notes
+                        const controlX = (prevX + startX) / 2;
+                        staticCanvasContext.bezierCurveTo(controlX, prevY, controlX, noteY, startX, noteY);
+                    }
+                    
+                    prevX = startX;
+                    prevY = noteY;
+                });
+                staticCanvasContext.stroke();
+
+                // Draw cute circles at each note
+                score.tracks[trackIndex].notes.forEach(note => {
+                    const startX = (Tone.Time(note.time).toSeconds() / totalDuration) * width;
+                    const pitches = Array.isArray(note.pitch) ? note.pitch : [note.pitch];
+                    const avgPitch = pitches.reduce((sum, pitch) => sum + Tone.Frequency(pitch).toMidi(), 0) / pitches.length;
+                    const normalizedPitch = (avgPitch - minPitch) / (maxPitch - minPitch);
+                    const noteY = y + (1 - normalizedPitch) * (trackHeight - 4);
+
+                    staticCanvasContext.beginPath();
+                    staticCanvasContext.arc(startX, noteY, 3, 0, 2 * Math.PI);
+                    staticCanvasContext.fillStyle = track.color;
+                    staticCanvasContext.fill();
+                });
+
+                // Draw track name
+                staticCanvasContext.font = '12px Arial';
+                staticCanvasContext.fillStyle = track.color;
+                staticCanvasContext.fillText(track.name, 10, y + 20);
+            });
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>

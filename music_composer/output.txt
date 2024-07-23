@@ -1,0 +1,5 @@
+120;4/4
+T:Ball Impact;MembraneSynth{pitchDecay:0.05;octaves:2;oscillator:type,sine;envelope:attack,0.001,decay,0.4,sustain,0.01,release,0.4,attackCurve,exponential};0
+N:C2,8n,0:0
+T:Air Whoosh;NoiseSynth{noise:type,white;envelope:attack,0.005,decay,0.1,sustain,0,release,0.1};Filter{frequency,800;type,lowpass;rolloff,-12;Q,1};-20
+N:undefined,16n,0:0

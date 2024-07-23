@@ -1,0 +1,125 @@
+{
+  "tempo": 80,
+  "timeSignature": [4, 4],
+  "tracks": [
+    {
+      "name": "Warm Pad",
+      "instrument": {
+        "type": "PolySynth",
+        "options": {
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.8, "decay": 0.2, "sustain": 0.8, "release": 1.5 }
+        }
+      },
+      "effects": [
+        { "type": "Freeverb", "options": { "roomSize": 0.7, "dampening": 3000, "wet": 0.4 } }
+      ],
+      "volume": -12,
+      "notes": [
+        { "pitch": ["G3", "B3", "D4"], "duration": "1m", "time": "0:0" },
+        { "pitch": ["C4", "E4", "G4"], "duration": "1m", "time": "1:0" },
+        { "pitch": ["A3", "C4", "E4"], "duration": "1m", "time": "2:0" },
+        { "pitch": ["F3", "A3", "C4"], "duration": "1m", "time": "3:0" }
+      ]
+    },
+    {
+      "name": "Gentle Piano",
+      "instrument": {
+        "type": "PolySynth",
+        "options": {
+          "oscillator": { "type": "triangle" },
+          "envelope": { "attack": 0.02, "decay": 0.1, "sustain": 0.3, "release": 1 }
+        }
+      },
+      "effects": [
+        { "type": "Reverb", "options": { "decay": 2, "wet": 0.3 } }
+      ],
+      "volume": -8,
+      "notes": [
+        { "pitch": "G4", "duration": "4n", "time": "0:0" },
+        { "pitch": "B4", "duration": "4n", "time": "0:1" },
+        { "pitch": "D5", "duration": "4n", "time": "0:2" },
+        { "pitch": "G5", "duration": "4n", "time": "0:3" },
+        { "pitch": "E5", "duration": "4n", "time": "1:0" },
+        { "pitch": "C5", "duration": "4n", "time": "1:1" },
+        { "pitch": "G4", "duration": "4n", "time": "1:2" },
+        { "pitch": "E5", "duration": "4n", "time": "1:3" },
+        { "pitch": "A4", "duration": "4n", "time": "2:0" },
+        { "pitch": "C5", "duration": "4n", "time": "2:1" },
+        { "pitch": "E5", "duration": "4n", "time": "2:2" },
+        { "pitch": "A5", "duration": "4n", "time": "2:3" },
+        { "pitch": "F5", "duration": "4n", "time": "3:0" },
+        { "pitch": "D5", "duration": "4n", "time": "3:1" },
+        { "pitch": "A4", "duration": "4n", "time": "3:2" },
+        { "pitch": "F5", "duration": "4n", "time": "3:3" }
+      ]
+    },
+    {
+      "name": "Soft Strings",
+      "instrument": {
+        "type": "FMSynth",
+        "options": {
+          "harmonicity": 1.5,
+          "modulationIndex": 2,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.3, "decay": 0.1, "sustain": 0.9, "release": 1 },
+          "modulation": { "type": "triangle" },
+          "modulationEnvelope": { "attack": 0.5, "decay": 0, "sustain": 1, "release": 0.8 }
+        }
+      },
+      "effects": [
+        { "type": "Chorus", "options": { "frequency": 1.5, "delayTime": 3.5, "depth": 0.7, "wet": 0.3 } }
+      ],
+      "volume": -15,
+      "notes": [
+        { "pitch": "D4", "duration": "1m", "time": "0:0" },
+        { "pitch": "G4", "duration": "1m", "time": "1:0" },
+        { "pitch": "E4", "duration": "1m", "time": "2:0" },
+        { "pitch": "A4", "duration": "1m", "time": "3:0" }
+      ]
+    },
+    {
+      "name": "Cheerful Bass",
+      "instrument": {
+        "type": "Synth",
+        "options": {
+          "oscillator": { "type": "triangle" },
+          "envelope": { "attack": 0.05, "decay": 0.2, "sustain": 0.8, "release": 0.5 }
+        }
+      },
+      "volume": -10,
+      "notes": [
+        { "pitch": "G2", "duration": "2n", "time": "0:0" },
+        { "pitch": "G2", "duration": "2n", "time": "0:2" },
+        { "pitch": "C3", "duration": "2n", "time": "1:0" },
+        { "pitch": "C3", "duration": "2n", "time": "1:2" },
+        { "pitch": "A2", "duration": "2n", "time": "2:0" },
+        { "pitch": "A2", "duration": "2n", "time": "2:2" },
+        { "pitch": "F2", "duration": "2n", "time": "3:0" },
+        { "pitch": "F2", "duration": "2n", "time": "3:2" }
+      ]
+    },
+    {
+      "name": "Loving Atmosphere",
+      "instrument": {
+        "type": "AMSynth",
+        "options": {
+          "harmonicity": 1.5,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 1, "decay": 0.1, "sustain": 1, "release": 2 },
+          "modulation": { "type": "square" },
+          "modulationEnvelope": { "attack": 1, "decay": 0, "sustain": 1, "release": 1 }
+        }
+      },
+      "effects": [
+        { "type": "PingPongDelay", "options": { "delayTime": "8n", "feedback": 0.2, "wet": 0.1 } },
+        { "type": "Tremolo", "options": { "frequency": 0.5, "depth": 0.2 } }
+      ],
+      "volume": -20,
+      "notes": [
+        { "pitch": "B4", "duration": "2m", "time": "0:0" },
+        { "pitch": "D5", "duration": "2m", "time": "2:0" }
+      ]
+    }
+  ]
+}

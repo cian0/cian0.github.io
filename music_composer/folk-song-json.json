@@ -1,0 +1,103 @@
+{
+  "tempo": 110,
+  "timeSignature": [3, 4],
+  "tracks": [
+    {
+      "name": "Melody",
+      "instrument": {
+        "type": "AMSynth",
+        "options": {
+          "harmonicity": 2,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.01, "decay": 0.1, "sustain": 0.9, "release": 0.1 },
+          "modulation": { "type": "square" }
+        }
+      },
+      "effects": [
+        { "type": "Freeverb", "options": { "roomSize": 0.3, "dampening": 1000, "wet": 0.2 } }
+      ],
+      "volume": -8,
+      "notes": [
+        { "pitch": "F#4", "duration": "8n", "time": "0:0" },
+        { "pitch": "G4", "duration": "8n.", "time": "0:0.5" },
+        { "pitch": "A4", "duration": "16n", "time": "0:1.25" },
+        { "pitch": "B4", "duration": "4n", "time": "0:1.5" },
+        { "pitch": "B4", "duration": "16n", "time": "0:2.5" },
+        { "pitch": "C5", "duration": "16n", "time": "0:2.75" },
+        { "pitch": "B4", "duration": "8n", "time": "0:3" },
+        { "pitch": "A4", "duration": "8n.", "time": "0:3.5" },
+        { "pitch": "F#4", "duration": "16n", "time": "0:4.25" },
+        { "pitch": "D4", "duration": "4n.", "time": "1:0" },
+        { "pitch": "C#4", "duration": "8n", "time": "1:1.5" },
+        { "pitch": "D4", "duration": "8n.", "time": "1:2" },
+        { "pitch": "F#4", "duration": "16n", "time": "1:2.75" },
+        { "pitch": "A4", "duration": "4n", "time": "1:3" },
+        { "pitch": "A4", "duration": "16n", "time": "2:0" },
+        { "pitch": "B4", "duration": "16n", "time": "2:0.25" },
+        { "pitch": "A4", "duration": "8n", "time": "2:0.5" },
+        { "pitch": "F#4", "duration": "4n", "time": "2:1" },
+        { "pitch": "G4", "duration": "4n.", "time": "2:2.5" },
+        { "pitch": "F#4", "duration": "8n", "time": "3:1" },
+        { "pitch": "G4", "duration": "8n.", "time": "3:1.5" },
+        { "pitch": "A4", "duration": "16n", "time": "3:2.25" },
+        { "pitch": "B4", "duration": "4n", "time": "3:2.5" },
+        { "pitch": "B4", "duration": "16n", "time": "3:3.5" },
+        { "pitch": "C5", "duration": "16n", "time": "3:3.75" },
+        { "pitch": "B4", "duration": "8n", "time": "4:0" },
+        { "pitch": "A4", "duration": "8n.", "time": "4:0.5" },
+        { "pitch": "F#4", "duration": "16n", "time": "4:1.25" }
+      ]
+    },
+    {
+      "name": "Harmony",
+      "instrument": {
+        "type": "PolySynth",
+        "options": {
+          "oscillator": { "type": "triangle" },
+          "envelope": { "attack": 0.02, "decay": 0.1, "sustain": 0.3, "release": 0.8 }
+        }
+      },
+      "effects": [
+        { "type": "Chorus", "options": { "frequency": 1.5, "delayTime": 3.5, "depth": 0.7 } }
+      ],
+      "volume": -12,
+      "notes": [
+        { "pitch": ["G3", "B3", "D4"], "duration": "2n", "time": "0:0" },
+        { "pitch": ["D3", "F#3", "A3"], "duration": "4n", "time": "0:2" },
+        { "pitch": ["G3", "B3", "D4"], "duration": "2n", "time": "1:0" },
+        { "pitch": ["D3", "F#3", "A3"], "duration": "4n", "time": "1:2" },
+        { "pitch": ["G3", "B3", "D4"], "duration": "2n", "time": "2:0" },
+        { "pitch": ["Bb3", "D4", "F4"], "duration": "4n", "time": "2:2" },
+        { "pitch": ["F3", "A3", "C4"], "duration": "2n", "time": "3:0" },
+        { "pitch": ["G3", "B3", "D4"], "duration": "4n", "time": "3:2" },
+        { "pitch": ["G3", "B3", "D4"], "duration": "2n", "time": "4:0" },
+        { "pitch": ["D3", "F#3", "A3"], "duration": "4n", "time": "4:2" }
+      ]
+    },
+    {
+      "name": "Bass",
+      "instrument": {
+        "type": "FMSynth",
+        "options": {
+          "harmonicity": 1,
+          "modulationIndex": 5,
+          "oscillator": { "type": "sine" },
+          "envelope": { "attack": 0.01, "decay": 0.2, "sustain": 0.8, "release": 0.1 }
+        }
+      },
+      "volume": -10,
+      "notes": [
+        { "pitch": "G2", "duration": "2n", "time": "0:0" },
+        { "pitch": "D2", "duration": "4n", "time": "0:2" },
+        { "pitch": "G2", "duration": "2n", "time": "1:0" },
+        { "pitch": "D2", "duration": "4n", "time": "1:2" },
+        { "pitch": "G2", "duration": "2n", "time": "2:0" },
+        { "pitch": "Bb2", "duration": "4n", "time": "2:2" },
+        { "pitch": "F2", "duration": "2n", "time": "3:0" },
+        { "pitch": "G2", "duration": "4n", "time": "3:2" },
+        { "pitch": "G2", "duration": "2n", "time": "4:0" },
+        { "pitch": "D2", "duration": "4n", "time": "4:2" }
+      ]
+    }
+  ]
+}

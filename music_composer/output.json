@@ -1,0 +1,59 @@
+{
+  "tempo": 120,
+  "timeSignature": [
+    4,
+    4
+  ],
+  "tracks": [
+    {
+      "name": "Ball Impact",
+      "instrument": {
+        "type": "MembraneSynth",
+        "options": {}
+      },
+      "volume": 0,
+      "notes": [
+        {
+          "pitch": [
+            "C2"
+          ],
+          "duration": "8n",
+          "time": "0:0"
+        }
+      ]
+    },
+    {
+      "name": "Air Whoosh",
+      "instrument": {
+        "type": "NoiseSynth",
+        "options": {
+          "noise:type": "whit"
+        }
+      },
+      "volume": -20,
+      "notes": [
+        {
+          "pitch": [
+            "un",
+            "de",
+            "fi",
+            "ne"
+          ],
+          "duration": "16n",
+          "time": "0:0"
+        }
+      ],
+      "effects": [
+        {
+          "type": "Filter",
+          "options": {
+            "frequency": 800,
+            "type": "lowpass",
+            "rolloff": -12,
+            "Q": 1
+          }
+        }
+      ]
+    }
+  ]
+}

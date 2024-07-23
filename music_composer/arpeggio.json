@@ -1,0 +1,229 @@
+{
+    "tempo": 140,
+    "timeSignature": [4, 4],
+    "tracks": [
+      {
+        "name": "Bouncy Lead",
+        "instrument": {
+          "type": "Synth",
+          "options": {
+            "oscillator": { "type": "square" },
+            "envelope": { "attack": 0.02, "decay": 0.1, "sustain": 0.3, "release": 0.1 }
+          }
+        },
+        "effects": [
+          { "type": "FeedbackDelay", "options": { "delayTime": "8n", "feedback": 0.2, "wet": 0.3 } }
+        ],
+        "volume": -8,
+        "notes": [
+          { "pitch": "C5", "duration": "8n", "time": "0:0" },
+          { "pitch": "E5", "duration": "8n", "time": "0:0.5" },
+          { "pitch": "G5", "duration": "8n", "time": "0:1" },
+          { "pitch": "C6", "duration": "8n", "time": "0:1.5" },
+          { "pitch": "B5", "duration": "8n", "time": "0:2" },
+          { "pitch": "G5", "duration": "8n", "time": "0:2.5" },
+          { "pitch": "A5", "duration": "8n", "time": "0:3" },
+          { "pitch": "F5", "duration": "8n", "time": "0:3.5" },
+          { "pitch": "E5", "duration": "8n", "time": "1:0" },
+          { "pitch": "G5", "duration": "8n", "time": "1:0.5" },
+          { "pitch": "C6", "duration": "8n", "time": "1:1" },
+          { "pitch": "B5", "duration": "8n", "time": "1:1.5" },
+          { "pitch": "A5", "duration": "8n", "time": "1:2" },
+          { "pitch": "G5", "duration": "8n", "time": "1:2.5" },
+          { "pitch": "F5", "duration": "8n", "time": "1:3" },
+          { "pitch": "D5", "duration": "8n", "time": "1:3.5" },
+          { "pitch": "E5", "duration": "8n", "time": "2:0" },
+          { "pitch": "G5", "duration": "8n", "time": "2:0.5" },
+          { "pitch": "A5", "duration": "8n", "time": "2:1" },
+          { "pitch": "C6", "duration": "8n", "time": "2:1.5" },
+          { "pitch": "B5", "duration": "8n", "time": "2:2" },
+          { "pitch": "A5", "duration": "8n", "time": "2:2.5" },
+          { "pitch": "G5", "duration": "8n", "time": "2:3" },
+          { "pitch": "E5", "duration": "8n", "time": "2:3.5" },
+          { "pitch": "F5", "duration": "8n", "time": "3:0" },
+          { "pitch": "A5", "duration": "8n", "time": "3:0.5" },
+          { "pitch": "C6", "duration": "8n", "time": "3:1" },
+          { "pitch": "B5", "duration": "8n", "time": "3:1.5" },
+          { "pitch": "A5", "duration": "8n", "time": "3:2" },
+          { "pitch": "G5", "duration": "8n", "time": "3:2.5" },
+          { "pitch": "F5", "duration": "8n", "time": "3:3" },
+          { "pitch": "D5", "duration": "8n", "time": "3:3.5" }
+        ]
+      },
+      {
+        "name": "Bubbly Bass",
+        "instrument": {
+          "type": "FMSynth",
+          "options": {
+            "harmonicity": 3,
+            "modulationIndex": 10,
+            "oscillator": { "type": "sine" },
+            "envelope": { "attack": 0.01, "decay": 0.2, "sustain": 0.8, "release": 0.1 },
+            "modulation": { "type": "square" },
+            "modulationEnvelope": { "attack": 0.5, "decay": 0, "sustain": 1, "release": 0.5 }
+          }
+        },
+        "effects": [
+          { "type": "AutoWah", "options": { "frequency": "8n", "depth": 0.6, "baseFrequency": 200, "octaves": 2 } }
+        ],
+        "volume": -12,
+        "notes": [
+          { "pitch": "C3", "duration": "4n", "time": "0:0" },
+          { "pitch": "G3", "duration": "4n", "time": "0:1" },
+          { "pitch": "E3", "duration": "4n", "time": "0:2" },
+          { "pitch": "F3", "duration": "4n", "time": "0:3" },
+          { "pitch": "C3", "duration": "4n", "time": "1:0" },
+          { "pitch": "G3", "duration": "4n", "time": "1:1" },
+          { "pitch": "A3", "duration": "4n", "time": "1:2" },
+          { "pitch": "F3", "duration": "4n", "time": "1:3" },
+          { "pitch": "E3", "duration": "4n", "time": "2:0" },
+          { "pitch": "G3", "duration": "4n", "time": "2:1" },
+          { "pitch": "A3", "duration": "4n", "time": "2:2" },
+          { "pitch": "B3", "duration": "4n", "time": "2:3" },
+          { "pitch": "C3", "duration": "4n", "time": "3:0" },
+          { "pitch": "A3", "duration": "4n", "time": "3:1" },
+          { "pitch": "F3", "duration": "4n", "time": "3:2" },
+          { "pitch": "G3", "duration": "4n", "time": "3:3" }
+        ]
+      },
+      {
+        "name": "Playful Percussion",
+        "instrument": { "type": "MembraneSynth" },
+        "volume": -6,
+        "notes": [
+          { "pitch": "C2", "duration": "8n", "time": "0:0" },
+          { "pitch": "C2", "duration": "8n", "time": "0:1" },
+          { "pitch": "C2", "duration": "8n", "time": "0:2" },
+          { "pitch": "C2", "duration": "8n", "time": "0:3" },
+          { "pitch": "C2", "duration": "8n", "time": "1:0" },
+          { "pitch": "C2", "duration": "8n", "time": "1:1" },
+          { "pitch": "C2", "duration": "8n", "time": "1:2" },
+          { "pitch": "C2", "duration": "8n", "time": "1:3" },
+          { "pitch": "C2", "duration": "8n", "time": "2:0" },
+          { "pitch": "C2", "duration": "8n", "time": "2:1" },
+          { "pitch": "C2", "duration": "8n", "time": "2:2" },
+          { "pitch": "C2", "duration": "16n", "time": "2:3" },
+          { "pitch": "C2", "duration": "16n", "time": "2:3.5" },
+          { "pitch": "C2", "duration": "8n", "time": "3:0" },
+          { "pitch": "C2", "duration": "8n", "time": "3:1" },
+          { "pitch": "C2", "duration": "8n", "time": "3:2" },
+          { "pitch": "C2", "duration": "16n", "time": "3:3" },
+          { "pitch": "C2", "duration": "16n", "time": "3:3.5" }
+        ]
+      },
+      {
+        "name": "Sparkly Arpeggio",
+        "instrument": {
+          "type": "AMSynth",
+          "options": {
+            "harmonicity": 3,
+            "oscillator": { "type": "triangle" },
+            "envelope": { "attack": 0.001, "decay": 0.1, "sustain": 0.1, "release": 0.5 },
+            "modulation": { "type": "square" }
+          }
+        },
+        "effects": [
+          { "type": "Chorus", "options": { "frequency": 4, "delayTime": 2.5, "depth": 0.7 } },
+          { "type": "Freeverb", "options": { "decay": 1.5, "wet": 0.2 } }
+        ],
+        "volume": -15,
+        "notes": [
+          { "pitch": "C4", "duration": "16n", "time": "0:0" },
+          { "pitch": "E4", "duration": "16n", "time": "0:0.25" },
+          { "pitch": "G4", "duration": "16n", "time": "0:0.5" },
+          { "pitch": "C5", "duration": "16n", "time": "0:0.75" },
+          { "pitch": "E5", "duration": "16n", "time": "0:1" },
+          { "pitch": "G5", "duration": "16n", "time": "0:1.25" },
+          { "pitch": "E5", "duration": "16n", "time": "0:1.5" },
+          { "pitch": "C5", "duration": "16n", "time": "0:1.75" },
+          { "pitch": "G4", "duration": "16n", "time": "0:2" },
+          { "pitch": "E4", "duration": "16n", "time": "0:2.25" },
+          { "pitch": "C4", "duration": "16n", "time": "0:2.5" },
+          { "pitch": "E4", "duration": "16n", "time": "0:2.75" },
+          { "pitch": "G4", "duration": "16n", "time": "0:3" },
+          { "pitch": "C5", "duration": "16n", "time": "0:3.25" },
+          { "pitch": "E5", "duration": "16n", "time": "0:3.5" },
+          { "pitch": "G5", "duration": "16n", "time": "0:3.75" },
+          { "pitch": "F4", "duration": "16n", "time": "1:0" },
+          { "pitch": "A4", "duration": "16n", "time": "1:0.25" },
+          { "pitch": "C5", "duration": "16n", "time": "1:0.5" },
+          { "pitch": "F5", "duration": "16n", "time": "1:0.75" },
+          { "pitch": "A5", "duration": "16n", "time": "1:1" },
+          { "pitch": "C6", "duration": "16n", "time": "1:1.25" },
+          { "pitch": "A5", "duration": "16n", "time": "1:1.5" },
+          { "pitch": "F5", "duration": "16n", "time": "1:1.75" },
+          { "pitch": "C5", "duration": "16n", "time": "1:2" },
+          { "pitch": "A4", "duration": "16n", "time": "1:2.25" },
+          { "pitch": "F4", "duration": "16n", "time": "1:2.5" },
+          { "pitch": "A4", "duration": "16n", "time": "1:2.75" },
+          { "pitch": "C5", "duration": "16n", "time": "1:3" },
+          { "pitch": "F5", "duration": "16n", "time": "1:3.25" },
+          { "pitch": "A5", "duration": "16n", "time": "1:3.5" },
+          { "pitch": "C6", "duration": "16n", "time": "1:3.75" },
+          { "pitch": "E4", "duration": "16n", "time": "2:0" },
+          { "pitch": "G4", "duration": "16n", "time": "2:0.25" },
+          { "pitch": "B4", "duration": "16n", "time": "2:0.5" },
+          { "pitch": "E5", "duration": "16n", "time": "2:0.75" },
+          { "pitch": "G5", "duration": "16n", "time": "2:1" },
+          { "pitch": "B5", "duration": "16n", "time": "2:1.25" },
+          { "pitch": "G5", "duration": "16n", "time": "2:1.5" },
+          { "pitch": "E5", "duration": "16n", "time": "2:1.75" },
+          { "pitch": "B4", "duration": "16n", "time": "2:2" },
+          { "pitch": "G4", "duration": "16n", "time": "2:2.25" },
+          { "pitch": "E4", "duration": "16n", "time": "2:2.5" },
+          { "pitch": "G4", "duration": "16n", "time": "2:2.75" },
+          { "pitch": "B4", "duration": "16n", "time": "2:3" },
+          { "pitch": "E5", "duration": "16n", "time": "2:3.25" },
+          { "pitch": "G5", "duration": "16n", "time": "2:3.5" },
+          { "pitch": "B5", "duration": "16n", "time": "2:3.75" },
+          { "pitch": "D4", "duration": "16n", "time": "3:0" },
+          { "pitch": "F4", "duration": "16n", "time": "3:0.25" },
+          { "pitch": "A4", "duration": "16n", "time": "3:0.5" },
+          { "pitch": "D5", "duration": "16n", "time": "3:0.75" },
+          { "pitch": "F5", "duration": "16n", "time": "3:1" },
+          { "pitch": "A5", "duration": "16n", "time": "3:1.25" },
+          { "pitch": "F5", "duration": "16n", "time": "3:1.5" },
+          { "pitch": "D5", "duration": "16n", "time": "3:1.75" },
+          { "pitch": "A4", "duration": "16n", "time": "3:2" },
+          { "pitch": "F4", "duration": "16n", "time": "3:2.25" },
+          { "pitch": "D4", "duration": "16n", "time": "3:2.5" },
+          { "pitch": "F4", "duration": "16n", "time": "3:2.75" },
+          { "pitch": "A4", "duration": "16n", "time": "3:3" },
+          { "pitch": "D5", "duration": "16n", "time": "3:3.25" },
+          { "pitch": "F5", "duration": "16n", "time": "3:3.5" },
+          { "pitch": "A5", "duration": "16n", "time": "3:3.75" }
+        ]
+      },
+      {
+        "name": "Playful Melody",
+        "instrument": {
+          "type": "PolySynth",
+          "options": {
+            "oscillator": { "type": "sine" },
+            "envelope": { "attack": 0.05, "decay": 0.3, "sustain": 0.4, "release": 0.8 }
+          }
+        },
+        "effects": [
+          { "type": "Freeverb", "options": { "roomSize": 0.7, "wet": 0.3 } }
+        ],
+        "volume": -10,
+        "notes": [
+          { "pitch": ["E4", "G4", "C5"], "duration": "4n", "time": "0:0" },
+          { "pitch": ["F4", "A4", "C5"], "duration": "4n", "time": "0:1" },
+          { "pitch": ["G4", "B4", "D5"], "duration": "4n", "time": "0:2" },
+          { "pitch": ["E4", "G4", "C5"], "duration": "4n", "time": "0:3" },
+          { "pitch": ["F4", "A4", "C5"], "duration": "4n", "time": "1:0" },
+          { "pitch": ["G4", "B4", "D5"], "duration": "4n", "time": "1:1" },
+          { "pitch": ["A4", "C5", "E5"], "duration": "4n", "time": "1:2" },
+          { "pitch": ["G4", "B4", "D5"], "duration": "4n", "time": "1:3" },
+          { "pitch": ["E4", "G4", "C5"], "duration": "4n", "time": "2:0" },
+          { "pitch": ["F4", "A4", "C5"], "duration": "4n", "time": "2:1" },
+          { "pitch": ["G4", "B4", "D5"], "duration": "4n", "time": "2:2" },
+          { "pitch": ["E4", "G4", "C5"], "duration": "4n", "time": "2:3" },
+          { "pitch": ["F4", "A4", "C5"], "duration": "4n", "time": "3:0" },
+          { "pitch": ["G4", "B4", "D5"], "duration": "4n", "time": "3:1" },
+          { "pitch": ["A4", "C5", "E5"], "duration": "2n", "time": "3:2" }
+        ]
+      }
+    ]
+  }
