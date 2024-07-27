@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import "nes.css/css/nes.min.css";
 
 const LandingPage = () => {
@@ -15,12 +16,14 @@ const LandingPage = () => {
           <li>Pixelated graphics</li>
           <li>Nostalgic sound effects</li>
           <li>Classic game references</li>
+          <li>Rock Paper Scissors game</li>
         </ul>
       </div>
       
       <div style={{ marginTop: '2rem' }}>
         <button type="button" className="nes-btn is-primary">Start Adventure</button>
         <button type="button" className="nes-btn is-success" style={{ marginLeft: '1rem' }}>Learn More</button>
+        <Link to="/rock-paper-scissors" className="nes-btn is-warning" style={{ marginLeft: '1rem' }}>Play Rock Paper Scissors</Link>
       </div>
       
       <progress className="nes-progress is-success" value="90" max="100" style={{ marginTop: '2rem' }}></progress>
