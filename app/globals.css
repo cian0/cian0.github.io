@@ -59,6 +59,13 @@
   }
 }
 
+
+/* 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*/
+
 @layer base {
   * {
     @apply border-border;
@@ -67,6 +74,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 html,
 body {
   padding: 0;
@@ -83,17 +91,79 @@ a {
   box-sizing: border-box;
 }
 
-/* Optionally, you can add some base styles for the retro look */
-
+/* Base styles for larger screens */
 .nes-container {
   margin-top: 20px;
+  padding: 1.5rem;
 }
 
-/* You might want to adjust some sizes due to the pixelated nature of the font */
 .nes-btn {
   padding: 0.5rem 1rem;
   margin: 0.5rem;
   font-size: 0.8rem;
 }
 
-/* Add any other global styles you want here */
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .nes-container {
+    margin-top: 10px;
+    padding: 1rem;
+  }
+
+  .nes-btn {
+    padding: 0.3rem 0.6rem;
+    margin: 0.3rem;
+    font-size: 0.7rem;
+  }
+
+  .nes-input {
+    font-size: 0.8rem;
+  }
+
+  .nes-balloon {
+    padding: 0.5rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+}
+
+/* Additional responsive adjustments for very small screens */
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+
+  .nes-container {
+    padding: 0.75rem;
+  }
+
+  .nes-btn {
+    padding: 0.2rem 0.4rem;
+    margin: 0.2rem;
+    font-size: 0.6rem;
+  }
+}
+
+/* Flexbox utility classes for better responsive layouts */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flex-item {
+  flex: 1 1 300px;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .flex-item {
+    flex-basis: 100%;
+  }
+}
