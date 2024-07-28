@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
-    "deploy": "next build && touch out/.nojekyll && gh-pages -d out -t true"
+    "deploy": "next build && node scripts/create-nojekyll.js && gh-pages -d out -t true"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.1",

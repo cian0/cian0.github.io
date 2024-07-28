@@ -11,6 +11,9 @@ const nextConfig = {
   output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
   basePath: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
+  publicRuntimeConfig: {
+    basePath: '/portfolio' || '',
+  },
   images: {
     unoptimized: true,
   },

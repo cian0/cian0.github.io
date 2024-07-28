@@ -84,11 +84,6 @@ a {
 }
 
 /* Optionally, you can add some base styles for the retro look */
-body {
-  background-color: #000;
-  color: #fff;
-  line-height: 1.6;
-}
 
 .nes-container {
   margin-top: 20px;
