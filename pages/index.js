@@ -3,73 +3,8 @@ import Link from 'next/link';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from "@/components/ui/alert-dialog";
 
 const apps = [
-  // ... (previous app data remains the same)
-
   {
     id: 1,
-    name: "Retro RPG Adventure",
-    category: "Games",
-    description: "Embark on an 8-bit journey through pixelated landscapes.",
-    image: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-        <rect width="100" height="100" fill="#000"/>
-        <circle cx="50" cy="50" r="40" fill="#fff"/>
-        <rect x="40" y="40" width="20" height="20" fill="#000"/>
-      </svg>
-    ),
-    link: "/retro-rpg" // Dummy link
-  },
-  {
-    id: 2,
-    name: "Pixel Art Creator",
-    category: "Creative",
-    description: "Design your own 8-bit masterpieces with our easy-to-use tool.",
-    image: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-        <rect width="100" height="100" fill="#f0f0f0"/>
-        <rect x="10" y="10" width="20" height="20" fill="#ff0000"/>
-        <rect x="40" y="10" width="20" height="20" fill="#00ff00"/>
-        <rect x="70" y="10" width="20" height="20" fill="#0000ff"/>
-        <rect x="10" y="40" width="20" height="20" fill="#ffff00"/>
-        <rect x="40" y="40" width="20" height="20" fill="#ff00ff"/>
-        <rect x="70" y="40" width="20" height="20" fill="#00ffff"/>
-      </svg>
-    ),
-    link: "/pixel-art-creator" // Dummy link
-  },
-  {
-    id: 3,
-    name: "NES-style Task Manager",
-    category: "Business",
-    description: "Manage your tasks with a nostalgic twist. Be productive in style!",
-    image: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-        <rect width="100" height="100" fill="#fff"/>
-        <rect x="10" y="20" width="80" height="10" fill="#000"/>
-        <rect x="10" y="40" width="60" height="10" fill="#000"/>
-        <rect x="10" y="60" width="70" height="10" fill="#000"/>
-      </svg>
-    ),
-    link: "/task-manager" // Dummy link
-  },
-  {
-    id: 4,
-    name: "Chiptune Music Maker",
-    category: "Music",
-    description: "Compose 8-bit melodies and create your own game soundtracks.",
-    image: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-        <rect width="100" height="100" fill="#000"/>
-        <rect x="10" y="20" width="10" height="60" fill="#fff"/>
-        <rect x="30" y="40" width="10" height="40" fill="#fff"/>
-        <rect x="50" y="30" width="10" height="50" fill="#fff"/>
-        <rect x="70" y="50" width="10" height="30" fill="#fff"/>
-      </svg>
-    ),
-    link: "/chiptune-maker" // Dummy link
-  },
-  {
-    id: 5,
     name: "Rock Paper Scissors",
     category: "Games",
     description: "Play the classic game with a retro twist!",
@@ -82,7 +17,7 @@ const apps = [
     link: "/rock-paper-scissors"
   },
   {
-    id: 6,
+    id: 2,
     name: "Emoji Terrain Game",
     category: "Games",
     description: "Navigate through a terrain made of emojis in this simple Phaser game.",
@@ -97,7 +32,7 @@ const apps = [
     link: "/emoji-terrain-game"
   },
   {
-    id: 7,
+    id: 3,
     name: "Chess Game",
     category: "Games",
     description: "Play chess with emoji pieces in this simple Phaser game.",
@@ -111,7 +46,7 @@ const apps = [
     link: "/chess-game"
   },
   {
-    id: 8,
+    id: 4,
     name: "Emoji Snake Game",
     category: "Games",
     description: "Play the classic Snake game with emojis!",
@@ -126,7 +61,7 @@ const apps = [
     link: "/snake-game"
   },
   {
-    id: 9,
+    id: 5,
     name: "Emoji Platformer",
     category: "Games",
     description: "Survive in a world of emoji zombies in this fun platformer!",
@@ -141,7 +76,7 @@ const apps = [
     link: "/emoji-platformer"
   },
   {
-    id: 10,
+    id: 6,
     name: "Retro Chat Connect",
     category: "Communication",
     description: "Chat with friends using WebRTC in a retro-styled interface!",
@@ -152,9 +87,61 @@ const apps = [
       </svg>
     ),
     link: "/retro-chat-connect"
+  },
+  {
+    id: 7,
+    name: "Auto Speech Recognition",
+    category: "AI",
+    description: "Convert speech to text using AI magic!",
+    image: (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+        <rect width="100" height="100" fill="#E6E6FA"/>
+        <text x="50" y="50" fontSize="60" textAnchor="middle" dominantBaseline="central">🎙️</text>
+      </svg>
+    ),
+    link: "/autospeechrecognition"
+  },
+  {
+    id: 8,
+    name: "Embedding Generator",
+    category: "AI",
+    description: "Turn your CSV data into fancy AI embeddings!",
+    image: (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+        <rect width="100" height="100" fill="#F0FFF0"/>
+        <text x="50" y="50" fontSize="60" textAnchor="middle" dominantBaseline="central">📊</text>
+      </svg>
+    ),
+    link: "/embedding-generation"
+  },
+  {
+    id: 9,
+    name: "Code Completer",
+    category: "AI",
+    description: "Watch AI finish your code like a mind reader!",
+    image: (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+        <rect width="100" height="100" fill="#F0F8FF"/>
+        <text x="50" y="50" fontSize="60" textAnchor="middle" dominantBaseline="central">💻</text>
+      </svg>
+    ),
+    link: "/codecompletion"
+  },
+  {
+    id: 10,
+    name: "Sentiment Checker",
+    category: "AI",
+    description: "See if your words are happy, sad, or somewhere in between!",
+    image: (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+        <rect width="100" height="100" fill="#FFF0F5"/>
+        <text x="50" y="50" fontSize="60" textAnchor="middle" dominantBaseline="central">😊😐😠</text>
+      </svg>
+    ),
+    link: "/sentimentcheck"
   }
-
 ];
+
 
 const LandingPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
