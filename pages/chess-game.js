@@ -5,15 +5,17 @@ const DynamicEmojiChessGame = dynamic(
   () => import('../components/ChessGame').then((mod) => mod.default),
   { 
     ssr: false,
-    loading: () => <p>Loading chess game...</p>
+    loading: () => <p className="retro-text">Loading chess game...</p>
   }
 );
 
 const EmojiChessGamePage = () => {
   return (
-    <div className="nes-container with-title is-centered" style={{ maxWidth: '900px', margin: '2rem auto' }}>
-      <p className="title">Emoji Chess Game</p>
-      <DynamicEmojiChessGame />
+    <div className="retro-container">
+      <div className="retro-post">
+        <h1 className="retro-header">Emoji Chess Game</h1>
+        <DynamicEmojiChessGame />
+      </div>
     </div>
   );
 };

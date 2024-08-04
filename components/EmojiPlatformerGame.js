@@ -14,6 +14,7 @@ const EmojiPlatformerGame = () => {
                 width: 800,
                 height: 600,
                 parent: 'game-container',
+                backgroundColor: '#000000',
                 physics: {
                     default: 'arcade',
                     arcade: {
@@ -41,12 +42,10 @@ const EmojiPlatformerGame = () => {
             let gameOver = false;
 
             function preload() {
-                this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png');
+                // No need to preload sky image
             }
 
             function create() {
-                this.add.image(400, 300, 'sky');
-
                 platforms = this.physics.add.staticGroup();
 
                 // Create ground
@@ -61,14 +60,14 @@ const EmojiPlatformerGame = () => {
 
                 // Replace platform sprites with emojis
                 platforms.children.entries.forEach(platform => {
-                    this.add.text(platform.x, platform.y, PLATFORM, { fontSize: '40px' }).setOrigin(0.5);
+                    this.add.text(platform.x, platform.y, PLATFORM, { fontSize: '40px', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
                     platform.setVisible(false);
                 });
 
                 // Player
                 player = this.physics.add.sprite(100, 450, 'player');
                 player.setCollideWorldBounds(true);
-                this.add.text(player.x, player.y, PLAYER, { fontSize: '40px' }).setOrigin(0.5);
+                this.add.text(player.x, player.y, PLAYER, { fontSize: '40px', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
                 player.setVisible(false);
 
                 // Zombies
@@ -80,7 +79,7 @@ const EmojiPlatformerGame = () => {
                     zombie.setBounce(1);
                     zombie.setCollideWorldBounds(true);
                     zombie.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                    this.add.text(zombie.x, zombie.y, ZOMBIE, { fontSize: '40px' }).setOrigin(0.5);
+                    this.add.text(zombie.x, zombie.y, ZOMBIE, { fontSize: '40px', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
                     zombie.setVisible(false);
                 }
 
@@ -91,7 +90,7 @@ const EmojiPlatformerGame = () => {
 
                 this.physics.add.collider(player, zombies, hitZombie, null, this);
 
-                scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+                scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '16px', fill: '#0ff', fontFamily: '"Press Start 2P"' });
 
                 // Update emoji positions
                 this.events.on('update', () => {
@@ -145,7 +144,7 @@ const EmojiPlatformerGame = () => {
                 this.physics.pause();
                 player.setTint(0xff0000);
                 gameOver = true;
-                this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
+                this.add.text(400, 300, 'Game Over', { fontSize: '32px', fill: '#f0f', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
             }
 
             if (gameRef.current) {
@@ -163,11 +162,12 @@ const EmojiPlatformerGame = () => {
     }, []);
 
     return (
-        <div className="nes-container with-title">
-            <p className="title">Emoji Platformer Game</p>
-            <div ref={gameRef} id="game-container" style={{ width: '800px', height: '600px', border: '1px solid #000' }}></div>
-            <div className="nes-container is-rounded" style={{ marginTop: '1rem' }}>
+        <div className="nes-container is-dark with-title">
+            <p className="title">Emoji Platformer</p>
+            <div ref={gameRef} id="game-container" style={{ width: '800px', height: '600px', border: '2px solid var(--retro-border)', margin: '0 auto' }}></div>
+            <div className="nes-container is-rounded is-dark" style={{ marginTop: '1rem' }}>
                 <p>Use arrow keys to move and jump. Avoid the zombies!</p>
+                <button className="nes-btn is-primary" onClick={() => window.location.reload()}>Restart Game</button>
             </div>
         </div>
     );

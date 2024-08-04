@@ -1,0 +1,84 @@
+{
+  "apps": [
+    {
+      "id": 1,
+      "name": "Auto Speech Recognition",
+      "category": "AI",
+      "description": "Convert speech to text using AI magic!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🎙️</text></svg>",
+      "link": "/autospeechrecognition"
+    },
+    {
+      "id": 2,
+      "name": "Embedding Generator",
+      "category": "AI",
+      "description": "Turn your CSV data into fancy AI embeddings!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">📊</text></svg>",
+      "link": "/embedding-generation"
+    },
+    {
+      "id": 3,
+      "name": "Code Completer",
+      "category": "AI",
+      "description": "Watch AI finish your code like a mind reader!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">💻</text></svg>",
+      "link": "/codecompletion"
+    },
+    {
+      "id": 4,
+      "name": "Sentiment Checker",
+      "category": "AI",
+      "description": "See if your words are happy, sad, or somewhere in between!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"40\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">😊😐😠</text></svg>",
+      "link": "/sentimentcheck"
+    },
+    {
+      "id": 5,
+      "name": "Rock Paper Scissors",
+      "category": "Games",
+      "description": "Play the classic game with a retro twist!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"40\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">✊✋✌️</text></svg>",
+      "link": "/rock-paper-scissors"
+    },
+    {
+      "id": 6,
+      "name": "Emoji Terrain Game",
+      "category": "Games",
+      "description": "Navigate through a terrain made of emojis in this simple Phaser game.",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🤠</text><text x=\"20\" y=\"20\" font-size=\"30\" fill=\"#00FFFF\">🌳</text><text x=\"80\" y=\"80\" font-size=\"30\" fill=\"#00FFFF\">🌳</text></svg>",
+      "link": "/emoji-terrain-game"
+    },
+    {
+      "id": 7,
+      "name": "Chess Game",
+      "category": "Games",
+      "description": "Play chess with emoji pieces in this simple Phaser game.",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"40\" font-size=\"40\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">♔♕♖</text><text x=\"50\" y=\"70\" font-size=\"30\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">♙♙♙</text></svg>",
+      "link": "/chess-game"
+    },
+    {
+      "id": 8,
+      "name": "Emoji Snake Game",
+      "category": "Games",
+      "description": "Play the classic Snake game with emojis!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🐍</text><text x=\"20\" y=\"20\" font-size=\"30\" fill=\"#00FFFF\">🍎</text><text x=\"80\" y=\"80\" font-size=\"30\" fill=\"#00FFFF\">🍎</text></svg>",
+      "link": "/snake-game"
+    },
+    {
+      "id": 9,
+      "name": "Emoji Platformer",
+      "category": "Games",
+      "description": "Survive in a world of emoji zombies in this fun platformer!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🏃</text><text x=\"20\" y=\"20\" font-size=\"30\" fill=\"#00FFFF\">🧟</text><text x=\"80\" y=\"80\" font-size=\"30\" fill=\"#00FFFF\">🧟</text></svg>",
+      "link": "/emoji-platformer"
+    },
+    {
+      "id": 10,
+      "name": "Retro Chat Connect",
+      "category": "Communication",
+      "description": "Chat with friends using WebRTC in a retro-styled interface!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">💬</text></svg>",
+      "link": "/retro-chat-connect"
+    }
+  ]
+}

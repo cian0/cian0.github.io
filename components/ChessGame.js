@@ -4,6 +4,19 @@ import dynamic from 'next/dynamic';
 const EmojiChessGame = () => {
     const gameRef = useRef(null);
     const [message, setMessage] = useState('White to move');
+    const [gameSize, setGameSize] = useState(800);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const width = Math.min(window.innerWidth - 40, 800);
+            setGameSize(width);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         let game;
@@ -14,10 +27,10 @@ const EmojiChessGame = () => {
             
             const config = {
                 type: Phaser.AUTO,
-                width: 800,
-                height: 800,
+                width: gameSize,
+                height: gameSize,
                 parent: 'game-container',
-                backgroundColor: '#FFFFFF',
+                backgroundColor: '#111111',
                 scene: {
                     create: create,
                     update: update
@@ -53,7 +66,7 @@ const EmojiChessGame = () => {
                 // Create chessboard
                 for (let y = 0; y < 8; y++) {
                     for (let x = 0; x < 8; x++) {
-                        const color = (x + y) % 2 === 0 ? 0xFFCE9E : 0xD18B47;
+                        const color = (x + y) % 2 === 0 ? 0x444444 : 0x666666;
                         this.add.rectangle(x * tileSize, y * tileSize, tileSize, tileSize, color);
                     }
                 }
@@ -63,7 +76,7 @@ const EmojiChessGame = () => {
                     for (let x = 0; x < 8; x++) {
                         if (board[y][x]) {
                             const piece = this.add.text(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, PIECES[board[y][x]], 
-                                { fontSize: `${tileSize * 0.7}px`, color: board[y][x][0] === 'w' ? '#000000' : '#000000' })
+                                { fontSize: `${tileSize * 0.7}px`, color: board[y][x][0] === 'w' ? '#00FFFF' : '#FF00FF' })
                                 .setOrigin(0.5)
                                 .setInteractive();
                             piece.pieceType = board[y][x];
@@ -154,15 +167,14 @@ const EmojiChessGame = () => {
                 game.destroy(true);
             }
         };
-    }, []);
+    }, [gameSize]);
 
     return (
-        <div className="nes-container with-title">
-            <p className="title">Emoji Chess Game</p>
-            <div ref={gameRef} id="game-container" style={{ width: '800px', height: '800px', border: '1px solid #000' }}></div>
-            <div className="nes-container is-rounded" style={{ marginTop: '1rem' }}>
-                <p>{message}</p>
-                <p>Click on a piece to select it, then click on a square to move.</p>
+        <div className="retro-post">
+            <div ref={gameRef} id="game-container" style={{ width: `${gameSize}px`, height: `${gameSize}px`, margin: '0 auto' }}></div>
+            <div className="retro-section" style={{ marginTop: '1rem' }}>
+                <p className="retro-text">{message}</p>
+                <p className="retro-text">Click on a piece to select it, then click on a square to move.</p>
             </div>
         </div>
     );

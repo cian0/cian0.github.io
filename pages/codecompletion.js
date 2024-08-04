@@ -6,7 +6,7 @@ const MODELS = [
   'Xenova/codegen-350M-mono',
 ];
 
-export default function CodeCompletionPage() {
+export default function RetroCyberCodeCompletionPage() {
   const [model, setModel] = useState(MODELS[0]);
   const [code, setCode] = useState('def fibonacci(n):\n    """Calculate the Fibonacci sequence up to n."""\n    ');
   const [maxNewTokens, setMaxNewTokens] = useState(45);
@@ -51,6 +51,26 @@ export default function CodeCompletionPage() {
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
+    
+    // Set editor options for a more retro look
+    monaco.editor.defineTheme('retroTheme', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [
+        { token: 'comment', foreground: '888888' },
+        { token: 'keyword', foreground: 'ff00ff' },
+        { token: 'string', foreground: '00ffff' },
+      ],
+      colors: {
+        'editor.background': '#000000',
+        'editor.foreground': '#00ff00',
+        'editor.lineHighlightBackground': '#1a1a1a',
+        'editorCursor.foreground': '#00ff00',
+        'editorLineNumber.foreground': '#00ff00',
+      }
+    });
+    
+    monaco.editor.setTheme('retroTheme');
   };
 
   const handleGenerate = () => {
@@ -65,70 +85,71 @@ export default function CodeCompletionPage() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '20px' }}>
-      <div style={{ marginBottom: '10px' }}>
-        <select value={model} onChange={(e) => setModel(e.target.value)}>
-          {MODELS.map((m) => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
-        <input
-          type="number"
-          value={maxNewTokens}
-          onChange={(e) => setMaxNewTokens(parseInt(e.target.value))}
-          min="1"
-          max="512"
-          style={{ marginLeft: '10px' }}
-        />
-        <button onClick={handleGenerate} style={{ marginLeft: '10px' }} disabled={isLoading}>
-          Generate
-        </button>
-      </div>
-      <div style={{ flex: 1, position: 'relative' }}>
-        {isLoading && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 10,
-          }}>
-            <div style={{ color: 'white', textAlign: 'center' }}>
-              <div>Loading model...</div>
-              <div style={{ 
-                width: '200px', 
-                height: '20px', 
-                backgroundColor: '#444', 
-                marginTop: '10px',
-                borderRadius: '10px',
-                overflow: 'hidden'
-              }}>
-                <div style={{
-                  width: `${loadingProgress}%`,
-                  height: '100%',
-                  backgroundColor: '#0f0',
-                  transition: 'width 0.3s ease-in-out'
-                }} />
-              </div>
-              <div>{loadingProgress.toFixed(0)}%</div>
-            </div>
+    <div className="retro-container">
+      <div className="retro-post">
+        <div className="retro-header">
+          🖥️ CyberCode Completion 🚀
+        </div>
+        <div className="retro-section">
+          <div className="retro-control-panel">
+            <select 
+              className="retro-input" 
+              value={model} 
+              onChange={(e) => setModel(e.target.value)}
+            >
+              {MODELS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+            <input
+              className="retro-input"
+              type="number"
+              value={maxNewTokens}
+              onChange={(e) => setMaxNewTokens(parseInt(e.target.value))}
+              min="1"
+              max="512"
+            />
+            <button 
+              className="retro-button" 
+              onClick={handleGenerate} 
+              disabled={isLoading}
+            >
+              {isLoading ? '⏳ Processing...' : '🔮 Generate'}
+            </button>
           </div>
-        )}
-        <Editor
-          height="100%"
-          language="python"
-          value={code}
-          onChange={(value) => setCode(value)}
-          onMount={handleEditorDidMount}
-          options={{
-            minimap: { enabled: false },
-          }}
-        />
+        </div>
+        <div className="retro-section retro-editor-container">
+          {isLoading && (
+            <div className="retro-loading-overlay">
+              <div className="retro-loading-content">
+                <div>⚙️ Initializing Cyber Brain ⚙️</div>
+                <div className="retro-progress-bar">
+                  <div 
+                    className="retro-progress-bar-fill" 
+                    style={{width: `${loadingProgress}%`}}
+                  />
+                </div>
+                <div>{loadingProgress.toFixed(0)}%</div>
+              </div>
+            </div>
+          )}
+          <Editor
+            height="400px"
+            language="python"
+            value={code}
+            onChange={(value) => setCode(value)}
+            onMount={handleEditorDidMount}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              lineNumbers: 'on',
+              glyphMargin: false,
+              folding: false,
+              lineDecorationsWidth: 0,
+              lineNumbersMinChars: 3,
+            }}
+          />
+        </div>
       </div>
     </div>
   );

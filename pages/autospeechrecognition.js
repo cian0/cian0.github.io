@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
-import { Progress } from "@/components/ui/progress"
+import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
-export default function AutomaticSpeechRecognition() {
+const AutomaticSpeechRecognition = () => {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,38 +74,62 @@ export default function AutomaticSpeechRecognition() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-12">
-      <h1 className="text-5xl font-bold mb-2 text-center">Automatic Speech Recognition</h1>
-      
-      {!isModelReady && (
-        <div className="w-full max-w-md mb-4">
-          <Progress value={progress} className="w-full" />
-          <p className="text-center mt-2">Loading model: {progress.toFixed(2)}%</p>
+    <div className="retro-container">
+      <div className="retro-post">
+        <div className="retro-header">
+          🎙️ Retro Speech Recognition 🖥️
         </div>
-      )}
-
-      <input
-        type="file"
-        accept="audio/*"
-        onChange={handleFileChange}
-        className="w-full max-w-md p-2 border border-gray-300 rounded mb-4"
-      />
-
-      <button
-        onClick={handleTranscribe}
-        disabled={!isModelReady || isLoading || !selectedFile}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        {isLoading ? 'Transcribing...' : 'Transcribe Audio'}
-      </button>
-
-      {error && <div className="text-red-500 mt-4">{error}</div>}
-      {result && (
-        <div className="mt-4 w-full max-w-md">
-          <h2 className="text-2xl font-bold">Result:</h2>
-          <pre className="bg-gray-100 p-4 rounded mt-2 whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>
+        
+        <div className="retro-section">
+          <p className="retro-text">Welcome to the Retro Speech Recognition!</p>
+          <p className="retro-text">Transform your audio into text with our cutting-edge 8-bit technology.</p>
         </div>
-      )}
-    </main>
+
+        {!isModelReady && (
+          <div className="retro-section">
+            <div className="nes-progress is-primary">
+              <progress value={progress} max="100"></progress>
+            </div>
+            <p className="retro-text">Loading model: {progress.toFixed(2)}%</p>
+          </div>
+        )}
+
+        <div className="retro-section">
+          <label className="nes-btn">
+            <span>Select Audio File</span>
+            <input type="file" accept="audio/*" onChange={handleFileChange} style={{display: 'none'}} />
+          </label>
+          {selectedFile && <p className="retro-text">Selected: {selectedFile.name}</p>}
+        </div>
+
+        <div className="retro-section">
+          <button
+            onClick={handleTranscribe}
+            disabled={!isModelReady || isLoading || !selectedFile}
+            className={`nes-btn ${isModelReady && !isLoading && selectedFile ? 'is-primary' : 'is-disabled'}`}
+          >
+            {isLoading ? 'Decoding...' : 'Transcribe Audio'}
+          </button>
+        </div>
+
+        {error && (
+          <div className="nes-container is-rounded is-error">
+            <p className="retro-text">{error}</p>
+          </div>
+        )}
+
+        {result && (
+          <div className="retro-section">
+            <div className="nes-container is-rounded with-title">
+              <p className="title">Transcription Result</p>
+              <p className="retro-text">{JSON.stringify(result, null, 2)}</p>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
   );
-}
+};
+
+export default AutomaticSpeechRecognition;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shuffle, RotateCcw, Info, User, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -330,50 +331,6 @@ const RockPaperScissors = () => {
     ai.current = new AIStrategy();
   };
 
-//   return (
-//     <div className="p-4 max-w-md mx-auto">
-//       <h1 className="text-2xl font-bold mb-4">Elemental Mastery</h1>
-//       <div className="mb-4">
-//         <div className="flex justify-between items-center mb-2">
-//           <span>Player Health: {playerHealth}</span>
-//           <Progress value={playerHealth} className="w-1/2" />
-//         </div>
-//         <div className="flex justify-between items-center mb-2">
-//           <span>AI Health: {aiHealth}</span>
-//           <Progress value={aiHealth} className="w-1/2" />
-//         </div>
-//         <div>Player Status: {playerStatus ? `${statusEffects[playerStatus].emoji} ${statusEffects[playerStatus].name}` : 'None'}</div>
-//         <div>AI Status: {aiStatus ? `${statusEffects[aiStatus].emoji} ${statusEffects[aiStatus].name}` : 'None'}</div>
-//         <div>Current Combo: {playerCombo.map(elem => elements[elem].emoji).join(' ')}</div>
-//       </div>
-//       <div className="grid grid-cols-3 gap-2 mb-4">
-//         {Object.entries(elements).map(([element, { emoji }]) => (
-//           <Button
-//             key={element}
-//             onClick={() => handlePlayerChoice(element)}
-//             className="text-2xl p-2"
-//             disabled={gameOver || (playerStatus === 'freeze' && turn % 2 === 1) || (playerStatus === 'root' && !['fire', 'water', 'earth'].includes(element))}
-//           >
-//             {emoji}
-//           </Button>
-//         ))}
-//       </div>
-//       <Button onClick={resetGame} className="mb-4">
-//         <RotateCcw className="mr-2 h-4 w-4" /> Reset Game</Button>
-//       {result && (
-//         <Alert>
-//           <AlertTitle>Round {turn} Result</AlertTitle>
-//           <AlertDescription>
-//             You chose {elements[playerChoice]?.emoji} - AI chose {elements[aiChoice]?.emoji}
-//             <br />
-//             {result}
-//           </AlertDescription>
-//         </Alert>
-//       )}
-//     </div>
-//   );
-// };
-
 const HealthBar = ({ value, max, label }) => (
   <div className="w-full">
     <div className="flex justify-between mb-1">
@@ -450,99 +407,75 @@ const TutorialDialog = () => (
 const elementOrder = ['fire', 'water', 'earth', 'air', 'ice', 'plant'];
 
 return (
-  <div className="p-4 sm:p-6 md:p-8 max-w-4xl mx-auto">
-    <TutorialDialog />
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center">Elemental Mastery</CardTitle>
-        <CardDescription className="text-center">Master the elements and defeat your opponent!</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center">
-                <User className="mr-2" /> Player
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <HealthBar value={playerHealth} max={100} label="Health" />
-              <div className="mt-2">
-                Status: {playerStatus ? (
-                  <span className="inline-flex items-center">
-                    {statusEffects[playerStatus].emoji} {statusEffects[playerStatus].name}
-                  </span>
-                ) : 'None'}
-              </div>
-              <div>
-                Combo: {playerCombo.length > 0 ? (
-                  <span className="text-2xl">{playerCombo.map(elem => elements[elem].emoji).join(' ')}</span>
-                ) : 'None'}
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center">
-                <Monitor className="mr-2" /> AI
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <HealthBar value={aiHealth} max={100} label="Health" />
-              <div className="mt-2">
-                Status: {aiStatus ? (
-                  <span className="inline-flex items-center">
-                    {statusEffects[aiStatus].emoji} {statusEffects[aiStatus].name}
-                  </span>
-                ) : 'None'}
-              </div>
-            </CardContent>
-          </Card>
+  <div className="retro-container">
+    <div className="retro-post">
+      <div className="retro-header">
+        🌟 Elemental Mastery 🌟
+      </div>
+      
+      <div className="retro-section">
+        <p>Master the elements and defeat your AI opponent!</p>
+      </div>
+
+      <div className="retro-section">
+        <div className="nes-container with-title">
+          <p className="title">Player</p>
+          <progress className="nes-progress is-success" value={playerHealth} max="100"></progress>
+          <p>Health: {playerHealth}/100</p>
+          <p>Status: {playerStatus ? `${statusEffects[playerStatus].emoji} ${statusEffects[playerStatus].name}` : 'None'}</p>
+          <p>Combo: {playerCombo.length > 0 ? playerCombo.map(elem => elements[elem].emoji).join(' ') : 'None'}</p>
         </div>
-        
-        
-        <div className="flex flex-wrap justify-center gap-4 mb-4 max-w-sm mx-auto">
-            {elementOrder.map((element, index) => (
-              <Button
+
+        <div className="nes-container with-title">
+          <p className="title">AI</p>
+          <progress className="nes-progress is-error" value={aiHealth} max="100"></progress>
+          <p>Health: {aiHealth}/100</p>
+          <p>Status: {aiStatus ? `${statusEffects[aiStatus].emoji} ${statusEffects[aiStatus].name}` : 'None'}</p>
+        </div>
+      </div>
+
+      <div className="retro-section">
+        <div className="nes-container">
+          <p>Choose your element:</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
+            {elementOrder.map((element) => (
+              <button
                 key={element}
+                className="nes-btn"
                 onClick={() => handlePlayerChoice(element)}
-                className="text-4xl p-2 h-24 w-24 flex items-center justify-center"
                 disabled={gameOver || (playerStatus === 'freeze' && turn % 2 === 1) || (playerStatus === 'root' && !['fire', 'water', 'earth'].includes(element))}
               >
                 {elements[element].emoji}
-              </Button>
+              </button>
             ))}
           </div>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button onClick={resetGame} variant="outline">
-          <RotateCcw className="mr-2 h-4 w-4" /> Reset Game
-        </Button>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <Info className="mr-2 h-4 w-4" /> Game Info
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Game Information</DialogTitle>
-            </DialogHeader>
-            <TutorialDialog />
-          </DialogContent>
-        </Dialog>
-      </CardFooter>
-    </Card>
-    {result && (
-      <Alert>
-        <AlertTitle>Round {turn} Result</AlertTitle>
-        <AlertDescription>
-          <div className="flex justify-center items-center text-3xl mb-2">
-            {elements[playerChoice]?.emoji} vs {elements[aiChoice]?.emoji}
-          </div>
-          <div className="text-center">{result}</div>
-        </AlertDescription>
-      </Alert>
+        </div>
+      </div>
+
+      {result && (
+        <div className="nes-container is-dark with-title">
+          <p className="title">Round {turn} Result</p>
+          <p>{elements[playerChoice]?.emoji} vs {elements[aiChoice]?.emoji}</p>
+          <p>{result}</p>
+        </div>
+      )}
+
+      <div className="retro-section">
+        <button className="nes-btn is-primary" onClick={resetGame}>Reset Game</button>
+        <button className="nes-btn is-info" onClick={() => setShowTutorial(true)}>Game Info</button>
+      </div>
+    </div>
+
+    {showTutorial && (
+      <div className="nes-dialog is-rounded" id="tutorial-dialog">
+        <form method="dialog">
+          <p className="title">Welcome to Elemental Mastery!</p>
+          <p>Learn about the game mechanics and start your journey to become an Elemental Master.</p>
+          <menu className="dialog-menu">
+            <button className="nes-btn" onClick={() => setShowTutorial(false)}>Close</button>
+          </menu>
+        </form>
+      </div>
     )}
   </div>
 );

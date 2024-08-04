@@ -44,7 +44,7 @@ const EmojiSnakeGame = () => {
     }
 
     setSnake(newSnake);
-  }, [snake, direction, food, gameOver]);
+  }, [snake, direction, food, gameOver, getRandomFood]);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
