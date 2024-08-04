@@ -4,6 +4,7 @@
       "id": 1,
       "name": "Auto Speech Recognition",
       "category": "AI",
+      "featured": true,
       "description": "Convert speech to text using AI magic!",
       "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🎙️</text></svg>",
       "link": "/autospeechrecognition"
@@ -12,6 +13,7 @@
       "id": 2,
       "name": "Embedding Generator",
       "category": "AI",
+      "featured": true,
       "description": "Turn your CSV data into fancy AI embeddings!",
       "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">📊</text></svg>",
       "link": "/embedding-generation"

@@ -473,3 +473,127 @@ html body {
   width: 100%;
   height: 100%;
 }
+
+/* Base font size adjustment */
+html {
+  font-size: 12px; /* Smaller base font size */
+}
+
+/* Responsive font sizing */
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 14px; /* Slightly larger for tablets and up */
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  html {
+    font-size: 16px; /* Original size for desktops */
+  }
+}
+
+/* More compact text styles */
+p, .retro-text {
+  line-height: 1.4; /* Reduced line height for compactness */
+  margin-bottom: 0.5em; /* Reduced margin between paragraphs */
+}
+
+.retro-compact-text {
+  font-size: 0.8rem; /* Even smaller text when needed */
+  line-height: 1.2;
+}
+
+/* Adjust header sizes */
+.retro-header {
+  font-size: 1.5rem; /* Smaller header size */
+}
+
+/* Adjust button and input sizes */
+.retro-button, .retro-input {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+}
+
+@media screen and (max-width: 767px) {
+  .retro-container {
+    padding: 10px;
+  }
+  
+  .retro-post {
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+}
+/* ... (existing styles) ... */
+/* ... (existing styles) ... */
+
+.retro-app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.retro-app-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 15px;
+  background-color: #222;
+  border: 2px solid var(--retro-accent);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.retro-app-card:hover {
+  transform: scale(1.05);
+}
+
+.retro-app-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.retro-app-image-container svg {
+  max-width: 100%;
+  max-height: 100px;
+}
+
+.featured-app {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.featured-app .retro-app-image-container {
+  grid-row: span 3;
+}
+
+.retro-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.retro-pagination .retro-button {
+  margin: 0 5px;
+}
+
+.retro-pagination .retro-button.active {
+  background-color: var(--retro-text);
+  color: var(--retro-bg);
+}
+
+.retro-input {
+  margin-bottom: 10px;
+}
+
+/* ... (rest of the existing styles) ... */
