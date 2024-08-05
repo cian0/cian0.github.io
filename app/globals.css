@@ -205,14 +205,16 @@ html body {
 }
 
 .retro-app-category {
-  background-color: var(--retro-accent);
-  color: var(--retro-button-text);
+  background-color: transparent;
+  color: var(--retro-accent);
+  border: 2px solid var(--retro-accent);
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 12px;
   display: inline-block;
   margin-top: 10px;
 }
+
 
 .retro-app-description {
   color: var(--retro-text);
