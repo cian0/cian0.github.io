@@ -90,6 +90,30 @@
       "description": "Predict relationships with our retro FLAMES calculator!",
       "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#FF00FF\">🔥</text></svg>",
       "link": "/flames-game"
+    },
+    {
+      "id": 12,
+      "name": "Spritesheet Editor",
+      "category": "Graphics",
+      "description": "Edit and manage your game sprites with ease!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🎨</text></svg>",
+      "link": "/retrospritesheeteditor"
+    },
+    {
+      "id": 13,
+      "name": "Emoji Battle Royale",
+      "category": "Game",
+      "description": "Engage in epic emoji warfare!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">🎮</text></svg>",
+      "link": "/emojiwars"
+    },
+    {
+      "id": 14,
+      "name": "Telegram Messaging Bot",
+      "category": "Communication",
+      "description": "Send messages through Telegram with a cyberpunk interface!",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">📡</text></svg>",
+      "link": "/telegrammessaging"
     }
   ]
 }
