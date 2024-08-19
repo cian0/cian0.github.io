@@ -1,114 +1,87 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
+import Phaser from 'phaser';
 
 const PingPong = () => {
-  const canvasRef = useRef(null);
-
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
-
-    // Set canvas size
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // Game variables
-    let paddleHeight = canvas.height / 6;
-    let paddleWidth = 10;
-    let ballRadius = 5;
-    let player1Y = (canvas.height - paddleHeight) / 2;
-    let player2Y = (canvas.height - paddleHeight) / 2;
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballSpeedX = 5;
-    let ballSpeedY = 3;
-
-    // Touch and mouse control
-    let lastTouchY = 0;
-    const handleMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const y = (e.clientY || e.touches[0].clientY) - rect.top;
-      player1Y = y - paddleHeight / 2;
-      lastTouchY = y;
-    };
-
-    canvas.addEventListener('mousemove', handleMove);
-    canvas.addEventListener('touchmove', handleMove);
-    canvas.addEventListener('touchstart', handleMove);
-
-    // AI for player 2
-    const movePlayer2 = () => {
-      const player2Center = player2Y + paddleHeight / 2;
-      if (player2Center < ballY - 35) {
-        player2Y += 4;
-      } else if (player2Center > ballY + 35) {
-        player2Y -= 4;
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      parent: 'game-container',
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: { y: 0 },
+          debug: false
+        }
+      },
+      scene: {
+        preload: preload,
+        create: create,
+        update: update
       }
     };
 
-    // Draw functions
-    const drawPaddle = (x, y) => {
-      ctx.fillStyle = '#00FFFF';
-      ctx.fillRect(x, y, paddleWidth, paddleHeight);
-    };
+    const game = new Phaser.Game(config);
 
-    const drawBall = () => {
-      ctx.beginPath();
-      ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-      ctx.fillStyle = '#00FFFF';
-      ctx.fill();
-      ctx.closePath();
-    };
+    let player1, player2, ball, cursors;
 
-    // Game loop
-    const gameLoop = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function preload() {
+      this.load.image('paddle', 'https://labs.phaser.io/assets/games/breakout/paddle1.png');
+      this.load.image('ball', 'https://labs.phaser.io/assets/games/breakout/ball1.png');
+    }
 
-      // Move the ball
-      ballX += ballSpeedX;
-      ballY += ballSpeedY;
+    function create() {
+      player1 = this.physics.add.sprite(50, 300, 'paddle');
+      player2 = this.physics.add.sprite(750, 300, 'paddle');
+      ball = this.physics.add.sprite(400, 300, 'ball');
 
-      // Ball collision with top and bottom walls
-      if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
-        ballSpeedY = -ballSpeedY;
+      player1.setCollideWorldBounds(true);
+      player2.setCollideWorldBounds(true);
+      ball.setCollideWorldBounds(true);
+      ball.setBounce(1);
+
+      player1.setImmovable();
+      player2.setImmovable();
+
+      this.physics.add.collider(ball, player1);
+      this.physics.add.collider(ball, player2);
+
+      cursors = this.input.keyboard.createCursorKeys();
+
+      ball.setVelocity(300, 200);
+
+      // Full screen button
+      const fullscreenButton = this.add.text(700, 20, 'Fullscreen', { fill: '#00FFFF' })
+        .setInteractive()
+        .on('pointerdown', () => {
+          if (this.scale.isFullscreen) {
+            this.scale.stopFullscreen();
+          } else {
+            this.scale.startFullscreen();
+          }
+        });
+    }
+
+    function update() {
+      // Player 1 controls (mouse/touch)
+      player1.y = this.input.y;
+
+      // AI for player 2
+      if (player2.y < ball.y) {
+        player2.y += 3;
+      } else if (player2.y > ball.y) {
+        player2.y -= 3;
       }
 
-      // Ball collision with paddles
-      if (
-        (ballX - ballRadius < paddleWidth && ballY > player1Y && ballY < player1Y + paddleHeight) ||
-        (ballX + ballRadius > canvas.width - paddleWidth && ballY > player2Y && ballY < player2Y + paddleHeight)
-      ) {
-        ballSpeedX = -ballSpeedX;
-      }
-
-      // Ball out of bounds
-      if (ballX < 0 || ballX > canvas.width) {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-      }
-
-      movePlayer2();
-
-      drawPaddle(0, player1Y);
-      drawPaddle(canvas.width - paddleWidth, player2Y);
-      drawBall();
-
-      animationFrameId = requestAnimationFrame(gameLoop);
-    };
-
-    gameLoop();
+      // Keep paddles within bounds
+      Phaser.Math.Clamp(player1.y, 52, 548);
+      Phaser.Math.Clamp(player2.y, 52, 548);
+    }
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
-      canvas.removeEventListener('mousemove', handleMove);
-      canvas.removeEventListener('touchmove', handleMove);
-      canvas.removeEventListener('touchstart', handleMove);
+      game.destroy(true);
     };
   }, []);
 
@@ -117,8 +90,8 @@ const PingPong = () => {
       <div className="retro-container">
         <div className="retro-post">
           <h1>Ping Pong</h1>
-          <p>Drag anywhere or touch the screen to move your paddle!</p>
-          <canvas ref={canvasRef} style={{ border: '2px solid #00FFFF', display: 'block', margin: '0 auto' }}></canvas>
+          <p>Move your mouse or touch the screen to control the left paddle!</p>
+          <div id="game-container" style={{ border: '2px solid #00FFFF', margin: '0 auto' }}></div>
         </div>
       </div>
     </Layout>
