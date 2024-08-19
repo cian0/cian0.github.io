@@ -20,10 +20,33 @@ const PingPong = () => {
         preload: preload,
         create: create,
         update: update
+      },
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
       }
     };
 
     const game = new Phaser.Game(config);
+
+    const resizeGame = () => {
+      const canvas = game.canvas;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const windowRatio = windowWidth / windowHeight;
+      const gameRatio = game.config.width / game.config.height;
+
+      if (windowRatio < gameRatio) {
+        canvas.style.width = windowWidth + 'px';
+        canvas.style.height = (windowWidth / gameRatio) + 'px';
+      } else {
+        canvas.style.width = (windowHeight * gameRatio) + 'px';
+        canvas.style.height = windowHeight + 'px';
+      }
+    };
+
+    window.addEventListener('resize', resizeGame);
+    resizeGame();
 
     let player1, player2, ball, cursors;
 
@@ -99,7 +122,16 @@ const PingPong = () => {
         <div className="retro-post">
           <h1>Ping Pong</h1>
           <p>Move your mouse or touch the screen to control the left paddle!</p>
-          <div id="game-container" style={{ border: '2px solid #00FFFF', margin: '0 auto' }}></div>
+          <div id="game-container" style={{ 
+            border: '2px solid #00FFFF', 
+            margin: '0 auto',
+            maxWidth: '100%',
+            maxHeight: '80vh',
+            aspectRatio: '4/3',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}></div>
         </div>
       </div>
     </Layout>
