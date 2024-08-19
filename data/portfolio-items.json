@@ -114,6 +114,14 @@
       "description": "Send messages through Telegram with a cyberpunk interface!",
       "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">📡</text></svg>",
       "link": "/telegrammessaging"
+    },
+    {
+      "id": 15,
+      "name": "Hello World",
+      "category": "Demo",
+      "description": "A simple Hello World page",
+      "image": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"60\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#00FFFF\">👋</text></svg>",
+      "link": "/hello-world"
     }
   ]
 }
