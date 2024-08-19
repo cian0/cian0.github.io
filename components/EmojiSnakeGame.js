@@ -12,6 +12,21 @@ const EmojiSnakeGame = () => {
   const [food, setFood] = useState(INITIAL_FOOD);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [gridSize, setGridSize] = useState(GRID_SIZE);
+  const [cellSize, setCellSize] = useState(20);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const smallerDimension = Math.min(window.innerWidth, window.innerHeight) - 40;
+      const newGridSize = Math.floor(smallerDimension / 20);
+      setGridSize(newGridSize);
+      setCellSize(smallerDimension / newGridSize);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const moveSnake = useCallback(() => {
     if (gameOver) return;
@@ -80,8 +95,8 @@ const EmojiSnakeGame = () => {
     let newFood;
     do {
       newFood = {
-        x: Math.floor(Math.random() * GRID_SIZE),
-        y: Math.floor(Math.random() * GRID_SIZE)
+        x: Math.floor(Math.random() * gridSize),
+        y: Math.floor(Math.random() * gridSize)
       };
     } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
     return newFood;
