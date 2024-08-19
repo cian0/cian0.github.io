@@ -45,6 +45,14 @@ const PingPong = () => {
       player1.setImmovable();
       player2.setImmovable();
 
+      // Rotate paddles to make them vertical
+      player1.angle = 90;
+      player2.angle = 90;
+
+      // Adjust paddle hitbox for vertical alignment
+      player1.body.setSize(player1.height, player1.width);
+      player2.body.setSize(player2.height, player2.width);
+
       this.physics.add.collider(ball, player1);
       this.physics.add.collider(ball, player2);
 
@@ -76,8 +84,8 @@ const PingPong = () => {
       }
 
       // Keep paddles within bounds
-      Phaser.Math.Clamp(player1.y, 52, 548);
-      Phaser.Math.Clamp(player2.y, 52, 548);
+      player1.y = Phaser.Math.Clamp(player1.y, player1.height / 2, 600 - player1.height / 2);
+      player2.y = Phaser.Math.Clamp(player2.y, player2.height / 2, 600 - player2.height / 2);
     }
 
     return () => {
