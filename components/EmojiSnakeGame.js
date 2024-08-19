@@ -28,6 +28,17 @@ const EmojiSnakeGame = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const getRandomFood = useCallback(() => {
+    let newFood;
+    do {
+      newFood = {
+        x: Math.floor(Math.random() * gridSize),
+        y: Math.floor(Math.random() * gridSize)
+      };
+    } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+    return newFood;
+  }, [gridSize, snake]);
+
   const moveSnake = useCallback(() => {
     if (gameOver) return;
 
@@ -59,7 +70,7 @@ const EmojiSnakeGame = () => {
     }
 
     setSnake(newSnake);
-  }, [snake, direction, food, gameOver, getRandomFood]);
+  }, [snake, direction, food, gameOver, gridSize, getRandomFood]);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -90,17 +101,6 @@ const EmojiSnakeGame = () => {
     const gameLoop = setInterval(moveSnake, 200);
     return () => clearInterval(gameLoop);
   }, [moveSnake]);
-
-  const getRandomFood = () => {
-    let newFood;
-    do {
-      newFood = {
-        x: Math.floor(Math.random() * gridSize),
-        y: Math.floor(Math.random() * gridSize)
-      };
-    } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
-    return newFood;
-  };
 
   const resetGame = () => {
     setSnake(INITIAL_SNAKE);
