@@ -37,7 +37,7 @@ const EmojiSnakeGame = () => {
     head.y += direction.y;
 
     // Check collision with walls
-    if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+    if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
       setGameOver(true);
       return;
     }
@@ -115,14 +115,16 @@ const EmojiSnakeGame = () => {
       <p className="title">Emoji Snake Game</p>
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: `repeat(${GRID_SIZE}, ${CELL_SIZE}px)`,
+        gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
         gap: '1px',
         backgroundColor: '#000',
-        border: '1px solid #000'
+        border: '1px solid #000',
+        width: 'fit-content',
+        margin: '0 auto'
       }}>
-        {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => {
-          const x = index % GRID_SIZE;
-          const y = Math.floor(index / GRID_SIZE);
+        {Array.from({ length: gridSize * gridSize }).map((_, index) => {
+          const x = index % gridSize;
+          const y = Math.floor(index / gridSize);
           const isSnake = snake.some(segment => segment.x === x && segment.y === y);
           const isFood = food.x === x && food.y === y;
           let content = '🟩';
