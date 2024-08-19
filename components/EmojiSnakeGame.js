@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 const GRID_SIZE = 20;
 const CELL_SIZE = 20;
@@ -14,6 +14,7 @@ const EmojiSnakeGame = () => {
   const [score, setScore] = useState(0);
   const [gridSize, setGridSize] = useState(GRID_SIZE);
   const [cellSize, setCellSize] = useState(20);
+  const gameContainerRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -72,6 +73,28 @@ const EmojiSnakeGame = () => {
     setSnake(newSnake);
   }, [snake, direction, food, gameOver, gridSize, getRandomFood]);
 
+  const handleTapOrClick = useCallback((event) => {
+    if (gameOver) return;
+
+    const rect = gameContainerRef.current.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const dx = x - centerX;
+    const dy = y - centerY;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Horizontal movement
+      setDirection({ x: dx > 0 ? 1 : -1, y: 0 });
+    } else {
+      // Vertical movement
+      setDirection({ x: 0, y: dy > 0 ? 1 : -1 });
+    }
+  }, [gameOver]);
+
   useEffect(() => {
     const handleKeyPress = (e) => {
       switch (e.key) {
@@ -113,15 +136,21 @@ const EmojiSnakeGame = () => {
   return (
     <div className="nes-container with-title">
       <p className="title">Emoji Snake Game</p>
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
-        gap: '1px',
-        backgroundColor: '#000',
-        border: '1px solid #000',
-        width: 'fit-content',
-        margin: '0 auto'
-      }}>
+      <div 
+        ref={gameContainerRef}
+        onClick={handleTapOrClick}
+        onTouchStart={handleTapOrClick}
+        style={{ 
+          display: 'grid', 
+          gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
+          gap: '1px',
+          backgroundColor: '#000',
+          border: '1px solid #000',
+          width: 'fit-content',
+          margin: '0 auto',
+          cursor: 'pointer'
+        }}
+      >
         {Array.from({ length: gridSize * gridSize }).map((_, index) => {
           const x = index % gridSize;
           const y = Math.floor(index / gridSize);
@@ -131,7 +160,7 @@ const EmojiSnakeGame = () => {
           if (isSnake) content = '🐍';
           if (isFood) content = '🍎';
           return (
-            <div key={index} style={{ width: CELL_SIZE, height: CELL_SIZE, fontSize: '16px', textAlign: 'center' }}>
+            <div key={index} style={{ width: cellSize, height: cellSize, fontSize: '16px', textAlign: 'center' }}>
               {content}
             </div>
           );
