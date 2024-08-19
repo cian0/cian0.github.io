@@ -120,7 +120,6 @@ const PingPong = () => {
     <Layout>
       <div className="retro-container">
         <div className="retro-post">
-          <h1>Ping Pong</h1>
           <p>Move your mouse or touch the screen to control the left paddle!</p>
           <div id="game-container" style={{ 
             border: '2px solid #00FFFF', 
