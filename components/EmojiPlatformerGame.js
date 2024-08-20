@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 
 const EmojiPlatformerGame = () => {
     const gameRef = useRef(null);
