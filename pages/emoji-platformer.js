@@ -20,4 +20,20 @@ const EmojiPlatformerPage = () => {
   );
 };
 
+export default EmojiPlatformerPage;import React from 'react';
+import dynamic from 'next/dynamic';
+
+const DynamicEmojiPlatformerGame = dynamic(() => import('../components/EmojiPlatformerGame'), {
+  ssr: false,
+});
+
+const EmojiPlatformerPage = () => {
+  return (
+    <div className="container">
+      <h1 className="nes-text is-primary">Emoji Platformer</h1>
+      <DynamicEmojiPlatformerGame />
+    </div>
+  );
+};
+
 export default EmojiPlatformerPage;
