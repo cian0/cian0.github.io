@@ -82,10 +82,26 @@ const EmojiBattleRoyale = () => {
         preload: preload,
         create: create,
         update: update
+      },
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH
       }
     };
 
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
+
+    const resizeGame = () => {
+      game.scale.resize(gameContainerRef.current.clientWidth, gameContainerRef.current.clientHeight);
+    };
+
+    window.addEventListener('resize', resizeGame);
+    resizeGame();
+
+    return () => {
+      window.removeEventListener('resize', resizeGame);
+      game.destroy(true);
+    };
   };
 
   // Game variables
@@ -551,6 +567,7 @@ const fade = (t) => { return t * t * t * (t * (t * 6 - 15) + 10); }
             <div 
               ref={gameContainerRef} 
               className={styles.gameContainer}
+              style={{ width: '100%', height: 'calc(100vh - 200px)', maxHeight: '600px' }}
             ></div>
             <div className={styles.retroSection}>
               <pre className={styles.debugInfo}>{debugInfo}</pre>
