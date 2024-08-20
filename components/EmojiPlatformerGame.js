@@ -4,6 +4,12 @@ import dynamic from 'next/dynamic';
 const EmojiPlatformerGame = () => {
     const gameRef = useRef(null);
     const [gameSize, setGameSize] = useState({ width: 800, height: 600 });
+    const [dpadControls, setDpadControls] = useState({
+        up: false,
+        down: false,
+        left: false,
+        right: false
+    });
 
     useEffect(() => {
         const handleResize = () => {
@@ -69,6 +75,7 @@ const EmojiPlatformerGame = () => {
             let zombies;
             let platforms;
             let cursors;
+            let dpadCursors;
             let score = 0;
             let scoreText;
             let gameOver = false;
@@ -119,6 +126,12 @@ const EmojiPlatformerGame = () => {
                 }
 
                 cursors = this.input.keyboard.createCursorKeys();
+                dpadCursors = {
+                    up: { isDown: false },
+                    down: { isDown: false },
+                    left: { isDown: false },
+                    right: { isDown: false }
+                };
 
                 this.physics.add.collider(player, platforms);
                 this.physics.add.collider(zombies, platforms);
@@ -133,15 +146,15 @@ const EmojiPlatformerGame = () => {
                     return;
                 }
 
-                if (cursors.left.isDown) {
+                if (cursors.left.isDown || dpadCursors.left.isDown) {
                     player.setVelocityX(-160);
-                } else if (cursors.right.isDown) {
+                } else if (cursors.right.isDown || dpadCursors.right.isDown) {
                     player.setVelocityX(160);
                 } else {
                     player.setVelocityX(0);
                 }
 
-                if (cursors.up.isDown && player.body.touching.down) {
+                if ((cursors.up.isDown || dpadCursors.up.isDown) && player.body.touching.down) {
                     player.setVelocityY(-330);
                 }
 
@@ -185,24 +198,35 @@ const EmojiPlatformerGame = () => {
         };
     }, []);
 
+    const handleDpadChange = (direction, isPressed) => {
+        setDpadControls(prev => ({ ...prev, [direction]: isPressed }));
+        if (gameRef.current) {
+            dpadCursors[direction].isDown = isPressed;
+        }
+    };
+
     return (
         <div className="nes-container is-dark with-title" style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <p className="title">Emoji Platformer</p>
-            <div id="game-container" style={{ 
-                width: '100%', 
-                height: '80vh', 
-                maxWidth: '800px', 
-                maxHeight: '600px', 
-                border: '2px solid var(--retro-border)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}>
-                <div ref={gameRef} style={{ width: '100%', height: '100%' }}></div>
-            </div>
-            <div className="nes-container is-rounded is-dark" style={{ marginTop: '1rem' }}>
-                <p>Use arrow keys to move and jump. Avoid the zombies!</p>
-                <button className="nes-btn is-primary" onClick={() => window.location.reload()}>Restart Game</button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '800px' }}>
+                <div id="game-container" style={{ 
+                    width: '70%', 
+                    height: '80vh', 
+                    maxHeight: '600px', 
+                    border: '2px solid var(--retro-border)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <div ref={gameRef} style={{ width: '100%', height: '100%' }}></div>
+                </div>
+                <div style={{ width: '25%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <DPadController onDirectionChange={handleDpadChange} />
+                    <div className="nes-container is-rounded is-dark" style={{ marginTop: '1rem' }}>
+                        <p>Use arrow keys or D-pad to move and jump. Avoid the zombies!</p>
+                        <button className="nes-btn is-primary" onClick={() => window.location.reload()}>Restart Game</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
