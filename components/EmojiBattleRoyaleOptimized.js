@@ -10,22 +10,22 @@ const EmojiBattleRoyale = () => {
 
   // Game constants
   const GAME_CONFIG = useMemo(() => ({
-    INITIAL_EMOJI_COUNT: 500,
-    MAX_SPEED: 500,
+    INITIAL_EMOJI_COUNT: 200,  // Reduced from 500
+    MAX_SPEED: 300,  // Reduced from 500
     EMOJI_SIZE: 24,
-    WORLD_WIDTH: 2400,
-    WORLD_HEIGHT: 1800,
-    SEPARATION_DISTANCE: 20,
-    ALIGNMENT_DISTANCE: 60,
-    COHESION_DISTANCE: 80,
-    MAX_FORCE: 2,
-    WANDER_STRENGTH: 1000,
-    PREY_ATTRACTION_STRENGTH: 10000,
+    WORLD_WIDTH: 1600,  // Reduced from 2400
+    WORLD_HEIGHT: 1200,  // Reduced from 1800
+    SEPARATION_DISTANCE: 30,  // Increased from 20
+    ALIGNMENT_DISTANCE: 50,  // Reduced from 60
+    COHESION_DISTANCE: 70,  // Reduced from 80
+    MAX_FORCE: 1.5,  // Reduced from 2
+    WANDER_STRENGTH: 500,  // Reduced from 1000
+    PREY_ATTRACTION_STRENGTH: 5000,  // Reduced from 10000
     POWER_UP_DURATION: 5000,
-    POWER_UP_SPAWN_INTERVAL: 100,
-    NINJA_POWER_UP_SPAWN_INTERVAL: 50,
-    TILE_SIZE: 48,
-    CELL_SIZE: 50
+    POWER_UP_SPAWN_INTERVAL: 200,  // Increased from 100
+    NINJA_POWER_UP_SPAWN_INTERVAL: 100,  // Increased from 50
+    TILE_SIZE: 64,  // Increased from 48
+    CELL_SIZE: 100  // Increased from 50
   }), []);
 
   const EMOJI_TYPES = useMemo(() => ['🗿', '📄', '✂️', '🔥', '💧', '🌱'], []);
@@ -150,28 +150,34 @@ const EmojiBattleRoyale = () => {
     updateSpatialHash();
 
     emojis.getChildren().forEach(emoji => {
-      applyFlockingBehavior(emoji);
-      
-      emoji.x = Phaser.Math.Wrap(emoji.x, 0, GAME_CONFIG.WORLD_WIDTH);
-      emoji.y = Phaser.Math.Wrap(emoji.y, 0, GAME_CONFIG.WORLD_HEIGHT);
+      if (emoji.active) {
+        applyFlockingBehavior(emoji);
+        
+        emoji.x = Phaser.Math.Wrap(emoji.x, 0, GAME_CONFIG.WORLD_WIDTH);
+        emoji.y = Phaser.Math.Wrap(emoji.y, 0, GAME_CONFIG.WORLD_HEIGHT);
 
-      if (emoji.getData('ninjaPowerUp')) {
-        emoji.setScale(1.8);
-      } else if (emoji.getData('powerUp')) {
-        emoji.setScale(1.5);
-      } else {
-        emoji.setScale(1);
+        if (emoji.getData('ninjaPowerUp')) {
+          emoji.setScale(1.8);
+        } else if (emoji.getData('powerUp')) {
+          emoji.setScale(1.5);
+        } else {
+          emoji.setScale(1);
+        }
       }
     });
 
     this.physics.world.collide(emojis, emojis, handleCollision, null, this);
 
-    updateDebugInfo();
+    if (this.time.now % 60 === 0) {  // Update debug info every 60 frames
+      updateDebugInfo();
+    }
 
-    const remainingTypes = Object.keys(emojiCounts).filter(type => emojiCounts[type] > 0);
-    if (remainingTypes.length === 1) {
-      setWinner(remainingTypes[0]);
-      this.scene.pause();
+    if (this.time.now % 300 === 0) {  // Check for winner every 300 frames
+      const remainingTypes = Object.keys(emojiCounts).filter(type => emojiCounts[type] > 0);
+      if (remainingTypes.length === 1) {
+        setWinner(remainingTypes[0]);
+        this.scene.pause();
+      }
     }
   };
 
@@ -320,21 +326,23 @@ const createTerrain = (scene) => {
   
   const applyFlockingBehavior = (emoji) => {
     const neighbors = findNeighbors(emoji);
-    const separation = separate(emoji, neighbors);
-    const alignment = align(emoji, neighbors);
-    const cohesion = cohere(emoji, neighbors);
-    const wander = getWanderForce();
-    const preyAttraction = getPrayAttractionForce(emoji);
-  
-    const { MAX_SPEED } = GAME_CONFIG;
-  
-    emoji.body.velocity.x += separation.x * 1.5 + alignment.x + cohesion.x + wander.x + preyAttraction.x;
-    emoji.body.velocity.y += separation.y * 1.5 + alignment.y + cohesion.y + wander.y + preyAttraction.y;
-  
-    const speed = Math.sqrt(emoji.body.velocity.x ** 2 + emoji.body.velocity.y ** 2);
-    if (speed > MAX_SPEED) {
-      emoji.body.velocity.x = (emoji.body.velocity.x / speed) * MAX_SPEED;
-      emoji.body.velocity.y = (emoji.body.velocity.y / speed) * MAX_SPEED;
+    if (neighbors.length > 0) {
+      const separation = separate(emoji, neighbors);
+      const alignment = align(emoji, neighbors);
+      const cohesion = cohere(emoji, neighbors);
+      const wander = getWanderForce();
+      const preyAttraction = getPrayAttractionForce(emoji);
+    
+      const { MAX_SPEED } = GAME_CONFIG;
+    
+      emoji.body.velocity.x += separation.x * 1.5 + alignment.x + cohesion.x + wander.x + preyAttraction.x;
+      emoji.body.velocity.y += separation.y * 1.5 + alignment.y + cohesion.y + wander.y + preyAttraction.y;
+    
+      const speed = Math.sqrt(emoji.body.velocity.x ** 2 + emoji.body.velocity.y ** 2);
+      if (speed > MAX_SPEED) {
+        emoji.body.velocity.x = (emoji.body.velocity.x / speed) * MAX_SPEED;
+        emoji.body.velocity.y = (emoji.body.velocity.y / speed) * MAX_SPEED;
+      }
     }
   };
   
