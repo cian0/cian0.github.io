@@ -36,178 +36,192 @@ const EmojiPlatformerGame = () => {
     useEffect(() => {
         let game;
         const initPhaser = async () => {
-            const Phaser = (await import('phaser')).default;
-            
-            const config = {
-                type: Phaser.AUTO,
-                width: gameSize.width,
-                height: gameSize.height,
-                parent: 'game-container',
-                backgroundColor: '#000000',
-                physics: {
-                    default: 'arcade',
-                    arcade: {
-                        gravity: { y: 300 },
-                        debug: false
+            console.log('Starting Phaser initialization...');
+            try {
+                const Phaser = (await import('phaser')).default;
+                console.log('Phaser imported successfully');
+                
+                const config = {
+                    type: Phaser.AUTO,
+                    width: gameSize.width,
+                    height: gameSize.height,
+                    parent: 'game-container',
+                    backgroundColor: '#000000',
+                    physics: {
+                        default: 'arcade',
+                        arcade: {
+                            gravity: { y: 300 },
+                            debug: false
+                        }
+                    },
+                    scene: {
+                        preload: preload,
+                        create: create,
+                        update: update
+                    },
+                    scale: {
+                        mode: Phaser.Scale.FIT,
+                        autoCenter: Phaser.Scale.CENTER_BOTH
+                    },
+                    plugins: {
+                        scene: [{
+                            key: 'rexVirtualJoystick',
+                            plugin: VirtualJoystickPlugin,
+                            mapping: 'rexVirtualJoystick'
+                        }]
                     }
-                },
-                scene: {
-                    preload: preload,
-                    create: create,
-                    update: update
-                },
-                scale: {
-                    mode: Phaser.Scale.FIT,
-                    autoCenter: Phaser.Scale.CENTER_BOTH
-                },
-                plugins: {
-                    scene: [{
-                        key: 'rexVirtualJoystick',
-                        plugin: VirtualJoystickPlugin,
-                        mapping: 'rexVirtualJoystick'
-                    }]
-                }
-            };
-
-            const PLAYER = '🏃';
-            const ZOMBIE = '🧟';
-            const PLATFORM = '🟫';
-
-            let player;
-            let zombies;
-            let platforms;
-            let cursors;
-            let joystick;
-            let score = 0;
-            let scoreText;
-            let gameOver = false;
-            let playerEmoji;
-            let zombieEmojis = [];
-
-            function preload() {
-                // No need to preload sky image
-            }
-
-            function create() {
-                // Create joystick
-                joystick = this.rexVirtualJoystick.add(this, {
-                    x: 100,
-                    y: 500,
-                    radius: 50,
-                    base: this.add.circle(0, 0, 50, 0x888888),
-                    thumb: this.add.circle(0, 0, 25, 0xcccccc),
-                });
-                platforms = this.physics.add.staticGroup();
-
-                // Create ground
-                for (let i = 0; i < 20; i++) {
-                    platforms.create(i * 40, 568, 'platform').setScale(0.5).refreshBody();
-                }
-
-                // Create some platforms
-                platforms.create(600, 400, 'platform');
-                platforms.create(50, 250, 'platform');
-                platforms.create(750, 220, 'platform');
-
-                // Replace platform sprites with emojis
-                platforms.children.entries.forEach(platform => {
-                    this.add.text(platform.x, platform.y, PLATFORM, { fontSize: '40px' }).setOrigin(0.5);
-                    platform.setVisible(false);
-                });
-
-                // Player
-                player = this.physics.add.sprite(100, 450, 'player');
-                player.setCollideWorldBounds(true);
-                playerEmoji = this.add.text(player.x, player.y, PLAYER, { fontSize: '40px' }).setOrigin(0.5);
-                player.setVisible(false);
-
-                // Zombies
-                zombies = this.physics.add.group();
-                for (let i = 0; i < 5; i++) {
-                    const x = Phaser.Math.Between(0, 800);
-                    const y = Phaser.Math.Between(0, 300);
-                    const zombie = zombies.create(x, y, 'zombie');
-                    zombie.setBounce(1);
-                    zombie.setCollideWorldBounds(true);
-                    zombie.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                    const zombieEmoji = this.add.text(zombie.x, zombie.y, ZOMBIE, { fontSize: '40px' }).setOrigin(0.5);
-                    zombieEmojis.push(zombieEmoji);
-                    zombie.setVisible(false);
-                }
-
-                cursors = this.input.keyboard.createCursorKeys();
-                dpadCursors = {
-                    up: { isDown: false },
-                    down: { isDown: false },
-                    left: { isDown: false },
-                    right: { isDown: false }
                 };
 
-                this.physics.add.collider(player, platforms);
-                this.physics.add.collider(zombies, platforms);
+                console.log('Config created');
 
-                this.physics.add.overlap(player, zombies, hitZombie, null, this);
+                const PLAYER = '🏃';
+                const ZOMBIE = '🧟';
+                const PLATFORM = '🟫';
 
-                scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '16px', fill: '#0ff' });
-            }
+                let player;
+                let zombies;
+                let platforms;
+                let cursors;
+                let joystick;
+                let score = 0;
+                let scoreText;
+                let gameOver = false;
+                let playerEmoji;
+                let zombieEmojis = [];
 
-            function update() {
-                if (gameOver) {
-                    return;
+                function preload() {
+                    console.log('Preload function called');
                 }
 
-                // Joystick controls
-                if (joystick.left) {
-                    player.setVelocityX(-160);
-                } else if (joystick.right) {
-                    player.setVelocityX(160);
-                } else {
-                    player.setVelocityX(0);
-                }
+                function create() {
+                    console.log('Create function called');
+                    // Create joystick
+                    joystick = this.rexVirtualJoystick.add(this, {
+                        x: 100,
+                        y: 500,
+                        radius: 50,
+                        base: this.add.circle(0, 0, 50, 0x888888),
+                        thumb: this.add.circle(0, 0, 25, 0xcccccc),
+                    });
+                    platforms = this.physics.add.staticGroup();
 
-                if (joystick.up && player.body.touching.down) {
-                    player.setVelocityY(-330);
-                }
-
-                // Keyboard controls (optional, in addition to joystick)
-                if (cursors.left.isDown) {
-                    player.setVelocityX(-160);
-                } else if (cursors.right.isDown) {
-                    player.setVelocityX(160);
-                }
-
-                if (cursors.up.isDown && player.body.touching.down) {
-                    player.setVelocityY(-330);
-                }
-
-                // Move zombies towards player
-                zombies.children.entries.forEach((zombie, index) => {
-                    if (zombie.x < player.x) {
-                        zombie.setVelocityX(50);
-                    } else {
-                        zombie.setVelocityX(-50);
+                    // Create ground
+                    for (let i = 0; i < 20; i++) {
+                        platforms.create(i * 40, 568, 'platform').setScale(0.5).refreshBody();
                     }
-                    zombieEmojis[index].x = zombie.x;
-                    zombieEmojis[index].y = zombie.y;
-                });
 
-                // Update player emoji position
-                playerEmoji.x = player.x;
-                playerEmoji.y = player.y;
+                    // Create some platforms
+                    platforms.create(600, 400, 'platform');
+                    platforms.create(50, 250, 'platform');
+                    platforms.create(750, 220, 'platform');
 
-                score += 1;
-                scoreText.setText('Score: ' + score);
-            }
+                    // Replace platform sprites with emojis
+                    platforms.children.entries.forEach(platform => {
+                        this.add.text(platform.x, platform.y, PLATFORM, { fontSize: '40px' }).setOrigin(0.5);
+                        platform.setVisible(false);
+                    });
 
-            function hitZombie(player, zombie) {
-                this.physics.pause();
-                player.setTint(0xff0000);
-                gameOver = true;
-                this.add.text(400, 300, 'Game Over', { fontSize: '32px', fill: '#f0f' }).setOrigin(0.5);
-            }
+                    // Player
+                    player = this.physics.add.sprite(100, 450, 'player');
+                    player.setCollideWorldBounds(true);
+                    playerEmoji = this.add.text(player.x, player.y, PLAYER, { fontSize: '40px' }).setOrigin(0.5);
+                    player.setVisible(false);
 
-            if (gameRef.current) {
-                game = new Phaser.Game(config);
+                    // Zombies
+                    zombies = this.physics.add.group();
+                    for (let i = 0; i < 5; i++) {
+                        const x = Phaser.Math.Between(0, 800);
+                        const y = Phaser.Math.Between(0, 300);
+                        const zombie = zombies.create(x, y, 'zombie');
+                        zombie.setBounce(1);
+                        zombie.setCollideWorldBounds(true);
+                        zombie.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                        const zombieEmoji = this.add.text(zombie.x, zombie.y, ZOMBIE, { fontSize: '40px' }).setOrigin(0.5);
+                        zombieEmojis.push(zombieEmoji);
+                        zombie.setVisible(false);
+                    }
+
+                    cursors = this.input.keyboard.createCursorKeys();
+                    dpadCursors = {
+                        up: { isDown: false },
+                        down: { isDown: false },
+                        left: { isDown: false },
+                        right: { isDown: false }
+                    };
+
+                    this.physics.add.collider(player, platforms);
+                    this.physics.add.collider(zombies, platforms);
+
+                    this.physics.add.overlap(player, zombies, hitZombie, null, this);
+
+                    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '16px', fill: '#0ff' });
+                    console.log('Create function completed');
+                }
+
+                function update() {
+                    if (gameOver) {
+                        return;
+                    }
+
+                    // Joystick controls
+                    if (joystick.left) {
+                        player.setVelocityX(-160);
+                    } else if (joystick.right) {
+                        player.setVelocityX(160);
+                    } else {
+                        player.setVelocityX(0);
+                    }
+
+                    if (joystick.up && player.body.touching.down) {
+                        player.setVelocityY(-330);
+                    }
+
+                    // Keyboard controls (optional, in addition to joystick)
+                    if (cursors.left.isDown) {
+                        player.setVelocityX(-160);
+                    } else if (cursors.right.isDown) {
+                        player.setVelocityX(160);
+                    }
+
+                    if (cursors.up.isDown && player.body.touching.down) {
+                        player.setVelocityY(-330);
+                    }
+
+                    // Move zombies towards player
+                    zombies.children.entries.forEach((zombie, index) => {
+                        if (zombie.x < player.x) {
+                            zombie.setVelocityX(50);
+                        } else {
+                            zombie.setVelocityX(-50);
+                        }
+                        zombieEmojis[index].x = zombie.x;
+                        zombieEmojis[index].y = zombie.y;
+                    });
+
+                    // Update player emoji position
+                    playerEmoji.x = player.x;
+                    playerEmoji.y = player.y;
+
+                    score += 1;
+                    scoreText.setText('Score: ' + score);
+                }
+
+                function hitZombie(player, zombie) {
+                    this.physics.pause();
+                    player.setTint(0xff0000);
+                    gameOver = true;
+                    this.add.text(400, 300, 'Game Over', { fontSize: '32px', fill: '#f0f' }).setOrigin(0.5);
+                }
+
+                if (gameRef.current) {
+                    console.log('Creating Phaser game instance');
+                    game = new Phaser.Game(config);
+                    console.log('Phaser game instance created');
+                } else {
+                    console.error('gameRef is not available');
+                }
+            } catch (error) {
+                console.error('Error during Phaser initialization:', error);
             }
         };
 
@@ -215,6 +229,7 @@ const EmojiPlatformerGame = () => {
 
         return () => {
             if (game) {
+                console.log('Destroying Phaser game instance');
                 game.destroy(true);
             }
         };
