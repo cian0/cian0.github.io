@@ -1,16 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import DPadController from './DPadController';
 
 const EmojiPlatformerGame = () => {
     const gameRef = useRef(null);
     const [gameSize, setGameSize] = useState({ width: 800, height: 600 });
-    const [dpadControls, setDpadControls] = useState({
-        up: false,
-        down: false,
-        left: false,
-        right: false
-    });
 
     useEffect(() => {
         const handleResize = () => {
@@ -65,6 +58,13 @@ const EmojiPlatformerGame = () => {
                 scale: {
                     mode: Phaser.Scale.FIT,
                     autoCenter: Phaser.Scale.CENTER_BOTH
+                },
+                plugins: {
+                    scene: [{
+                        key: 'rexVirtualJoystick',
+                        plugin: VirtualJoystickPlugin,
+                        mapping: 'rexVirtualJoystick'
+                    }]
                 }
             };
 
@@ -76,7 +76,7 @@ const EmojiPlatformerGame = () => {
             let zombies;
             let platforms;
             let cursors;
-            let dpadCursors;
+            let joystick;
             let score = 0;
             let scoreText;
             let gameOver = false;
@@ -88,6 +88,14 @@ const EmojiPlatformerGame = () => {
             }
 
             function create() {
+                // Create joystick
+                joystick = this.rexVirtualJoystick.add(this, {
+                    x: 100,
+                    y: 500,
+                    radius: 50,
+                    base: this.add.circle(0, 0, 50, 0x888888),
+                    thumb: this.add.circle(0, 0, 25, 0xcccccc),
+                });
                 platforms = this.physics.add.staticGroup();
 
                 // Create ground
@@ -147,15 +155,27 @@ const EmojiPlatformerGame = () => {
                     return;
                 }
 
-                if (cursors.left.isDown || dpadCursors.left.isDown) {
+                // Joystick controls
+                if (joystick.left) {
                     player.setVelocityX(-160);
-                } else if (cursors.right.isDown || dpadCursors.right.isDown) {
+                } else if (joystick.right) {
                     player.setVelocityX(160);
                 } else {
                     player.setVelocityX(0);
                 }
 
-                if ((cursors.up.isDown || dpadCursors.up.isDown) && player.body.touching.down) {
+                if (joystick.up && player.body.touching.down) {
+                    player.setVelocityY(-330);
+                }
+
+                // Keyboard controls (optional, in addition to joystick)
+                if (cursors.left.isDown) {
+                    player.setVelocityX(-160);
+                } else if (cursors.right.isDown) {
+                    player.setVelocityX(160);
+                }
+
+                if (cursors.up.isDown && player.body.touching.down) {
                     player.setVelocityY(-330);
                 }
 
