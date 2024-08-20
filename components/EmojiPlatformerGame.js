@@ -7,20 +7,23 @@ const EmojiPlatformerGame = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            const containerWidth = window.innerWidth;
-            const containerHeight = window.innerHeight - 100; // Subtracting 100px for potential margins/paddings
-            const aspectRatio = 4 / 3; // Maintain 4:3 aspect ratio
-            let width, height;
+            const container = document.getElementById('game-container');
+            if (container) {
+                const containerWidth = container.clientWidth;
+                const containerHeight = container.clientHeight;
+                const aspectRatio = 4 / 3;
+                let width, height;
 
-            if (containerWidth / containerHeight > aspectRatio) {
-                height = containerHeight;
-                width = height * aspectRatio;
-            } else {
-                width = containerWidth;
-                height = width / aspectRatio;
+                if (containerWidth / containerHeight > aspectRatio) {
+                    height = containerHeight;
+                    width = height * aspectRatio;
+                } else {
+                    width = containerWidth;
+                    height = width / aspectRatio;
+                }
+
+                setGameSize({ width, height });
             }
-
-            setGameSize({ width, height });
         };
 
         window.addEventListener('resize', handleResize);
@@ -51,6 +54,10 @@ const EmojiPlatformerGame = () => {
                     preload: preload,
                     create: create,
                     update: update
+                },
+                scale: {
+                    mode: Phaser.Scale.FIT,
+                    autoCenter: Phaser.Scale.CENTER_BOTH
                 }
             };
 
@@ -189,7 +196,18 @@ const EmojiPlatformerGame = () => {
     return (
         <div className="nes-container is-dark with-title" style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <p className="title">Emoji Platformer</p>
-            <div ref={gameRef} id="game-container" style={{ width: `${gameSize.width}px`, height: `${gameSize.height}px`, border: '2px solid var(--retro-border)' }}></div>
+            <div id="game-container" style={{ 
+                width: '100%', 
+                height: '80vh', 
+                maxWidth: '800px', 
+                maxHeight: '600px', 
+                border: '2px solid var(--retro-border)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <div ref={gameRef} style={{ width: '100%', height: '100%' }}></div>
+            </div>
             <div className="nes-container is-rounded is-dark" style={{ marginTop: '1rem' }}>
                 <p>Use arrow keys to move and jump. Avoid the zombies!</p>
                 <button className="nes-btn is-primary" onClick={() => window.location.reload()}>Restart Game</button>
