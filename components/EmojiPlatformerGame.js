@@ -187,9 +187,9 @@ const EmojiPlatformerGame = () => {
     }, []);
 
     return (
-        <div className="nes-container is-dark with-title">
+        <div className="nes-container is-dark with-title" style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <p className="title">Emoji Platformer</p>
-            <div ref={gameRef} id="game-container" style={{ width: '800px', height: '600px', border: '2px solid var(--retro-border)', margin: '0 auto' }}></div>
+            <div ref={gameRef} id="game-container" style={{ width: `${gameSize.width}px`, height: `${gameSize.height}px`, border: '2px solid var(--retro-border)' }}></div>
             <div className="nes-container is-rounded is-dark" style={{ marginTop: '1rem' }}>
                 <p>Use arrow keys to move and jump. Avoid the zombies!</p>
                 <button className="nes-btn is-primary" onClick={() => window.location.reload()}>Restart Game</button>
