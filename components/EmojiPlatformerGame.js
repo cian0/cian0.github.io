@@ -72,6 +72,8 @@ const EmojiPlatformerGame = () => {
             let score = 0;
             let scoreText;
             let gameOver = false;
+            let playerEmoji;
+            let zombieEmojis = [];
 
             function preload() {
                 // No need to preload sky image
@@ -92,14 +94,14 @@ const EmojiPlatformerGame = () => {
 
                 // Replace platform sprites with emojis
                 platforms.children.entries.forEach(platform => {
-                    this.add.text(platform.x, platform.y, PLATFORM, { fontSize: '40px', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
+                    this.add.text(platform.x, platform.y, PLATFORM, { fontSize: '40px' }).setOrigin(0.5);
                     platform.setVisible(false);
                 });
 
                 // Player
                 player = this.physics.add.sprite(100, 450, 'player');
                 player.setCollideWorldBounds(true);
-                this.add.text(player.x, player.y, PLAYER, { fontSize: '40px', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
+                playerEmoji = this.add.text(player.x, player.y, PLAYER, { fontSize: '40px' }).setOrigin(0.5);
                 player.setVisible(false);
 
                 // Zombies
@@ -111,7 +113,8 @@ const EmojiPlatformerGame = () => {
                     zombie.setBounce(1);
                     zombie.setCollideWorldBounds(true);
                     zombie.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                    this.add.text(zombie.x, zombie.y, ZOMBIE, { fontSize: '40px', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
+                    const zombieEmoji = this.add.text(zombie.x, zombie.y, ZOMBIE, { fontSize: '40px' }).setOrigin(0.5);
+                    zombieEmojis.push(zombieEmoji);
                     zombie.setVisible(false);
                 }
 
@@ -120,26 +123,9 @@ const EmojiPlatformerGame = () => {
                 this.physics.add.collider(player, platforms);
                 this.physics.add.collider(zombies, platforms);
 
-                this.physics.add.collider(player, zombies, hitZombie, null, this);
+                this.physics.add.overlap(player, zombies, hitZombie, null, this);
 
-                scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '16px', fill: '#0ff', fontFamily: '"Press Start 2P"' });
-
-                // Update emoji positions
-                this.events.on('update', () => {
-                    this.children.list.forEach(child => {
-                        if (child.type === 'Text' && child.text !== 'Score: 0') {
-                            const gameObject = this.children.list.find(obj => 
-                                obj.type === 'Sprite' && 
-                                Math.abs(obj.x - child.x) < 1 && 
-                                Math.abs(obj.y - child.y) < 1
-                            );
-                            if (gameObject) {
-                                child.x = gameObject.x;
-                                child.y = gameObject.y;
-                            }
-                        }
-                    });
-                });
+                scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '16px', fill: '#0ff' });
             }
 
             function update() {
@@ -160,13 +146,19 @@ const EmojiPlatformerGame = () => {
                 }
 
                 // Move zombies towards player
-                zombies.children.entries.forEach(zombie => {
+                zombies.children.entries.forEach((zombie, index) => {
                     if (zombie.x < player.x) {
                         zombie.setVelocityX(50);
                     } else {
                         zombie.setVelocityX(-50);
                     }
+                    zombieEmojis[index].x = zombie.x;
+                    zombieEmojis[index].y = zombie.y;
                 });
+
+                // Update player emoji position
+                playerEmoji.x = player.x;
+                playerEmoji.y = player.y;
 
                 score += 1;
                 scoreText.setText('Score: ' + score);
@@ -176,7 +168,7 @@ const EmojiPlatformerGame = () => {
                 this.physics.pause();
                 player.setTint(0xff0000);
                 gameOver = true;
-                this.add.text(400, 300, 'Game Over', { fontSize: '32px', fill: '#f0f', fontFamily: '"Press Start 2P"' }).setOrigin(0.5);
+                this.add.text(400, 300, 'Game Over', { fontSize: '32px', fill: '#f0f' }).setOrigin(0.5);
             }
 
             if (gameRef.current) {
