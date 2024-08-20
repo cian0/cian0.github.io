@@ -67,7 +67,7 @@ const EmojiChessGame = () => {
                 for (let y = 0; y < 8; y++) {
                     for (let x = 0; x < 8; x++) {
                         const color = (x + y) % 2 === 0 ? 0x444444 : 0x666666;
-                        this.add.rectangle(x * tileSize, y * tileSize, tileSize, tileSize, color);
+                        this.add.rectangle(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, tileSize, tileSize, color);
                     }
                 }
 
@@ -78,7 +78,7 @@ const EmojiChessGame = () => {
                             const piece = this.add.text(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, PIECES[board[y][x]], 
                                 { fontSize: `${tileSize * 0.7}px`, color: board[y][x][0] === 'w' ? '#00FFFF' : '#FF00FF' })
                                 .setOrigin(0.5)
-                                .setInteractive();
+                                .setInteractive({ draggable: true });
                             piece.pieceType = board[y][x];
                             piece.gridX = x;
                             piece.gridY = y;
@@ -88,8 +88,9 @@ const EmojiChessGame = () => {
                 }
 
                 // Set up input events
-                this.input.on('gameobjectdown', onPieceClick);
-                this.input.on('pointerdown', onBoardClick);
+                this.input.on('dragstart', onDragStart);
+                this.input.on('drag', onDrag);
+                this.input.on('dragend', onDragEnd);
 
                 console.log('Create function completed');
             }
@@ -98,23 +99,36 @@ const EmojiChessGame = () => {
                 // This function is called every frame, but we don't need it for chess
             }
 
-            function onPieceClick(pointer, gameObject) {
+            function onDragStart(pointer, gameObject) {
                 if (gameObject.pieceType[0] === turn) {
                     selectedPiece = gameObject;
-                    setMessage(`Selected ${gameObject.pieceType}. Click a square to move.`);
+                    setMessage(`Dragging ${gameObject.pieceType}. Release to move.`);
+                    gameObject.setTint(0x00ff00);
+                } else {
+                    setMessage(`It's ${turn === 'w' ? 'White' : 'Black'}'s turn.`);
                 }
             }
 
-            function onBoardClick(pointer) {
+            function onDrag(pointer, gameObject, dragX, dragY) {
+                gameObject.x = dragX;
+                gameObject.y = dragY;
+            }
+
+            function onDragEnd(pointer, gameObject) {
+                gameObject.clearTint();
                 if (selectedPiece) {
-                    const x = Math.floor(pointer.x / (config.width / 8));
-                    const y = Math.floor(pointer.y / (config.height / 8));
+                    const tileSize = config.width / 8;
+                    const newX = Math.floor(gameObject.x / tileSize);
+                    const newY = Math.floor(gameObject.y / tileSize);
                     
-                    if (isValidMove(selectedPiece, x, y)) {
-                        movePiece(selectedPiece, x, y);
+                    if (isValidMove(selectedPiece, newX, newY)) {
+                        movePiece(selectedPiece, newX, newY);
                         turn = turn === 'w' ? 'b' : 'w';
                         setMessage(`${turn === 'w' ? 'White' : 'Black'} to move`);
                     } else {
+                        // Move the piece back to its original position
+                        gameObject.x = selectedPiece.gridX * tileSize + tileSize / 2;
+                        gameObject.y = selectedPiece.gridY * tileSize + tileSize / 2;
                         setMessage('Invalid move. Try again.');
                     }
                     
@@ -130,6 +144,7 @@ const EmojiChessGame = () => {
             }
 
             function movePiece(piece, newX, newY) {
+                const tileSize = config.width / 8;
                 // Remove the piece from its old position
                 board[piece.gridY][piece.gridX] = '';
                 
@@ -144,8 +159,8 @@ const EmojiChessGame = () => {
                 board[newY][newX] = piece.pieceType;
                 piece.gridX = newX;
                 piece.gridY = newY;
-                piece.x = newX * (config.width / 8) + (config.width / 16);
-                piece.y = newY * (config.height / 8) + (config.height / 16);
+                piece.x = newX * tileSize + tileSize / 2;
+                piece.y = newY * tileSize + tileSize / 2;
             }
 
             if (gameRef.current) {
