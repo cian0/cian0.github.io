@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function WorkoutTracker({ workouts, addWorkout }) {
   const [exercise, setExercise] = useState('');
@@ -7,10 +7,16 @@ export default function WorkoutTracker({ workouts, addWorkout }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (exercise && duration) {
-      addWorkout({ exercise, duration: parseInt(duration) });
+      const newWorkout = { exercise, duration: parseInt(duration), date: new Date().toISOString() };
+      addWorkout(newWorkout);
       setExercise('');
       setDuration('');
     }
+  };
+
+  const handleClearWorkouts = () => {
+    localStorage.removeItem('workouts');
+    window.location.reload();
   };
 
   return (
@@ -36,9 +42,15 @@ export default function WorkoutTracker({ workouts, addWorkout }) {
         {workouts.map((workout, index) => (
           <li key={index} className="workout-item">
             {workout.exercise} - {workout.duration} minutes
+            {workout.date && ` (${new Date(workout.date).toLocaleDateString()})`}
           </li>
         ))}
       </ul>
+      {workouts.length > 0 && (
+        <button onClick={handleClearWorkouts} className="retro-button clear-button">
+          Clear All Workouts
+        </button>
+      )}
     </div>
   );
 }
