@@ -121,7 +121,7 @@ const PingPong = () => {
   }, []);
 
   return (
-    <Layout>
+    
       <div className="retro-container">
         <div className="retro-post">
           <p>Move your mouse or touch the screen to control the left paddle!</p>
@@ -137,7 +137,7 @@ const PingPong = () => {
           }}></div>
         </div>
       </div>
-    </Layout>
+    
   );
 };
 
