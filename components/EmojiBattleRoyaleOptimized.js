@@ -68,8 +68,8 @@ const EmojiBattleRoyale = () => {
   const initGame = () => {
     const config = {
       type: Phaser.AUTO,
-      width: '100%',
-      height: '100%',
+      width: gameContainerRef.current.clientWidth,
+      height: gameContainerRef.current.clientHeight,
       parent: gameContainerRef.current,
       physics: {
         default: 'arcade',
@@ -84,7 +84,7 @@ const EmojiBattleRoyale = () => {
         update: update
       },
       scale: {
-        mode: Phaser.Scale.RESIZE,
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
       }
     };
@@ -96,7 +96,6 @@ const EmojiBattleRoyale = () => {
     };
 
     window.addEventListener('resize', resizeGame);
-    resizeGame();
 
     return () => {
       window.removeEventListener('resize', resizeGame);
@@ -567,7 +566,7 @@ const fade = (t) => { return t * t * t * (t * (t * 6 - 15) + 10); }
             <div 
               ref={gameContainerRef} 
               className={styles.gameContainer}
-              style={{ width: '100%', height: 'calc(100vh - 200px)', maxHeight: '600px' }}
+              style={{ width: '100%', height: 'calc(100vh - 200px)', maxHeight: '600px', overflow: 'hidden' }}
             ></div>
             <div className={styles.retroSection}>
               <pre className={styles.debugInfo}>{debugInfo}</pre>
