@@ -3,6 +3,31 @@ import dynamic from 'next/dynamic';
 
 const EmojiPlatformerGame = () => {
     const gameRef = useRef(null);
+    const [gameSize, setGameSize] = useState({ width: 800, height: 600 });
+
+    useEffect(() => {
+        const handleResize = () => {
+            const containerWidth = window.innerWidth;
+            const containerHeight = window.innerHeight - 100; // Subtracting 100px for potential margins/paddings
+            const aspectRatio = 4 / 3; // Maintain 4:3 aspect ratio
+            let width, height;
+
+            if (containerWidth / containerHeight > aspectRatio) {
+                height = containerHeight;
+                width = height * aspectRatio;
+            } else {
+                width = containerWidth;
+                height = width / aspectRatio;
+            }
+
+            setGameSize({ width, height });
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         let game;
@@ -11,8 +36,8 @@ const EmojiPlatformerGame = () => {
             
             const config = {
                 type: Phaser.AUTO,
-                width: 800,
-                height: 600,
+                width: gameSize.width,
+                height: gameSize.height,
                 parent: 'game-container',
                 backgroundColor: '#000000',
                 physics: {
