@@ -4,12 +4,14 @@ import dynamic from 'next/dynamic';
 const EmojiChessGame = () => {
     const gameRef = useRef(null);
     const [message, setMessage] = useState('White to move');
-    const [gameSize, setGameSize] = useState(800);
+    const [gameSize, setGameSize] = useState({ width: 800, height: 800 });
 
     useEffect(() => {
         const handleResize = () => {
-            const width = Math.min(window.innerWidth - 40, 800);
-            setGameSize(width);
+            const containerWidth = window.innerWidth;
+            const containerHeight = window.innerHeight - 100; // Subtracting 100px for potential margins/paddings
+            const size = Math.min(containerWidth, containerHeight);
+            setGameSize({ width: size, height: size });
         };
 
         window.addEventListener('resize', handleResize);
@@ -27,8 +29,8 @@ const EmojiChessGame = () => {
             
             const config = {
                 type: Phaser.AUTO,
-                width: gameSize,
-                height: gameSize,
+                width: gameSize.width,
+                height: gameSize.height,
                 parent: 'game-container',
                 backgroundColor: '#111111',
                 scene: {
@@ -185,11 +187,11 @@ const EmojiChessGame = () => {
     }, [gameSize]);
 
     return (
-        <div className="retro-post">
-            <div ref={gameRef} id="game-container" style={{ width: `${gameSize}px`, height: `${gameSize}px`, margin: '0 auto' }}></div>
-            <div className="retro-section" style={{ marginTop: '1rem' }}>
+        <div className="retro-post" style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <div ref={gameRef} id="game-container" style={{ width: `${gameSize.width}px`, height: `${gameSize.height}px` }}></div>
+            <div className="retro-section" style={{ marginTop: '1rem', textAlign: 'center' }}>
                 <p className="retro-text">{message}</p>
-                <p className="retro-text">Click on a piece to select it, then click on a square to move.</p>
+                <p className="retro-text">Drag and drop pieces to move them.</p>
             </div>
         </div>
     );
