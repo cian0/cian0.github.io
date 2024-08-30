@@ -86,8 +86,10 @@ const CompactMusicPlayer = () => {
         log(`Split into ${notes.length} notes`);
         notes.forEach(note => {
           const [pitch, duration, time] = note.split(',');
-          log(`Parsed note - pitch: ${pitch}, duration: ${duration}, time: ${time}`);
-          tracks[tracks.length - 1].notes.push({ pitch, duration, time });
+          const [bar, beat] = time.split(':').map(Number);
+          const adjustedTime = `${bar}:${beat}`;
+          log(`Parsed note - pitch: ${pitch}, duration: ${duration}, time: ${adjustedTime}`);
+          tracks[tracks.length - 1].notes.push({ pitch, duration, time: adjustedTime });
         });
       }
     }
@@ -106,7 +108,7 @@ const CompactMusicPlayer = () => {
     log(`Instrument type: ${type.trim()}`);
     const options = optionsParts.join('{').slice(0, -1);
     log(`Instrument options string: ${options}`);
-  
+
     if (type.trim() === 'Sampler') {
       log("Parsing Sampler instrument");
       const sampleMap = {};
@@ -118,8 +120,24 @@ const CompactMusicPlayer = () => {
       log(`Completed Sampler parsing: ${JSON.stringify(sampleMap)}`);
       return ['Sampler', sampleMap];
     }
-  
-    // ... (rest of the function remains the same)
+
+    const parsedOptions = {};
+    options.split(';').forEach(option => {
+      const [key, value] = option.split(':');
+      if (key === 'envelope') {
+        parsedOptions.envelope = {
+          attack: parseFloat(value.split(',')[0]),
+          decay: parseFloat(value.split(',')[1]),
+          sustain: parseFloat(value.split(',')[2]),
+          release: parseFloat(value.split(',')[3])
+        };
+      } else {
+        parsedOptions[key] = value;
+      }
+    });
+
+    log(`Completed instrument parsing: ${JSON.stringify(parsedOptions)}`);
+    return [type.trim(), parsedOptions];
   };
 
   const parseEffect = (effectInfo) => {
