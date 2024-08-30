@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abduction Game with Tone.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        #scene {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .character {
+            position: absolute;
+            font-size: 24px;
+            z-index: 10;
+        }
+        .robot {
+            position: absolute;
+            font-size: 40px;
+            z-index: 20;
+        }
+        .beam {
+            position: absolute;
+            width: 40px;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(0,255,255,0.7), rgba(0,255,255,0));
+            z-index: 15;
+            display: none;
+            left: 0;
+            bottom: -100px;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        .building {
+            position: absolute;
+            bottom: 50px;
+            background-color: #333;
+            width: 60px;
+        }
+        .window {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffff00;
+            opacity: 0.7;
+        }
+        .raindrop {
+            position: absolute;
+            width: 1px;
+            height: 15px;
+            background-color: #6af;
+            opacity: 0.6;
+        }
+        #lightning {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            opacity: 0;
+            z-index: 30;
+        }
+        #guessBoxes {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 5px;
+            z-index: 40;
+        }
+        .guessBox {
+            width: 40px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            color: #fff;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+        .letter {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .letter.back {
+            transform: rotateY(180deg);
+            background-color: rgba(0, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div id="scene">
+        <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#000033;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#000011;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#111;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#222;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#skyGradient)" />
+            <rect width="100%" height="50" y="950" fill="url(#groundGradient)" />
+        </svg>
+        <div id="lightning"></div>
+        <div id="guessBoxes"></div>
+    </div>
+
+    <script>
+        const scene = document.getElementById('scene');
+        const guessBoxes = document.getElementById('guessBoxes');
+        const numStars = 50;
+        const numBuildings = 10;
+        const numCharacters = 5;
+        const numRobots = 3;
+        const numRaindrops = 100;
+        const word = "ABDUCTION";
+
+        // Tone.js setup
+        const synth = new Tone.Synth().toDestination();
+        const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+
+        // Create guess boxes
+        for (let i = 0; i < word.length; i++) {
+            const box = document.createElement('div');
+            box.className = 'guessBox';
+            const frontLetter = document.createElement('div');
+            frontLetter.className = 'letter front';
+            const backLetter = document.createElement('div');
+            backLetter.className = 'letter back';
+            box.appendChild(frontLetter);
+            box.appendChild(backLetter);
+            guessBoxes.appendChild(box);
+        }
+
+        // Create scene elements (stars, buildings, characters, robots, raindrops)
+        function createSceneElements() {
+            // Create stars
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 95}%`;
+                scene.appendChild(star);
+            }
+
+            // Create buildings
+            for (let i = 0; i < numBuildings; i++) {
+                const building = document.createElement('div');
+                building.className = 'building';
+                building.style.left = `${i * 10}%`;
+                building.style.height = `${Math.random() * 30 + 20}%`;
+                scene.appendChild(building);
+
+                const numWindows = Math.floor(Math.random() * 10) + 5;
+                for (let j = 0; j < numWindows; j++) {
+                    const window = document.createElement('div');
+                    window.className = 'window';
+                    window.style.left = `${Math.random() * 40 + 5}px`;
+                    window.style.bottom = `${Math.random() * 80}%`;
+                    building.appendChild(window);
+                }
+            }
+
+            // Create characters
+            for (let i = 0; i < numCharacters; i++) {
+                const character = document.createElement('div');
+                character.className = 'character';
+                character.textContent = '🚶';
+                character.style.left = `${Math.random() * 80 + 10}%`;
+                character.style.bottom = '55px';
+                scene.appendChild(character);
+            }
+
+            // Create robots
+            for (let i = 0; i < numRobots; i++) {
+                const robot = document.createElement('div');
+                robot.className = 'robot';
+                robot.textContent = '🤖';
+                robot.style.left = `${Math.random() * 80 + 10}%`;
+                robot.style.top = '-50px';
+                scene.appendChild(robot);
+
+                const beam = document.createElement('div');
+                beam.className = 'beam';
+                robot.appendChild(beam);
+            }
+
+            // Create raindrops
+            for (let i = 0; i < numRaindrops; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.className = 'raindrop';
+                raindrop.style.left = `${Math.random() * 100}%`;
+                raindrop.style.top = `${Math.random() * 100}%`;
+                scene.appendChild(raindrop);
+            }
+        }
+
+        createSceneElements();
+
+        // Animations
+        function setupAnimations() {
+            gsap.to('.star', {
+                opacity: 0.5,
+                duration: 1,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut",
+                stagger: { each: 0.1, from: "random" }
+            });
+
+            gsap.to('.window', {
+                opacity: 0.3,
+                duration: 0.5,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut",
+                stagger: { each: 0.1, from: "random" }
+            });
+
+            gsap.to('.character', {
+                x: "+=50",
+                duration: 5,
+                repeat: -1,
+                yoyo: true,
+                ease: "none",
+                stagger: { each: 0.5, from: "random" }
+            });
+
+            gsap.to('.raindrop', {
+                y: "+=100%",
+                duration: 0.5,
+                repeat: -1,
+                ease: "none",
+                stagger: { each: 0.01, from: "random" }
+            });
+        }
+
+        setupAnimations();
+
+        function abductCharacter(robot, character) {
+            const robotRect = robot.getBoundingClientRect();
+            const characterRect = character.getBoundingClientRect();
+
+            const beam = robot.querySelector('.beam');
+            beam.style.display = 'block';
+
+            const robotWidth = robotRect.width;
+            beam.style.left = `${(robotWidth - 40) / 2}px`;
+
+            gsap.to(character, {
+                x: robotRect.left - characterRect.left + (robotWidth / 2) - (characterRect.width / 2),
+                y: robotRect.top - characterRect.top + 40,
+                duration: 2,
+                ease: "power2.in",
+                onComplete: () => {
+                    character.style.display = 'none';
+                    beam.style.display = 'none';
+
+                    setTimeout(() => {
+                        character.style.display = 'block';
+                        gsap.set(character, {
+                            x: 0,
+                            y: 0,
+                            left: `${Math.random() * 80 + 10}%`,
+                            bottom: '55px'
+                        });
+                    }, 1000);
+                }
+            });
+
+            // Play abduction sound
+            synth.triggerAttackRelease("C2", "8n");
+        }
+
+        function robotAbductionCycle() {
+            const robots = document.querySelectorAll('.robot');
+            const characters = document.querySelectorAll('.character');
+
+            robots.forEach((robot, index) => {
+                gsap.to(robot, {
+                    y: "+=300",
+                    duration: 3,
+                    ease: "power1.inOut",
+                    delay: index * 2,
+                    onComplete: () => {
+                        const availableCharacters = Array.from(characters).filter(c => c.style.display !== 'none');
+                        if (availableCharacters.length > 0) {
+                            const character = availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
+                            abductCharacter(robot, character);
+                        }
+
+                        gsap.to(robot, {
+                            y: "-=300",
+                            duration: 3,
+                            ease: "power1.inOut",
+                            delay: 2
+                        });
+                    }
+                });
+            });
+        }
+
+        function startAbductionCycle() {
+            robotAbductionCycle();
+            setTimeout(startAbductionCycle, numRobots * 2000 + 3000);
+        }
+
+        startAbductionCycle();
+
+        function shakeCamera() {
+            gsap.to(scene, {
+                x: "+=10",
+                y: "+=10",
+                duration: 0.1,
+                repeat: 5,
+                yoyo: true,
+                ease: "none",
+                onComplete: () => {
+                    gsap.set(scene, {x: 0, y: 0});
+                }
+            });
+        }
+
+        function flashLightning() {
+            const lightning = document.getElementById('lightning');
+            gsap.to(lightning, {
+                opacity: 0.8,
+                duration: 0.1,
+                repeat: 3,
+                yoyo: true,
+                onComplete: () => {
+                    gsap.set(lightning, {opacity: 0});
+                }
+            });
+            shakeCamera();
+
+            // Play lightning sound
+            synth.triggerAttackRelease("A5", "16n");
+        }
+
+        setInterval(shakeCamera, 10000);
+        setInterval(flashLightning, 5000 + Math.random() * 5000);
+
+        // Guessing game logic
+        let revealedCount = 0;
+        let revealedIndices = [];
+
+        function revealCharacter() {
+            if (revealedCount >= 3 || revealedIndices.length === word.length) {
+                // Reset the boxes
+                guessBoxes.querySelectorAll('.guessBox').forEach(box => {
+                    box.querySelector('.letter.front').textContent = '';
+                    box.querySelector('.letter.back').textContent = '';
+                    gsap.set(box.children, { rotationY: 0 });
+                });
+                revealedCount = 0;
+                revealedIndices = [];
+            }
+
+            let index;
+            do {
+                index = Math.floor(Math.random() * word.length);
+            } while (revealedIndices.includes(index));
+
+            revealedIndices.push(index);
+            const box = guessBoxes.children[index];
+            const frontLetter = box.querySelector('.letter.front');
+            const backLetter = box.querySelector('.letter.back');
+
+            frontLetter.textContent = '?';
+            backLetter.textContent = word[index];
+
+            gsap.to(box.children, {
+                rotationY: 180,
+                duration: 0.6,
+                ease: "back.out(1.7)"
+            });
+
+            // Play reveal sound
+            synth.triggerAttackRelease(notes[index % notes.length], "8n");
+
+            revealedCount++;
+        }
+
+// Reveal a character every 3 seconds
+setInterval(revealCharacter, 3000);
+
+// Add interactive elements
+function setupInteractivity() {
+    // Make characters draggable
+    const characters = document.querySelectorAll('.character');
+    characters.forEach(character => {
+        let isDragging = false;
+        let startX, startY;
+
+        character.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - character.offsetLeft;
+            startY = e.clientY - character.offsetTop;
+            character.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const newX = e.clientX - startX;
+            const newY = e.clientY - startY;
+            character.style.left = `${newX}px`;
+            character.style.top = `${newY}px`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            character.style.cursor = 'grab';
+        });
+    });
+
+    // Add click event to robots
+    const robots = document.querySelectorAll('.robot');
+    robots.forEach(robot => {
+        robot.addEventListener('click', () => {
+            gsap.to(robot, {
+                rotation: 360,
+                duration: 1,
+                ease: "power2.inOut"
+            });
+            synth.triggerAttackRelease("G4", "8n");
+        });
+    });
+}
+
+setupInteractivity();
+
+// Add a score system
+let score = 0;
+const scoreDisplay = document.createElement('div');
+scoreDisplay.style.position = 'absolute';
+scoreDisplay.style.top = '10px';
+scoreDisplay.style.right = '10px';
+scoreDisplay.style.color = 'white';
+scoreDisplay.style.fontSize = '24px';
+scoreDisplay.textContent = `Score: ${score}`;
+scene.appendChild(scoreDisplay);
+
+function updateScore(points) {
+    score += points;
+    scoreDisplay.textContent = `Score: ${score}`;
+    gsap.from(scoreDisplay, {
+        scale: 1.5,
+        duration: 0.3,
+        ease: "elastic.out(1, 0.3)"
+    });
+}
+
+// Add power-ups
+function createPowerUp() {
+    const powerUp = document.createElement('div');
+    powerUp.textContent = '⚡';
+    powerUp.style.position = 'absolute';
+    powerUp.style.fontSize = '30px';
+    powerUp.style.left = `${Math.random() * 90 + 5}%`;
+    powerUp.style.top = `${Math.random() * 60 + 20}%`;
+    powerUp.style.cursor = 'pointer';
+    scene.appendChild(powerUp);
+
+    gsap.to(powerUp, {
+        y: '+=20',
+        duration: 1,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+
+    powerUp.addEventListener('click', () => {
+        updateScore(10);
+        synth.triggerAttackRelease("C6", "16n");
+        scene.removeChild(powerUp);
+        
+        // Temporary invincibility effect
+        characters.forEach(character => {
+            character.style.filter = 'brightness(2)';
+            setTimeout(() => {
+                character.style.filter = 'none';
+            }, 5000);
+        });
+    });
+
+    setTimeout(() => {
+        if (scene.contains(powerUp)) {
+            scene.removeChild(powerUp);
+        }
+    }, 5000);
+}
+
+setInterval(createPowerUp, 10000);
+
+// Add a game over condition
+function checkGameOver() {
+    const remainingCharacters = document.querySelectorAll('.character:not([style*="display: none"])');
+    if (remainingCharacters.length === 0) {
+        const gameOverText = document.createElement('div');
+        gameOverText.textContent = 'GAME OVER';
+        gameOverText.style.position = 'absolute';
+        gameOverText.style.top = '50%';
+        gameOverText.style.left = '50%';
+        gameOverText.style.transform = 'translate(-50%, -50%)';
+        gameOverText.style.color = 'red';
+        gameOverText.style.fontSize = '48px';
+        gameOverText.style.fontWeight = 'bold';
+        scene.appendChild(gameOverText);
+
+        gsap.from(gameOverText, {
+            scale: 0,
+            duration: 1,
+            ease: "elastic.out(1, 0.3)"
+        });
+
+        // Play game over sound
+        const gameOverSynth = new Tone.Synth().toDestination();
+        const now = Tone.now();
+        gameOverSynth.triggerAttackRelease("C4", "8n", now);
+        gameOverSynth.triggerAttackRelease("G3", "8n", now + 0.25);
+        gameOverSynth.triggerAttackRelease("E3", "8n", now + 0.5);
+        gameOverSynth.triggerAttackRelease("C3", "2n", now + 0.75);
+
+        // Stop the game logic
+        clearInterval(gameOverInterval);
+    }
+}
+
+const gameOverInterval = setInterval(checkGameOver, 1000);
+
+// Start the game when the page loads
+window.addEventListener('load', () => {
+    Tone.start();
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start Game';
+    startButton.style.position = 'absolute';
+    startButton.style.top = '50%';
+    startButton.style.left = '50%';
+    startButton.style.transform = 'translate(-50%, -50%)';
+    startButton.style.fontSize = '24px';
+    startButton.style.padding = '10px 20px';
+    scene.appendChild(startButton);
+
+    startButton.addEventListener('click', () => {
+        scene.removeChild(startButton);
+        startAbductionCycle();
+        setupInteractivity();
+    });
+});
+</script>
+</body>
+</html>

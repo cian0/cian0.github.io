@@ -30,6 +30,7 @@
     "next": "14.2.5",
     "papaparse": "^5.4.1",
     "phaser": "^3.80.1",
+    "phaser3-rex-plugins": "^1.80.6",
     "react": "^18",
     "react-dom": "^18",
     "simple-peer": "^9.11.1",

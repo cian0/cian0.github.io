@@ -522,6 +522,18 @@ const getTerrainType = (noiseValue) => {
             <div 
               ref={gameContainerRef} 
               className={styles.gameContainer}
+              style={{
+                width: '100%',
+                height: 'calc(100vh - 200px)',
+                maxWidth: '100%',
+                maxHeight: '80vh',
+                margin: '0 auto',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden',
+                border: '2px solid #00FFFF'
+              }}
             ></div>
             <div className={styles.retroSection}>
               <pre className={styles.debugInfo}>{debugInfo}</pre>
