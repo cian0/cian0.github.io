@@ -24,7 +24,7 @@ const CompactMusicPlayer = () => {
       debugRef.current.innerHTML += message + '<br>';
       debugRef.current.scrollTop = debugRef.current.scrollHeight;
     }
-  };
+  }, []);
 
   const parseScore = useCallback((scoreText) => {
     log("Starting to parse score");
@@ -304,9 +304,6 @@ const CompactMusicPlayer = () => {
       <div ref={debugRef} className={styles['retro-debug']}></div>
     </div>
   );
-};
-
-export default CompactMusicPlayer;
   const handlePlay = async () => {
     log('Play button clicked');
     await Tone.start();
@@ -337,3 +334,12 @@ export default CompactMusicPlayer;
     Tone.Transport.loop = newLoopState;
     log(`Looping ${newLoopState ? 'enabled' : 'disabled'}`);
   };
+
+  return (
+    <div className={styles['retro-container']}>
+      {/* ... rest of the JSX ... */}
+    </div>
+  );
+};
+
+export default CompactMusicPlayer;
