@@ -1,13 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
+import CompactMusicPlayer from '../components/CompactMusicPlayer';
 
 const CompactMusicPlayerPage = () => {
   return (
     <div className="retro-container">
       <Head>
         <title>Compact Music Player</title>
-        <script src="https://unpkg.com/tone"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
       </Head>
       <div className="retro-post">
         <div className="retro-header">
@@ -20,12 +19,7 @@ const CompactMusicPlayerPage = () => {
         </div>
         
         <div className="retro-section">
-          <iframe
-            src="/minified_player.html"
-            width="100%"
-            height="600px"
-            style={{ border: 'none' }}
-          ></iframe>
+          <CompactMusicPlayer />
         </div>
       </div>
     </div>
