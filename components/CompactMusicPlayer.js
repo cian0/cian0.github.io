@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as Tone from 'tone';
 import styles from '../styles/CompactMusicPlayer.module.css';
 
@@ -18,15 +18,7 @@ const CompactMusicPlayer = () => {
   const staticVisualizerRef = useRef(null);
   const debugRef = useRef(null);
 
-  useEffect(() => {
-    initializePlayer();
-    return () => {
-      Tone.Transport.stop();
-      Tone.Transport.cancel();
-    };
-  }, []);
-
-  const log = (message) => {
+  const log = useCallback((message) => {
     console.log(message);
     if (debugRef.current) {
       debugRef.current.innerHTML += message + '<br>';
@@ -34,7 +26,7 @@ const CompactMusicPlayer = () => {
     }
   };
 
-  const parseScore = (scoreText) => {
+  const parseScore = useCallback((scoreText) => {
     log("Starting to parse score");
     const lines = scoreText.trim().split('\n');
     log(`Score split into ${lines.length} lines`);
@@ -100,9 +92,9 @@ const CompactMusicPlayer = () => {
       timeSignature: timeSignature.split('/').map(Number),
       tracks
     };
-  };
+  }, [log]);
 
-  const parseInstrument = (instrumentInfo) => {
+  const parseInstrument = useCallback((instrumentInfo) => {
     log(`Parsing instrument: ${instrumentInfo}`);
     const [type, ...optionsParts] = instrumentInfo.split('{');
     log(`Instrument type: ${type.trim()}`);
@@ -138,9 +130,9 @@ const CompactMusicPlayer = () => {
 
     log(`Completed instrument parsing: ${JSON.stringify(parsedOptions)}`);
     return [type.trim(), parsedOptions];
-  };
+  }, [log]);
 
-  const parseEffect = (effectInfo) => {
+  const parseEffect = useCallback((effectInfo) => {
     log(`Parsing effect: ${effectInfo}`);
     const [type, options] = effectInfo.split('{');
     const parsedOptions = {};
@@ -151,7 +143,7 @@ const CompactMusicPlayer = () => {
     });
     log(`Completed effect parsing: ${type.trim()} ${JSON.stringify(parsedOptions)}`);
     return { type: type.trim(), options: parsedOptions };
-  };
+  }, [log]);
 
   const initializePlayer = () => {
     if (parseBtnRef.current) {
