@@ -42,11 +42,83 @@ const CompactMusicPlayer = () => {
 
       const playerScript = document.createElement('script');
       playerScript.textContent = \`
-        // Add your existing JavaScript code here
-        // Make sure to remove any references to document and replace them with iframe.contentDocument
-        // For example:
-        // const scoreInput = iframe.contentDocument.getElementById('scoreInput');
-        // ...
+        let score;
+        let tracks;
+        const scoreInput = iframe.contentDocument.getElementById('scoreInput');
+        const parseBtn = iframe.contentDocument.getElementById('parseBtn');
+        const playBtn = iframe.contentDocument.getElementById('playBtn');
+        const stopBtn = iframe.contentDocument.getElementById('stopBtn');
+        const rewindBtn = iframe.contentDocument.getElementById('rewindBtn');
+        const loopBtn = iframe.contentDocument.getElementById('loopBtn');
+        const visualizer = iframe.contentDocument.getElementById('visualizer');
+        const staticVisualizer = iframe.contentDocument.getElementById('staticVisualizer');
+        const canvasContext = visualizer.getContext('2d');
+        const staticCanvasContext = staticVisualizer.getContext('2d');
+        const debugElement = iframe.contentDocument.getElementById('debug');
+
+        function log(message) {
+          console.log(message);
+          debugElement.innerHTML += message + '<br>';
+          debugElement.scrollTop = debugElement.scrollHeight;
+        }
+
+        parseBtn.addEventListener('click', function() {
+          const scoreText = scoreInput.value;
+          try {
+            score = parseScore(scoreText);
+            initializePlayer();
+            playBtn.disabled = false;
+            stopBtn.disabled = false;
+            rewindBtn.disabled = false;
+            loopBtn.disabled = false;
+          } catch (error) {
+            console.error('Error parsing score:', error);
+            alert('Invalid score format. Please check your input.');
+          }
+        });
+
+        function parseScore(scoreText) {
+          // Implementation of parseScore function
+        }
+
+        function parseInstrument(instrumentInfo) {
+          // Implementation of parseInstrument function
+        }
+
+        function parseEffect(effectInfo) {
+          // Implementation of parseEffect function
+        }
+
+        function initializePlayer() {
+          // Implementation of initializePlayer function
+        }
+
+        function calculateTotalDuration() {
+          // Implementation of calculateTotalDuration function
+        }
+
+        function scheduleNotes() {
+          // Implementation of scheduleNotes function
+        }
+
+        function resizeCanvas() {
+          // Implementation of resizeCanvas function
+        }
+
+        function getRandomColor() {
+          return \`hsl(\${Math.random() * 360}, 70%, 60%)\`;
+        }
+
+        function drawVisualizer() {
+          // Implementation of drawVisualizer function
+        }
+
+        function drawStaticVisualization() {
+          // Implementation of drawStaticVisualization function
+        }
+
+        resizeCanvas();
+        iframe.contentWindow.addEventListener('resize', resizeCanvas);
       \`;
       iframe.contentDocument.body.appendChild(playerScript);
     }
