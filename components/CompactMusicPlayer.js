@@ -1,8 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { Tone } from 'tone';
+import React, { useEffect, useRef, useState } from 'react';
+import * as Tone from 'tone';
 import styles from '../styles/CompactMusicPlayer.module.css';
 
 const CompactMusicPlayer = () => {
+  const [score, setScore] = useState(null);
+  const [tracks, setTracks] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLooping, setIsLooping] = useState(false);
+
   const scoreInputRef = useRef(null);
   const parseBtnRef = useRef(null);
   const playBtnRef = useRef(null);
@@ -13,20 +18,11 @@ const CompactMusicPlayer = () => {
   const staticVisualizerRef = useRef(null);
   const debugRef = useRef(null);
 
-  let score;
-  let tracks;
-
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/tone';
-    document.head.appendChild(script);
-
-    script.onload = () => {
-      initializePlayer();
-    };
-
+    initializePlayer();
     return () => {
-      document.head.removeChild(script);
+      Tone.Transport.stop();
+      Tone.Transport.cancel();
     };
   }, []);
 
@@ -141,32 +137,29 @@ const CompactMusicPlayer = () => {
 
   const initializePlayer = () => {
     if (parseBtnRef.current) {
-      parseBtnRef.current.addEventListener('click', () => {
+      parseBtnRef.current.onclick = () => {
         const scoreText = scoreInputRef.current.value;
         try {
-          score = parseScore(scoreText);
-          setupPlayer();
-          playBtnRef.current.disabled = false;
-          stopBtnRef.current.disabled = false;
-          rewindBtnRef.current.disabled = false;
-          loopBtnRef.current.disabled = false;
+          const parsedScore = parseScore(scoreText);
+          setScore(parsedScore);
+          setupPlayer(parsedScore);
         } catch (error) {
           console.error('Error parsing score:', error);
           alert('Invalid score format. Please check your input.');
         }
-      });
+      };
     }
   };
 
-  const setupPlayer = () => {
+  const setupPlayer = (parsedScore) => {
     log('Initializing player with score:');
-    log(JSON.stringify(score, null, 2));
+    log(JSON.stringify(parsedScore, null, 2));
 
     Tone.Transport.cancel();
-    console.log("score.tracks");
-    console.log(score.tracks);
+    console.log("parsedScore.tracks");
+    console.log(parsedScore.tracks);
 
-    tracks = score.tracks.map((track, index) => {
+    const newTracks = parsedScore.tracks.map((track, index) => {
       log(`Initializing track: ${track.name}`);
       log(`Instrument type: ${track.instrument.type}`);
       log(`Instrument options: ${JSON.stringify(track.instrument.options)}`);
@@ -219,45 +212,24 @@ const CompactMusicPlayer = () => {
       };
     });
 
-    Tone.Transport.timeSignature = score.timeSignature;
-    Tone.Transport.bpm.value = score.tempo;
-    log(`Set tempo to ${score.tempo} BPM and time signature to ${score.timeSignature}`);
+    Tone.Transport.timeSignature = parsedScore.timeSignature;
+    Tone.Transport.bpm.value = parsedScore.tempo;
+    log(`Set tempo to ${parsedScore.tempo} BPM and time signature to ${parsedScore.timeSignature}`);
 
-    const totalDuration = calculateTotalDuration();
-    Tone.Transport.loop = false;
+    const totalDuration = calculateTotalDuration(parsedScore);
+    Tone.Transport.loop = isLooping;
     Tone.Transport.loopEnd = totalDuration;
     log(`Total duration: ${totalDuration}`);
 
-    scheduleNotes();
-    drawStaticVisualization();
+    scheduleNotes(newTracks, parsedScore);
+    drawStaticVisualization(newTracks, parsedScore);
 
-    playBtnRef.current.onclick = async () => {
-      log('Play button clicked');
-      await Tone.start();
-      log('Tone.js started');
-      Tone.Transport.start();
-      log('Transport started');
-      drawVisualizer();
-      log('Visualizer started');
-    };
+    setTracks(newTracks);
 
-    stopBtnRef.current.onclick = () => {
-      log('Stop button clicked');
-      Tone.Transport.stop();
-      log('Playback stopped');
-    };
-
-    rewindBtnRef.current.onclick = () => {
-      log('Rewind button clicked');
-      Tone.Transport.position = 0;
-      log('Transport position reset to 0');
-    };
-
-    loopBtnRef.current.onclick = () => {
-      Tone.Transport.loop = !Tone.Transport.loop;
-      loopBtnRef.current.textContent = `Loop: ${Tone.Transport.loop ? 'On' : 'Off'}`;
-      log(`Looping ${Tone.Transport.loop ? 'enabled' : 'disabled'}`);
-    };
+    playBtnRef.current.disabled = false;
+    stopBtnRef.current.disabled = false;
+    rewindBtnRef.current.disabled = false;
+    loopBtnRef.current.disabled = false;
   };
 
   const calculateTotalDuration = () => {
@@ -304,11 +276,13 @@ const CompactMusicPlayer = () => {
           placeholder="Enter your score here..."
         ></textarea>
         <div className={styles['retro-controls']}>
-          <button ref={parseBtnRef} className={styles['retro-button']}>Parse Score</button>
-          <button ref={playBtnRef} className={styles['retro-button']} disabled>Play</button>
-          <button ref={stopBtnRef} className={styles['retro-button']} disabled>Stop</button>
-          <button ref={rewindBtnRef} className={styles['retro-button']} disabled>Rewind</button>
-          <button ref={loopBtnRef} className={styles['retro-button']} disabled>Loop: Off</button>
+          <button ref={parseBtnRef} className={styles['retro-button']} onClick={initializePlayer}>Parse Score</button>
+          <button ref={playBtnRef} className={styles['retro-button']} onClick={handlePlay} disabled={!score || isPlaying}>Play</button>
+          <button ref={stopBtnRef} className={styles['retro-button']} onClick={handleStop} disabled={!score || !isPlaying}>Stop</button>
+          <button ref={rewindBtnRef} className={styles['retro-button']} onClick={handleRewind} disabled={!score}>Rewind</button>
+          <button ref={loopBtnRef} className={styles['retro-button']} onClick={handleLoop} disabled={!score}>
+            Loop: {isLooping ? 'On' : 'Off'}
+          </button>
         </div>
         
         <div className={styles['retro-visualizer-container']}>
@@ -323,3 +297,33 @@ const CompactMusicPlayer = () => {
 };
 
 export default CompactMusicPlayer;
+  const handlePlay = async () => {
+    log('Play button clicked');
+    await Tone.start();
+    log('Tone.js started');
+    Tone.Transport.start();
+    log('Transport started');
+    setIsPlaying(true);
+    drawVisualizer();
+    log('Visualizer started');
+  };
+
+  const handleStop = () => {
+    log('Stop button clicked');
+    Tone.Transport.stop();
+    setIsPlaying(false);
+    log('Playback stopped');
+  };
+
+  const handleRewind = () => {
+    log('Rewind button clicked');
+    Tone.Transport.position = 0;
+    log('Transport position reset to 0');
+  };
+
+  const handleLoop = () => {
+    const newLoopState = !isLooping;
+    setIsLooping(newLoopState);
+    Tone.Transport.loop = newLoopState;
+    log(`Looping ${newLoopState ? 'enabled' : 'disabled'}`);
+  };
