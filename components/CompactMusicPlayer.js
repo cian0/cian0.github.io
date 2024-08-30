@@ -274,36 +274,6 @@ const CompactMusicPlayer = () => {
     };
   }, []);
 
-  return (
-    <div className={styles['retro-container']}>
-      <h1 className={styles['retro-header']}>🎵 Compact Music Player 🎶</h1>
-      
-      <div className={styles['retro-panel']}>
-        <textarea
-          ref={scoreInputRef}
-          rows="10"
-          className={styles['retro-textarea']}
-          placeholder="Enter your score here..."
-        ></textarea>
-        <div className={styles['retro-controls']}>
-          <button ref={parseBtnRef} className={styles['retro-button']} onClick={initializePlayer}>Parse Score</button>
-          <button ref={playBtnRef} className={styles['retro-button']} onClick={handlePlay} disabled={!score || isPlaying}>Play</button>
-          <button ref={stopBtnRef} className={styles['retro-button']} onClick={handleStop} disabled={!score || !isPlaying}>Stop</button>
-          <button ref={rewindBtnRef} className={styles['retro-button']} onClick={handleRewind} disabled={!score}>Rewind</button>
-          <button ref={loopBtnRef} className={styles['retro-button']} onClick={handleLoop} disabled={!score}>
-            Loop: {isLooping ? 'On' : 'Off'}
-          </button>
-        </div>
-        
-        <div className={styles['retro-visualizer-container']}>
-          <canvas ref={visualizerRef} className={styles['retro-visualizer']}></canvas>
-          <canvas ref={staticVisualizerRef} className={styles['retro-static-visualizer']}></canvas>
-        </div>
-      </div>
-      
-      <div ref={debugRef} className={styles['retro-debug']}></div>
-    </div>
-  );
   const handlePlay = async () => {
     log('Play button clicked');
     await Tone.start();
@@ -337,7 +307,32 @@ const CompactMusicPlayer = () => {
 
   return (
     <div className={styles['retro-container']}>
-      {/* ... rest of the JSX ... */}
+      <h1 className={styles['retro-header']}>🎵 Compact Music Player 🎶</h1>
+      
+      <div className={styles['retro-panel']}>
+        <textarea
+          ref={scoreInputRef}
+          rows="10"
+          className={styles['retro-textarea']}
+          placeholder="Enter your score here..."
+        ></textarea>
+        <div className={styles['retro-controls']}>
+          <button ref={parseBtnRef} className={styles['retro-button']} onClick={initializePlayer}>Parse Score</button>
+          <button ref={playBtnRef} className={styles['retro-button']} onClick={handlePlay} disabled={!score || isPlaying}>Play</button>
+          <button ref={stopBtnRef} className={styles['retro-button']} onClick={handleStop} disabled={!score || !isPlaying}>Stop</button>
+          <button ref={rewindBtnRef} className={styles['retro-button']} onClick={handleRewind} disabled={!score}>Rewind</button>
+          <button ref={loopBtnRef} className={styles['retro-button']} onClick={handleLoop} disabled={!score}>
+            Loop: {isLooping ? 'On' : 'Off'}
+          </button>
+        </div>
+        
+        <div className={styles['retro-visualizer-container']}>
+          <canvas ref={visualizerRef} className={styles['retro-visualizer']}></canvas>
+          <canvas ref={staticVisualizerRef} className={styles['retro-static-visualizer']}></canvas>
+        </div>
+      </div>
+      
+      <div ref={debugRef} className={styles['retro-debug']}></div>
     </div>
   );
 };
