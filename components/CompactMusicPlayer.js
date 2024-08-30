@@ -1,135 +1,200 @@
 import React, { useEffect, useRef } from 'react';
+import { Tone } from 'tone';
+import styles from '../styles/CompactMusicPlayer.module.css';
 
 const CompactMusicPlayer = () => {
-  const iframeRef = useRef(null);
+  const scoreInputRef = useRef(null);
+  const parseBtnRef = useRef(null);
+  const playBtnRef = useRef(null);
+  const stopBtnRef = useRef(null);
+  const rewindBtnRef = useRef(null);
+  const loopBtnRef = useRef(null);
+  const visualizerRef = useRef(null);
+  const staticVisualizerRef = useRef(null);
+  const debugRef = useRef(null);
+
+  let score;
+  let tracks;
 
   useEffect(() => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/tone';
-      iframe.contentDocument.head.appendChild(script);
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/tone';
+    document.head.appendChild(script);
 
-      const tailwindScript = document.createElement('script');
-      tailwindScript.src = 'https://cdn.tailwindcss.com';
-      iframe.contentDocument.head.appendChild(tailwindScript);
+    script.onload = () => {
+      initializePlayer();
+    };
 
-      const content = `
-        <div class="container mx-auto px-4 py-8">
-          <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Compact Music Player</h1>
-          
-          <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <textarea id="scoreInput" rows="10" class="w-full p-2 border rounded mb-4" placeholder="Enter your score here..."></textarea>
-            <div id="controls" class="flex flex-wrap justify-center items-center gap-4 mb-6">
-              <button id="parseBtn" class="bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600 transition duration-300">Parse Score</button>
-              <button id="playBtn" disabled class="bg-green-500 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-600 transition duration-300">Play</button>
-              <button id="stopBtn" disabled class="bg-red-500 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-600 transition duration-300">Stop</button>
-              <button id="rewindBtn" disabled class="bg-yellow-500 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-yellow-600 transition duration-300">Rewind</button>
-              <button id="loopBtn" disabled class="bg-purple-500 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 transition duration-300">Loop: Off</button>
-            </div>
-            
-            <div class="relative">
-              <canvas id="visualizer" class="w-full h-64 bg-gray-200 rounded"></canvas>
-              <canvas id="staticVisualizer" class="w-full h-64 bg-transparent rounded absolute top-0 left-0"></canvas>
-            </div>
-          </div>
-          
-          <div id="debug" class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto font-mono text-sm"></div>
-        </div>
-      `;
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
-      iframe.contentDocument.body.innerHTML = content;
-
-      const playerScript = document.createElement('script');
-      playerScript.textContent = `
-        let score;
-        let tracks;
-        const scoreInput = iframe.contentDocument.getElementById('scoreInput');
-        const parseBtn = iframe.contentDocument.getElementById('parseBtn');
-        const playBtn = iframe.contentDocument.getElementById('playBtn');
-        const stopBtn = iframe.contentDocument.getElementById('stopBtn');
-        const rewindBtn = iframe.contentDocument.getElementById('rewindBtn');
-        const loopBtn = iframe.contentDocument.getElementById('loopBtn');
-        const visualizer = iframe.contentDocument.getElementById('visualizer');
-        const staticVisualizer = iframe.contentDocument.getElementById('staticVisualizer');
-        const canvasContext = visualizer.getContext('2d');
-        const staticCanvasContext = staticVisualizer.getContext('2d');
-        const debugElement = iframe.contentDocument.getElementById('debug');
-
-        function log(message) {
-          console.log(message);
-          debugElement.innerHTML += message + '<br>';
-          debugElement.scrollTop = debugElement.scrollHeight;
-        }
-
-        parseBtn.addEventListener('click', function() {
-          const scoreText = scoreInput.value;
-          try {
-            score = parseScore(scoreText);
-            initializePlayer();
-            playBtn.disabled = false;
-            stopBtn.disabled = false;
-            rewindBtn.disabled = false;
-            loopBtn.disabled = false;
-          } catch (error) {
-            console.error('Error parsing score:', error);
-            alert('Invalid score format. Please check your input.');
-          }
-        });
-
-        function parseScore(scoreText) {
-          // Implementation of parseScore function
-        }
-
-        function parseInstrument(instrumentInfo) {
-          // Implementation of parseInstrument function
-        }
-
-        function parseEffect(effectInfo) {
-          // Implementation of parseEffect function
-        }
-
-        function initializePlayer() {
-          // Implementation of initializePlayer function
-        }
-
-        function calculateTotalDuration() {
-          // Implementation of calculateTotalDuration function
-        }
-
-        function scheduleNotes() {
-          // Implementation of scheduleNotes function
-        }
-
-        function resizeCanvas() {
-          // Implementation of resizeCanvas function
-        }
-
-        function getRandomColor() {
-          return \`hsl(\${Math.random() * 360}, 70%, 60%)\`;
-        }
-
-        function drawVisualizer() {
-          // Implementation of drawVisualizer function
-        }
-
-        function drawStaticVisualization() {
-          // Implementation of drawStaticVisualization function
-        }
-
-        resizeCanvas();
-        iframe.contentWindow.addEventListener('resize', resizeCanvas);
-      `;
-      iframe.contentDocument.body.appendChild(playerScript);
+  const log = (message) => {
+    console.log(message);
+    if (debugRef.current) {
+      debugRef.current.innerHTML += message + '<br>';
+      debugRef.current.scrollTop = debugRef.current.scrollHeight;
     }
+  };
+
+  const parseScore = (scoreText) => {
+    log("Starting to parse score");
+    const lines = scoreText.trim().split('\n');
+    log(`Score split into ${lines.length} lines`);
+    const [tempo, timeSignature] = lines[0].split(';');
+    log(`Parsed tempo: ${tempo}, time signature: ${timeSignature}`);
+    const tracks = [];
+
+    // ... (rest of the parseScore function)
+
+    log(`Finished parsing score. Total tracks: ${tracks.length}`);
+    return {
+      tempo: parseInt(tempo),
+      timeSignature: timeSignature.split('/').map(Number),
+      tracks
+    };
+  };
+
+  const parseInstrument = (instrumentInfo) => {
+    // ... (implementation of parseInstrument function)
+  };
+
+  const parseEffect = (effectInfo) => {
+    // ... (implementation of parseEffect function)
+  };
+
+  const initializePlayer = () => {
+    if (parseBtnRef.current) {
+      parseBtnRef.current.addEventListener('click', () => {
+        const scoreText = scoreInputRef.current.value;
+        try {
+          score = parseScore(scoreText);
+          setupPlayer();
+          playBtnRef.current.disabled = false;
+          stopBtnRef.current.disabled = false;
+          rewindBtnRef.current.disabled = false;
+          loopBtnRef.current.disabled = false;
+        } catch (error) {
+          console.error('Error parsing score:', error);
+          alert('Invalid score format. Please check your input.');
+        }
+      });
+    }
+  };
+
+  const setupPlayer = () => {
+    log('Initializing player with score:');
+    log(JSON.stringify(score, null, 2));
+
+    Tone.Transport.cancel();
+    console.log("score.tracks");
+    console.log(score.tracks);
+
+    tracks = score.tracks.map((track, index) => {
+      // ... (rest of the setupPlayer function)
+    });
+
+    Tone.Transport.timeSignature = score.timeSignature;
+    Tone.Transport.bpm.value = score.tempo;
+    log(`Set tempo to ${score.tempo} BPM and time signature to ${score.timeSignature}`);
+
+    const totalDuration = calculateTotalDuration();
+    Tone.Transport.loop = false;
+    Tone.Transport.loopEnd = totalDuration;
+    log(`Total duration: ${totalDuration}`);
+
+    scheduleNotes();
+    drawStaticVisualization();
+
+    playBtnRef.current.onclick = async () => {
+      log('Play button clicked');
+      await Tone.start();
+      log('Tone.js started');
+      Tone.Transport.start();
+      log('Transport started');
+      drawVisualizer();
+      log('Visualizer started');
+    };
+
+    stopBtnRef.current.onclick = () => {
+      log('Stop button clicked');
+      Tone.Transport.stop();
+      log('Playback stopped');
+    };
+
+    rewindBtnRef.current.onclick = () => {
+      log('Rewind button clicked');
+      Tone.Transport.position = 0;
+      log('Transport position reset to 0');
+    };
+
+    loopBtnRef.current.onclick = () => {
+      Tone.Transport.loop = !Tone.Transport.loop;
+      loopBtnRef.current.textContent = `Loop: ${Tone.Transport.loop ? 'On' : 'Off'}`;
+      log(`Looping ${Tone.Transport.loop ? 'enabled' : 'disabled'}`);
+    };
+  };
+
+  const calculateTotalDuration = () => {
+    // ... (implementation of calculateTotalDuration function)
+  };
+
+  const scheduleNotes = () => {
+    // ... (implementation of scheduleNotes function)
+  };
+
+  const resizeCanvas = () => {
+    // ... (implementation of resizeCanvas function)
+  };
+
+  const getRandomColor = () => {
+    return `hsl(${Math.random() * 360}, 70%, 60%)`;
+  };
+
+  const drawVisualizer = () => {
+    // ... (implementation of drawVisualizer function)
+  };
+
+  const drawStaticVisualization = () => {
+    // ... (implementation of drawStaticVisualization function)
+  };
+
+  useEffect(() => {
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
   }, []);
 
   return (
-    <iframe
-      ref={iframeRef}
-      title="Compact Music Player"
-      className="w-full h-[800px] border-none"
-    />
+    <div className={styles['retro-container']}>
+      <h1 className={styles['retro-header']}>🎵 Compact Music Player 🎶</h1>
+      
+      <div className={styles['retro-panel']}>
+        <textarea
+          ref={scoreInputRef}
+          rows="10"
+          className={styles['retro-textarea']}
+          placeholder="Enter your score here..."
+        ></textarea>
+        <div className={styles['retro-controls']}>
+          <button ref={parseBtnRef} className={styles['retro-button']}>Parse Score</button>
+          <button ref={playBtnRef} className={styles['retro-button']} disabled>Play</button>
+          <button ref={stopBtnRef} className={styles['retro-button']} disabled>Stop</button>
+          <button ref={rewindBtnRef} className={styles['retro-button']} disabled>Rewind</button>
+          <button ref={loopBtnRef} className={styles['retro-button']} disabled>Loop: Off</button>
+        </div>
+        
+        <div className={styles['retro-visualizer-container']}>
+          <canvas ref={visualizerRef} className={styles['retro-visualizer']}></canvas>
+          <canvas ref={staticVisualizerRef} className={styles['retro-static-visualizer']}></canvas>
+        </div>
+      </div>
+      
+      <div ref={debugRef} className={styles['retro-debug']}></div>
+    </div>
   );
 };
 
