@@ -41,7 +41,7 @@ const CompactMusicPlayer = () => {
       iframe.contentDocument.body.innerHTML = content;
 
       const playerScript = document.createElement('script');
-      playerScript.textContent = \`
+      playerScript.textContent = `
         let score;
         let tracks;
         const scoreInput = iframe.contentDocument.getElementById('scoreInput');
@@ -119,7 +119,7 @@ const CompactMusicPlayer = () => {
 
         resizeCanvas();
         iframe.contentWindow.addEventListener('resize', resizeCanvas);
-      \`;
+      `;
       iframe.contentDocument.body.appendChild(playerScript);
     }
   }, []);
