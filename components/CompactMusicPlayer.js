@@ -57,7 +57,54 @@ const CompactMusicPlayer = () => {
   };
 
   const parseInstrument = (instrumentInfo) => {
-    // ... (implementation of parseInstrument function)
+    log(`Parsing instrument: ${instrumentInfo}`);
+    const [type, ...optionsParts] = instrumentInfo.split('{');
+    log(`Instrument type: ${type.trim()}`);
+    const options = optionsParts.join('{').slice(0, -1);
+    log(`Instrument options string: ${options}`);
+    
+    if (type.trim() === 'Sampler') {
+      log("Parsing Sampler instrument");
+      const sampleMap = {};
+      options.split('|').forEach(sample => {
+        const [note, url] = sample.split(':');
+        sampleMap[note] = url;
+        log(`Added sample mapping: ${note} -> ${url}`);
+      });
+      log(`Completed Sampler parsing: ${JSON.stringify(sampleMap)}`);
+      return ['Sampler', sampleMap];
+    }
+    
+    if (!options) {
+      log("No options provided for instrument");
+      return [type, {}];
+    }
+
+    const parsedOptions = {};
+    options.split(';').forEach(option => {
+      log(`Parsing option: ${option}`);
+      if (option.startsWith('env:')) {
+        const [attack, decay, sustain, release] = option.substring(4).split(',').map(Number);
+        parsedOptions.envelope = { attack, decay, sustain, release };
+        log(`Parsed envelope: ${JSON.stringify(parsedOptions.envelope)}`);
+      } else if (option.startsWith('mod:')) {
+        const [modType, ...modOptions] = option.substring(4).split(',');
+        parsedOptions.modulation = { type: modType };
+        log(`Parsed modulation type: ${modType}`);
+        if (modOptions.length === 4) {
+          const [attack, decay, sustain, release] = modOptions.map(Number);
+          parsedOptions.modulationEnvelope = { attack, decay, sustain, release };
+          log(`Parsed modulation envelope: ${JSON.stringify(parsedOptions.modulationEnvelope)}`);
+        }
+      } else {
+        const [key, value] = option.split(':');
+        parsedOptions[key] = isNaN(value) ? value : Number(value);
+        log(`Parsed option ${key}: ${parsedOptions[key]}`);
+      }
+    });
+
+    log(`Completed instrument parsing: ${JSON.stringify(parsedOptions)}`);
+    return [type.trim(), parsedOptions];
   };
 
   const parseEffect = (effectInfo) => {
@@ -92,7 +139,56 @@ const CompactMusicPlayer = () => {
     console.log(score.tracks);
 
     tracks = score.tracks.map((track, index) => {
-      // ... (rest of the setupPlayer function)
+      log(`Initializing track: ${track.name}`);
+      log(`Instrument type: ${track.instrument.type}`);
+      log(`Instrument options: ${JSON.stringify(track.instrument.options)}`);
+      const instruments = [];
+      const createInstrument = () => {
+        try {
+          log(`Creating instrument for track: ${track.name}`);
+          log(`Instrument type: ${track.instrument.type}`);
+          log(`Instrument options: ${JSON.stringify(track.instrument.options)}`);
+          let instrument;
+          if (track.instrument.type === 'Sampler') {
+            log("Creating Sampler instrument");
+            instrument = new Tone.Sampler({
+              urls: track.instrument.options,
+              baseUrl: "" // Assuming the URLs are relative to the current page
+            }).toDestination();
+          } else {
+            log(`Creating ${track.instrument.type} instrument`);
+            instrument = new Tone[track.instrument.type](track.instrument.options).toDestination();
+          }
+          instrument.volume.value = track.volume;
+          log(`Set instrument volume to ${track.volume}`);
+
+          if (track.effects && track.effects.length > 0) {
+            log(`Applying ${track.effects.length} effects to the instrument`);
+            const effectsChain = track.effects.map(effect => {
+              log(`Creating effect: ${effect.type}`);
+              return new Tone[effect.type](effect.options);
+            });
+            instrument.chain(...effectsChain, Tone.Destination);
+          }
+          log("Instrument created successfully");
+          return instrument;
+        } catch (error) {
+          console.error(`Error creating instrument for track ${track.name}:`, error);
+          log(`Failed to create instrument for track ${track.name}. Error: ${error.message}`);
+          log("Using default Synth as fallback");
+          return new Tone.Synth().toDestination();
+        }
+      };
+
+      instruments.push(createInstrument());
+
+      return { 
+        instruments, 
+        name: track.name, 
+        createInstrument,
+        color: getRandomColor(),
+        index
+      };
     });
 
     Tone.Transport.timeSignature = score.timeSignature;
