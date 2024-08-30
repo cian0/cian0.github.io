@@ -96,6 +96,34 @@ This example defines a composition with a tempo of 140 BPM in 4/4 time, containi
 
 6. **Time Signatures**: The player supports various time signatures like 4/4, 3/4, 6/8, etc.
 
+## Sampler Instruments
+
+When using a Sampler instrument, you can specify individual audio samples for different notes. This allows for more realistic instrument sounds by using recorded samples instead of synthesized tones.
+
+### Sampler Format
+
+```
+T:<Track Name>;Sampler{<Note1>:<SampleURL1>|<Note2>:<SampleURL2>|...};[Effects];[Volume]
+```
+
+- `<Note>`: Specify the note in scientific notation (e.g., C4, F#5). Use sharp (#) notation for accidentals, not flat (b).
+- `<SampleURL>`: The URL or path to the audio sample file for the corresponding note.
+
+### Example
+
+```
+T:Piano;Sampler{A1:/audio/A1.mp3|A2:/audio/A2.mp3|A#1:/audio/As1.mp3|B1:/audio/B1.mp3|C2:/audio/C2.mp3|C#2:/audio/Cs2.mp3|D2:/audio/D2.mp3|D#2:/audio/Ds2.mp3|E2:/audio/E2.mp3|F2:/audio/F2.mp3|F#2:/audio/Fs2.mp3|G2:/audio/G2.mp3|G#1:/audio/Gs1.mp3};Reverb{0.5,2};-2
+```
+
+### Notes on Sampler Usage
+
+1. Use sharp (#) notation for accidentals in note names (e.g., C#2 instead of Db2).
+2. Ensure that the sample URLs are correct and the audio files are accessible.
+3. You don't need to provide samples for every possible note. The Sampler will automatically pitch-shift the nearest sample for notes without a specific sample defined.
+4. The more samples you provide, especially for different octaves, the more realistic the instrument will sound.
+5. Sampler instruments can be resource-intensive, so use them judiciously, especially for complex compositions or on devices with limited processing power.
+
+
 ## Extending a Composition
 
 To add new sections to an existing composition, follow these steps:
