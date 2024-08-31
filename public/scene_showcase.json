@@ -1,0 +1,245 @@
+{                                                                                                                                              
+     "elements": {                                                                                                                              
+         "background": {                                                                                                                        
+             "class": "background",                                                                                                             
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "top": "0",                                                                                                                    
+                 "left": "0",                                                                                                                   
+                 "width": "100%",                                                                                                               
+                 "height": "100%",                                                                                                              
+                 "z-index": "1"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene1", "scene2", "scene3"]                                                                                           
+         },                                                                                                                                     
+         "sun": {                                                                                                                               
+             "class": "celestial",                                                                                                              
+             "content": "☀️",                                                                                                                   
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "font-size": "80px",                                                                                                           
+                 "top": "10%",                                                                                                                  
+                 "left": "10%",                                                                                                                 
+                 "z-index": "2"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene1"]                                                                                                               
+         },                                                                                                                                     
+         "moon": {                                                                                                                              
+             "class": "celestial",                                                                                                              
+             "content": "🌙",                                                                                                                   
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "font-size": "80px",                                                                                                           
+                 "top": "10%",                                                                                                                  
+                 "right": "10%",                                                                                                                
+                 "z-index": "2"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene2"]                                                                                                               
+         },                                                                                                                                     
+         "character": {                                                                                                                         
+             "class": "character",                                                                                                              
+             "content": "🧑",                                                                                                                   
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "font-size": "60px",                                                                                                           
+                 "bottom": "25%",                                                                                                               
+                 "left": "50%",                                                                                                                 
+                 "transform": "translateX(-50%)",                                                                                               
+                 "z-index": "4"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene1", "scene2", "scene3"]                                                                                           
+         },                                                                                                                                     
+         "tree": {                                                                                                                              
+             "class": "scenery",                                                                                                                
+             "content": "🌳",                                                                                                                   
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "font-size": "100px",                                                                                                          
+                 "bottom": "30%",                                                                                                               
+                 "left": "15%",                                                                                                                 
+                 "z-index": "3"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene1", "scene2"]                                                                                                     
+         },                                                                                                                                     
+         "house": {                                                                                                                             
+             "class": "building",                                                                                                               
+             "content": "🏠",                                                                                                                   
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "font-size": "80px",                                                                                                           
+                 "bottom": "35%",                                                                                                               
+                 "right": "20%",                                                                                                                
+                 "z-index": "3"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene1", "scene2"]                                                                                                     
+         },                                                                                                                                     
+         "spaceship": {                                                                                                                         
+             "class": "vehicle",                                                                                                                
+             "content": "🚀",                                                                                                                   
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "font-size": "80px",                                                                                                           
+                 "top": "50%",                                                                                                                  
+                 "left": "50%",                                                                                                                 
+                 "transform": "translate(-50%, -50%)",                                                                                          
+                 "z-index": "5",                                                                                                                
+                 "opacity": "0"                                                                                                                 
+             },                                                                                                                                 
+             "scenes": ["scene3"]                                                                                                               
+         },                                                                                                                                     
+         "transition": {                                                                                                                        
+             "class": "overlay",                                                                                                                
+             "style": {                                                                                                                         
+                 "position": "absolute",                                                                                                        
+                 "top": "0",                                                                                                                    
+                 "left": "0",                                                                                                                   
+                 "width": "100%",                                                                                                               
+                 "height": "100%",                                                                                                              
+                 "background-color": "#000000",                                                                                                 
+                 "opacity": "0",                                                                                                                
+                 "z-index": "10"                                                                                                                
+             },                                                                                                                                 
+             "scenes": ["scene1", "scene2", "scene3"]                                                                                           
+         }                                                                                                                                      
+     },                                                                                                                                         
+     "steps": [                                                                                                                                 
+         {                                                                                                                                      
+             "type": "changeScene",                                                                                                             
+             "sceneName": "scene1"                                                                                                              
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "set",                                                                                                                     
+             "target": "background",                                                                                                            
+             "props": {                                                                                                                         
+                 "style": {                                                                                                                     
+                     "background": "linear-gradient(to bottom, #87CEEB 60%, #228B22 60%)"                                                       
+                 }                                                                                                                              
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "dialog",                                                                                                                  
+             "target": "character",                                                                                                             
+             "text": "What a beautiful day! 😊",                                                                                                
+             "duration": 2                                                                                                                      
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "character",                                                                                                             
+             "props": {                                                                                                                         
+                 "duration": 2,                                                                                                                 
+                 "x": "100px",                                                                                                                  
+                 "ease": "power1.inOut"                                                                                                         
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "transition",                                                                                                            
+             "props": {                                                                                                                         
+                 "duration": 1,                                                                                                                 
+                 "opacity": 1                                                                                                                   
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "changeScene",                                                                                                             
+             "sceneName": "scene2"                                                                                                              
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "set",                                                                                                                     
+             "target": "background",                                                                                                            
+             "props": {                                                                                                                         
+                 "style": {                                                                                                                     
+                     "background": "linear-gradient(to bottom, #191970 60%, #2F4F4F 60%)"                                                       
+                 }                                                                                                                              
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "transition",                                                                                                            
+             "props": {                                                                                                                         
+                 "duration": 1,                                                                                                                 
+                 "opacity": 0                                                                                                                   
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "dialog",                                                                                                                  
+             "target": "character",                                                                                                             
+             "text": "Night has fallen... 🌙",                                                                                                  
+             "duration": 2                                                                                                                      
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "character",                                                                                                             
+             "props": {                                                                                                                         
+                 "duration": 2,                                                                                                                 
+                 "x": "-100px",                                                                                                                 
+                 "ease": "power1.inOut"                                                                                                         
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "transition",                                                                                                            
+             "props": {                                                                                                                         
+                 "duration": 1,                                                                                                                 
+                 "opacity": 1                                                                                                                   
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "changeScene",                                                                                                             
+             "sceneName": "scene3"                                                                                                              
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "set",                                                                                                                     
+             "target": "background",                                                                                                            
+             "props": {                                                                                                                         
+                 "style": {                                                                                                                     
+                     "background": "linear-gradient(to bottom, #000000 60%, #4B0082 60%)"                                                       
+                 }                                                                                                                              
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "transition",                                                                                                            
+             "props": {                                                                                                                         
+                 "duration": 1,                                                                                                                 
+                 "opacity": 0                                                                                                                   
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "set",                                                                                                                     
+             "target": "spaceship",                                                                                                             
+             "props": {                                                                                                                         
+                 "opacity": 1                                                                                                                   
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "dialog",                                                                                                                  
+             "target": "character",                                                                                                             
+             "text": "Wow, a spaceship! 🚀",                                                                                                    
+             "duration": 2                                                                                                                      
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "spaceship",                                                                                                             
+             "props": {                                                                                                                         
+                 "duration": 3,                                                                                                                 
+                 "y": "-200px",                                                                                                                 
+                 "ease": "power1.inOut"                                                                                                         
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "to",                                                                                                                      
+             "target": "character",                                                                                                             
+             "props": {                                                                                                                         
+                 "duration": 2,                                                                                                                 
+                 "y": "-100px",                                                                                                                 
+                 "ease": "power1.in"                                                                                                            
+             }                                                                                                                                  
+         },                                                                                                                                     
+         {                                                                                                                                      
+             "type": "dialog",                                                                                                                  
+             "target": "character",                                                                                                             
+             "text": "Let's go on an adventure! 🌟",                                                                                            
+             "duration": 2                                                                                                                      
+         }                                                                                                                                      
+     ]                                                                                                                                          
+ }             
