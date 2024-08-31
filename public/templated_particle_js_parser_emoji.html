@@ -247,6 +247,8 @@
                 this.elements.forEach(element => {
                     if (element.scenes.includes(sceneName)) {
                         element.domElement.style.display = '';
+                        // Reset any transformations
+                        element.domElement.style.transform = element.domElement.style.transform.replace(/translate\([^)]*\)/, '');
                     }
                 });
 
