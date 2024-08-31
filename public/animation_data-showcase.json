@@ -140,6 +140,49 @@
                 "opacity": "0",
                 "z-index": "10"
             }
+        },
+        "futureBoy": {
+            "class": "character",
+            "content": "🏃",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "bottom": "25%",
+                "left": "50%",
+                "transform": "translateX(-50%)",
+                "z-index": "4",
+                "opacity": "0"
+            }
+        },
+        "explosion1": {
+            "class": "effect",
+            "content": "💥",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "opacity": "0",
+                "z-index": "3"
+            }
+        },
+        "explosion2": {
+            "class": "effect",
+            "content": "💥",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "opacity": "0",
+                "z-index": "3"
+            }
+        },
+        "explosion3": {
+            "class": "effect",
+            "content": "💥",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "opacity": "0",
+                "z-index": "3"
+            }
         }
     },
     "steps": [
@@ -439,6 +482,159 @@
                 "y": -30,
                 "repeat": 2,
                 "yoyo": true
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #FF6B6B 60%, #4A4A4A 60%)"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "girl",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "boy",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "dog",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "house",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "futureBoy",
+            "props": {
+                "opacity": 1,
+                "left": "10%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "futureBoy",
+            "text": "The future is not what we expected... 😰",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "futureBoy",
+            "props": {
+                "duration": 2,
+                "left": "80%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion1",
+            "props": {
+                "opacity": 1,
+                "left": "20%",
+                "bottom": "30%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion1",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion2",
+            "props": {
+                "opacity": 1,
+                "left": "50%",
+                "bottom": "40%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion2",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "futureBoy",
+            "props": {
+                "duration": 1,
+                "left": "20%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion3",
+            "props": {
+                "opacity": 1,
+                "left": "70%",
+                "bottom": "35%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion3",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "futureBoy",
+            "text": "We must change our past to save our future! 🕒",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
             }
         }
     ]
