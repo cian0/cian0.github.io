@@ -324,7 +324,7 @@
             "target": "background",
             "props": {
                 "style": {
-                    "background": "linear-gradient(to bottom, #4a4a4a 60%, #8B4513 60%)"
+                    "background": "linear-gradient(to bottom, #F0E68C 60%, #8B4513 60%)"
                 }
             }
         },
@@ -358,6 +358,18 @@
                     "fontSize": "120px",
                     "bottom": "30%",
                     "right": "10%"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "content": "🏞️",
+                "style": {
+                    "fontSize": "300px",
+                    "opacity": "0.3",
+                    "zIndex": "1"
                 }
             }
         },
