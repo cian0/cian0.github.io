@@ -36,6 +36,7 @@
     "simple-peer": "^9.11.1",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "tone": "^15.1.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
