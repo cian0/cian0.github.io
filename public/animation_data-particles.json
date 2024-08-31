@@ -25,7 +25,8 @@
               "size": 20,
               "opacity": 0.7,
               "duration": 3,
-              "durationVariation": 1
+              "durationVariation": 1,
+              "movementType": "rain"
           }
       },
       "ground":
