@@ -146,6 +146,7 @@
                     particle.style.opacity = this.options.opacity;
                     particle.style.position = 'absolute';
                     this.particlesContainer.appendChild(particle);
+                    console.log(`Created particle: ${this.options.emoji} at (${particle.style.left}, ${particle.style.top})`);
                     return particle;
                 }
 
@@ -155,6 +156,7 @@
                     const centerY = this.options.centerY || this.container.clientHeight / 2;
 
                     gsap.set(particle, { x: centerX, y: centerY });
+                    console.log(`Particle initial position: (${centerX}, ${centerY})`);
 
                     let animationProps;
 
@@ -170,6 +172,7 @@
                                 opacity: 0,
                                 ease: "power2.out"
                             };
+                            console.log(`Explosion animation: to (${animationProps.x}, ${animationProps.y})`);
                             break;
                         case 'rain':
                             animationProps = {
@@ -178,6 +181,7 @@
                                 x: `+=${(Math.random() - 0.5) * 100}`,
                                 ease: "power1.in"
                             };
+                            console.log(`Rain animation: to y=${animationProps.y}, x offset=${animationProps.x}`);
                             break;
                         case 'projectile':
                             const projectileAngle = Math.random() * Math.PI / 4 + Math.PI / 4; // 45 to 90 degrees
@@ -189,6 +193,7 @@
                                 y: centerY - Math.sin(projectileAngle) * projectileDistance + 0.5 * gravity * Math.pow(duration, 2),
                                 ease: "power1.in"
                             };
+                            console.log(`Projectile animation: to (${animationProps.x}, ${animationProps.y})`);
                             break;
                         case 'beam':
                             animationProps = {
@@ -198,6 +203,7 @@
                                 opacity: 0,
                                 ease: "power1.in"
                             };
+                            console.log(`Beam animation: to y=${animationProps.y}`);
                             break;
                         default:
                             animationProps = {
@@ -213,6 +219,7 @@
                                 rotation: (Math.random() - 0.5) * 360,
                                 ease: "power1.inOut"
                             };
+                            console.log(`Default animation: path=${JSON.stringify(animationProps.motionPath.path)}`);
                     }
 
                     animationProps.onComplete = () => {
@@ -225,6 +232,7 @@
                 removeParticle(particle) {
                     if (this.particlesContainer && this.particlesContainer.contains(particle)) {
                         this.particlesContainer.removeChild(particle);
+                        console.log(`Removed particle: ${particle.textContent}`);
                     }
                 }
 
@@ -239,6 +247,9 @@
                         const rect = targetElement.getBoundingClientRect();
                         this.options.centerX = rect.left + rect.width / 2;
                         this.options.centerY = rect.top + rect.height / 2;
+                        console.log(`Target element position: (${this.options.centerX}, ${this.options.centerY})`);
+                    } else {
+                        console.log(`Target element not found: ${this.options.targetSelector}`);
                     }
                     this.animateParticles();
                 }
@@ -266,6 +277,7 @@
                             this.particlesContainer.removeChild(this.particlesContainer.firstChild);
                         }
                     }
+                    console.log(`Stopped particle system: ${this.id}`);
                 }
             }
         class SceneManager {
@@ -352,19 +364,22 @@
                             domElement: element,
                             scenes: data.scenes || []
                         });
+                        console.log(`Created element: ${id}, scenes: ${data.scenes}, position: (${element.style.left}, ${element.style.top})`);
                     }
                 }
             }
 
             changeScene(sceneName) {
+                console.log(`Changing scene to: ${sceneName}`);
                 if (this.currentScene) {
                     // Hide all elements from the current scene
                     this.elements.forEach(element => {
                         if (element.scenes.includes(this.currentScene)) {
                             element.domElement.style.display = 'none';
+                            console.log(`Hiding element: ${element.id}`);
                         }
                     });
-    
+
                     // Stop all particle systems
                     this.stopAllParticleSystems();
                 }
@@ -373,6 +388,7 @@
                 this.elements.forEach(element => {
                     if (element.scenes.includes(sceneName)) {
                         element.domElement.style.display = '';
+                        console.log(`Showing element: ${element.id}, position: (${element.domElement.style.left}, ${element.domElement.style.top})`);
                     }
                 });
 
@@ -391,6 +407,7 @@
                     if (props.style) {
                         Object.assign(element.domElement.style, props.style);
                     }
+                    console.log(`Updated element: ${id}, new position: (${element.domElement.style.left}, ${element.domElement.style.top})`);
                 }
             }
 
@@ -398,6 +415,7 @@
                 for (const [id, data] of Object.entries(this.animationData.elements)) {
                     if (data.type === 'particle') {
                         this.particleSystems[id] = new EmojiParticleSystem(this.container, data.options, id);
+                        console.log(`Created particle system: ${id}`);
                     }
                 }
             }
@@ -408,9 +426,13 @@
                     switch (step.type) {
                         case 'set':
                             if (step.target && this.elements.find(el => el.id === step.target)) {
-                                this.timeline.call(() => this.updateElement(step.target, step.props));
+                                this.timeline.call(() => {
+                                    this.updateElement(step.target, step.props);
+                                    console.log(`Set animation: ${step.target}, props: ${JSON.stringify(step.props)}`);
+                                });
                             } else if (step.target === 'parent' || step.target === 'container') {
                                 this.timeline.set(this.container, step.props);
+                                console.log(`Set animation for container: ${JSON.stringify(step.props)}`);
                             } else if (step.target) {
                                 console.warn(`Element "${step.target}" not found for set animation. Skipping this step.`);
                             } else {
@@ -424,13 +446,23 @@
                                     // Handle SVG elements differently
                                     this.timeline.to(element.domElement, {
                                         ...step.props,
-                                        attr: step.props // Apply properties as attributes for SVG
+                                        attr: step.props, // Apply properties as attributes for SVG
+                                        onStart: () => console.log(`Starting SVG animation: ${step.target}, props: ${JSON.stringify(step.props)}`),
+                                        onComplete: () => console.log(`Completed SVG animation: ${step.target}`)
                                     });
                                 } else {
-                                    this.timeline.to(element.domElement, step.props);
+                                    this.timeline.to(element.domElement, {
+                                        ...step.props,
+                                        onStart: () => console.log(`Starting animation: ${step.target}, props: ${JSON.stringify(step.props)}`),
+                                        onComplete: () => console.log(`Completed animation: ${step.target}`)
+                                    });
                                 }
                             } else if (step.target === 'parent' || step.target === 'container') {
-                                this.timeline.to(this.container, step.props);
+                                this.timeline.to(this.container, {
+                                    ...step.props,
+                                    onStart: () => console.log(`Starting container animation, props: ${JSON.stringify(step.props)}`),
+                                    onComplete: () => console.log(`Completed container animation`)
+                                });
                             } else if (step.target) {
                                 console.warn(`Element "${step.target}" not found for to animation. Skipping this step.`);
                             } else {
@@ -442,7 +474,10 @@
                             break;
                         case 'function':
                             if (typeof this[step.function] === 'function') {
-                                this.timeline.call(() => this[step.function](...(step.args || [])));
+                                this.timeline.call(() => {
+                                    console.log(`Calling function: ${step.function}`);
+                                    this[step.function](...(step.args || []));
+                                });
                             } else {
                                 console.warn(`Function "${step.function}" not found`);
                             }
@@ -453,11 +488,17 @@
                                     const targetElement = this.elements.find(el => el.id === step.options.targetElement);
                                     if (targetElement) {
                                         this.particleSystems[step.target].options.targetSelector = `#${targetElement.id}`;
+                                        console.log(`Starting particle system: ${step.target}, target: ${targetElement.id}`);
+                                    } else {
+                                        console.log(`Starting particle system: ${step.target}, no target element`);
                                     }
                                     this.particleSystems[step.target].start();
                                     this.currentParticleSystems.push(this.particleSystems[step.target]);
                                 });
-                                this.timeline.call(() => this.particleSystems[step.target].stop(), null, `+=${step.duration || this.particleSystems[step.target].options.duration}`);
+                                this.timeline.call(() => {
+                                    console.log(`Stopping particle system: ${step.target}`);
+                                    this.particleSystems[step.target].stop();
+                                }, null, `+=${step.duration || this.particleSystems[step.target].options.duration}`);
                             } else {
                                 console.warn(`Particle system "${step.target}" not found`);
                             }
@@ -465,6 +506,7 @@
                         case 'stopParticles':
                             if (this.particleSystems[step.target]) {
                                 this.timeline.call(() => {
+                                    console.log(`Manually stopping particle system: ${step.target}`);
                                     this.particleSystems[step.target].stop();
                                     const index = this.currentParticleSystems.indexOf(this.particleSystems[step.target]);
                                     if (index > -1) {
