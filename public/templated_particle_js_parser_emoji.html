@@ -128,6 +128,7 @@
                     this.id = id;
                     this.particles = [];
                     this.isRunning = false;
+                    this.animationTimeout = null;
                 }
 
                 create() {
@@ -153,11 +154,11 @@
                     const duration = this.options.duration + (Math.random() - 0.5) * this.options.durationVariation;
                     const startX = Math.random() * this.container.clientWidth;
                     const startY = this.options.movementType === 'rain' ? -50 : Math.random() * this.container.clientHeight;
-                    
+        
                     gsap.set(particle, { x: startX, y: startY });
-                    
+        
                     let animationProps;
-                    
+        
                     switch (this.options.movementType) {
                         case 'rain':
                             animationProps = {
@@ -193,15 +194,18 @@
                                 ease: "power1.inOut"
                             };
                     }
-                    
+        
                     animationProps.onComplete = () => {
-                        this.particlesContainer.removeChild(particle);
-                        if (this.isRunning) {
-                            this.animateParticle(this.createParticle());
-                        }
+                        this.removeParticle(particle);
                     };
-                    
+        
                     gsap.to(particle, animationProps);
+                }
+
+                removeParticle(particle) {
+                    if (this.particlesContainer && this.particlesContainer.contains(particle)) {
+                        this.particlesContainer.removeChild(particle);
+                    }
                 }
 
                 start() {
@@ -209,21 +213,31 @@
                         this.create();
                     }
                     this.isRunning = true;
-                    for (let i = 0; i < this.options.number; i++) {
-                        setTimeout(() => {
-                            if (this.isRunning) {
-                                this.animateParticle(this.createParticle());
-                            }
-                        }, i * (this.options.duration / this.options.number));
+                    this.animateParticles();
+                }
+
+                animateParticles() {
+                    if (!this.isRunning) return;
+
+                    const particle = this.createParticle();
+                    this.animateParticle(particle);
+
+                    if (this.particles.length < this.options.number) {
+                        this.animationTimeout = setTimeout(() => this.animateParticles(), this.options.duration / this.options.number);
                     }
                 }
 
                 stop() {
                     this.isRunning = false;
+                    if (this.animationTimeout) {
+                        clearTimeout(this.animationTimeout);
+                        this.animationTimeout = null;
+                    }
                     if (this.particlesContainer) {
                         gsap.killTweensOf(this.particlesContainer.children);
-                        this.particlesContainer.remove();
-                        this.particlesContainer = null;
+                        while (this.particlesContainer.firstChild) {
+                            this.particlesContainer.removeChild(this.particlesContainer.firstChild);
+                        }
                     }
                 }
             }
@@ -281,6 +295,11 @@
                 }, 100);
             }
 
+            stopAllParticleSystems() {
+                Object.values(this.particleSystems).forEach(system => system.stop());
+                this.currentParticleSystems = [];
+            }
+
             createElements() {
                 this.container.innerHTML = ''; // Clear previous elements
                 for (const [id, data] of Object.entries(this.animationData.elements)) {
@@ -315,12 +334,9 @@
                             element.domElement.style.display = 'none';
                         }
                     });
-            
-                    // Stop all current particle systems
-                    this.currentParticleSystems.forEach(particleSystem => {
-                        particleSystem.stop();
-                    });
-                    this.currentParticleSystems = [];
+    
+                    // Stop all particle systems
+                    this.stopAllParticleSystems();
                 }
 
                 // Show elements for the new scene
@@ -403,14 +419,24 @@
                             break;
                         case 'startParticles':
                             if (this.particleSystems[step.target]) {
-                                this.timeline.call(() => this.particleSystems[step.target].start());
+                                this.timeline.call(() => {
+                                    this.particleSystems[step.target].start();
+                                    this.currentParticleSystems.push(this.particleSystems[step.target]);
+                                });
+                                this.timeline.call(() => this.particleSystems[step.target].stop(), null, `+=${step.duration || this.particleSystems[step.target].options.duration}`);
                             } else {
                                 console.warn(`Particle system "${step.target}" not found`);
                             }
                             break;
                         case 'stopParticles':
                             if (this.particleSystems[step.target]) {
-                                this.timeline.call(() => this.particleSystems[step.target].stop());
+                                this.timeline.call(() => {
+                                    this.particleSystems[step.target].stop();
+                                    const index = this.currentParticleSystems.indexOf(this.particleSystems[step.target]);
+                                    if (index > -1) {
+                                        this.currentParticleSystems.splice(index, 1);
+                                    }
+                                });
                             } else {
                                 console.warn(`Particle system "${step.target}" not found`);
                             }
