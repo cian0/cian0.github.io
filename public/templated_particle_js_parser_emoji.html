@@ -213,7 +213,11 @@
                         const element = document.createElement('div');
                         element.id = id;
                         element.className = data.class;
-                        element.textContent = data.content || '';
+                        if (data.content && data.content.startsWith('<svg')) {
+                            element.innerHTML = data.content;
+                        } else {
+                            element.textContent = data.content || '';
+                        }
                         Object.assign(element.style, data.style);
                         this.container.appendChild(element);
                         this.elements[id] = element;
