@@ -247,6 +247,12 @@
                         element.className = data.class;
                         element.textContent = data.content || '';
                         Object.assign(element.style, data.style);
+                        
+                        // Set initial visibility based on scenes
+                        if (data.scenes && data.scenes.length > 0) {
+                            element.style.display = data.scenes.includes('scene1') ? 'block' : 'none';
+                        }
+                        
                         this.container.appendChild(element);
                         this.elements[id] = element;
                     }
@@ -304,6 +310,9 @@
                             } else {
                                 console.warn(`Particle system "${step.target}" not found`);
                             }
+                            break;
+                        case 'changeScene':
+                            this.timeline.call(() => this.changeScene(step.sceneName));
                             break;
                     }
                 }
@@ -373,6 +382,15 @@
                     y: 0,
                     ease: "power2.inOut"
                 });
+            }
+
+            changeScene(sceneName) {
+                for (const [id, element] of Object.entries(this.elements)) {
+                    const elementData = this.animationData.elements[id];
+                    if (elementData.scenes) {
+                        element.style.display = elementData.scenes.includes(sceneName) ? 'block' : 'none';
+                    }
+                }
             }
 
             play() {
