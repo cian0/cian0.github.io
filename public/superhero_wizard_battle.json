@@ -108,7 +108,9 @@
                 "opacity": 0.7,
                 "duration": 1.5,
                 "durationVariation": 0.5,
-                "movementType": "projectile"
+                "movementType": "explosion",
+                "centerX": "30%",
+                "centerY": "70%"
             }
         },
         "wizardMagic": {
@@ -120,7 +122,9 @@
                 "opacity": 0.7,
                 "duration": 1.5,
                 "durationVariation": 0.5,
-                "movementType": "projectile"
+                "movementType": "explosion",
+                "centerX": "70%",
+                "centerY": "70%"
             }
         },
         "cloudBurst": {

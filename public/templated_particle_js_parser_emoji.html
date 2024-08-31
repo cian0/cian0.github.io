@@ -144,22 +144,33 @@
                     particle.textContent = this.options.emoji;
                     particle.style.fontSize = `${this.options.size}px`;
                     particle.style.opacity = this.options.opacity;
-                    particle.style.left = `${Math.random() * 100}%`;
-                    particle.style.top = '-50px';
+                    particle.style.position = 'absolute';
                     this.particlesContainer.appendChild(particle);
                     return particle;
                 }
 
                 animateParticle(particle) {
                     const duration = this.options.duration + (Math.random() - 0.5) * this.options.durationVariation;
-                    const startX = Math.random() * this.container.clientWidth;
-                    const startY = this.options.movementType === 'rain' || this.options.movementType === 'beam' ? -50 : this.container.clientHeight;
-        
-                    gsap.set(particle, { x: startX, y: startY });
-        
+                    const centerX = this.options.centerX || this.container.clientWidth / 2;
+                    const centerY = this.options.centerY || this.container.clientHeight / 2;
+
+                    gsap.set(particle, { x: centerX, y: centerY });
+
                     let animationProps;
-        
+
                     switch (this.options.movementType) {
+                        case 'explosion':
+                            const angle = Math.random() * Math.PI * 2;
+                            const distance = Math.random() * 200 + 50;
+                            animationProps = {
+                                duration: duration,
+                                x: centerX + Math.cos(angle) * distance,
+                                y: centerY + Math.sin(angle) * distance,
+                                scale: 0,
+                                opacity: 0,
+                                ease: "power2.out"
+                            };
+                            break;
                         case 'rain':
                             animationProps = {
                                 duration: duration,
@@ -168,25 +179,14 @@
                                 ease: "power1.in"
                             };
                             break;
-                        case 'explosion':
-                            const angle = Math.random() * Math.PI;
-                            const distance = Math.random() * 200 + 100;
-                            animationProps = {
-                                duration: duration,
-                                x: startX + Math.cos(angle) * distance,
-                                y: startY - Math.sin(angle) * distance,
-                                scale: 0,
-                                ease: "power2.out"
-                            };
-                            break;
                         case 'projectile':
                             const projectileAngle = Math.random() * Math.PI / 4 + Math.PI / 4; // 45 to 90 degrees
                             const projectileDistance = Math.random() * 300 + 200;
                             const gravity = 500; // pixels per second squared
                             animationProps = {
                                 duration: duration,
-                                x: startX + Math.cos(projectileAngle) * projectileDistance,
-                                y: startY - Math.sin(projectileAngle) * projectileDistance + 0.5 * gravity * Math.pow(duration, 2),
+                                x: centerX + Math.cos(projectileAngle) * projectileDistance,
+                                y: centerY - Math.sin(projectileAngle) * projectileDistance + 0.5 * gravity * Math.pow(duration, 2),
                                 ease: "power1.in"
                             };
                             break;
@@ -204,9 +204,9 @@
                                 duration: duration,
                                 motionPath: {
                                     path: [
-                                        { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 },
-                                        { x: startX + (Math.random() - 0.5) * 200, y: startY + (Math.random() - 0.5) * 200 },
-                                        { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 }
+                                        { x: centerX + (Math.random() - 0.5) * 100, y: centerY + (Math.random() - 0.5) * 100 },
+                                        { x: centerX + (Math.random() - 0.5) * 200, y: centerY + (Math.random() - 0.5) * 200 },
+                                        { x: centerX + (Math.random() - 0.5) * 100, y: centerY + (Math.random() - 0.5) * 100 }
                                     ],
                                     curviness: 1.5
                                 },
@@ -214,11 +214,11 @@
                                 ease: "power1.inOut"
                             };
                     }
-        
+
                     animationProps.onComplete = () => {
                         this.removeParticle(particle);
                     };
-        
+
                     gsap.to(particle, animationProps);
                 }
 
