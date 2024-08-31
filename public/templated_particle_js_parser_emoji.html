@@ -235,12 +235,14 @@
                     switch (step.type) {
                         case 'set':
                         case 'to':
-                            if (this.elements[step.target]) {
+                            if (step.target && this.elements[step.target]) {
                                 this.timeline[step.type](this.elements[step.target], step.props);
                             } else if (step.target === 'parent' || step.target === 'container') {
                                 this.timeline[step.type](this.container, step.props);
+                            } else if (step.target) {
+                                console.warn(`Element "${step.target}" not found for ${step.type} animation. Skipping this step.`);
                             } else {
-                                console.warn(`Element "${step.target}" not found for ${step.type} animation`);
+                                console.warn(`Invalid target for ${step.type} animation. Skipping this step.`);
                             }
                             break;
                         case 'dialog':
