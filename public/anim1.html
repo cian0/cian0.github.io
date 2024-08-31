@@ -161,12 +161,12 @@
                 .to(element, {duration: 0.3, opacity: 0, scale: 0.8, delay: duration, ease: "power2.in"});
         }
 
-        function showNarration(id, text, duration = 3) {
+        function showNarration(id, text, duration = 2) {
             const element = document.getElementById(id);
             element.textContent = text;
             return gsap.timeline()
-                .to(element, {duration: 0.5, opacity: 1, y: 10, ease: "power2.out"})
-                .to(element, {duration: 0.5, opacity: 0, y: -10, delay: duration, ease: "power2.in"});
+                .to(element, {duration: 0.3, opacity: 1, y: 10, ease: "power2.out"})
+                .to(element, {duration: 0.3, opacity: 0, y: -10, delay: duration, ease: "power2.in"});
         }
 
         function createBubbles(container, count) {
