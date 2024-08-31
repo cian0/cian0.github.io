@@ -1,0 +1,99 @@
+{
+  "elements":
+  {
+      "cloud":
+      {
+          "type": "div",
+          "class": "emoji-character",
+          "content": "☁️",
+          "style":
+          {
+              "position": "absolute",
+              "fontSize": "100px",
+              "left": "50%",
+              "top": "20%",
+              "transform": "translateX(-50%)"
+          }
+      },
+      "raindrops":
+      {
+          "type": "particle",
+          "options":
+          {
+              "emoji": "💧",
+              "number": 50,
+              "size": 20,
+              "opacity": 0.7,
+              "duration": 3,
+              "durationVariation": 1
+          }
+      },
+      "ground":
+      {
+          "type": "div",
+          "class": "ground",
+          "content": "🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱",
+          "style":
+          {
+              "position": "absolute",
+              "fontSize": "30px",
+              "left": "0",
+              "right": "0",
+              "bottom": "10%",
+              "textAlign": "center"
+          }
+      }
+  },
+  "steps":
+  [
+      {
+          "type": "set",
+          "target": "cloud",
+          "props":
+          {
+              "scale": 0,
+              "y": -50
+          }
+      },
+      {
+          "type": "to",
+          "target": "cloud",
+          "props":
+          {
+              "scale": 1,
+              "y": 0,
+              "duration": 1,
+              "ease": "back.out(1.7)"
+          }
+      },
+      {
+          "type": "startParticles",
+          "target": "raindrops"
+      },
+      {
+          "type": "to",
+          "target": "cloud",
+          "x": "+=20",
+          "yoyo": true,
+          "repeat": -1,
+          "duration": 2,
+          "ease": "power1.inOut"
+      },
+      {
+          "type": "dialog",
+          "target": "cloud",
+          "text": "It's raining! ☔",
+          "duration": 3
+      },
+      {
+          "type": "to",
+          "target": "ground",
+          "props":
+          {
+              "scale": 1.1,
+              "duration": 10,
+              "ease": "power1.inOut"
+          }
+      }
+  ]
+}

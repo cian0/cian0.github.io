@@ -1,0 +1,399 @@
+{
+    "elements":
+    {
+        "classroom_background":
+        {
+            "class": "background",
+            "content": "<svg width='100%' height='100%' viewBox='0 0 1000 600' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%'    fill='#F0F0F0'/><rect x='0' y='400' width='1000' height='200' fill='#8B4513'/><rect x='50' y='50' width='200' height='300' fill='#A0522D'/><re x='750' y='50' width='200' height='300' fill='#A0522D'/><rect x='300' y='20' width='400' height='250' fill='#4682B4'/></svg>",
+            "style":
+            {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "z-index": "1"
+            }
+        },
+        "classroom":
+        {
+            "class": "background",
+            "style":
+            {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background-color": "rgba(240, 240, 240, 0.3)",
+                "opacity": "1",
+                "z-index": "2"
+            }
+        },
+        "desk":
+        {
+            "class": "furniture",
+            "style":
+            {
+                "position": "absolute",
+                "bottom": "20%",
+                "left": "50%",
+                "width": "100px",
+                "height": "60px",
+                "background-color": "#8B4513",
+                "transform": "translateX(-50%)",
+                "z-index": "3"
+            }
+        },
+        "boy":
+        {
+            "class": "character",
+            "content": "👦",
+            "style":
+            {
+                "position": "absolute",
+                "font-size": "48px",
+                "z-index": "10",
+                "bottom": "30%",
+                "left": "50%",
+                "transform": "translateX(-50%)"
+            }
+        },
+        "teacher":
+        {
+            "class": "character",
+            "content": "👩‍🏫",
+            "style":
+            {
+                "position": "absolute",
+                "font-size": "48px",
+                "z-index": "10",
+                "bottom": "30%",
+                "left": "20%"
+            }
+        },
+        "farm":
+        {
+            "class": "background",
+            "style":
+            {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background": "linear-gradient(to bottom, #87CEEB 60%, #228B22 60%)",
+                "opacity": "0"
+            }
+        },
+        "barn":
+        {
+            "class": "building",
+            "style":
+            {
+                "position": "absolute",
+                "bottom": "30%",
+                "right": "20%",
+                "width": "100px",
+                "height": "80px",
+                "background-color": "#8B0000",
+                "opacity": "0"
+            }
+        },
+        "girl":
+        {
+            "class": "character",
+            "content": "👧",
+            "style":
+            {
+                "position": "absolute",
+                "font-size": "48px",
+                "z-index": "10",
+                "bottom": "20%",
+                "left": "30%",
+                "opacity": "0"
+            }
+        },
+        "chicken":
+        {
+            "class": "animal",
+            "content": "🐔",
+            "style":
+            {
+                "position": "absolute",
+                "font-size": "32px",
+                "z-index": "10",
+                "bottom": "15%",
+                "left": "40%",
+                "opacity": "0"
+            }
+        },
+        "transition":
+        {
+            "class": "overlay",
+            "style":
+            {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background-color": "#000000",
+                "opacity": "0",
+                "z-index": "20"
+            }
+        }
+    },
+    "steps":
+    [
+        {
+            "type": "set",
+            "target": "boy",
+            "props":
+            {
+                "scale": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "teacher",
+            "props":
+            {
+                "left": "-10%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "boy",
+            "props":
+            {
+                "duration": 1,
+                "scale": 1,
+                "ease": "back.out(1.7)"
+            }
+        },
+        {
+            "type": "to",
+            "target": "teacher",
+            "props":
+            {
+                "duration": 2,
+                "left": "20%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "teacher",
+            "text": "Good morning, class! 📚",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "boy",
+            "props":
+            {
+                "duration": 0.5,
+                "rotation": 5,
+                "repeat": 2,
+                "yoyo": true
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "boy",
+            "text": "Good morning, teacher! 😊",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "teacher",
+            "props":
+            {
+                "duration": 1,
+                "left": "40%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "teacher",
+            "text": "Let's start our lesson. 🍎",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props":
+            {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "set",
+            "target": "classroom",
+            "props":
+            {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "desk",
+            "props":
+            {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "boy",
+            "props":
+            {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "teacher",
+            "props":
+            {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "farm",
+            "props":
+            {
+                "opacity": 1
+            }
+        },
+        {
+            "type": "set",
+            "target": "barn",
+            "props":
+            {
+                "opacity": 1
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props":
+            {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "girl",
+            "props":
+            {
+                "left": "-10%",
+                "opacity": 1
+            }
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props":
+            {
+                "duration": 2,
+                "left": "30%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "What a beautiful day on the farm! 🌞",
+            "duration": 2
+        },
+        {
+            "type": "set",
+            "target": "chicken",
+            "props":
+            {
+                "scale": 0,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "to",
+            "target": "chicken",
+            "props":
+            {
+                "duration": 1,
+                "scale": 1,
+                "ease": "back.out(1.7)"
+            }
+        },
+        {
+            "type": "to",
+            "target": "chicken",
+            "props":
+            {
+                "duration": 0.5,
+                "rotation": 10,
+                "repeat": 2,
+                "yoyo": true
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "Oh, hello there little chicken! 🐔",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props":
+            {
+                "duration": 1.5,
+                "left": "60%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "to",
+            "target": "chicken",
+            "props":
+            {
+                "duration": 1,
+                "left": "70%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "Let's go feed the other animals! 🍴",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props":
+            {
+                "duration": 1,
+                "left": "110%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "to",
+            "target": "chicken",
+            "props":
+            {
+                "duration": 1,
+                "left": "110%",
+                "ease": "power1.inOut",
+                "delay": 0.5
+            }
+        }
+    ]
+}
