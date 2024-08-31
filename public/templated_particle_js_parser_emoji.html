@@ -147,12 +147,23 @@
 
                 animateParticle(particle) {
                     const duration = this.options.duration + (Math.random() - 0.5) * this.options.durationVariation;
+                    const startX = Math.random() * this.container.clientWidth;
+                    const startY = Math.random() * this.container.clientHeight;
+                    
+                    gsap.set(particle, { x: startX, y: startY });
+                    
                     gsap.to(particle, {
-                        y: `${this.container.clientHeight + 100}px`,
-                        x: `${(Math.random() - 0.5) * 200}px`,
-                        rotation: (Math.random() - 0.5) * 360,
                         duration: duration,
-                        ease: "none",
+                        motionPath: {
+                            path: [
+                                { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 },
+                                { x: startX + (Math.random() - 0.5) * 200, y: startY + (Math.random() - 0.5) * 200 },
+                                { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 }
+                            ],
+                            curviness: 1.5
+                        },
+                        rotation: (Math.random() - 0.5) * 360,
+                        ease: "power1.inOut",
                         onComplete: () => {
                             this.particlesContainer.removeChild(particle);
                             if (this.isRunning) {
