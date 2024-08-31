@@ -253,7 +253,7 @@
                 "opacity": 0.7,
                 "duration": 3,
                 "durationVariation": 0.5,
-                "movementType": "rain"
+                "movementType": "beam"
             }
         }
     },
