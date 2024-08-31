@@ -199,7 +199,11 @@
             init() {
                 this.createElements();
                 this.createParticleSystems();
-                this.createAnimationSteps();
+                // Delay creating animation steps to ensure all elements are ready
+                setTimeout(() => {
+                    this.createAnimationSteps();
+                    this.play();
+                }, 100);
             }
 
             createElements() {
@@ -233,6 +237,8 @@
                         case 'to':
                             if (this.elements[step.target]) {
                                 this.timeline[step.type](this.elements[step.target], step.props);
+                            } else if (step.target === 'parent' || step.target === 'container') {
+                                this.timeline[step.type](this.container, step.props);
                             } else {
                                 console.warn(`Element "${step.target}" not found for ${step.type} animation`);
                             }
@@ -363,7 +369,6 @@
                     const animationData = JSON.parse(jsonInput);
                     animation = new AnimationLibrary('animation-container', animationData);
                     animation.init();
-                    animation.play();
                     
                     // Automatically close the drawer when animation starts
                     controlsDrawer.classList.add('drawer-closed');
