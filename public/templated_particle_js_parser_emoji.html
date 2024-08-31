@@ -463,11 +463,25 @@
 
             const loadJsonButton = document.getElementById('load-json-button');
             loadJsonButton.addEventListener('click', () => {
-                fetch('animation_data.json')
+                fetch('animation_data-showcase.json')
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('json-input').value = JSON.stringify(data, null, 2);
                         alert('JSON data loaded successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error loading JSON:', error);
+                        alert('Error loading JSON file. Please check the console for details.');
+                    });
+            });
+
+            // Load and play the animation automatically when the page loads
+            window.addEventListener('load', () => {
+                fetch('animation_data-showcase.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        animation = new AnimationLibrary('animation-container', data);
+                        animation.init();
                     })
                     .catch(error => {
                         console.error('Error loading JSON:', error);
