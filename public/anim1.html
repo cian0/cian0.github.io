@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Case of the Depressed Goldfish</title>
+    <title>Toxic Mermaid Transformation and Attack Animation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         body, html {
@@ -19,6 +19,7 @@
             height: 100%;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB 0%, #00AB66 100%);
         }
         .scene {
             width: 100%;
@@ -26,24 +27,63 @@
             position: absolute;
             top: 0;
             left: 0;
-            opacity: 0;
         }
         .character {
             position: absolute;
             font-size: 48px;
+            z-index: 10;
         }
-        .speech-bubble {
+        .fish {
+            position: absolute;
+            font-size: 36px;
+            z-index: 9;
+            opacity: 0;
+        }
+        .sand {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20%;
+            background-color: #F4A460;
+        }
+        .water {
+            position: absolute;
+            bottom: 20%;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to bottom, rgba(0,171,102,0) 0%, rgba(0,171,102,0.8) 100%);
+        }
+        .wave {
+            position: absolute;
+            bottom: 50%;
+            left: 0;
+            width: 200%;
+            height: 10px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2300AB66" fill-opacity="0.5" d="M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,229.3C840,235,960,213,1080,202.7C1200,192,1320,192,1380,192L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>');
+            background-size: 100% 100%;
+            animation: waveAnimation 10s linear infinite;
+        }
+        @keyframes waveAnimation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .dialog-bubble {
             position: absolute;
             background-color: white;
             border-radius: 20px;
             padding: 10px;
             font-size: 16px;
-            max-width: 200px;
             opacity: 0;
-            z-index: 10;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 20;
+            max-width: 150px;
+            text-align: center;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 20%;
         }
-        .speech-bubble::after {
+        .dialog-bubble::after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -53,201 +93,297 @@
             border-color: white transparent;
             transform: translateX(-50%);
         }
-        .narration {
+        .splash {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border-radius: 20px;
-            padding: 10px;
-            font-size: 16px;
-            max-width: 280px;
-            text-align: center;
+            font-size: 48px;
             opacity: 0;
-            z-index: 20;
+            z-index: 15;
         }
-        #office, #aquarium {
-            width: 100%;
-            height: 100%;
-        }
-        #fishbowl, #square-fishbowl {
-            width: 200px;
-            height: 200px;
-            border: 10px solid #B8860B;
-            background: rgba(135, 206, 235, 0.6);
+        .glow {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        #fishbowl {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,255,0,0.8) 0%, rgba(0,255,0,0) 70%);
+            opacity: 0;
+            z-index: 8;
         }
-        #square-fishbowl {
+        .bite-effect {
+            position: absolute;
+            font-size: 48px;
+            opacity: 0;
+            z-index: 25;
+        }
+        .pain-effect {
+            position: absolute;
+            font-size: 36px;
+            opacity: 0;
+            z-index: 25;
+        }
+        .toxic {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            z-index: 7;
+        }
+        .victim {
+            position: absolute;
+            font-size: 36px;
+            z-index: 8;
             opacity: 0;
         }
         .bubble {
             position: absolute;
-            background-color: rgba(255,255,255,0.5);
-            border-radius: 50%;
+            font-size: 24px;
             opacity: 0;
+            z-index: 12;
         }
     </style>
 </head>
 <body>
     <div id="animation-container">
-        <div id="office" class="scene">
-            <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
-                <defs>
-                    <linearGradient id="officeWall" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#4B5320;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#2F4F4F;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-                <rect width="1000" height="1000" fill="url(#officeWall)" />
-                <rect x="100" y="700" width="300" height="150" fill="#8B4513" rx="10" ry="10" />
-                <rect x="150" y="50" width="200" height="300" fill="#A0522D" stroke="#8B4513" stroke-width="10" />
-                <circle cx="250" cy="200" r="50" fill="#FFD700" />
-                <rect x="700" y="100" width="200" height="300" fill="#A9A9A9" />
-                <rect x="725" y="125" width="150" height="50" fill="#FFFFFF" />
-                <rect x="725" y="200" width="150" height="50" fill="#FFFFFF" />
-                <rect x="725" y="275" width="150" height="50" fill="#FFFFFF" />
-            </svg>
-            <div id="detective-1" class="character" style="bottom: 120px; left: 70px;">🕵️‍♂️</div>
-            <div id="phone" class="character" style="bottom: 290px; left: 180px;">📞</div>
-            <div id="detective-speech-1" class="speech-bubble" style="bottom: 180px; left: 20px;"></div>
+        <div class="scene">
+            <div class="sand"></div>
+            <div class="water"></div>
+            <div class="wave"></div>
+            <div id="girl" class="character">👧</div>
+            <div id="fish" class="fish">🐠</div>
+            <div id="mermaid" class="character" style="opacity: 0;">🧜‍♀️</div>
+            <div id="dialog1" class="dialog-bubble"></div>
+            <div id="dialog2" class="dialog-bubble"></div>
+            <div id="dialog3" class="dialog-bubble"></div>
+            <div id="dialog4" class="dialog-bubble"></div>
+            <div id="dialog5" class="dialog-bubble"></div>
+            <div id="dialog6" class="dialog-bubble"></div>
+            <div id="dialog7" class="dialog-bubble"></div>
+            <div id="splash" class="splash">💦</div>
+            <div id="glow" class="glow"></div>
+            <div id="bite" class="bite-effect">🦷</div>
+            <div id="pain" class="pain-effect">💥</div>
+            <div id="victim1" class="victim">🏊‍♂️</div>
+            <div id="victim2" class="victim">🏄‍♀️</div>
         </div>
-        <div id="aquarium" class="scene">
-            <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
-                <defs>
-                    <linearGradient id="aquariumBg" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#1E90FF;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-                <rect width="1000" height="1000" fill="url(#aquariumBg)" />
-                <path d="M0 800 Q 250 700 500 800 T 1000 800 L 1000 1000 L 0 1000 Z" fill="#228B22" />
-                <circle cx="100" cy="100" r="50" fill="#FFD700" />
-                <path d="M50 950 C 200 850, 300 900, 400 850 S 550 800, 650 850 S 800 900, 950 850" stroke="#8B4513" stroke-width="10" fill="none" />
-            </svg>
-            <div id="fishbowl"></div>
-            <div id="square-fishbowl"></div>
-            <div id="bubbles" class="character" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">🐠</div>
-            <div id="owner" class="character" style="bottom: 50px; right: 50px;">👩</div>
-            <div id="detective-2" class="character" style="bottom: 50px; left: 50px;">🕵️‍♂️</div>
-            <div id="owner-speech-1" class="speech-bubble" style="bottom: 120px; right: 20px;"></div>
-            <div id="detective-speech-2" class="speech-bubble" style="bottom: 120px; left: 20px;"></div>
-            <div id="bubbles-speech-1" class="speech-bubble" style="top: 30%; left: 50%; transform: translateX(-50%);"></div>
-            <div id="detective-speech-3" class="speech-bubble" style="bottom: 120px; left: 20px;"></div>
-            <div id="bubbles-speech-2" class="speech-bubble" style="top: 30%; left: 50%; transform: translateX(-50%);"></div>
-            <div id="owner-speech-2" class="speech-bubble" style="bottom: 120px; right: 20px;"></div>
-        </div>
-        <div id="narration-1" class="narration"></div>
-        <div id="narration-2" class="narration"></div>
-        <div id="narration-3" class="narration"></div>
-        <div id="narration-4" class="narration"></div>
     </div>
 
     <script>
+        const girl = document.getElementById('girl');
+        const fish = document.getElementById('fish');
+        const mermaid = document.getElementById('mermaid');
+        const splash = document.getElementById('splash');
+        const glow = document.getElementById('glow');
+        const bite = document.getElementById('bite');
+        const pain = document.getElementById('pain');
+        const container = document.getElementById('animation-container');
+        const victim1 = document.getElementById('victim1');
+        const victim2 = document.getElementById('victim2');
+
         const tl = gsap.timeline();
 
-        function showSpeech(id, text, duration = 1) {
-            const element = document.getElementById(id);
-            element.textContent = text;
+        function showDialog(id, text, duration = 2) {
+            const dialog = document.getElementById(id);
+            dialog.textContent = text;
             return gsap.timeline()
-                .to(element, {duration: 0.3, opacity: 1, scale: 1, ease: "back.out(1.7)"})
-                .to(element, {duration: 0.3, opacity: 0, scale: 0.8, delay: duration, ease: "power2.in"});
+                .to(dialog, { duration: 0.5, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
+                .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: duration });
         }
 
-        function showNarration(id, text, duration = 2) {
-            const element = document.getElementById(id);
-            element.textContent = text;
-            return gsap.timeline()
-                .to(element, {duration: 0.3, opacity: 1, y: 10, ease: "power2.out"})
-                .to(element, {duration: 0.3, opacity: 0, y: -10, delay: duration, ease: "power2.in"});
+        function createToxicEmoji() {
+            const toxic = document.createElement('div');
+            toxic.className = 'toxic';
+            toxic.textContent = '☢️';
+            toxic.style.left = `${Math.random() * 100}%`;
+            toxic.style.top = `${Math.random() * 60 + 20}%`;
+            container.appendChild(toxic);
+
+            gsap.to(toxic, {
+                duration: Math.random() * 3 + 2,
+                y: '+=50',
+                opacity: 1,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
         }
 
-        function createBubbles(container, count) {
-            for (let i = 0; i < count; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.style.width = bubble.style.height = `${Math.random() * 20 + 5}px`;
-                bubble.style.left = `${Math.random() * 100}%`;
-                bubble.style.top = `${Math.random() * 100}%`;
-                container.appendChild(bubble);
+        function createBubble(x, y) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.textContent = '🫧';
+            bubble.style.left = `${x}px`;
+            bubble.style.top = `${y}px`;
+            container.appendChild(bubble);
 
-                gsap.to(bubble, {
-                    y: `-=${Math.random() * 100 + 50}`,
-                    x: `+=${Math.random() * 50 - 25}`,
-                    opacity: 1,
-                    duration: Math.random() * 2 + 1,
-                    repeat: -1,
-                    delay: Math.random() * 2,
-                    ease: "power1.inOut",
-                    yoyo: true
-                });
-            }
+            gsap.to(bubble, {
+                duration: 2,
+                y: '-=100',
+                x: `+=${Math.random() * 100 - 50}`,
+                opacity: 1,
+                scale: 2,
+                ease: 'power1.out',
+                onComplete: () => bubble.remove()
+            });
         }
 
-        // Create bubbles in the fishbowl
-        createBubbles(document.getElementById('fishbowl'), 10);
-        createBubbles(document.getElementById('square-fishbowl'), 10);
+        // Create toxic emojis
+        for (let i = 0; i < 5; i++) {
+            createToxicEmoji();
+        }
 
-        // Scene 1: The Call
-        tl.to("#office", {duration: 1, opacity: 1})
-          .add(showNarration("narration-1", "In the bustling city of Aquapolis, Detective Finn receives an unusual call..."))
-          .from("#detective-1", {duration: 1, x: -100, opacity: 0})
-          .from("#phone", {duration: 0.5, y: -50, opacity: 0})
-          .to("#phone", {duration: 0.1, y: -5, repeat: 5, yoyo: true})
-          .add(showSpeech("detective-speech-1", "Detective Finn here. What's the catch of the day?"))
-          .to("#detective-1", {duration: 0.5, rotate: 10, yoyo: true, repeat: 1})
-          .to("#office", {duration: 1, opacity: 0, delay: 1});
+        // Scene 1: Girl walking on the beach
+        tl.set(girl, { bottom: '20%', left: '-10%' })
+          .to(girl, { duration: 3, left: '40%', ease: 'power1.inOut' })
+          .add(showDialog("dialog1", "What a beautiful day for a swim! 🏖️"))
+          .to(girl, { duration: 2, bottom: '40%', left: '50%', ease: 'power1.inOut' })
+          .to(splash, { duration: 0.5, opacity: 1, scale: 1.5, bottom: '40%', left: '50%' })
+          .to(splash, { duration: 0.5, opacity: 0, scale: 0 })
+          .add(showDialog("dialog2", "The water feels... strange. 🤨"));
 
-        // Scene 2: The Crime Scene
-        tl.to("#aquarium", {duration: 1, opacity: 1})
-          .add(showNarration("narration-2", "At the luxurious Bubble Palace, Detective Finn encounters a most peculiar case..."))
-          .from("#fishbowl", {duration: 1, scale: 0, ease: "elastic.out(1, 0.5)"})
-          .from("#bubbles", {duration: 1, opacity: 0, scale: 0, ease: "back.out(1.7)"})
-          .from("#owner", {duration: 1, x: 100, opacity: 0})
-          .add(showSpeech("owner-speech-1", "Detective, look at poor Bubbles! He's so depressed!"))
-          .to("#bubbles", {duration: 2, rotation: 10, yoyo: true, repeat: -1, ease: "sine.inOut"})
-          .from("#detective-2", {duration: 1, x: -100, y: 100, scale: 0.7, opacity: 0})
-          .to("#detective-2", {duration: 2, x: "+=50", y: "+=50", ease: "power2.inOut"})
-          .add(showSpeech("detective-speech-2", "Hmm... How long has the suspect... I mean, your fish been like this?"));
+        // Scene 2: Fish appears
+        tl.set(fish, { bottom: '30%', right: '-10%', scaleX: -1, opacity: 0 })
+          .to(fish, { duration: 0.5, opacity: 1, ease: 'power1.inOut' })
+          .to(fish, { duration: 2, right: '40%', ease: 'power1.inOut' })
+          .add(showDialog("dialog3", "Oh, what's that fish doing? 😮"));
 
-        // Scene 3: The Solution
-        tl.add(showNarration("narration-3", "As Detective Finn investigates, he uncovers a surprising truth..."))
-          .add(showSpeech("bubbles-speech-1", "I'm just tired, Detective. Tired of swimming in endless circles."))
-          .to("#detective-2", {duration: 1, scale: 1.2, ease: "back.out(1.7)"})
-          .add(showSpeech("detective-speech-3", "Great Scott! I've solved it!"))
-          .to("#square-fishbowl", {duration: 1, opacity: 1, scale: 1.1, ease: "elastic.out(1, 0.5)"})
-          .to("#fishbowl", {duration: 1, opacity: 0, scale: 0.9, ease: "power2.in"}, "<")
-          .to("#bubbles", {duration: 1, scale: 1.2, ease: "back.out(1.7)"})
-          .to("#bubbles", {
-              duration: 4,
-              repeat: -1,
-              ease: "none",
-              keyframes: [
-                  {x: -50, y: -50, rotation: 0},
-                  {x: 50, y: 50, rotation: 180},
-                  {x: -50, y: 50, rotation: 270},
-                  {x: 50, y: -50, rotation: 360}
-              ]
-          })
-          .add(showSpeech("bubbles-speech-2", "Wee! Look at me go! I've never felt so angle-ic in my life!"))
-          .to("#owner", {duration: 0.5, y: -20, repeat: 1, yoyo: true})
-          .add(showSpeech("owner-speech-2", "You've worked miracles, Detective!"))
-          .to("#detective-2", {duration: 2, x: 400, y: 200, scale: 0.5, opacity: 0, ease: "power2.in"})
-          .add(showNarration("narration-4", "And so, Detective Finn solved another case, proving that sometimes, all we need is a change of perspective."));
+        // Scene 3: Fish bites girl
+        tl.to(fish, { duration: 0.3, scale: 1.2, ease: 'back.out(1.7)' })
+          .to(fish, { duration: 0.2, rotation: -30, ease: 'power1.in' })
+          .to(fish, { duration: 0.1, rotation: 0, ease: 'power1.out' })
+          .to(bite, { duration: 0.1, opacity: 1, scale: 1, bottom: '45%', left: '52%' }, '-=0.1')
+          .to(bite, { duration: 0.2, opacity: 0, scale: 0 })
+          .to(pain, { duration: 0.1, opacity: 1, scale: 1, bottom: '50%', left: '55%' }, '-=0.1')
+          .to(pain, { duration: 0.3, opacity: 0, y: 20 })
+          .to(girl, { duration: 0.2, rotation: 5, repeat: 3, yoyo: true }, '-=0.5')
+          .to(fish, { duration: 0.5, right: '30%', bottom: '35%', ease: 'power1.out' })
+          .add(showDialog("dialog4", "Ouch! It bit me! 😫"));
 
-        // Speed up the entire animation by 30%
-        tl.timeScale(1.3);
+        // Scene 4: Transformation
+        tl.to(glow, { duration: 0.5, opacity: 1, scale: 1.5, bottom: '40%', left: '50%' })
+          .to(glow, { duration: 1, opacity: 0, scale: 3 })
+          .to(girl, { duration: 1, opacity: 0, scale: 0, ease: 'power2.in' }, '-=0.5')
+          .set(mermaid, { bottom: '40%', left: '50%', scale: 0 })
+          .to(mermaid, { duration: 1, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
+          .to(fish, { duration: 1, right: '110%', ease: 'power1.in' })
+          .add(showDialog("dialog5", "What's happening to me?! 😱"));
+
+        // Scene 5: Mermaid realization
+        tl.to(mermaid, { duration: 3, bottom: '60%', left: '70%', ease: 'power1.inOut' })
+          .to(mermaid, { duration: 0.5, rotation: 10, repeat: 4, yoyo: true }, '-=3')
+          .add(showDialog("dialog6", "I'm... I'm a mermaid! 🧜‍♀️✨"));
+
+        // Scene 6: Toxic Mermaid Attack
+        tl.add(showDialog("dialog7", "I feel... strange... and powerful! 😈"))
+          .to(mermaid, { duration: 2, bottom: '40%', left: '30%', ease: 'power2.inOut' })
+          .set(victim1, { bottom: '30%', right: '-10%', opacity: 1 })
+          .set(victim2, { bottom: '25%', right: '-20%', opacity: 1 })
+          .to(victim1, { duration: 3, right: '60%', ease: 'none' })
+          .to(victim2, { duration: 4, right: '70%', ease: 'none' }, '-=3')
+          .to(mermaid, { duration: 1, rotation: -10, repeat: 5, yoyo: true }, '-=4')
+          .to(mermaid, { duration: 0.2, scale: 1.2, repeat: 5, yoyo: true }, '-=4')
+          .add(() => {
+              for (let i = 0; i < 20; i++) {
+                  setTimeout(() => {
+                      const mermaidRect = mermaid.getBoundingClientRect();
+                      createBubble(mermaidRect.left + Math.random() * mermaidRect.width, mermaidRect.top + Math.random() * mermaidRect.height);
+                  }, i * 100);
+              }
+          }, '-=4')
+          .to(victim1, { duration: 0.5, y: -20, rotation: 20, repeat: 3, yoyo: true }, '-=2')
+          .to(victim2, { duration: 0.5, y: -30, rotation: -30, repeat: 3, yoyo: true }, '-=2')
+          .to([victim1, victim2], { duration: 1, opacity: 0, y: -50, ease: 'power2.in' })
+          .to(mermaid, { duration: 2, scale: 1.5, bottom: '50%', left: '50%', ease: 'power2.inOut' });
 
         // Add interactivity
-        document.querySelector("#animation-container").addEventListener("click", () => {
+        container.addEventListener("click", () => {
             tl.paused() ? tl.play() : tl.pause();
         });
+
+        // Add a reset function
+        function resetAnimation() {
+            tl.pause();
+            tl.time(0);
+            tl.play();
+        }
+
+        // Add a reset button
+        const resetButton = document.createElement('button');
+        resetButton.textContent = 'Reset Animation';
+        resetButton.style.position = 'absolute';
+        resetButton.style.top = '10px';
+        resetButton.style.right = '10px';
+        resetButton.style.zIndex = '100';
+        resetButton.addEventListener('click', resetAnimation);
+        //container.appendChild(resetButton);
+
+        // Add screen shake effect
+        function screenShake() {
+            gsap.to(container, {
+                duration: 0.1,
+                x: "+=10",
+                yoyo: true,
+                repeat: 5,
+                ease: "power2.inOut"
+            });
+        }
+
+        // Add screen shake to the mermaid attack
+        tl.add(screenShake, "-=2");
+
+        // Add a glowing effect to the mermaid during the attack
+        const glowEffect = document.createElement('div');
+        glowEffect.style.position = 'absolute';
+        glowEffect.style.width = '100%';
+        glowEffect.style.height = '100%';
+        glowEffect.style.backgroundColor = 'rgba(0, 255, 0, 0.2)';
+        glowEffect.style.opacity = '0';
+        glowEffect.style.zIndex = '5';
+        container.appendChild(glowEffect);
+
+        tl.to(glowEffect, {
+            duration: 4,
+            opacity: 0.5,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut"
+        }, "-=4");
+
+        // Add more bubbles and splashes during the attack
+        function createSplash(x, y) {
+            const splashElem = document.createElement('div');
+            splashElem.className = 'splash';
+            splashElem.textContent = '💦';
+            splashElem.style.left = `${x}px`;
+            splashElem.style.top = `${y}px`;
+            container.appendChild(splashElem);
+
+            gsap.to(splashElem, {
+                duration: 1,
+                y: '-=50',
+                x: `+=${Math.random() * 60 - 30}`,
+                opacity: 1,
+                scale: 2,
+                ease: 'power1.out',
+                onComplete: () => splashElem.remove()
+            });
+        }
+
+        tl.add(() => {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const mermaidRect = mermaid.getBoundingClientRect();
+                    createSplash(mermaidRect.left + Math.random() * mermaidRect.width, mermaidRect.top + Math.random() * mermaidRect.height);
+                }, i * 200);
+            }
+        }, "-=3");
+
+        // Add a final dramatic zoom effect
+        tl.to(container, {
+            duration: 2,
+            scale: 1.2,
+            ease: "power2.inOut"
+        });
+
+        // Start the animation
+        tl.play();
     </script>
 </body>
+</html>
