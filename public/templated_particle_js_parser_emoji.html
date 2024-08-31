@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON-Driven Animation with particles.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #animation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+        .dialog-bubble {
+            position: absolute;
+            transform-origin: bottom center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 16px;
+            opacity: 0;
+            z-index: 20;
+            max-width: 150px;
+            text-align: center;
+        }
+        .dialog-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent;
+            transform: translateX(-50%);
+        }
+        #controls-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        #controls {
+            padding: 20px;
+        }
+        #json-input {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
+        #play-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #drawer-toggle {
+            position: absolute;
+            top: -30px;
+            right: 20px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .drawer-closed {
+            transform: translateY(100%);
+        }
+        .drawer-open {
+            transform: translateY(0);
+        }
+        .emoji-particle {
+            position: absolute;
+            user-select: none;
+            pointer-events: none;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="animation-container"></div>
+    <div id="controls-drawer" class="drawer-closed">
+        <button id="drawer-toggle">☰ JSON</button>
+        <div id="controls">
+            <textarea id="json-input" placeholder="Paste your JSON here"></textarea>
+            <button id="play-button">Play Animation</button>
+        </div>
+    </div>
+    <script>
+
+        // Wait for particles.js to load
+        window.addEventListener('load', function() {
+            if (typeof particlesJS === 'undefined') {
+                console.error('particles.js is not loaded. Please check your internet connection and try again.');
+                return;
+            }
+            class ParticleSystem {
+                constructor(container, options, id) {
+                    this.container = container;
+                    this.options = options;
+                    this.id = id;
+                    this.particlesContainer = null;
+                }
+
+                create() {
+                    this.particlesContainer = document.createElement('div');
+                    this.particlesContainer.id = `particles-${this.id}`;
+                    this.particlesContainer.className = 'particle-container';
+                    this.container.appendChild(this.particlesContainer);
+                }
+
+                start() {
+                    this.create();
+                    particlesJS(`particles-${this.id}`, this.options);
+                }
+
+                stop() {
+                    if (this.particlesContainer) {
+                        if (window.pJSDom) {
+                            window.pJSDom.forEach((dom, i) => {
+                                if (dom.pJS.canvas.el.id === `particles-${this.id}-canvas`) {
+                                    window.pJSDom[i].pJS.fn.vendors.destroypJS();
+                                    window.pJSDom.splice(i, 1);
+                                }
+                            });
+                        }
+                        this.particlesContainer.remove();
+                        this.particlesContainer = null;
+                    }
+                }
+            }
+
+        class AnimationLibrary {
+            constructor(containerId, animationData) {
+                this.container = document.getElementById(containerId);
+                if (!this.container) {
+                    throw new Error(`Container with id "${containerId}" not found`);
+                }
+                this.animationData = animationData;
+                this.timeline = gsap.timeline();
+                this.elements = {};
+                this.particleSystems = {};
+            }
+
+            init() {
+                this.createElements();
+                this.createParticleSystems();
+                this.createAnimationSteps();
+            }
+
+            createElements() {
+                this.container.innerHTML = ''; // Clear previous elements
+                for (const [id, data] of Object.entries(this.animationData.elements)) {
+                    if (data.type !== 'particle') {
+                        const element = document.createElement('div');
+                        element.id = id;
+                        element.className = data.class;
+                        element.textContent = data.content || '';
+                        Object.assign(element.style, data.style);
+                        this.container.appendChild(element);
+                        this.elements[id] = element;
+                    }
+                }
+            }
+
+            createParticleSystems() {
+                for (const [id, data] of Object.entries(this.animationData.elements)) {
+                    if (data.type === 'particle') {
+                        this.particleSystems[id] = new EmojiParticleSystem(this.container, data.options, id);
+                    }
+                }
+            }
+
+            createAnimationSteps() {
+                this.timeline.clear(); // Clear previous timeline
+                for (const step of this.animationData.steps) {
+                    switch (step.type) {
+                        case 'set':
+                        case 'to':
+                            if (this.elements[step.target]) {
+                                this.timeline[step.type](this.elements[step.target], step.props);
+                            } else {
+                                console.warn(`Element "${step.target}" not found for ${step.type} animation`);
+                            }
+                            break;
+                        case 'dialog':
+                            this.timeline.call(() => this.showDialog(step));
+                            break;
+                        case 'function':
+                            if (typeof this[step.function] === 'function') {
+                                this.timeline.call(() => this[step.function](...(step.args || [])));
+                            } else {
+                                console.warn(`Function "${step.function}" not found`);
+                            }
+                            break;
+                        case 'startParticles':
+                            if (this.particleSystems[step.target]) {
+                                this.timeline.call(() => this.particleSystems[step.target].start());
+                            } else {
+                                console.warn(`Particle system "${step.target}" not found`);
+                            }
+                            break;
+                        case 'stopParticles':
+                            if (this.particleSystems[step.target]) {
+                                this.timeline.call(() => this.particleSystems[step.target].stop());
+                            } else {
+                                console.warn(`Particle system "${step.target}" not found`);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            showDialog(dialogData) {
+                const target = this.elements[dialogData.target];
+                if (!target) {
+                    console.warn(`Target "${dialogData.target}" not found for dialog`);
+                    return;
+                }
+
+                const dialog = document.createElement('div');
+                dialog.className = 'dialog-bubble';
+                dialog.textContent = dialogData.text;
+                this.container.appendChild(dialog);
+
+                const positionDialog = () => {
+                    const targetRect = target.getBoundingClientRect();
+                    const containerRect = this.container.getBoundingClientRect();
+
+                    dialog.style.left = `${(targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100}%`;
+                    dialog.style.top = `${(targetRect.top - containerRect.top) / containerRect.height * 100 - 10}%`;
+                    dialog.style.transform = 'translate(-50%, -100%)';
+                };
+
+                positionDialog();
+                window.addEventListener('resize', positionDialog);
+
+                gsap.timeline()
+                    .set(dialog, { opacity: 0, scale: 0 })
+                    .to(dialog, { duration: 0.5, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
+                    .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: dialogData.duration || 2 })
+                    .call(() => {
+                        dialog.remove();
+                        window.removeEventListener('resize', positionDialog);
+                    });
+            }
+
+            zoomCamera(target, scale = 1.5, duration = 2) {
+                const targetElement = this.elements[target];
+                if (!targetElement) {
+                    console.warn(`Target "${target}" not found for camera zoom`);
+                    return;
+                }
+
+                const targetRect = targetElement.getBoundingClientRect();
+                const containerRect = this.container.getBoundingClientRect();
+
+                const xCenter = (targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100;
+                const yCenter = (targetRect.top - containerRect.top + targetRect.height / 2) / containerRect.height * 100;
+
+                return gsap.to(this.container, {
+                    duration: duration,
+                    scale: scale,
+                    x: `${-xCenter * (scale - 1)}%`,
+                    y: `${-yCenter * (scale - 1)}%`,
+                    ease: "power2.inOut"
+                });
+            }
+
+            resetCamera(duration = 1.5) {
+                return gsap.to(this.container, {
+                    duration: duration,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    ease: "power2.inOut"
+                });
+            }
+
+            play() {
+                this.timeline.play();
+            }
+
+            pause() {
+                this.timeline.pause();
+            }
+
+            reset() {
+                this.timeline.pause();
+                this.timeline.time(0);
+                this.resetCamera();
+                this.timeline.play();
+            }
+        }
+
+        let animation;
+            const controlsDrawer = document.getElementById('controls-drawer');
+            const drawerToggle = document.getElementById('drawer-toggle');
+            const playButton = document.getElementById('play-button');
+
+            drawerToggle.addEventListener('click', () => {
+                controlsDrawer.classList.toggle('drawer-closed');
+                controlsDrawer.classList.toggle('drawer-open');
+            });
+
+            playButton.addEventListener('click', () => {
+                const jsonInput = document.getElementById('json-input').value;
+                try {
+                    const animationData = JSON.parse(jsonInput);
+                    animation = new AnimationLibrary('animation-container', animationData);
+                    animation.init();
+                    animation.play();
+                    
+                    // Automatically close the drawer when animation starts
+                    controlsDrawer.classList.add('drawer-closed');
+                    controlsDrawer.classList.remove('drawer-open');
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    alert('Invalid JSON input. Please check your JSON and try again.');
+                }
+            });
+
+            // Add interactivity (click to pause/play)
+            document.getElementById('animation-container').addEventListener('click', () => {
+                if (animation && animation.timeline) {
+                    animation.timeline.paused() ? animation.play() : animation.pause();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
