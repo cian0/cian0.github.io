@@ -314,6 +314,9 @@
                                 element.textContent = data.content;
                             }
                         }
+                        if (data.type === 'svg') {
+                            element.innerHTML = data.content;
+                        }
                         Object.assign(element.style, data.style);
                         element.style.display = 'none'; // Initially hide all elements
                         this.container.appendChild(element);
