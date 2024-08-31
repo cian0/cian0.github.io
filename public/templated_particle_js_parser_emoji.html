@@ -233,6 +233,13 @@
                         this.create();
                     }
                     this.isRunning = true;
+                    // Get the current position of the target element
+                    const targetElement = document.querySelector(this.options.targetSelector);
+                    if (targetElement) {
+                        const rect = targetElement.getBoundingClientRect();
+                        this.options.centerX = rect.left + rect.width / 2;
+                        this.options.centerY = rect.top + rect.height / 2;
+                    }
                     this.animateParticles();
                 }
 
@@ -443,6 +450,10 @@
                         case 'startParticles':
                             if (this.particleSystems[step.target]) {
                                 this.timeline.call(() => {
+                                    const targetElement = this.elements.find(el => el.id === step.options.targetElement);
+                                    if (targetElement) {
+                                        this.particleSystems[step.target].options.targetSelector = `#${targetElement.id}`;
+                                    }
                                     this.particleSystems[step.target].start();
                                     this.currentParticleSystems.push(this.particleSystems[step.target]);
                                 });

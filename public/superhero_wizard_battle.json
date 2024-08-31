@@ -306,7 +306,8 @@
                 "size": 30,
                 "duration": 2,
                 "opacity": 0.7,
-                "movementType": "explosion"
+                "movementType": "explosion",
+                "targetElement": "superhero"
             }
         },
         {
