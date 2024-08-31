@@ -250,13 +250,15 @@
                         
                         // Set initial visibility based on scenes
                         if (data.scenes && data.scenes.length > 0) {
-                            element.style.display = data.scenes.includes('scene1') ? 'block' : 'none';
+                            element.style.display = 'none'; // Initially hide all elements
                         }
                         
                         this.container.appendChild(element);
                         this.elements[id] = element;
                     }
                 }
+                // Show elements for the first scene
+                this.changeScene('scene1');
             }
 
             createParticleSystems() {
@@ -389,8 +391,12 @@
                     const elementData = this.animationData.elements[id];
                     if (elementData.scenes) {
                         element.style.display = elementData.scenes.includes(sceneName) ? 'block' : 'none';
+                    } else {
+                        // If no scenes are specified, show the element in all scenes
+                        element.style.display = 'block';
                     }
                 }
+                console.log(`Changed to ${sceneName}`); // Add this line for debugging
             }
 
             play() {
