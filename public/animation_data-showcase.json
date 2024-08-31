@@ -112,7 +112,8 @@
                 "size": 15,
                 "opacity": 0.5,
                 "duration": 2,
-                "durationVariation": 0.5
+                "durationVariation": 0.5,
+                "movementType": "rain"
             }
         },
         "transition": {
