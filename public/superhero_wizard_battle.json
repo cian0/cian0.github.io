@@ -1,0 +1,402 @@
+{
+    "elements": {
+        "background": {
+            "class": "background",
+            "style": {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "z-index": "1"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "superhero": {
+            "class": "character",
+            "content": "🦸‍♂️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "bottom": "20%",
+                "left": "20%",
+                "z-index": "3"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "wizard": {
+            "class": "character",
+            "content": "🧙‍♂️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "bottom": "20%",
+                "right": "20%",
+                "z-index": "3"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "buildings": {
+            "class": "prop",
+            "content": "🏙️",
+            "style": {
+                "position": "absolute",
+                "font-size": "120px",
+                "bottom": "10%",
+                "left": "50%",
+                "transform": "translateX(-50%)",
+                "z-index": "2"
+            },
+            "scenes": ["city"]
+        },
+        "cloud1": {
+            "class": "prop",
+            "content": "☁️",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "top": "20%",
+                "left": "10%",
+                "z-index": "2"
+            },
+            "scenes": ["sky"]
+        },
+        "cloud2": {
+            "class": "prop",
+            "content": "☁️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "top": "40%",
+                "right": "15%",
+                "z-index": "2"
+            },
+            "scenes": ["sky"]
+        },
+        "castle": {
+            "class": "prop",
+            "content": "🏰",
+            "style": {
+                "position": "absolute",
+                "font-size": "120px",
+                "bottom": "10%",
+                "right": "10%",
+                "z-index": "2"
+            },
+            "scenes": ["castle"]
+        },
+        "transition": {
+            "class": "overlay",
+            "style": {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background-color": "#000000",
+                "opacity": "0",
+                "z-index": "10"
+            },
+            "scenes": ["city", "sky", "castle"]
+        }
+    },
+    "steps": [
+        {
+            "type": "changeScene",
+            "sceneName": "city"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #87CEEB 70%, #A9A9A9 70%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect fill=\"%23A9A9A9\" width=\"100\" height=\"100\"/><rect fill=\"%23808080\" width=\"20\" height=\"20\" x=\"0\" y=\"0\"/><rect fill=\"%23808080\" width=\"20\" height=\"20\" x=\"40\" y=\"0\"/><rect fill=\"%23808080\" width=\"20\" height=\"20\" x=\"80\" y=\"0\"/><rect fill=\"%23808080\" width=\"20\" height=\"20\" x=\"20\" y=\"20\"/><rect fill=\"%23808080\" width=\"20\" height=\"20\" x=\"60\" y=\"20\"/></svg>')"
+                }
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "Evil wizard! Your reign of terror ends now! ⚡️",
+            "duration": 3
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Foolish hero! You cannot stop my dark magic! 🔮",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "superhero",
+            "props": {
+                "duration": 1,
+                "x": "100px",
+                "y": "-50px",
+                "ease": "power2.out"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "heroEnergy",
+            "options": {
+                "emoji": "⚡",
+                "number": 30,
+                "size": 30,
+                "duration": 2,
+                "opacity": 0.7,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "to",
+            "target": "wizard",
+            "props": {
+                "duration": 1,
+                "x": "-100px",
+                "y": "-50px",
+                "ease": "power2.out"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "wizardMagic",
+            "options": {
+                "emoji": "✨",
+                "number": 30,
+                "size": 30,
+                "duration": 2,
+                "opacity": 0.7,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["buildings", 1.5, 2]
+        },
+        {
+            "type": "to",
+            "target": "buildings",
+            "props": {
+                "duration": 1,
+                "y": "50px",
+                "ease": "power1.in"
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "changeScene",
+            "sceneName": "sky"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #1E90FF, #87CEEB)"
+                }
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "superhero",
+            "props": {
+                "duration": 2,
+                "x": "-100px",
+                "y": "-100px",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "to",
+            "target": "wizard",
+            "props": {
+                "duration": 2,
+                "x": "100px",
+                "y": "-100px",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "cloudBurst",
+            "options": {
+                "emoji": "☁️",
+                "number": 10,
+                "size": 50,
+                "duration": 3,
+                "opacity": 0.5,
+                "movementType": "float"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "Your dark clouds won't stop me! 🌟",
+            "duration": 3
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Then face the fury of my storm! ⚡️",
+            "duration": 3
+        },
+        {
+            "type": "startParticles",
+            "target": "lightning",
+            "options": {
+                "emoji": "⚡",
+                "number": 20,
+                "size": 40,
+                "duration": 2,
+                "opacity": 0.8,
+                "movementType": "rain"
+            }
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["cloud1", 1.8, 2]
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "changeScene",
+            "sceneName": "castle"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #4B0082 70%, #8B4513 70%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect fill=\"%238B4513\" width=\"100\" height=\"100\"/><path fill=\"%23A0522D\" d=\"M0 50 L50 0 L100 50 Z\"/><path fill=\"%23A0522D\" d=\"M0 100 L50 50 L100 100 Z\"/></svg>')"
+                }
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "function",
+            "function": "resetCamera"
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Welcome to my domain, hero! Your journey ends here! 💀",
+            "duration": 3
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "Not if I can help it! Prepare to face justice! ⚖️",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "superhero",
+            "props": {
+                "duration": 1.5,
+                "x": "150px",
+                "y": "-100px",
+                "scale": 1.2,
+                "ease": "power2.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "heroAura",
+            "options": {
+                "emoji": "🌟",
+                "number": 40,
+                "size": 30,
+                "duration": 3,
+                "opacity": 0.7,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "to",
+            "target": "wizard",
+            "props": {
+                "duration": 1.5,
+                "x": "-100px",
+                "y": "-50px",
+                "scale": 0.8,
+                "ease": "power2.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "wizardDefeat",
+            "options": {
+                "emoji": "💥",
+                "number": 30,
+                "size": 40,
+                "duration": 2,
+                "opacity": 0.8,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["castle", 1.5, 2]
+        },
+        {
+            "type": "to",
+            "target": "castle",
+            "props": {
+                "duration": 2,
+                "scale": 0.8,
+                "opacity": 0.5,
+                "ease": "power2.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "The day is saved! Evil has been vanquished! 🌈",
+            "duration": 4
+        },
+        {
+            "type": "startParticles",
+            "target": "victory",
+            "options": {
+                "emoji": "🎉",
+                "number": 50,
+                "size": 40,
+                "duration": 4,
+                "opacity": 0.8,
+                "movementType": "float"
+            }
+        }
+    ]
+}

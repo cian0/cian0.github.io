@@ -522,7 +522,7 @@
 
             const loadJsonButton = document.getElementById('load-json-button');
             loadJsonButton.addEventListener('click', () => {
-                fetch('animation_data-showcase.json')
+                fetch('superhero_wizard_battle.json')
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('json-input').value = JSON.stringify(data, null, 2);
@@ -536,7 +536,7 @@
 
             // Load and play the animation automatically when the page loads
             window.addEventListener('load', () => {
-                fetch('animation_data-showcase.json')
+                fetch('superhero_wizard_battle.json')
                     .then(response => response.json())
                     .then(data => {
                         animation = new AnimationLibrary('animation-container', data);
