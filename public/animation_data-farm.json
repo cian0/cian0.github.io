@@ -232,6 +232,14 @@
         },
         {
             "type": "set",
+            "target": "classroom_background",
+            "props":
+            {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
             "target": "classroom",
             "props":
             {

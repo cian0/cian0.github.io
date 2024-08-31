@@ -214,10 +214,12 @@
                         const element = document.createElement('div');
                         element.id = id;
                         element.className = data.class;
-                        if (data.content && data.content.startsWith('<svg')) {
-                            element.innerHTML = data.content;
-                        } else {
-                            element.textContent = data.content || '';
+                        if (data.content) {
+                            if (data.content.startsWith('<svg')) {
+                                element.innerHTML = data.content;
+                            } else {
+                                element.textContent = data.content;
+                            }
                         }
                         Object.assign(element.style, data.style);
                         this.container.appendChild(element);
@@ -241,7 +243,16 @@
                         case 'set':
                         case 'to':
                             if (step.target && this.elements[step.target]) {
-                                this.timeline[step.type](this.elements[step.target], step.props);
+                                const element = this.elements[step.target];
+                                if (element.tagName.toLowerCase() === 'svg') {
+                                    // Handle SVG elements differently
+                                    this.timeline[step.type](element, {
+                                        ...step.props,
+                                        attr: step.props // Apply properties as attributes for SVG
+                                    });
+                                } else {
+                                    this.timeline[step.type](element, step.props);
+                                }
                             } else if (step.target === 'parent' || step.target === 'container') {
                                 this.timeline[step.type](this.container, step.props);
                             } else if (step.target) {
