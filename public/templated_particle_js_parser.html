@@ -387,6 +387,7 @@
             }
 
             changeScene(sceneName) {
+                console.log(`Changing to ${sceneName}`);
                 for (const [id, element] of Object.entries(this.elements)) {
                     const elementData = this.animationData.elements[id];
                     if (elementData.scenes) {
@@ -395,8 +396,17 @@
                         // If no scenes are specified, show the element in all scenes
                         element.style.display = 'block';
                     }
+                    console.log(`Element: ${id}`);
+                    console.log('  Data:', JSON.stringify(elementData, null, 2));
+                    console.log('  Current style:', JSON.stringify(element.style, (key, value) => {
+                        if (value && typeof value === 'object' && value.nodeType) {
+                            return '[CircularReference]';
+                        }
+                        return value;
+                    }, 2));
+                    console.log('  Computed style:', JSON.stringify(window.getComputedStyle(element), null, 2));
                 }
-                console.log(`Changed to ${sceneName}`); // Add this line for debugging
+                console.log(`Changed to ${sceneName}`);
             }
 
             play() {
