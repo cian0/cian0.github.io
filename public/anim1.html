@@ -243,14 +243,15 @@
                   curviness: 0,
                   autoRotate: true
               }
-          }, "squareMove")
+          })
           .to("#bubbles", {
               duration: 2,
               rotation: 0,
-              ease: "none",
+              ease: "power1.inOut",
               repeat: -1,
-              repeatDelay: 6
-          }, "squareMove")
+              repeatDelay: 6,
+              yoyo: true
+          }, "<")
           .add(showSpeech("bubbles-speech-2", "Wee! Look at me go! I've never felt so angle-ic in my life!"))
           .to("#owner", {duration: 0.5, y: "-4vmin", repeat: 1, yoyo: true})
           .add(showSpeech("owner-speech-2", "You've worked miracles, Detective!"))
