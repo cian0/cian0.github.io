@@ -30,15 +30,15 @@
         }
         .character {
             position: absolute;
-            font-size: 10vmin;
+            font-size: 48px;
         }
         .speech-bubble {
             position: absolute;
             background-color: white;
             border-radius: 20px;
             padding: 10px;
-            font-size: 3vmin;
-            max-width: 40%;
+            font-size: 16px;
+            max-width: 200px;
             opacity: 0;
             z-index: 10;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -62,20 +62,31 @@
             color: white;
             border-radius: 20px;
             padding: 10px;
-            font-size: 3vmin;
-            max-width: 80%;
+            font-size: 16px;
+            max-width: 280px;
             text-align: center;
             opacity: 0;
             z-index: 20;
         }
-        #desk {
-            width: 40%;
-            height: 15%;
-            background-color: #8B4513;
+        #office, #aquarium {
+            width: 100%;
+            height: 100%;
+        }
+        #fishbowl, #square-fishbowl {
+            width: 200px;
+            height: 200px;
+            border: 10px solid #B8860B;
+            background: rgba(135, 206, 235, 0.6);
             position: absolute;
-            bottom: 10%;
-            left: 10%;
-            border-radius: 10px 10px 0 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #fishbowl {
+            border-radius: 50%;
+        }
+        #square-fishbowl {
+            opacity: 0;
         }
         .bubble {
             position: absolute;
@@ -83,70 +94,55 @@
             border-radius: 50%;
             opacity: 0;
         }
-        .office-item {
-            position: absolute;
-            font-size: 8vmin;
-        }
-        #books {
-            top: 40%;
-            right: 15%;
-        }
-        #coffee {
-            bottom: 30%;
-            left: 35%;
-        }
-        #phone {
-            bottom: 25%;
-            left: 55%;
-        }
     </style>
 </head>
 <body>
     <div id="animation-container">
         <div id="office" class="scene">
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+            <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
                 <defs>
-                    <linearGradient id="wallGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient id="officeWall" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style="stop-color:#4B5320;stop-opacity:1" />
                         <stop offset="100%" style="stop-color:#2F4F4F;stop-opacity:1" />
                     </linearGradient>
                 </defs>
-                <rect width="100" height="100" fill="url(#wallGradient)"/>
-                <rect x="10" y="65" width="40" height="15" fill="#8B4513" rx="2" ry="2"/>
-                <rect x="12" y="63" width="36" height="2" fill="#A0522D" rx="1" ry="1"/>
-                <rect x="75" y="10" width="15" height="25" fill="#D2B48C" stroke="#8B4513" stroke-width="1"/>
-                <line x1="82.5" y1="10" x2="82.5" y2="35" stroke="#8B4513" stroke-width="0.5"/>
-                <line x1="75" y1="22.5" x2="90" y2="22.5" stroke="#8B4513" stroke-width="0.5"/>
+                <rect width="1000" height="1000" fill="url(#officeWall)" />
+                <rect x="100" y="700" width="300" height="150" fill="#8B4513" rx="10" ry="10" />
+                <rect x="150" y="50" width="200" height="300" fill="#A0522D" stroke="#8B4513" stroke-width="10" />
+                <circle cx="250" cy="200" r="50" fill="#FFD700" />
+                <rect x="700" y="100" width="200" height="300" fill="#A9A9A9" />
+                <rect x="725" y="125" width="150" height="50" fill="#FFFFFF" />
+                <rect x="725" y="200" width="150" height="50" fill="#FFFFFF" />
+                <rect x="725" y="275" width="150" height="50" fill="#FFFFFF" />
             </svg>
-            <div id="detective-1" class="character" style="bottom: 25%; left: 15%;">🕵️‍♂️</div>
-            <div id="detective-speech-1" class="speech-bubble" style="bottom: 40%; left: 5%;"></div>
-            <div id="books" class="office-item">📚</div>
-            <div id="coffee" class="office-item">☕</div>
-            <div id="phone" class="office-item">📞</div>
+            <div id="detective-1" class="character" style="bottom: 120px; left: 70px;">🕵️‍♂️</div>
+            <div id="phone" class="character" style="bottom: 290px; left: 180px;">📞</div>
+            <div id="detective-speech-1" class="speech-bubble" style="bottom: 180px; left: 20px;"></div>
         </div>
         <div id="aquarium" class="scene">
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+            <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
                 <defs>
-                    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient id="aquariumBg" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
                         <stop offset="100%" style="stop-color:#1E90FF;stop-opacity:1" />
                     </linearGradient>
                 </defs>
-                <rect width="100" height="100" fill="url(#waterGradient)"/>
-                <circle id="fishbowl-svg" cx="50" cy="50" r="25" fill="none" stroke="#B8860B" stroke-width="2"/>
-                <rect id="square-fishbowl-svg" x="25" y="25" width="50" height="50" fill="none" stroke="#B8860B" stroke-width="2" opacity="0"/>
-                <path d="M10,80 Q50,70 90,80" fill="none" stroke="#228B22" stroke-width="1"/>
-                <path d="M15,90 Q50,80 85,90" fill="none" stroke="#228B22" stroke-width="1.5"/>
+                <rect width="1000" height="1000" fill="url(#aquariumBg)" />
+                <path d="M0 800 Q 250 700 500 800 T 1000 800 L 1000 1000 L 0 1000 Z" fill="#228B22" />
+                <circle cx="100" cy="100" r="50" fill="#FFD700" />
+                <path d="M50 950 C 200 850, 300 900, 400 850 S 550 800, 650 850 S 800 900, 950 850" stroke="#8B4513" stroke-width="10" fill="none" />
             </svg>
+            <div id="fishbowl"></div>
+            <div id="square-fishbowl"></div>
             <div id="bubbles" class="character" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">🐠</div>
-            <div id="owner" class="character" style="bottom: 10%; right: 10%;">👩</div>
-            <div id="detective-2" class="character" style="bottom: 10%; left: 10%;">🕵️‍♂️</div>
-            <div id="owner-speech-1" class="speech-bubble" style="bottom: 25%; right: 5%;"></div>
-            <div id="detective-speech-2" class="speech-bubble" style="bottom: 25%; left: 5%;"></div>
+            <div id="owner" class="character" style="bottom: 50px; right: 50px;">👩</div>
+            <div id="detective-2" class="character" style="bottom: 50px; left: 50px;">🕵️‍♂️</div>
+            <div id="owner-speech-1" class="speech-bubble" style="bottom: 120px; right: 20px;"></div>
+            <div id="detective-speech-2" class="speech-bubble" style="bottom: 120px; left: 20px;"></div>
             <div id="bubbles-speech-1" class="speech-bubble" style="top: 30%; left: 50%; transform: translateX(-50%);"></div>
-            <div id="detective-speech-3" class="speech-bubble" style="bottom: 25%; left: 5%;"></div>
+            <div id="detective-speech-3" class="speech-bubble" style="bottom: 120px; left: 20px;"></div>
             <div id="bubbles-speech-2" class="speech-bubble" style="top: 30%; left: 50%; transform: translateX(-50%);"></div>
-            <div id="owner-speech-2" class="speech-bubble" style="bottom: 25%; right: 5%;"></div>
+            <div id="owner-speech-2" class="speech-bubble" style="bottom: 120px; right: 20px;"></div>
         </div>
         <div id="narration-1" class="narration"></div>
         <div id="narration-2" class="narration"></div>
@@ -177,14 +173,14 @@
             for (let i = 0; i < count; i++) {
                 const bubble = document.createElement('div');
                 bubble.className = 'bubble';
-                bubble.style.width = bubble.style.height = `${Math.random() * 2 + 0.5}vmin`;
+                bubble.style.width = bubble.style.height = `${Math.random() * 20 + 5}px`;
                 bubble.style.left = `${Math.random() * 100}%`;
                 bubble.style.top = `${Math.random() * 100}%`;
                 container.appendChild(bubble);
 
                 gsap.to(bubble, {
-                    y: `-=${Math.random() * 20 + 10}vmin`,
-                    x: `+=${Math.random() * 10 - 5}vmin`,
+                    y: `-=${Math.random() * 100 + 50}`,
+                    x: `+=${Math.random() * 50 - 25}`,
                     opacity: 1,
                     duration: Math.random() * 2 + 1,
                     repeat: -1,
@@ -195,15 +191,16 @@
             }
         }
 
-        // Create bubbles in the aquarium
-        createBubbles(document.querySelector("#aquarium"), 20);
+        // Create bubbles in the fishbowl
+        createBubbles(document.getElementById('fishbowl'), 10);
+        createBubbles(document.getElementById('square-fishbowl'), 10);
 
         // Scene 1: The Call
         tl.to("#office", {duration: 1, opacity: 1})
           .add(showNarration("narration-1", "In the bustling city of Aquapolis, Detective Finn receives an unusual call..."))
-          .from("#detective-1", {duration: 1, x: "-20vw", opacity: 0})
-          .from("#books, #coffee, #phone", {duration: 0.5, opacity: 0, scale: 0, stagger: 0.2, ease: "back.out(1.7)"})
-          .to("#phone", {duration: 0.1, y: "-1vmin", repeat: 5, yoyo: true})
+          .from("#detective-1", {duration: 1, x: -100, opacity: 0})
+          .from("#phone", {duration: 0.5, y: -50, opacity: 0})
+          .to("#phone", {duration: 0.1, y: -5, repeat: 5, yoyo: true})
           .add(showSpeech("detective-speech-1", "Detective Finn here. What's the catch of the day?"))
           .to("#detective-1", {duration: 0.5, rotate: 10, yoyo: true, repeat: 1})
           .to("#office", {duration: 1, opacity: 0, delay: 1});
@@ -211,13 +208,13 @@
         // Scene 2: The Crime Scene
         tl.to("#aquarium", {duration: 1, opacity: 1})
           .add(showNarration("narration-2", "At the luxurious Bubble Palace, Detective Finn encounters a most peculiar case..."))
-          .from("#fishbowl-svg", {duration: 1, scale: 0, transformOrigin: "center", ease: "elastic.out(1, 0.5)"})
+          .from("#fishbowl", {duration: 1, scale: 0, ease: "elastic.out(1, 0.5)"})
           .from("#bubbles", {duration: 1, opacity: 0, scale: 0, ease: "back.out(1.7)"})
-          .from("#owner", {duration: 1, x: "20vw", opacity: 0})
+          .from("#owner", {duration: 1, x: 100, opacity: 0})
           .add(showSpeech("owner-speech-1", "Detective, look at poor Bubbles! He's so depressed!"))
           .to("#bubbles", {duration: 2, rotation: 10, yoyo: true, repeat: -1, ease: "sine.inOut"})
-          .from("#detective-2", {duration: 1, x: "-20vw", y: "20vh", scale: 0.7, opacity: 0})
-          .to("#detective-2", {duration: 2, x: "+=10vw", y: "+=10vh", ease: "power2.inOut"})
+          .from("#detective-2", {duration: 1, x: -100, y: 100, scale: 0.7, opacity: 0})
+          .to("#detective-2", {duration: 2, x: "+=50", y: "+=50", ease: "power2.inOut"})
           .add(showSpeech("detective-speech-2", "Hmm... How long has the suspect... I mean, your fish been like this?"));
 
         // Scene 3: The Solution
@@ -225,96 +222,32 @@
           .add(showSpeech("bubbles-speech-1", "I'm just tired, Detective. Tired of swimming in endless circles."))
           .to("#detective-2", {duration: 1, scale: 1.2, ease: "back.out(1.7)"})
           .add(showSpeech("detective-speech-3", "Great Scott! I've solved it!"))
-          .to("#square-fishbowl-svg", {duration: 1, opacity: 1, scale: 1.1, transformOrigin: "center", ease: "elastic.out(1, 0.5)"})
-          .to("#fishbowl-svg", {duration: 1, opacity: 0, scale: 0.9, transformOrigin: "center", ease: "power2.in"}, "<")
+          .to("#square-fishbowl", {duration: 1, opacity: 1, scale: 1.1, ease: "elastic.out(1, 0.5)"})
+          .to("#fishbowl", {duration: 1, opacity: 0, scale: 0.9, ease: "power2.in"}, "<")
           .to("#bubbles", {duration: 1, scale: 1.2, ease: "back.out(1.7)"})
           .to("#bubbles", {
-              duration: 8,
+              duration: 4,
               repeat: -1,
               ease: "none",
-              motionPath: {
-                  path: [
-                      {x: "-10vw", y: "-10vh"},
-                      {x: "10vw", y: "-10vh"},
-                      {x: "10vw", y: "10vh"},
-                      {x: "-10vw", y: "10vh"},
-                      {x: "-10vw", y: "-10vh"}
-                  ],
-                  curviness: 0,
-                  autoRotate: true
-              }
+              keyframes: [
+                  {x: -50, y: -50, rotation: 0},
+                  {x: 50, y: 50, rotation: 180},
+                  {x: -50, y: 50, rotation: 270},
+                  {x: 50, y: -50, rotation: 360}
+              ]
           })
-          .to("#bubbles", {
-              duration: 2,
-              rotation: 0,
-              ease: "power1.inOut",
-              repeat: -1,
-              repeatDelay: 6,
-              yoyo: true
-          }, "<")
           .add(showSpeech("bubbles-speech-2", "Wee! Look at me go! I've never felt so angle-ic in my life!"))
-          .to("#owner", {duration: 0.5, y: "-4vmin", repeat: 1, yoyo: true})
+          .to("#owner", {duration: 0.5, y: -20, repeat: 1, yoyo: true})
           .add(showSpeech("owner-speech-2", "You've worked miracles, Detective!"))
-          .to("#detective-2", {duration: 2, x: "80vw", y: "40vh", scale: 0.5, opacity: 0, ease: "power2.in"})
-          .add(showNarration("narration-4", "And so, Detective Finn swam away from another successful case, leaving behind a very happy square fish."))
-          .to("#aquarium", {duration: 1, opacity: 0, delay: 1});
+          .to("#detective-2", {duration: 2, x: 400, y: 200, scale: 0.5, opacity: 0, ease: "power2.in"})
+          .add(showNarration("narration-4", "And so, Detective Finn solved another case, proving that sometimes, all we need is a change of perspective."));
+
+        // Speed up the entire animation by 30%
+        tl.timeScale(1.3);
 
         // Add interactivity
         document.querySelector("#animation-container").addEventListener("click", () => {
             tl.paused() ? tl.play() : tl.pause();
         });
-
-        // Make the animation responsive
-        function resizeAnimation() {
-            const vw = window.innerWidth / 100;
-            const vh = window.innerHeight / 100;
-
-            // Adjust font sizes
-            document.querySelectorAll('.character').forEach(char => {
-                char.style.fontSize = `${10 * Math.min(vw, vh)}px`;
-            });
-
-            document.querySelectorAll('.office-item').forEach(item => {
-                item.style.fontSize = `${8 * Math.min(vw, vh)}px`;
-            });
-
-            document.querySelectorAll('.speech-bubble').forEach(bubble => {
-                bubble.style.fontSize = `${3 * Math.min(vw, vh)}px`;
-            });
-
-            document.querySelectorAll('.narration').forEach(narr => {
-                narr.style.fontSize = `${3 * Math.min(vw, vh)}px`;
-            });
-
-            // Adjust positions
-            const detective1 = document.getElementById('detective-1');
-            detective1.style.bottom = '25%';
-            detective1.style.left = '15%';
-
-            const coffee = document.getElementById('coffee');
-            coffee.style.bottom = '30%';
-            coffee.style.left = '35%';
-
-            const phone = document.getElementById('phone');
-            phone.style.bottom = '25%';
-            phone.style.left = '55%';
-
-            // Recalculate bubble sizes and positions
-            document.querySelectorAll('.bubble').forEach(bubble => {
-                bubble.style.width = bubble.style.height = `${(Math.random() * 2 + 0.5) * Math.min(vw, vh)}px`;
-            });
-        }
-
-        // Call resizeAnimation on window resize
-        window.addEventListener('resize', resizeAnimation);
-
-        // Initial call to set up the animation
-        resizeAnimation();
-
-        // Restart the animation when it completes
-        tl.eventCallback("onComplete", () => {
-            tl.restart();
-        });
     </script>
 </body>
-</html>
