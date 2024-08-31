@@ -115,12 +115,14 @@
                 console.error('particles.js is not loaded. Please check your internet connection and try again.');
                 return;
             }
-            class ParticleSystem {
+
+            class EmojiParticleSystem {
                 constructor(container, options, id) {
                     this.container = container;
                     this.options = options;
                     this.id = id;
-                    this.particlesContainer = null;
+                    this.particles = [];
+                    this.isRunning = false;
                 }
 
                 create() {
@@ -130,27 +132,58 @@
                     this.container.appendChild(this.particlesContainer);
                 }
 
+                createParticle() {
+                    const particle = document.createElement('div');
+                    particle.className = 'emoji-particle';
+                    particle.textContent = this.options.emoji;
+                    particle.style.fontSize = `${this.options.size}px`;
+                    particle.style.opacity = this.options.opacity;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = '-50px';
+                    this.particlesContainer.appendChild(particle);
+                    return particle;
+                }
+
+                animateParticle(particle) {
+                    const duration = this.options.duration + (Math.random() - 0.5) * this.options.durationVariation;
+                    gsap.to(particle, {
+                        y: `${this.container.clientHeight + 100}px`,
+                        x: `${(Math.random() - 0.5) * 200}px`,
+                        rotation: (Math.random() - 0.5) * 360,
+                        duration: duration,
+                        ease: "none",
+                        onComplete: () => {
+                            this.particlesContainer.removeChild(particle);
+                            if (this.isRunning) {
+                                this.animateParticle(this.createParticle());
+                            }
+                        }
+                    });
+                }
+
                 start() {
-                    this.create();
-                    particlesJS(`particles-${this.id}`, this.options);
+                    if (!this.particlesContainer) {
+                        this.create();
+                    }
+                    this.isRunning = true;
+                    for (let i = 0; i < this.options.number; i++) {
+                        setTimeout(() => {
+                            if (this.isRunning) {
+                                this.animateParticle(this.createParticle());
+                            }
+                        }, i * (this.options.duration / this.options.number));
+                    }
                 }
 
                 stop() {
+                    this.isRunning = false;
                     if (this.particlesContainer) {
-                        if (window.pJSDom) {
-                            window.pJSDom.forEach((dom, i) => {
-                                if (dom.pJS.canvas.el.id === `particles-${this.id}-canvas`) {
-                                    window.pJSDom[i].pJS.fn.vendors.destroypJS();
-                                    window.pJSDom.splice(i, 1);
-                                }
-                            });
-                        }
+                        gsap.killTweensOf(this.particlesContainer.children);
                         this.particlesContainer.remove();
                         this.particlesContainer = null;
                     }
                 }
             }
-
         class AnimationLibrary {
             constructor(containerId, animationData) {
                 this.container = document.getElementById(containerId);
