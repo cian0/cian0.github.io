@@ -98,6 +98,90 @@
                 "z-index": "10"
             },
             "scenes": ["city", "sky", "castle"]
+        },
+        "heroEnergy": {
+            "type": "particle",
+            "options": {
+                "emoji": "⚡",
+                "number": 30,
+                "size": 30,
+                "opacity": 0.7,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "explosion"
+            }
+        },
+        "wizardMagic": {
+            "type": "particle",
+            "options": {
+                "emoji": "✨",
+                "number": 30,
+                "size": 30,
+                "opacity": 0.7,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "explosion"
+            }
+        },
+        "cloudBurst": {
+            "type": "particle",
+            "options": {
+                "emoji": "☁️",
+                "number": 10,
+                "size": 50,
+                "opacity": 0.5,
+                "duration": 3,
+                "durationVariation": 1,
+                "movementType": "float"
+            }
+        },
+        "lightning": {
+            "type": "particle",
+            "options": {
+                "emoji": "⚡",
+                "number": 20,
+                "size": 40,
+                "opacity": 0.8,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "rain"
+            }
+        },
+        "heroAura": {
+            "type": "particle",
+            "options": {
+                "emoji": "🌟",
+                "number": 40,
+                "size": 30,
+                "opacity": 0.7,
+                "duration": 3,
+                "durationVariation": 1,
+                "movementType": "explosion"
+            }
+        },
+        "wizardDefeat": {
+            "type": "particle",
+            "options": {
+                "emoji": "💥",
+                "number": 30,
+                "size": 40,
+                "opacity": 0.8,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "explosion"
+            }
+        },
+        "victory": {
+            "type": "particle",
+            "options": {
+                "emoji": "🎉",
+                "number": 50,
+                "size": 40,
+                "opacity": 0.8,
+                "duration": 4,
+                "durationVariation": 1,
+                "movementType": "float"
+            }
         }
     },
     "steps": [
