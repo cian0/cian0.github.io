@@ -270,6 +270,18 @@
                 }
             }
 
+            updateElement(id, props) {
+                const element = this.elements[id];
+                if (element) {
+                    if (props.content) {
+                        element.textContent = props.content;
+                    }
+                    if (props.style) {
+                        Object.assign(element.style, props.style);
+                    }
+                }
+            }
+
             createParticleSystems() {
                 for (const [id, data] of Object.entries(this.animationData.elements)) {
                     if (data.type === 'particle') {
@@ -283,24 +295,34 @@
                 for (const step of this.animationData.steps) {
                     switch (step.type) {
                         case 'set':
+                            if (step.target && this.elements[step.target]) {
+                                this.timeline.call(() => this.updateElement(step.target, step.props));
+                            } else if (step.target === 'parent' || step.target === 'container') {
+                                this.timeline.set(this.container, step.props);
+                            } else if (step.target) {
+                                console.warn(`Element "${step.target}" not found for set animation. Skipping this step.`);
+                            } else {
+                                console.warn(`Invalid target for set animation. Skipping this step.`);
+                            }
+                            break;
                         case 'to':
                             if (step.target && this.elements[step.target]) {
                                 const element = this.elements[step.target];
                                 if (element.tagName.toLowerCase() === 'svg') {
                                     // Handle SVG elements differently
-                                    this.timeline[step.type](element, {
+                                    this.timeline.to(element, {
                                         ...step.props,
                                         attr: step.props // Apply properties as attributes for SVG
                                     });
                                 } else {
-                                    this.timeline[step.type](element, step.props);
+                                    this.timeline.to(element, step.props);
                                 }
                             } else if (step.target === 'parent' || step.target === 'container') {
-                                this.timeline[step.type](this.container, step.props);
+                                this.timeline.to(this.container, step.props);
                             } else if (step.target) {
-                                console.warn(`Element "${step.target}" not found for ${step.type} animation. Skipping this step.`);
+                                console.warn(`Element "${step.target}" not found for to animation. Skipping this step.`);
                             } else {
-                                console.warn(`Invalid target for ${step.type} animation. Skipping this step.`);
+                                console.warn(`Invalid target for to animation. Skipping this step.`);
                             }
                             break;
                         case 'dialog':
