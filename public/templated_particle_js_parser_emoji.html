@@ -265,6 +265,7 @@
                 this.elements = [];
                 this.particleSystems = {};
                 this.sceneManager = new SceneManager(this.elements);
+                this.currentScene = null;
             }
 
             init() {
@@ -292,6 +293,7 @@
                             }
                         }
                         Object.assign(element.style, data.style);
+                        element.style.display = 'none'; // Initially hide all elements
                         this.container.appendChild(element);
                         this.elements.push({
                             id: id,
@@ -300,6 +302,26 @@
                         });
                     }
                 }
+            }
+
+            changeScene(sceneName) {
+                if (this.currentScene) {
+                    // Hide all elements from the current scene
+                    this.elements.forEach(element => {
+                        if (element.scenes.includes(this.currentScene)) {
+                            element.domElement.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Show elements for the new scene
+                this.elements.forEach(element => {
+                    if (element.scenes.includes(sceneName)) {
+                        element.domElement.style.display = '';
+                    }
+                });
+
+                this.currentScene = sceneName;
             }
 
             updateElement(id, props) {
@@ -382,7 +404,7 @@
                             }
                             break;
                         case 'changeScene':
-                            this.timeline.call(() => this.sceneManager.changeScene(step.sceneName));
+                            this.timeline.call(() => this.changeScene(step.sceneName));
                             break;
                     }
                 }
