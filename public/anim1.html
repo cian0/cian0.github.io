@@ -153,12 +153,12 @@
     <script>
         const tl = gsap.timeline();
 
-        function showSpeech(id, text, duration = 2) {
+        function showSpeech(id, text, duration = 1) {
             const element = document.getElementById(id);
             element.textContent = text;
             return gsap.timeline()
-                .to(element, {duration: 0.5, opacity: 1, scale: 1, ease: "back.out(1.7)"})
-                .to(element, {duration: 0.5, opacity: 0, scale: 0.8, delay: duration, ease: "power2.in"});
+                .to(element, {duration: 0.3, opacity: 1, scale: 1, ease: "back.out(1.7)"})
+                .to(element, {duration: 0.3, opacity: 0, scale: 0.8, delay: duration, ease: "power2.in"});
         }
 
         function showNarration(id, text, duration = 3) {
