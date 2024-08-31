@@ -116,6 +116,18 @@
                 "movementType": "rain"
             }
         },
+        "explosion": {
+            "type": "particle",
+            "options": {
+                "emoji": "💥",
+                "number": 30,
+                "size": 20,
+                "opacity": 1,
+                "duration": 1.5,
+                "durationVariation": 0.5,
+                "movementType": "explosion"
+            }
+        },
         "transition": {
             "class": "overlay",
             "style": {
@@ -288,6 +300,10 @@
             "duration": 2
         },
         {
+            "type": "startParticles",
+            "target": "explosion"
+        },
+        {
             "type": "to",
             "target": "transition",
             "props": {
@@ -298,6 +314,10 @@
         {
             "type": "stopParticles",
             "target": "raindrops"
+        },
+        {
+            "type": "stopParticles",
+            "target": "explosion"
         },
         {
             "type": "set",

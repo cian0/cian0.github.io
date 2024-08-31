@@ -156,40 +156,52 @@
                     
                     gsap.set(particle, { x: startX, y: startY });
                     
-                    if (this.options.movementType === 'rain') {
-                        gsap.to(particle, {
-                            duration: duration,
-                            y: this.container.clientHeight + 50,
-                            x: `+=${(Math.random() - 0.5) * 100}`,
-                            ease: "power1.in",
-                            onComplete: () => {
-                                this.particlesContainer.removeChild(particle);
-                                if (this.isRunning) {
-                                    this.animateParticle(this.createParticle());
-                                }
-                            }
-                        });
-                    } else {
-                        gsap.to(particle, {
-                            duration: duration,
-                            motionPath: {
-                                path: [
-                                    { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 },
-                                    { x: startX + (Math.random() - 0.5) * 200, y: startY + (Math.random() - 0.5) * 200 },
-                                    { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 }
-                                ],
-                                curviness: 1.5
-                            },
-                            rotation: (Math.random() - 0.5) * 360,
-                            ease: "power1.inOut",
-                            onComplete: () => {
-                                this.particlesContainer.removeChild(particle);
-                                if (this.isRunning) {
-                                    this.animateParticle(this.createParticle());
-                                }
-                            }
-                        });
+                    let animationProps;
+                    
+                    switch (this.options.movementType) {
+                        case 'rain':
+                            animationProps = {
+                                duration: duration,
+                                y: this.container.clientHeight + 50,
+                                x: `+=${(Math.random() - 0.5) * 100}`,
+                                ease: "power1.in"
+                            };
+                            break;
+                        case 'explosion':
+                            const angle = Math.random() * Math.PI * 2;
+                            const distance = Math.random() * 200 + 100;
+                            animationProps = {
+                                duration: duration,
+                                x: startX + Math.cos(angle) * distance,
+                                y: startY + Math.sin(angle) * distance,
+                                scale: 0,
+                                ease: "power2.out"
+                            };
+                            break;
+                        default:
+                            animationProps = {
+                                duration: duration,
+                                motionPath: {
+                                    path: [
+                                        { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 },
+                                        { x: startX + (Math.random() - 0.5) * 200, y: startY + (Math.random() - 0.5) * 200 },
+                                        { x: startX + (Math.random() - 0.5) * 100, y: startY + (Math.random() - 0.5) * 100 }
+                                    ],
+                                    curviness: 1.5
+                                },
+                                rotation: (Math.random() - 0.5) * 360,
+                                ease: "power1.inOut"
+                            };
                     }
+                    
+                    animationProps.onComplete = () => {
+                        this.particlesContainer.removeChild(particle);
+                        if (this.isRunning) {
+                            this.animateParticle(this.createParticle());
+                        }
+                    };
+                    
+                    gsap.to(particle, animationProps);
                 }
 
                 start() {
