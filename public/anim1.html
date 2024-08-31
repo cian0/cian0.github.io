@@ -229,19 +229,20 @@
           .to("#fishbowl-svg", {duration: 1, opacity: 0, scale: 0.9, transformOrigin: "center", ease: "power2.in"}, "<")
           .to("#bubbles", {duration: 1, scale: 1.2, ease: "back.out(1.7)"})
           .to("#bubbles", {
-              duration: 4,
+              duration: 8,
               repeat: -1,
               ease: "none",
               motionPath: {
                   path: [
                       {x: "-10vw", y: "-10vh"},
+                      {x: "10vw", y: "-10vh"},
                       {x: "10vw", y: "10vh"},
                       {x: "-10vw", y: "10vh"},
-                      {x: "10vw", y: "-10vh"}
+                      {x: "-10vw", y: "-10vh"}
                   ],
-                  curviness: 1.5
-              },
-              rotation: 360
+                  curviness: 0,
+                  autoRotate: true
+              }
           })
           .add(showSpeech("bubbles-speech-2", "Wee! Look at me go! I've never felt so angle-ic in my life!"))
           .to("#owner", {duration: 0.5, y: "-4vmin", repeat: 1, yoyo: true})
