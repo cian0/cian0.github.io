@@ -256,8 +256,8 @@
             "props": {
                 "duration": 1.5,
                 "motionPath": [
-                    {x: "+=50", y: "-=100"},
-                    {x: "+=100", y: "+=150"}
+                    {"x": 50, "y": -100},
+                    {"x": 100, "y": 150}
                 ],
                 "rotation": 720,
                 "ease": "power1.inOut"
@@ -334,8 +334,8 @@
             "props": {
                 "duration": 1.5,
                 "motionPath": [
-                    {x: "+=50", y: "-=100"},
-                    {x: "+=100", y: "+=150"}
+                    {"x": 50, "y": -100},
+                    {"x": 100, "y": 150}
                 ],
                 "rotation": 360,
                 "ease": "power1.inOut"
@@ -415,8 +415,8 @@
             "props": {
                 "duration": 2,
                 "motionPath": [
-                    {x: "-=50", y: "-=100"},
-                    {x: "-=100", y: "+=150"}
+                    {"x": -50, "y": -100},
+                    {"x": -100, "y": 150}
                 ],
                 "rotation": 720,
                 "ease": "bounce.out"
