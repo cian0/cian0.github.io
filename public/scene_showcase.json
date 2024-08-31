@@ -1,11 +1,8 @@
 {
-    "elements":
-    {
-        "background":
-        {
+    "elements": {
+        "background": {
             "class": "background",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "top": "0",
                 "left": "0",
@@ -13,70 +10,48 @@
                 "height": "100%",
                 "z-index": "1"
             },
-            "scenes":
-            [
-                "classroom",
-                "farm",
-                "beach"
-            ]
+            "scenes": ["classroom", "farm", "beach"]
         },
-        "teacher":
-        {
+        "teacher": {
             "class": "character",
             "content": "👩‍🏫",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "60px",
                 "bottom": "30%",
                 "left": "20%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "classroom"
-            ]
+            "scenes": ["classroom"]
         },
-        "student1":
-        {
+        "student1": {
             "class": "character",
             "content": "👧",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "50px",
                 "bottom": "25%",
                 "left": "40%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "classroom"
-            ]
+            "scenes": ["classroom"]
         },
-        "student2":
-        {
+        "student2": {
             "class": "character",
             "content": "👦",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "50px",
                 "bottom": "25%",
                 "right": "40%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "classroom"
-            ]
+            "scenes": ["classroom"]
         },
-        "blackboard":
-        {
+        "blackboard": {
             "class": "prop",
             "content": "🔳",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "100px",
                 "top": "20%",
@@ -84,152 +59,143 @@
                 "transform": "translateX(-50%)",
                 "z-index": "2"
             },
-            "scenes":
-            [
-                "classroom"
-            ]
+            "scenes": ["classroom"]
         },
-        "farmer":
-        {
+        "apple": {
+            "class": "prop",
+            "content": "🍎",
+            "style": {
+                "position": "absolute",
+                "font-size": "40px",
+                "top": "40%",
+                "left": "30%",
+                "z-index": "4"
+            },
+            "scenes": ["classroom"]
+        },
+        "farmer": {
             "class": "character",
             "content": "👨‍🌾",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "60px",
                 "bottom": "25%",
                 "left": "30%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "farm"
-            ]
+            "scenes": ["farm"]
         },
-        "cow":
-        {
+        "cow": {
             "class": "animal",
             "content": "🐄",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "70px",
                 "bottom": "20%",
                 "right": "30%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "farm"
-            ]
+            "scenes": ["farm"]
         },
-        "barn":
-        {
+        "barn": {
             "class": "building",
-            "content": "�barn",
-            "style":
-            {
+            "content": "🏚️",
+            "style": {
                 "position": "absolute",
                 "font-size": "80px",
                 "top": "30%",
                 "right": "20%",
                 "z-index": "2"
             },
-            "scenes":
-            [
-                "farm"
-            ]
+            "scenes": ["farm"]
         },
-        "tractor":
-        {
+        "tractor": {
             "class": "vehicle",
             "content": "🚜",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "70px",
                 "bottom": "15%",
                 "left": "10%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "farm"
-            ]
+            "scenes": ["farm"]
         },
-        "beachgoer":
-        {
+        "hay": {
+            "class": "prop",
+            "content": "🌾",
+            "style": {
+                "position": "absolute",
+                "font-size": "50px",
+                "bottom": "10%",
+                "left": "50%",
+                "z-index": "2"
+            },
+            "scenes": ["farm"]
+        },
+        "beachgoer": {
             "class": "character",
             "content": "🏊‍♀️",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "60px",
                 "bottom": "30%",
                 "left": "40%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "beach"
-            ]
+            "scenes": ["beach"]
         },
-        "umbrella":
-        {
+        "umbrella": {
             "class": "prop",
             "content": "🏖️",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "80px",
                 "bottom": "20%",
                 "right": "30%",
                 "z-index": "2"
             },
-            "scenes":
-            [
-                "beach"
-            ]
+            "scenes": ["beach"]
         },
-        "boat":
-        {
+        "boat": {
             "class": "vehicle",
             "content": "🚤",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "70px",
                 "top": "40%",
                 "right": "20%",
                 "z-index": "3"
             },
-            "scenes":
-            [
-                "beach"
-            ]
+            "scenes": ["beach"]
         },
-        "fish":
-        {
+        "fish": {
             "class": "animal",
             "content": "🐠",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "font-size": "50px",
                 "bottom": "40%",
                 "left": "20%",
                 "z-index": "2"
             },
-            "scenes":
-            [
-                "beach"
-            ]
+            "scenes": ["beach"]
         },
-        "transition":
-        {
+        "volleyball": {
+            "class": "prop",
+            "content": "🏐",
+            "style": {
+                "position": "absolute",
+                "font-size": "40px",
+                "bottom": "25%",
+                "left": "60%",
+                "z-index": "4"
+            },
+            "scenes": ["beach"]
+        },
+        "transition": {
             "class": "overlay",
-            "style":
-            {
+            "style": {
                 "position": "absolute",
                 "top": "0",
                 "left": "0",
@@ -239,16 +205,10 @@
                 "opacity": "0",
                 "z-index": "10"
             },
-            "scenes":
-            [
-                "classroom",
-                "farm",
-                "beach"
-            ]
+            "scenes": ["classroom", "farm", "beach"]
         }
     },
-    "steps":
-    [
+    "steps": [
         {
             "type": "changeScene",
             "sceneName": "classroom"
@@ -256,25 +216,22 @@
         {
             "type": "set",
             "target": "background",
-            "props":
-            {
-                "style":
-                {
-                    "background": "linear-gradient(to bottom, #87CEEB 30%, #F0F0F0 30%)"
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #87CEEB 30%, #F0F0F0 30%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect fill=\"%23ffffff\" width=\"50\" height=\"50\" x=\"0\" y=\"0\"/><rect fill=\"%23ffffff\" width=\"50\" height=\"50\" x=\"50\" y=\"50\"/><rect fill=\"%23f0f0f0\" width=\"50\" height=\"50\" x=\"50\" y=\"0\"/><rect fill=\"%23f0f0f0\" width=\"50\" height=\"50\" x=\"0\" y=\"50\"/></svg>')"
                 }
             }
         },
         {
             "type": "dialog",
             "target": "teacher",
-            "text": "Good morning, class! 📚",
-            "duration": 2
+            "text": "Good morning, class! 📚 Let's start with a fun activity!",
+            "duration": 3
         },
         {
             "type": "to",
             "target": "student1",
-            "props":
-            {
+            "props": {
                 "duration": 1,
                 "y": "-20px",
                 "yoyo": true,
@@ -285,8 +242,7 @@
         {
             "type": "to",
             "target": "student2",
-            "props":
-            {
+            "props": {
                 "duration": 1,
                 "y": "-20px",
                 "yoyo": true,
@@ -296,9 +252,33 @@
         },
         {
             "type": "to",
+            "target": "apple",
+            "props": {
+                "duration": 1.5,
+                "motionPath": [
+                    {x: "+=50", y: "-=100"},
+                    {x: "+=100", y: "+=150"}
+                ],
+                "rotation": 720,
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "classroomStars",
+            "options": {
+                "emoji": "⭐",
+                "number": 20,
+                "size": 20,
+                "duration": 2,
+                "opacity": 0.7,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "to",
             "target": "transition",
-            "props":
-            {
+            "props": {
                 "duration": 1,
                 "opacity": 1
             }
@@ -310,19 +290,16 @@
         {
             "type": "set",
             "target": "background",
-            "props":
-            {
-                "style":
-                {
-                    "background": "linear-gradient(to bottom, #87CEEB 60%, #228B22 60%)"
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #87CEEB 60%, #228B22 60%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path fill=\"%23228B22\" d=\"M0 0h100v100H0z\"/><path fill=\"%2332CD32\" d=\"M0 0h50v50H0z\"/><path fill=\"%2332CD32\" d=\"M50 50h50v50H50z\"/></svg>')"
                 }
             }
         },
         {
             "type": "to",
             "target": "transition",
-            "props":
-            {
+            "props": {
                 "duration": 1,
                 "opacity": 0
             }
@@ -330,14 +307,13 @@
         {
             "type": "dialog",
             "target": "farmer",
-            "text": "Time to milk the cows! 🥛",
-            "duration": 2
+            "text": "Time to milk the cows! 🥛 But first, let's feed them!",
+            "duration": 3
         },
         {
             "type": "to",
             "target": "cow",
-            "props":
-            {
+            "props": {
                 "duration": 2,
                 "x": "-50px",
                 "ease": "power1.inOut"
@@ -346,8 +322,7 @@
         {
             "type": "to",
             "target": "tractor",
-            "props":
-            {
+            "props": {
                 "duration": 3,
                 "x": "100px",
                 "ease": "power1.inOut"
@@ -355,9 +330,33 @@
         },
         {
             "type": "to",
+            "target": "hay",
+            "props": {
+                "duration": 1.5,
+                "motionPath": [
+                    {x: "+=50", y: "-=100"},
+                    {x: "+=100", y: "+=150"}
+                ],
+                "rotation": 360,
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "farmDust",
+            "options": {
+                "emoji": "💨",
+                "number": 15,
+                "size": 30,
+                "duration": 3,
+                "opacity": 0.5,
+                "movementType": "rain"
+            }
+        },
+        {
+            "type": "to",
             "target": "transition",
-            "props":
-            {
+            "props": {
                 "duration": 1,
                 "opacity": 1
             }
@@ -369,19 +368,16 @@
         {
             "type": "set",
             "target": "background",
-            "props":
-            {
-                "style":
-                {
-                    "background": "linear-gradient(to bottom, #87CEEB 70%, #F4A460 70%)"
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #87CEEB 70%, #F4A460 70%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path fill=\"%2387CEEB\" d=\"M0 0h100v70H0z\"/><path fill=\"%23F4A460\" d=\"M0 70h100v30H0z\"/><circle fill=\"%23FFD700\" cx=\"80\" cy=\"20\" r=\"10\"/></svg>')"
                 }
             }
         },
         {
             "type": "to",
             "target": "transition",
-            "props":
-            {
+            "props": {
                 "duration": 1,
                 "opacity": 0
             }
@@ -389,14 +385,13 @@
         {
             "type": "dialog",
             "target": "beachgoer",
-            "text": "What a perfect day for a swim! 🌊",
-            "duration": 2
+            "text": "What a perfect day for a swim! 🌊 Let's play some volleyball first!",
+            "duration": 3
         },
         {
             "type": "to",
             "target": "boat",
-            "props":
-            {
+            "props": {
                 "duration": 4,
                 "x": "-150px",
                 "ease": "power1.inOut"
@@ -405,14 +400,38 @@
         {
             "type": "to",
             "target": "fish",
-            "props":
-            {
+            "props": {
                 "duration": 2,
                 "x": "50px",
                 "y": "-30px",
                 "yoyo": true,
                 "repeat": 1,
                 "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "to",
+            "target": "volleyball",
+            "props": {
+                "duration": 2,
+                "motionPath": [
+                    {x: "-=50", y: "-=100"},
+                    {x: "-=100", y: "+=150"}
+                ],
+                "rotation": 720,
+                "ease": "bounce.out"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "beachBubbles",
+            "options": {
+                "emoji": "🫧",
+                "number": 25,
+                "size": 25,
+                "duration": 4,
+                "opacity": 0.6,
+                "movementType": "float"
             }
         }
     ]
