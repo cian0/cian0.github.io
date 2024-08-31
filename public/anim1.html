@@ -6,6 +6,7 @@
     <title>Toxic Mermaid Transformation and Attack Animation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
+
         body, html {
             margin: 0;
             padding: 0;
@@ -71,6 +72,7 @@
         }
         .dialog-bubble {
             position: absolute;
+            transform-origin: bottom center;
             background-color: white;
             border-radius: 20px;
             padding: 10px;
@@ -138,10 +140,35 @@
             opacity: 0;
             z-index: 12;
         }
+        .beachgoer {
+            position: absolute;
+            font-size: 36px;
+            z-index: 8;
+            opacity: 0;
+        }
+        .pristine-water {
+            position: absolute;
+            bottom: 20%;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to bottom, rgba(0,191,255,0) 0%, rgba(0,191,255,0.8) 100%);
+            opacity: 0;
+        }
+        .evil-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,0,0,0.8) 0%, rgba(255,0,0,0) 70%);
+            opacity: 0;
+            z-index: 8;
+        }
     </style>
 </head>
 <body>
     <div id="animation-container">
+        <!-- <div id="extended-background"></div> -->
         <div class="scene">
             <div class="sand"></div>
             <div class="water"></div>
@@ -156,12 +183,21 @@
             <div id="dialog5" class="dialog-bubble"></div>
             <div id="dialog6" class="dialog-bubble"></div>
             <div id="dialog7" class="dialog-bubble"></div>
+            <div id="dialog8" class="dialog-bubble"></div>
+            <div id="dialog9" class="dialog-bubble"></div>
+            <div id="dialog10" class="dialog-bubble"></div>
+            <div id="dialog11" class="dialog-bubble"></div>
             <div id="splash" class="splash">💦</div>
             <div id="glow" class="glow"></div>
             <div id="bite" class="bite-effect">🦷</div>
             <div id="pain" class="pain-effect">💥</div>
             <div id="victim1" class="victim">🏊‍♂️</div>
             <div id="victim2" class="victim">🏄‍♀️</div>
+            <div id="pristineWater" class="pristine-water"></div>
+            <div id="beachgoer1" class="beachgoer">🏊‍♂️</div>
+            <div id="beachgoer2" class="beachgoer">🏄‍♀️</div>
+            <div id="beachgoer3" class="beachgoer">⛱️</div>
+            <div id="evilGlow" class="evil-glow"></div>
         </div>
     </div>
 
@@ -177,23 +213,76 @@
         const victim1 = document.getElementById('victim1');
         const victim2 = document.getElementById('victim2');
 
+        const pristineWater = document.getElementById('pristineWater');
+        const beachgoer1 = document.getElementById('beachgoer1');
+        const beachgoer2 = document.getElementById('beachgoer2');
+        const beachgoer3 = document.getElementById('beachgoer3');
+        const evilGlow = document.getElementById('evilGlow');
+
         const tl = gsap.timeline();
 
-        function showDialog(id, text, duration = 2) {
-            const dialog = document.getElementById(id);
-            dialog.textContent = text;
-            return gsap.timeline()
-                .to(dialog, { duration: 0.5, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
-                .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: duration });
+        function showDialog(id, text, target, duration = 2) {
+            return () => {
+                const dialog = document.getElementById(id);
+                const container = document.getElementById('animation-container');
+                dialog.textContent = text;
+
+                const positionDialog = () => {
+                    const containerRect = container.getBoundingClientRect();
+                    const targetRect = target.getBoundingClientRect();
+
+                    // Calculate target's center position in percentages
+                    const targetCenterX = (targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100;
+                    const targetTop = (targetRect.top - containerRect.top) / containerRect.height * 100;
+
+                    // Position the dialog
+                    dialog.style.left = `${targetCenterX}%`;
+                    dialog.style.top = `${targetTop - 10}%`; // 10% above the target's top
+                    dialog.style.transform = 'translate(-50%, -100%)'; // Center horizontally and place above
+
+                    console.log('Target Rect:', targetRect);
+                    console.log('Container Rect:', containerRect);
+                    console.log('Dialog Position:', {
+                        left: `${targetCenterX}%`,
+                        top: `${targetTop - 10}%`
+                    });
+                };
+
+                positionDialog();
+                window.addEventListener('resize', positionDialog);
+
+                const timeline = gsap.timeline();
+                timeline.set(dialog, { opacity: 0, scale: 0 })
+                        .to(dialog, { duration: 0.5, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
+                        .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: duration })
+                        .call(() => window.removeEventListener('resize', positionDialog));
+
+                return timeline;
+            };
         }
 
         function zoomCamera(target, scale = 1.5, duration = 2) {
             const targetRect = target.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
-            
-            const xCenter = targetRect.left + targetRect.width / 2 - containerRect.width / 2;
-            const yCenter = targetRect.top + targetRect.height / 2 - containerRect.height / 2;
-            
+
+            // Get the current transform values
+            const currentTransform = window.getComputedStyle(container).transform;
+            const matrix = new DOMMatrix(currentTransform);
+            const currentScale = matrix.a;
+
+            // Calculate the position relative to the container
+            const relativeX = (targetRect.left - containerRect.left) / currentScale;
+            const relativeY = (targetRect.top - containerRect.top) / currentScale;
+
+            // Calculate the center point
+            const xCenter = relativeX + targetRect.width / (2 * currentScale) - containerRect.width / (2 * currentScale);
+            const yCenter = relativeY + targetRect.height / (2 * currentScale) - containerRect.height / (2 * currentScale);
+
+            console.log("Target Rect:", targetRect);
+            console.log("Container Rect:", containerRect);
+            console.log("xCenter:", xCenter);
+            console.log("yCenter:", yCenter);
+
             return gsap.to(container, {
                 duration: duration,
                 scale: scale,
@@ -203,7 +292,7 @@
             });
         }
 
-        function resetCamera(duration = 2) {
+        function resetCamera(duration = 1.5) {
             return gsap.to(container, {
                 duration: duration,
                 scale: 1,
@@ -258,20 +347,25 @@
         // Scene 1: Girl walking on the beach
         tl.set(girl, { bottom: '20%', left: '-10%' })
           .to(girl, { duration: 3, left: '40%', ease: 'power1.inOut' })
-          .add(showDialog("dialog1", "What a beautiful day for a swim! 🏖️"))
+          .call(showDialog("dialog1", "What a beautiful day for a swim! 🏖️", girl))
+        //   .add(showDialog("dialog1", "What a beautiful day for a swim! 🏖️"))
           .to(girl, { duration: 2, bottom: '40%', left: '50%', ease: 'power1.inOut' })
           .to(splash, { duration: 0.5, opacity: 1, scale: 1.5, bottom: '40%', left: '50%' })
           .to(splash, { duration: 0.5, opacity: 0, scale: 0 })
-          .add(showDialog("dialog2", "The water feels... strange. 🤨"));
+          .call(showDialog("dialog2", "The water feels... strange. 🤨", girl))
+        //   .call(showDialog("dialog2", "The water feels... strange. 🤨"), girl)
+          ;
 
         // Scene 2: Fish appears
         tl.set(fish, { bottom: '30%', right: '-10%', scaleX: -1, opacity: 0 })
-          .to(fish, { duration: 0.5, opacity: 1, ease: 'power1.inOut' })
-          .to(fish, { duration: 2, right: '40%', ease: 'power1.inOut' })
-          .add(showDialog("dialog3", "Oh, what's that fish doing? 😮"));
+            .to(fish, { duration: 0.5, opacity: 1, ease: 'power1.inOut' })
+            .to(fish, { duration: 2, right: '40%', ease: 'power1.inOut' })
+            .call(showDialog("dialog3", "Oh, what's that fish doing? 😮", girl))
+            .call(() => zoomCamera(girl), null, "-=0.5");
 
         // Scene 3: Fish bites girl
-        tl.to(fish, { duration: 0.3, scale: 1.2, ease: 'back.out(1.7)' })
+        tl//.add(resetCamera() , "+=1")
+          .to(fish, { duration: 0.3, scale: 1.2, ease: 'back.out(1.7)' })
           .to(fish, { duration: 0.2, rotation: -30, ease: 'power1.in' })
           .to(fish, { duration: 0.1, rotation: 0, ease: 'power1.out' })
           .to(bite, { duration: 0.1, opacity: 1, scale: 1, bottom: '45%', left: '52%' }, '-=0.1')
@@ -280,27 +374,30 @@
           .to(pain, { duration: 0.3, opacity: 0, y: 20 })
           .to(girl, { duration: 0.2, rotation: 5, repeat: 3, yoyo: true }, '-=0.5')
           .to(fish, { duration: 0.5, right: '30%', bottom: '35%', ease: 'power1.out' })
-          .add(showDialog("dialog4", "Ouch! It bit me! 😫"));
+          .call(showDialog("dialog4", "Ouch! It bit me! 😫", girl));
 
-        // Scene 4: Transformation
+        // Scene 4: Transformation 
         tl.to(glow, { duration: 0.5, opacity: 1, scale: 1.5, bottom: '40%', left: '50%' })
           .to(glow, { duration: 1, opacity: 0, scale: 3 })
           .to(girl, { duration: 1, opacity: 0, scale: 0, ease: 'power2.in' }, '-=0.5')
           .set(mermaid, { bottom: '40%', left: '50%', scale: 0 })
           .to(mermaid, { duration: 1, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
           .to(fish, { duration: 1, right: '110%', ease: 'power1.in' })
-          .add(showDialog("dialog5", "What's happening to me?! 😱"));
+          .call(showDialog("dialog5", "What's happening to me?! 😱", mermaid))
+          .call(() => zoomCamera(mermaid), null, "-=0.5"); // Zoom in on the mermaid
 
         // Scene 5: Mermaid realization
         tl.to(mermaid, { duration: 3, bottom: '60%', left: '70%', ease: 'power1.inOut' })
           .to(mermaid, { duration: 0.5, rotation: 10, repeat: 4, yoyo: true }, '-=3')
-          .add(showDialog("dialog6", "I'm... I'm a mermaid! 🧜‍♀️✨"));
+          .call(showDialog("dialog6", "I'm... I'm a mermaid! 🧜‍♀️✨", mermaid))
+          .call(() => zoomCamera(mermaid), null, "-=0.5"); // Zoom in on the mermaid again
 
         // Scene 6: Toxic Mermaid Attack
-        tl.add(showDialog("dialog7", "I feel... strange... and powerful! 😈"))
+        tl.call(showDialog("dialog7", "I feel... strange... and powerful! 😈", mermaid))
           .to(mermaid, { duration: 2, bottom: '40%', left: '30%', ease: 'power2.inOut' })
           .set(victim1, { bottom: '30%', right: '-10%', opacity: 1 })
           .set(victim2, { bottom: '25%', right: '-20%', opacity: 1 })
+          .call(() => zoomCamera(mermaid, 1), null, "-=0.5")
           .to(victim1, { duration: 3, right: '60%', ease: 'none' })
           .to(victim2, { duration: 4, right: '70%', ease: 'none' }, '-=3')
           .to(mermaid, { duration: 1, rotation: -10, repeat: 5, yoyo: true }, '-=4')
@@ -316,7 +413,43 @@
           .to(victim1, { duration: 0.5, y: -20, rotation: 20, repeat: 3, yoyo: true }, '-=2')
           .to(victim2, { duration: 0.5, y: -30, rotation: -30, repeat: 3, yoyo: true }, '-=2')
           .to([victim1, victim2], { duration: 1, opacity: 0, y: -50, ease: 'power2.in' })
-          .to(mermaid, { duration: 2, scale: 1.5, bottom: '50%', left: '50%', ease: 'power2.inOut' });
+          .to(mermaid, { duration: 2, scale: 1.5, bottom: '50%', left: '50%', ease: 'power2.inOut' })
+          .call(() => zoomCamera(mermaid, 2))
+          .add(resetCamera() , "+=3"); // Focus on the mermaid at the end
+
+        
+        // New Scene 7: Beach Terror
+        tl.to(mermaid, { duration: 2, opacity: 0, x: '-100%', ease: 'power2.in' })
+          .set([pristineWater, beachgoer1, beachgoer2, beachgoer3], { opacity: 1 })
+          .to(pristineWater, { duration: 1, opacity: 1 })
+          .call(resetCamera)
+          .set(beachgoer1, { bottom: '30%', left: '20%' })
+          .set(beachgoer2, { bottom: '25%', left: '50%' })
+          .set(beachgoer3, { bottom: '22%', left: '80%' })
+          .to([beachgoer1, beachgoer2, beachgoer3], { duration: 2, opacity: 1, stagger: 0.5 })
+          .call(showDialog("dialog8", "What a beautiful day at the beach! 🌞", beachgoer3))
+          .to(mermaid, { duration: 1, opacity: 1, x: '0%', bottom: '40%', left: '-10%', ease: 'power2.out' })
+          .call(showDialog("dialog9", "Time for some chaos! 😈", mermaid))
+          .to(mermaid, { duration: 3, left: '110%', ease: 'power1.inOut' })
+          .to(beachgoer1, { duration: 0.5, y: -30, rotation: 20, repeat: 3, yoyo: true }, '-=2.5')
+          .to(beachgoer2, { duration: 0.5, y: -20, rotation: -30, repeat: 3, yoyo: true }, '-=2')
+          .to(beachgoer3, { duration: 0.5, y: -25, rotation: 15, repeat: 3, yoyo: true }, '-=1.5')
+          .to([beachgoer1, beachgoer2, beachgoer3], { duration: 1, opacity: 0, y: -50, stagger: 0.3, ease: 'power2.in' })
+          .to(pristineWater, { duration: 2, backgroundColor: '#00AB66', ease: 'power2.inOut' }, '-=1')
+          .to(mermaid, { duration: 2, scale: 1.5, bottom: '50%', left: '50%', ease: 'power2.inOut' })
+          .call(() => zoomCamera(mermaid, 2))
+          .call(showDialog("dialog10", "This beach is mine now! 🏖️👑", mermaid))
+          .add(resetCamera(), "+=3")
+
+          // New final sinister statement
+          .to(mermaid, { duration: 1, scale: 2, ease: 'power2.out' })
+          .to(evilGlow, { duration: 1, opacity: 1, scale: 1.5, ease: 'power2.out' }, '-=1')
+          .call(showDialog("dialog11", "Soon, all the waters of the world will be under my toxic reign! 🌊☠️", mermaid))
+          .to(mermaid, { duration: 0.5, rotation: -5, repeat: 3, yoyo: true })
+          .to(evilGlow, { duration: 0.5, scale: 1.8, repeat: 3, yoyo: true }, '-=1.5')
+          .to([mermaid, evilGlow], { duration: 1, opacity: 0, scale: 3, ease: 'power2.in' });
+
+
 
         // Add interactivity
         container.addEventListener("click", () => {
@@ -327,6 +460,7 @@
         function resetAnimation() {
             tl.pause();
             tl.time(0);
+            resetCamera(); // Reset camera before restarting
             tl.play();
         }
 
