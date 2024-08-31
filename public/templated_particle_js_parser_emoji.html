@@ -146,7 +146,9 @@
                     particle.style.opacity = this.options.opacity;
                     particle.style.position = 'absolute';
                     this.particlesContainer.appendChild(particle);
-                    console.log(`Created particle: ${this.options.emoji} at (${particle.style.left}, ${particle.style.top})`);
+                    if (this.particles.length < 5) {
+                        console.log(`Created particle: ${this.options.emoji} at (${particle.style.left}, ${particle.style.top})`);
+                    }
                     return particle;
                 }
 
@@ -156,7 +158,9 @@
                     const centerY = this.options.centerY || this.container.clientHeight / 2;
 
                     gsap.set(particle, { x: centerX, y: centerY });
-                    console.log(`Particle initial position: (${centerX}, ${centerY})`);
+                    if (this.particles.length < 5) {
+                        console.log(`Particle initial position: (${centerX}, ${centerY})`);
+                    }
 
                     let animationProps;
 
@@ -172,7 +176,9 @@
                                 opacity: 0,
                                 ease: "power2.out"
                             };
-                            console.log(`Explosion animation: to (${animationProps.x}, ${animationProps.y})`);
+                            if (this.particles.length < 5) {
+                                console.log(`Explosion animation: to (${animationProps.x}, ${animationProps.y})`);
+                            }
                             break;
                         case 'rain':
                             animationProps = {
@@ -181,7 +187,9 @@
                                 x: `+=${(Math.random() - 0.5) * 100}`,
                                 ease: "power1.in"
                             };
-                            console.log(`Rain animation: to y=${animationProps.y}, x offset=${animationProps.x}`);
+                            if (this.particles.length < 5) {
+                                console.log(`Rain animation: to y=${animationProps.y}, x offset=${animationProps.x}`);
+                            }
                             break;
                         case 'projectile':
                             const projectileAngle = Math.random() * Math.PI / 4 + Math.PI / 4; // 45 to 90 degrees
@@ -193,7 +201,9 @@
                                 y: centerY - Math.sin(projectileAngle) * projectileDistance + 0.5 * gravity * Math.pow(duration, 2),
                                 ease: "power1.in"
                             };
-                            console.log(`Projectile animation: to (${animationProps.x}, ${animationProps.y})`);
+                            if (this.particles.length < 5) {
+                                console.log(`Projectile animation: to (${animationProps.x}, ${animationProps.y})`);
+                            }
                             break;
                         case 'beam':
                             animationProps = {
@@ -203,7 +213,9 @@
                                 opacity: 0,
                                 ease: "power1.in"
                             };
-                            console.log(`Beam animation: to y=${animationProps.y}`);
+                            if (this.particles.length < 5) {
+                                console.log(`Beam animation: to y=${animationProps.y}`);
+                            }
                             break;
                         default:
                             animationProps = {
@@ -219,7 +231,9 @@
                                 rotation: (Math.random() - 0.5) * 360,
                                 ease: "power1.inOut"
                             };
-                            console.log(`Default animation: path=${JSON.stringify(animationProps.motionPath.path)}`);
+                            if (this.particles.length < 5) {
+                                console.log(`Default animation: path=${JSON.stringify(animationProps.motionPath.path)}`);
+                            }
                     }
 
                     animationProps.onComplete = () => {
@@ -232,7 +246,9 @@
                 removeParticle(particle) {
                     if (this.particlesContainer && this.particlesContainer.contains(particle)) {
                         this.particlesContainer.removeChild(particle);
-                        console.log(`Removed particle: ${particle.textContent}`);
+                        if (this.particles.length < 5) {
+                            console.log(`Removed particle: ${particle.textContent}`);
+                        }
                     }
                 }
 
@@ -258,6 +274,7 @@
                     if (!this.isRunning) return;
 
                     const particle = this.createParticle();
+                    this.particles.push(particle);
                     this.animateParticle(particle);
 
                     if (this.particles.length < this.options.number) {
@@ -277,6 +294,7 @@
                             this.particlesContainer.removeChild(this.particlesContainer.firstChild);
                         }
                     }
+                    this.particles = [];
                     console.log(`Stopped particle system: ${this.id}`);
                 }
             }
