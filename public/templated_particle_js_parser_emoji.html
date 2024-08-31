@@ -268,6 +268,7 @@
                 this.particleSystems = {};
                 this.sceneManager = new SceneManager(this.elements);
                 this.currentScene = null;
+                this.currentParticleSystems = [];
             }
 
             init() {
@@ -314,6 +315,12 @@
                             element.domElement.style.display = 'none';
                         }
                     });
+            
+                    // Stop all current particle systems
+                    this.currentParticleSystems.forEach(particleSystem => {
+                        particleSystem.stop();
+                    });
+                    this.currentParticleSystems = [];
                 }
 
                 // Show elements for the new scene
@@ -322,6 +329,9 @@
                         element.domElement.style.display = '';
                     }
                 });
+
+                // Reset the camera
+                this.resetCamera();
 
                 this.currentScene = sceneName;
             }
@@ -490,6 +500,13 @@
                     y: 0,
                     ease: "power2.inOut"
                 });
+            }
+
+            addCurrentParticleSystem(particleSystemId) {
+                const particleSystem = this.particleSystems[particleSystemId];
+                if (particleSystem) {
+                    this.currentParticleSystems.push(particleSystem);
+                }
             }
 
             play() {

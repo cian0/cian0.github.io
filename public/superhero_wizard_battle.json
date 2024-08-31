@@ -306,6 +306,11 @@
             }
         },
         {
+            "type": "function",
+            "function": "addCurrentParticleSystem",
+            "args": ["heroEnergy"]
+        },
+        {
             "type": "to",
             "target": "wizard",
             "props": {
