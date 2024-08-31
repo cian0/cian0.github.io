@@ -459,16 +459,30 @@
                 const xCenter = (targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100;
                 const yCenter = (targetRect.top - containerRect.top + targetRect.height / 2) / containerRect.height * 100;
 
-                return gsap.to(this.container, {
-                    duration: duration,
-                    scale: scale,
-                    x: `${-xCenter * (scale - 1)}%`,
-                    y: `${-yCenter * (scale - 1)}%`,
-                    ease: "power2.inOut"
+                // First, reset the camera smoothly
+                return this.resetCameraSmooth(duration / 2).then(() => {
+                    // Then, perform the zoom
+                    return gsap.to(this.container, {
+                        duration: duration / 2,
+                        scale: scale,
+                        x: `${-xCenter * (scale - 1)}%`,
+                        y: `${-yCenter * (scale - 1)}%`,
+                        ease: "power2.inOut"
+                    });
                 });
             }
 
             resetCamera(duration = 1.5) {
+                return gsap.to(this.container, {
+                    duration: duration,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    ease: "power2.inOut"
+                });
+            }
+
+            resetCameraSmooth(duration = 0.75) {
                 return gsap.to(this.container, {
                     duration: duration,
                     scale: 1,
