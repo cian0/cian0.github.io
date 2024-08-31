@@ -187,6 +187,32 @@
                 .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: duration });
         }
 
+        function zoomCamera(target, scale = 1.5, duration = 2) {
+            const targetRect = target.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            
+            const xCenter = targetRect.left + targetRect.width / 2 - containerRect.width / 2;
+            const yCenter = targetRect.top + targetRect.height / 2 - containerRect.height / 2;
+            
+            return gsap.to(container, {
+                duration: duration,
+                scale: scale,
+                x: -xCenter * scale,
+                y: -yCenter * scale,
+                ease: "power2.inOut"
+            });
+        }
+
+        function resetCamera(duration = 2) {
+            return gsap.to(container, {
+                duration: duration,
+                scale: 1,
+                x: 0,
+                y: 0,
+                ease: "power2.inOut"
+            });
+        }
+
         function createToxicEmoji() {
             const toxic = document.createElement('div');
             toxic.className = 'toxic';
