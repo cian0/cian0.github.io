@@ -105,6 +105,7 @@
         <div id="controls">
             <textarea id="json-input" placeholder="Paste your JSON here"></textarea>
             <button id="play-button">Play Animation</button>
+            <button id="load-json-button">Load JSON</button>
         </div>
     </div>
     <script>
@@ -383,6 +384,20 @@
                     console.error('Error parsing JSON:', error);
                     alert('Invalid JSON input. Please check your JSON and try again.');
                 }
+            });
+
+            const loadJsonButton = document.getElementById('load-json-button');
+            loadJsonButton.addEventListener('click', () => {
+                fetch('animation_data.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('json-input').value = JSON.stringify(data, null, 2);
+                        alert('JSON data loaded successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error loading JSON:', error);
+                        alert('Error loading JSON file. Please check the console for details.');
+                    });
             });
 
             // Add interactivity (click to pause/play)
