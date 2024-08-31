@@ -106,9 +106,9 @@
                 "number": 30,
                 "size": 30,
                 "opacity": 0.7,
-                "duration": 2,
+                "duration": 1.5,
                 "durationVariation": 0.5,
-                "movementType": "explosion"
+                "movementType": "projectile"
             }
         },
         "wizardMagic": {
@@ -118,9 +118,9 @@
                 "number": 30,
                 "size": 30,
                 "opacity": 0.7,
-                "duration": 2,
+                "duration": 1.5,
                 "durationVariation": 0.5,
-                "movementType": "explosion"
+                "movementType": "projectile"
             }
         },
         "cloudBurst": {
