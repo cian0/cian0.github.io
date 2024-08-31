@@ -227,6 +227,33 @@
                     }
                 }
             }
+        class SceneManager {
+            constructor(elements) {
+                this.elements = elements;
+                this.currentScene = null;
+            }
+
+            changeScene(sceneName) {
+                if (this.currentScene) {
+                    // Hide all elements from the current scene
+                    this.elements.forEach(element => {
+                        if (element.scenes.includes(this.currentScene)) {
+                            element.domElement.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Show elements for the new scene
+                this.elements.forEach(element => {
+                    if (element.scenes.includes(sceneName)) {
+                        element.domElement.style.display = '';
+                    }
+                });
+
+                this.currentScene = sceneName;
+            }
+        }
+
         class AnimationLibrary {
             constructor(containerId, animationData) {
                 this.container = document.getElementById(containerId);
@@ -235,8 +262,9 @@
                 }
                 this.animationData = animationData;
                 this.timeline = gsap.timeline();
-                this.elements = {};
+                this.elements = [];
                 this.particleSystems = {};
+                this.sceneManager = new SceneManager(this.elements);
             }
 
             init() {
@@ -265,19 +293,23 @@
                         }
                         Object.assign(element.style, data.style);
                         this.container.appendChild(element);
-                        this.elements[id] = element;
+                        this.elements.push({
+                            id: id,
+                            domElement: element,
+                            scenes: data.scenes || []
+                        });
                     }
                 }
             }
 
             updateElement(id, props) {
-                const element = this.elements[id];
+                const element = this.elements.find(el => el.id === id);
                 if (element) {
                     if (props.content) {
-                        element.textContent = props.content;
+                        element.domElement.textContent = props.content;
                     }
                     if (props.style) {
-                        Object.assign(element.style, props.style);
+                        Object.assign(element.domElement.style, props.style);
                     }
                 }
             }
@@ -295,7 +327,7 @@
                 for (const step of this.animationData.steps) {
                     switch (step.type) {
                         case 'set':
-                            if (step.target && this.elements[step.target]) {
+                            if (step.target && this.elements.find(el => el.id === step.target)) {
                                 this.timeline.call(() => this.updateElement(step.target, step.props));
                             } else if (step.target === 'parent' || step.target === 'container') {
                                 this.timeline.set(this.container, step.props);
@@ -306,16 +338,16 @@
                             }
                             break;
                         case 'to':
-                            if (step.target && this.elements[step.target]) {
-                                const element = this.elements[step.target];
-                                if (element.tagName.toLowerCase() === 'svg') {
+                            const element = this.elements.find(el => el.id === step.target);
+                            if (element) {
+                                if (element.domElement.tagName.toLowerCase() === 'svg') {
                                     // Handle SVG elements differently
-                                    this.timeline.to(element, {
+                                    this.timeline.to(element.domElement, {
                                         ...step.props,
                                         attr: step.props // Apply properties as attributes for SVG
                                     });
                                 } else {
-                                    this.timeline.to(element, step.props);
+                                    this.timeline.to(element.domElement, step.props);
                                 }
                             } else if (step.target === 'parent' || step.target === 'container') {
                                 this.timeline.to(this.container, step.props);
@@ -349,12 +381,15 @@
                                 console.warn(`Particle system "${step.target}" not found`);
                             }
                             break;
+                        case 'changeScene':
+                            this.timeline.call(() => this.sceneManager.changeScene(step.sceneName));
+                            break;
                     }
                 }
             }
 
             showDialog(dialogData) {
-                const target = this.elements[dialogData.target];
+                const target = this.elements.find(el => el.id === dialogData.target);
                 if (!target) {
                     console.warn(`Target "${dialogData.target}" not found for dialog`);
                     return;
@@ -366,7 +401,7 @@
                 this.container.appendChild(dialog);
 
                 const positionDialog = () => {
-                    const targetRect = target.getBoundingClientRect();
+                    const targetRect = target.domElement.getBoundingClientRect();
                     const containerRect = this.container.getBoundingClientRect();
 
                     dialog.style.left = `${(targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100}%`;
@@ -388,13 +423,13 @@
             }
 
             zoomCamera(target, scale = 1.5, duration = 2) {
-                const targetElement = this.elements[target];
+                const targetElement = this.elements.find(el => el.id === target);
                 if (!targetElement) {
                     console.warn(`Target "${target}" not found for camera zoom`);
                     return;
                 }
 
-                const targetRect = targetElement.getBoundingClientRect();
+                const targetRect = targetElement.domElement.getBoundingClientRect();
                 const containerRect = this.container.getBoundingClientRect();
 
                 const xCenter = (targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100;
