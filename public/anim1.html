@@ -3,547 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toxic Mermaid Transformation and Attack Animation</title>
+    <title>EXIT Rebus Food Animation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB, #4682B4);
             font-family: Arial, sans-serif;
         }
-        #animation-container {
+        #game-container {
             width: 100%;
             height: 100%;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB 0%, #00AB66 100%);
         }
-        .scene {
-            width: 100%;
-            height: 100%;
+        .egg {
+            font-size: 60px;
             position: absolute;
-            top: 0;
-            left: 0;
+            bottom: 20px;
         }
-        .character {
+        .mouth {
             position: absolute;
-            font-size: 48px;
-            z-index: 10;
+            width: 24px;
+            height: 12px;
+            background-color: #FF69B4;
+            border-radius: 0 0 100px 100px;
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%) scaleY(0.1);
+            overflow: hidden;
         }
-        .fish {
+        .tongue {
+            width: 12px;
+            height: 6px;
+            background-color: #FF1493;
+            border-radius: 6px 6px 0 0;
             position: absolute;
-            font-size: 36px;
-            z-index: 9;
-            opacity: 0;
-        }
-        .sand {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 20%;
-            background-color: #F4A460;
-        }
-        .water {
-            position: absolute;
-            bottom: 20%;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            background: linear-gradient(to bottom, rgba(0,171,102,0) 0%, rgba(0,171,102,0.8) 100%);
-        }
-        .wave {
-            position: absolute;
-            bottom: 50%;
-            left: 0;
-            width: 200%;
-            height: 10px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2300AB66" fill-opacity="0.5" d="M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,229.3C840,235,960,213,1080,202.7C1200,192,1320,192,1380,192L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>');
-            background-size: 100% 100%;
-            animation: waveAnimation 10s linear infinite;
-        }
-        @keyframes waveAnimation {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .dialog-bubble {
-            position: absolute;
-            transform-origin: bottom center;
-            background-color: white;
-            border-radius: 20px;
-            padding: 10px;
-            font-size: 16px;
-            opacity: 0;
-            z-index: 20;
-            max-width: 150px;
-            text-align: center;
+            bottom: -6px;
             left: 50%;
             transform: translateX(-50%);
-            top: 20%;
         }
-        .dialog-bubble::after {
-            content: '';
+        .food {
+            font-size: 20px;
             position: absolute;
-            bottom: -10px;
+            user-select: none;
+        }
+        .rebus-container {
+            position: absolute;
+            top: 20px;
             left: 50%;
-            border-width: 10px 10px 0;
-            border-style: solid;
-            border-color: white transparent;
             transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
         }
-        .splash {
-            position: absolute;
-            font-size: 48px;
-            opacity: 0;
-            z-index: 15;
-        }
-        .glow {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,255,0,0.8) 0%, rgba(0,255,0,0) 70%);
-            opacity: 0;
-            z-index: 8;
-        }
-        .bite-effect {
-            position: absolute;
-            font-size: 48px;
-            opacity: 0;
-            z-index: 25;
-        }
-        .pain-effect {
-            position: absolute;
-            font-size: 36px;
-            opacity: 0;
-            z-index: 25;
-        }
-        .toxic {
-            position: absolute;
-            font-size: 24px;
-            opacity: 0;
-            z-index: 7;
-        }
-        .victim {
-            position: absolute;
-            font-size: 36px;
-            z-index: 8;
-            opacity: 0;
-        }
-        .bubble {
-            position: absolute;
-            font-size: 24px;
-            opacity: 0;
-            z-index: 12;
-        }
-        .beachgoer {
-            position: absolute;
-            font-size: 36px;
-            z-index: 8;
-            opacity: 0;
-        }
-        .pristine-water {
-            position: absolute;
-            bottom: 20%;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            background: linear-gradient(to bottom, rgba(0,191,255,0) 0%, rgba(0,191,255,0.8) 100%);
-            opacity: 0;
-        }
-        .evil-glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,0,0,0.8) 0%, rgba(255,0,0,0) 70%);
-            opacity: 0;
-            z-index: 8;
+        .rebus-box {
+            width: 40px;
+            height: 40px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div id="animation-container">
-        <!-- <div id="extended-background"></div> -->
-        <div class="scene">
-            <div class="sand"></div>
-            <div class="water"></div>
-            <div class="wave"></div>
-            <div id="girl" class="character">👧</div>
-            <div id="fish" class="fish">🐠</div>
-            <div id="mermaid" class="character" style="opacity: 0;">🧜‍♀️</div>
-            <div id="dialog1" class="dialog-bubble"></div>
-            <div id="dialog2" class="dialog-bubble"></div>
-            <div id="dialog3" class="dialog-bubble"></div>
-            <div id="dialog4" class="dialog-bubble"></div>
-            <div id="dialog5" class="dialog-bubble"></div>
-            <div id="dialog6" class="dialog-bubble"></div>
-            <div id="dialog7" class="dialog-bubble"></div>
-            <div id="dialog8" class="dialog-bubble"></div>
-            <div id="dialog9" class="dialog-bubble"></div>
-            <div id="dialog10" class="dialog-bubble"></div>
-            <div id="dialog11" class="dialog-bubble"></div>
-            <div id="splash" class="splash">💦</div>
-            <div id="glow" class="glow"></div>
-            <div id="bite" class="bite-effect">🦷</div>
-            <div id="pain" class="pain-effect">💥</div>
-            <div id="victim1" class="victim">🏊‍♂️</div>
-            <div id="victim2" class="victim">🏄‍♀️</div>
-            <div id="pristineWater" class="pristine-water"></div>
-            <div id="beachgoer1" class="beachgoer">🏊‍♂️</div>
-            <div id="beachgoer2" class="beachgoer">🏄‍♀️</div>
-            <div id="beachgoer3" class="beachgoer">⛱️</div>
-            <div id="evilGlow" class="evil-glow"></div>
+    <div id="game-container">
+        <div class="rebus-container">
+            <div class="rebus-box"></div>
+            <div class="rebus-box">X</div>
+            <div class="rebus-box"></div>
+            <div class="rebus-box"></div>
         </div>
     </div>
 
     <script>
-        const girl = document.getElementById('girl');
-        const fish = document.getElementById('fish');
-        const mermaid = document.getElementById('mermaid');
-        const splash = document.getElementById('splash');
-        const glow = document.getElementById('glow');
-        const bite = document.getElementById('bite');
-        const pain = document.getElementById('pain');
-        const container = document.getElementById('animation-container');
-        const victim1 = document.getElementById('victim1');
-        const victim2 = document.getElementById('victim2');
+        const container = document.getElementById('game-container');
+        const foodItems = ['🍔', '🍕', '🍗', '🍎', '🍌', '🍣', '🥩', '🥕', '🍇', '🍉'];
+        const numEggs = 3;
+        const eggs = [];
+        const foodPool = [];
+        const maxFood = 500;
+        let isGameActive = true;
+        const gameDuration = 20000; // 20 seconds in milliseconds
+        let gameStartTime;
+        let foodCreationInterval;
 
-        const pristineWater = document.getElementById('pristineWater');
-        const beachgoer1 = document.getElementById('beachgoer1');
-        const beachgoer2 = document.getElementById('beachgoer2');
-        const beachgoer3 = document.getElementById('beachgoer3');
-        const evilGlow = document.getElementById('evilGlow');
-
-        const tl = gsap.timeline();
-
-        function showDialog(id, text, target, duration = 2) {
-            return () => {
-                const dialog = document.getElementById(id);
-                const container = document.getElementById('animation-container');
-                dialog.textContent = text;
-
-                const positionDialog = () => {
-                    const containerRect = container.getBoundingClientRect();
-                    const targetRect = target.getBoundingClientRect();
-
-                    // Calculate target's center position in percentages
-                    const targetCenterX = (targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100;
-                    const targetTop = (targetRect.top - containerRect.top) / containerRect.height * 100;
-
-                    // Position the dialog
-                    dialog.style.left = `${targetCenterX}%`;
-                    dialog.style.top = `${targetTop - 10}%`; // 10% above the target's top
-                    dialog.style.transform = 'translate(-50%, -100%)'; // Center horizontally and place above
-
-                    console.log('Target Rect:', targetRect);
-                    console.log('Container Rect:', containerRect);
-                    console.log('Dialog Position:', {
-                        left: `${targetCenterX}%`,
-                        top: `${targetTop - 10}%`
-                    });
-                };
-
-                positionDialog();
-                window.addEventListener('resize', positionDialog);
-
-                const timeline = gsap.timeline();
-                timeline.set(dialog, { opacity: 0, scale: 0 })
-                        .to(dialog, { duration: 0.5, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
-                        .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: duration })
-                        .call(() => window.removeEventListener('resize', positionDialog));
-
-                return timeline;
-            };
+        function createEgg(index) {
+            const egg = document.createElement('div');
+            egg.classList.add('egg');
+            egg.innerHTML = '🥚<div class="mouth"><div class="tongue"></div></div>';
+            container.appendChild(egg);
+            return { egg, mouth: egg.querySelector('.mouth'), tongue: egg.querySelector('.tongue') };
         }
 
-        function zoomCamera(target, scale = 1.5, duration = 2) {
-            const targetRect = target.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
+        function positionEggs() {
+            const containerWidth = container.offsetWidth;
+            const eggWidth = 60;
+            const totalWidth = eggWidth * numEggs;
+            const startX = (containerWidth - totalWidth) / 2;
 
-            // Get the current transform values
-            const currentTransform = window.getComputedStyle(container).transform;
-            const matrix = new DOMMatrix(currentTransform);
-            const currentScale = matrix.a;
-
-            // Calculate the position relative to the container
-            const relativeX = (targetRect.left - containerRect.left) / currentScale;
-            const relativeY = (targetRect.top - containerRect.top) / currentScale;
-
-            // Calculate the center point
-            const xCenter = relativeX + targetRect.width / (2 * currentScale) - containerRect.width / (2 * currentScale);
-            const yCenter = relativeY + targetRect.height / (2 * currentScale) - containerRect.height / (2 * currentScale);
-
-            console.log("Target Rect:", targetRect);
-            console.log("Container Rect:", containerRect);
-            console.log("xCenter:", xCenter);
-            console.log("yCenter:", yCenter);
-
-            return gsap.to(container, {
-                duration: duration,
-                scale: scale,
-                x: -xCenter * scale,
-                y: -yCenter * scale,
-                ease: "power2.inOut"
+            eggs.forEach(({ egg }, index) => {
+                const offset = (index - 1) * 12;
+                egg.style.left = `${startX + index * eggWidth + offset}px`;
             });
         }
 
-        function resetCamera(duration = 1.5) {
-            return gsap.to(container, {
-                duration: duration,
-                scale: 1,
-                x: 0,
-                y: 0,
-                ease: "power2.inOut"
-            });
-        }
-
-        function createToxicEmoji() {
-            const toxic = document.createElement('div');
-            toxic.className = 'toxic';
-            toxic.textContent = '☢️';
-            toxic.style.left = `${Math.random() * 100}%`;
-            toxic.style.top = `${Math.random() * 60 + 20}%`;
-            container.appendChild(toxic);
-
-            gsap.to(toxic, {
-                duration: Math.random() * 3 + 2,
-                y: '+=50',
-                opacity: 1,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut'
-            });
-        }
-
-        function createBubble(x, y) {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            bubble.textContent = '🫧';
-            bubble.style.left = `${x}px`;
-            bubble.style.top = `${y}px`;
-            container.appendChild(bubble);
-
-            gsap.to(bubble, {
-                duration: 2,
-                y: '-=100',
-                x: `+=${Math.random() * 100 - 50}`,
-                opacity: 1,
-                scale: 2,
-                ease: 'power1.out',
-                onComplete: () => bubble.remove()
-            });
-        }
-
-        // Create toxic emojis
-        for (let i = 0; i < 5; i++) {
-            createToxicEmoji();
-        }
-
-        // Scene 1: Girl walking on the beach
-        tl.set(girl, { bottom: '20%', left: '-10%' })
-          .to(girl, { duration: 3, left: '40%', ease: 'power1.inOut' })
-          .call(showDialog("dialog1", "What a beautiful day for a swim! 🏖️", girl))
-        //   .add(showDialog("dialog1", "What a beautiful day for a swim! 🏖️"))
-          .to(girl, { duration: 2, bottom: '40%', left: '50%', ease: 'power1.inOut' })
-          .to(splash, { duration: 0.5, opacity: 1, scale: 1.5, bottom: '40%', left: '50%' })
-          .to(splash, { duration: 0.5, opacity: 0, scale: 0 })
-          .call(showDialog("dialog2", "The water feels... strange. 🤨", girl))
-        //   .call(showDialog("dialog2", "The water feels... strange. 🤨"), girl)
-          ;
-
-        // Scene 2: Fish appears
-        tl.set(fish, { bottom: '30%', right: '-10%', scaleX: -1, opacity: 0 })
-            .to(fish, { duration: 0.5, opacity: 1, ease: 'power1.inOut' })
-            .to(fish, { duration: 2, right: '40%', ease: 'power1.inOut' })
-            .call(showDialog("dialog3", "Oh, what's that fish doing? 😮", girl))
-            .call(() => zoomCamera(girl), null, "-=0.5");
-
-        // Scene 3: Fish bites girl
-        tl//.add(resetCamera() , "+=1")
-          .to(fish, { duration: 0.3, scale: 1.2, ease: 'back.out(1.7)' })
-          .to(fish, { duration: 0.2, rotation: -30, ease: 'power1.in' })
-          .to(fish, { duration: 0.1, rotation: 0, ease: 'power1.out' })
-          .to(bite, { duration: 0.1, opacity: 1, scale: 1, bottom: '45%', left: '52%' }, '-=0.1')
-          .to(bite, { duration: 0.2, opacity: 0, scale: 0 })
-          .to(pain, { duration: 0.1, opacity: 1, scale: 1, bottom: '50%', left: '55%' }, '-=0.1')
-          .to(pain, { duration: 0.3, opacity: 0, y: 20 })
-          .to(girl, { duration: 0.2, rotation: 5, repeat: 3, yoyo: true }, '-=0.5')
-          .to(fish, { duration: 0.5, right: '30%', bottom: '35%', ease: 'power1.out' })
-          .call(showDialog("dialog4", "Ouch! It bit me! 😫", girl));
-
-        // Scene 4: Transformation 
-        tl.to(glow, { duration: 0.5, opacity: 1, scale: 1.5, bottom: '40%', left: '50%' })
-          .to(glow, { duration: 1, opacity: 0, scale: 3 })
-          .to(girl, { duration: 1, opacity: 0, scale: 0, ease: 'power2.in' }, '-=0.5')
-          .set(mermaid, { bottom: '40%', left: '50%', scale: 0 })
-          .to(mermaid, { duration: 1, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
-          .to(fish, { duration: 1, right: '110%', ease: 'power1.in' })
-          .call(showDialog("dialog5", "What's happening to me?! 😱", mermaid))
-          .call(() => zoomCamera(mermaid), null, "-=0.5"); // Zoom in on the mermaid
-
-        // Scene 5: Mermaid realization
-        tl.to(mermaid, { duration: 3, bottom: '60%', left: '70%', ease: 'power1.inOut' })
-          .to(mermaid, { duration: 0.5, rotation: 10, repeat: 4, yoyo: true }, '-=3')
-          .call(showDialog("dialog6", "I'm... I'm a mermaid! 🧜‍♀️✨", mermaid))
-          .call(() => zoomCamera(mermaid), null, "-=0.5"); // Zoom in on the mermaid again
-
-        // Scene 6: Toxic Mermaid Attack
-        tl.call(showDialog("dialog7", "I feel... strange... and powerful! 😈", mermaid))
-          .to(mermaid, { duration: 2, bottom: '40%', left: '30%', ease: 'power2.inOut' })
-          .set(victim1, { bottom: '30%', right: '-10%', opacity: 1 })
-          .set(victim2, { bottom: '25%', right: '-20%', opacity: 1 })
-          .call(() => zoomCamera(mermaid, 1), null, "-=0.5")
-          .to(victim1, { duration: 3, right: '60%', ease: 'none' })
-          .to(victim2, { duration: 4, right: '70%', ease: 'none' }, '-=3')
-          .to(mermaid, { duration: 1, rotation: -10, repeat: 5, yoyo: true }, '-=4')
-          .to(mermaid, { duration: 0.2, scale: 1.2, repeat: 5, yoyo: true }, '-=4')
-          .add(() => {
-              for (let i = 0; i < 20; i++) {
-                  setTimeout(() => {
-                      const mermaidRect = mermaid.getBoundingClientRect();
-                      createBubble(mermaidRect.left + Math.random() * mermaidRect.width, mermaidRect.top + Math.random() * mermaidRect.height);
-                  }, i * 100);
-              }
-          }, '-=4')
-          .to(victim1, { duration: 0.5, y: -20, rotation: 20, repeat: 3, yoyo: true }, '-=2')
-          .to(victim2, { duration: 0.5, y: -30, rotation: -30, repeat: 3, yoyo: true }, '-=2')
-          .to([victim1, victim2], { duration: 1, opacity: 0, y: -50, ease: 'power2.in' })
-          .to(mermaid, { duration: 2, scale: 1.5, bottom: '50%', left: '50%', ease: 'power2.inOut' })
-          .call(() => zoomCamera(mermaid, 2))
-          .add(resetCamera() , "+=3"); // Focus on the mermaid at the end
-
-        
-        // New Scene 7: Beach Terror
-        tl.to(mermaid, { duration: 2, opacity: 0, x: '-100%', ease: 'power2.in' })
-          .set([pristineWater, beachgoer1, beachgoer2, beachgoer3], { opacity: 1 })
-          .to(pristineWater, { duration: 1, opacity: 1 })
-          .call(resetCamera)
-          .set(beachgoer1, { bottom: '30%', left: '20%' })
-          .set(beachgoer2, { bottom: '25%', left: '50%' })
-          .set(beachgoer3, { bottom: '22%', left: '80%' })
-          .to([beachgoer1, beachgoer2, beachgoer3], { duration: 2, opacity: 1, stagger: 0.5 })
-          .call(showDialog("dialog8", "What a beautiful day at the beach! 🌞", beachgoer3))
-          .to(mermaid, { duration: 1, opacity: 1, x: '0%', bottom: '40%', left: '-10%', ease: 'power2.out' })
-          .call(showDialog("dialog9", "Time for some chaos! 😈", mermaid))
-          .to(mermaid, { duration: 3, left: '110%', ease: 'power1.inOut' })
-          .to(beachgoer1, { duration: 0.5, y: -30, rotation: 20, repeat: 3, yoyo: true }, '-=2.5')
-          .to(beachgoer2, { duration: 0.5, y: -20, rotation: -30, repeat: 3, yoyo: true }, '-=2')
-          .to(beachgoer3, { duration: 0.5, y: -25, rotation: 15, repeat: 3, yoyo: true }, '-=1.5')
-          .to([beachgoer1, beachgoer2, beachgoer3], { duration: 1, opacity: 0, y: -50, stagger: 0.3, ease: 'power2.in' })
-          .to(pristineWater, { duration: 2, backgroundColor: '#00AB66', ease: 'power2.inOut' }, '-=1')
-          .to(mermaid, { duration: 2, scale: 1.5, bottom: '50%', left: '50%', ease: 'power2.inOut' })
-          .call(() => zoomCamera(mermaid, 2))
-          .call(showDialog("dialog10", "This beach is mine now! 🏖️👑", mermaid))
-          .add(resetCamera(), "+=3")
-
-          // New final sinister statement
-          .to(mermaid, { duration: 1, scale: 2, ease: 'power2.out' })
-          .to(evilGlow, { duration: 1, opacity: 1, scale: 1.5, ease: 'power2.out' }, '-=1')
-          .call(showDialog("dialog11", "Soon, all the waters of the world will be under my toxic reign! 🌊☠️", mermaid))
-          .to(mermaid, { duration: 0.5, rotation: -5, repeat: 3, yoyo: true })
-          .to(evilGlow, { duration: 0.5, scale: 1.8, repeat: 3, yoyo: true }, '-=1.5')
-          .to([mermaid, evilGlow], { duration: 1, opacity: 0, scale: 3, ease: 'power2.in' });
-
-
-
-        // Add interactivity
-        container.addEventListener("click", () => {
-            tl.paused() ? tl.play() : tl.pause();
-        });
-
-        // Add a reset function
-        function resetAnimation() {
-            tl.pause();
-            tl.time(0);
-            resetCamera(); // Reset camera before restarting
-            tl.play();
-        }
-
-        // Add a reset button
-        const resetButton = document.createElement('button');
-        resetButton.textContent = 'Reset Animation';
-        resetButton.style.position = 'absolute';
-        resetButton.style.top = '10px';
-        resetButton.style.right = '10px';
-        resetButton.style.zIndex = '100';
-        resetButton.addEventListener('click', resetAnimation);
-        //container.appendChild(resetButton);
-
-        // Add screen shake effect
-        function screenShake() {
-            gsap.to(container, {
-                duration: 0.1,
-                x: "+=10",
-                yoyo: true,
-                repeat: 5,
-                ease: "power2.inOut"
-            });
-        }
-
-        // Add screen shake to the mermaid attack
-        tl.add(screenShake, "-=2");
-
-        // Add a glowing effect to the mermaid during the attack
-        const glowEffect = document.createElement('div');
-        glowEffect.style.position = 'absolute';
-        glowEffect.style.width = '100%';
-        glowEffect.style.height = '100%';
-        glowEffect.style.backgroundColor = 'rgba(0, 255, 0, 0.2)';
-        glowEffect.style.opacity = '0';
-        glowEffect.style.zIndex = '5';
-        container.appendChild(glowEffect);
-
-        tl.to(glowEffect, {
-            duration: 4,
-            opacity: 0.5,
-            yoyo: true,
-            repeat: 1,
-            ease: "sine.inOut"
-        }, "-=4");
-
-        // Add more bubbles and splashes during the attack
-        function createSplash(x, y) {
-            const splashElem = document.createElement('div');
-            splashElem.className = 'splash';
-            splashElem.textContent = '💦';
-            splashElem.style.left = `${x}px`;
-            splashElem.style.top = `${y}px`;
-            container.appendChild(splashElem);
-
-            gsap.to(splashElem, {
-                duration: 1,
-                y: '-=50',
-                x: `+=${Math.random() * 60 - 30}`,
-                opacity: 1,
-                scale: 2,
-                ease: 'power1.out',
-                onComplete: () => splashElem.remove()
-            });
-        }
-
-        tl.add(() => {
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    const mermaidRect = mermaid.getBoundingClientRect();
-                    createSplash(mermaidRect.left + Math.random() * mermaidRect.width, mermaidRect.top + Math.random() * mermaidRect.height);
-                }, i * 200);
+        function createFood() {
+            let food;
+            if (foodPool.length > 0) {
+                food = foodPool.pop();
+                if (food && food.style) {
+                    food.style.display = 'block';
+                } else {
+                    food = document.createElement('div');
+                    food.classList.add('food');
+                }
+            } else {
+                food = document.createElement('div');
+                food.classList.add('food');
             }
-        }, "-=3");
+            container.appendChild(food);
+            food.textContent = foodItems[Math.floor(Math.random() * foodItems.length)];
+            food.style.left = `${Math.random() * (container.offsetWidth - 20)}px`;
+            food.style.top = '-30px';
+            return food;
+        }
 
-        // Add a final dramatic zoom effect
-        tl.to(container, {
-            duration: 2,
-            scale: 1.2,
-            ease: "power2.inOut"
+        function animateFood(food) {
+            if (!food || !food.style) return;
+            const duration = 2 + Math.random() * 2;
+            gsap.to(food, {
+                duration: duration,
+                y: container.offsetHeight + 30,
+                ease: 'none',
+                onComplete: () => recycleFood(food)
+            });
+        }
+
+        function recycleFood(food) {
+            if (!food || !food.style) return;
+            gsap.killTweensOf(food);
+            food.style.display = 'none';
+            foodPool.push(food);
+        }
+
+        function checkCollision(food, egg) {
+            if (!food || !egg) return false;
+            const foodRect = food.getBoundingClientRect();
+            const eggRect = egg.getBoundingClientRect();
+            return !(foodRect.right < eggRect.left || 
+                     foodRect.left > eggRect.right || 
+                     foodRect.bottom < eggRect.top || 
+                     foodRect.top > eggRect.bottom);
+        }
+
+        function animateMouth(mouth, tongue) {
+            if (!mouth || !tongue) return;
+            gsap.timeline()
+                .to(mouth, { duration: 0.15, scaleY: 1, ease: 'power1.out' })
+                .to(tongue, { duration: 0.15, bottom: 0, ease: 'power1.out' }, 0)
+                .to(mouth, { duration: 0.15, scaleY: 0.1, ease: 'power1.in' }, 0.15)
+                .to(tongue, { duration: 0.15, bottom: -6, ease: 'power1.in' }, 0.15);
+        }
+
+        function eatFood(food, eggIndex) {
+            const { egg, mouth, tongue } = eggs[eggIndex];
+            if (!food || !egg) return;
+            gsap.killTweensOf(food);
+            
+            gsap.to(food, {
+                duration: 0.3,
+                scale: 0,
+                x: egg.offsetLeft + egg.offsetWidth / 2,
+                y: egg.offsetTop + egg.offsetHeight / 2,
+                onComplete: () => recycleFood(food)
+            });
+
+            gsap.to(egg, {
+                duration: 0.2,
+                scale: 1.1,
+                yoyo: true,
+                repeat: 1
+            });
+
+            animateMouth(mouth, tongue);
+        }
+
+        function gameLoop() {
+            if (!isGameActive) return;
+
+            const currentTime = Date.now();
+            if (currentTime - gameStartTime >= gameDuration) {
+                endGame();
+                return;
+            }
+
+            const activeFood = container.querySelectorAll('.food:not([style*="display: none"])');
+            activeFood.forEach(food => {
+                eggs.forEach((egg, index) => {
+                    if (checkCollision(food, egg.egg)) {
+                        eatFood(food, index);
+                    }
+                });
+            });
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function createFoodInterval() {
+            // if (container.querySelectorAll('.food:not([style*="display: none"])').length < maxFood) {
+                const food = createFood();
+                if (food) animateFood(food);
+            // }
+        }
+
+        function endGame() {
+            isGameActive = false;
+            clearInterval(foodCreationInterval);
+            gsap.to('.food', {
+                duration: 0.5,
+                opacity: 0,
+                y: '+=50',
+                stagger: 0.02,
+                onComplete: function(target) {
+                    if (target && target.style) target.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize game
+        for (let i = 0; i < numEggs; i++) {
+            eggs.push(createEgg(i));
+        }
+
+        gsap.from(eggs.map(e => e.egg), {
+            duration: 1,
+            scale: 0,
+            rotation: 360,
+            ease: 'back.out(1.7)'
         });
 
-        // Start the animation
-        tl.play();
+        positionEggs();
+        window.addEventListener('resize', positionEggs);
+
+        // Start the game
+        gameStartTime = Date.now();
+        gameLoop();
+        foodCreationInterval = setInterval(createFoodInterval, 100); // Create food every 100ms
+
+        // End the game after 20 seconds
+        setTimeout(endGame, gameDuration);
+
+        // Touch event for mobile
+        container.addEventListener('touchstart', (e) => {
+            if (!isGameActive) return;
+            const touch = e.touches[0];
+            const food = createFood();
+            if (food && food.style) {
+                food.style.left = `${touch.clientX}px`;
+                food.style.top = `${touch.clientY}px`;
+                animateFood(food);
+            }
+        });
     </script>
 </body>
 </html>
