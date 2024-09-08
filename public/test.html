@@ -88,21 +88,17 @@
             gap: 5px;
             opacity: 0;
             width: 90%;
-            max-width: 400px;
             justify-content: center;
-            flex-wrap: wrap;
         }
         .magnified-box {
-            width: 40px;
+            flex: 1;
             height: 50px;
             background-color: rgba(255, 255, 255, 0.8);
             border: 3px solid #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 32px;
             font-weight: bold;
-            margin: 5px;
         }
         .celebration-emoji {
             position: absolute;
@@ -403,11 +399,15 @@
                 ease: "power2.in",
                 onComplete: () => {
                     const screenWidth = window.innerWidth;
-                    const scale = screenWidth < 600 ? 1 : 1.2;
+                    const wordLength = currentWord.length;
+                    const fontSize = Math.min(32, Math.floor(screenWidth / (wordLength * 1.5)));
+                    
+                    magnifiedContainer.style.fontSize = `${fontSize}px`;
+                    
                     gsap.to(magnifiedContainer, {
                         duration: 1,
                         opacity: 1,
-                        scale: scale,
+                        scale: 1,
                         ease: "back.out(1.7)"
                     });
                     
