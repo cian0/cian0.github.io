@@ -1,0 +1,42 @@
+{
+    "totalPuzzles": 5,
+    "timePerPuzzle": 20,
+    "initialRevealedLetters": 2,
+    "puzzles": [
+        {
+            "word": "SEASHELL",
+            "emojis": ["🌊", "🐚"],
+            "theme": "ocean",
+            "background": "linear-gradient(135deg, #006994, #00FFFF)",
+            "elements": ["🐙", "🦀", "🐠", "🌊", "🏖️", "🐳"]
+        },
+        {
+            "word": "EARPHONE",
+            "emojis": ["👂", "📞"],
+            "theme": "music",
+            "background": "linear-gradient(135deg, #8B008B, #FF1493)",
+            "elements": ["🎵", "🎧", "🎼", "🎹", "🎸", "🥁"]
+        },
+        {
+            "word": "STARFISH",
+            "emojis": ["⭐", "🐠"],
+            "theme": "underwater",
+            "background": "linear-gradient(135deg, #000080, #0000FF)",
+            "elements": ["🐙", "🦈", "🐡", "🌊", "🐚", "🦑"]
+        },
+        {
+            "word": "SNOWBALL",
+            "emojis": ["❄️", "⚾"],
+            "theme": "winter",
+            "background": "linear-gradient(135deg, #E0FFFF, #87CEEB)",
+            "elements": ["☃️", "🏂", "🌨️", "🧊", "🏔️", "🧤"]
+        },
+        {
+            "word": "FIREWORK",
+            "emojis": ["🔥", "💼"],
+            "theme": "celebration",
+            "background": "linear-gradient(135deg, #FF4500, #FFD700)",
+            "elements": ["🎉", "🎊", "🎇", "🥳", "🍾", "🎆"]
+        }
+    ]
+}

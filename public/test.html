@@ -134,6 +134,12 @@
     <div id="guess-container"></div>
     <div id="magnified-container"></div>
     <script>
+        let gameConfig;
+        let currentPuzzleIndex = 0;
+        let timeLeft;
+        let revealedIndices = new Set();
+        let timerInterval;
+
         const container = document.getElementById('animation-container');
         const guessContainer = document.getElementById('guess-container');
         const magnifiedContainer = document.getElementById('magnified-container');
@@ -143,25 +149,21 @@
         const component1 = document.getElementById('component1');
         const component2 = document.getElementById('component2');
 
-        const puzzles = [
-            {word: "SEASHELL", emojis: ["🌊", "🐚"], theme: "ocean", background: "linear-gradient(135deg, #006994, #00FFFF)", elements: ['🐙', '🦀', '🐠', '🌊', '🏖️', '🐳']},
-            {word: "EARPHONE", emojis: ["👂", "📞"], theme: "music", background: "linear-gradient(135deg, #8B008B, #FF1493)", elements: ['🎵', '🎧', '🎼', '🎹', '🎸', '🥁']},
-            {word: "STARFISH", emojis: ["⭐", "🐠"], theme: "underwater", background: "linear-gradient(135deg, #000080, #0000FF)", elements: ['🐙', '🦈', '🐡', '🌊', '🐚', '🦑']},
-            {word: "SNOWBALL", emojis: ["❄️", "⚾"], theme: "winter", background: "linear-gradient(135deg, #E0FFFF, #87CEEB)", elements: ['☃️', '🏂', '🌨️', '🧊', '🏔️', '🧤']},
-            {word: "FIREWORK", emojis: ["🔥", "💼"], theme: "celebration", background: "linear-gradient(135deg, #FF4500, #FFD700)", elements: ['🎉', '🎊', '🎇', '🥳', '🍾', '🎆']}
-        ];
-
-        let currentPuzzleIndex = 0;
-        let timeLeft = 20;
-        let revealedIndices = new Set();
-        let timerInterval;
+        // Load the game configuration
+        fetch('game-config.json')
+            .then(response => response.json())
+            .then(config => {
+                gameConfig = config;
+                setupPuzzle(currentPuzzleIndex);
+            })
+            .catch(error => console.error('Error loading game configuration:', error));
 
         function setupPuzzle(index) {
-            const puzzle = puzzles[index];
+            const puzzle = gameConfig.puzzles[index];
             document.body.style.background = puzzle.background;
             component1.textContent = puzzle.emojis[0];
             component2.textContent = puzzle.emojis[1];
-            puzzleCounter.textContent = `Puzzle ${index + 1}/${puzzles.length}`;
+            puzzleCounter.textContent = `Puzzle ${index + 1}/${gameConfig.totalPuzzles}`;
 
             guessContainer.innerHTML = '';
             magnifiedContainer.innerHTML = '';
@@ -177,14 +179,14 @@
                 magnifiedContainer.appendChild(magnifiedBox);
             });
 
-            timeLeft = 20;
+            timeLeft = gameConfig.timePerPuzzle;
             timerValue.textContent = timeLeft;
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(updateTimer, 1000);
 
             setBackgroundTheme(puzzle.theme, puzzle.elements);
 
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i < gameConfig.initialRevealedLetters; i++) {
                 revealLetter(puzzle.word);
             }
 
@@ -374,7 +376,7 @@
         }
 
         function revealAllLetters() {
-            const currentWord = puzzles[currentPuzzleIndex].word;
+            const currentWord = gameConfig.puzzles[currentPuzzleIndex].word;
             currentWord.split('').forEach((letter, index) => {
                 if (!revealedIndices.has(index)) {
                     guessContainer.children[index].textContent = letter;
@@ -402,7 +404,7 @@
                         ease: "back.out(1.7)"
                     });
                     
-                    const celebrationEmojis = ['🎉', '✨', '🌟', '👏', '🙌', ...puzzles[currentPuzzleIndex].elements];
+                    const celebrationEmojis = ['🎉', '✨', '🌟', '👏', '🙌', ...gameConfig.puzzles[currentPuzzleIndex].elements];
                     celebrationEmojis.forEach(emoji => {
                         const element = createCelebrationEmoji(emoji);
                         gsap.to(element, {
@@ -432,7 +434,7 @@
                 ease: "power2.in",
                 onComplete: () => {
                     currentPuzzleIndex++;
-                    if (currentPuzzleIndex < puzzles.length) {
+                    if (currentPuzzleIndex < gameConfig.totalPuzzles) {
                         setTimeout(() => {
                             setupPuzzle(currentPuzzleIndex);
                         }, 3000);
@@ -446,9 +448,6 @@
         function endGame() {
             container.innerHTML = '<h1 style="color: white; text-align: center;">Congratulations! You\'ve completed all puzzles!</h1>';
         }
-
-        // Start the game
-        setupPuzzle(currentPuzzleIndex);
     </script>
 </body>
 </html>
