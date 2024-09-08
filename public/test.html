@@ -150,7 +150,7 @@
         const component2 = document.getElementById('component2');
 
         // Load the game configuration
-        fetch('public/game-config.json')
+        fetch('game-config.json')
             .then(response => response.json())
             .then(config => {
                 gameConfig = config;
