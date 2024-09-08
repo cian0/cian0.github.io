@@ -3,274 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXIT Rebus Food Animation</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <title>Smooth Multi-Particle Animation with Transitions</title>
     <style>
-        body, html {
+        body {
             margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
             overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB, #4682B4);
-            font-family: Arial, sans-serif;
+            background-color: #000000;
         }
-        #game-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        .egg {
-            font-size: 60px;
-            position: absolute;
-            bottom: 20px;
-        }
-        .mouth {
-            position: absolute;
-            width: 24px;
-            height: 12px;
-            background-color: #FF69B4;
-            border-radius: 0 0 100px 100px;
-            top: 70%;
-            left: 50%;
-            transform: translateX(-50%) scaleY(0.1);
-            overflow: hidden;
-        }
-        .tongue {
-            width: 12px;
-            height: 6px;
-            background-color: #FF1493;
-            border-radius: 6px 6px 0 0;
-            position: absolute;
-            bottom: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .food {
-            font-size: 20px;
-            position: absolute;
-            user-select: none;
-        }
-        .rebus-container {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-        .rebus-box {
-            width: 40px;
-            height: 40px;
-            background-color: #ffffff;
-            border: 2px solid #000000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            font-weight: bold;
+        canvas {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <div class="rebus-container">
-            <div class="rebus-box"></div>
-            <div class="rebus-box">X</div>
-            <div class="rebus-box"></div>
-            <div class="rebus-box"></div>
-        </div>
-    </div>
-
+    <canvas id="particleCanvas"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        const container = document.getElementById('game-container');
-        const foodItems = ['🍔', '🍕', '🍗', '🍎', '🍌', '🍣', '🥩', '🥕', '🍇', '🍉'];
-        const numEggs = 3;
-        const eggs = [];
-        const foodPool = [];
-        const maxFood = 500;
-        let isGameActive = true;
-        const gameDuration = 20000; // 20 seconds in milliseconds
-        let gameStartTime;
-        let foodCreationInterval;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('particleCanvas'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-        function createEgg(index) {
-            const egg = document.createElement('div');
-            egg.classList.add('egg');
-            egg.innerHTML = '🥚<div class="mouth"><div class="tongue"></div></div>';
-            container.appendChild(egg);
-            return { egg, mouth: egg.querySelector('.mouth'), tongue: egg.querySelector('.tongue') };
-        }
+        const particles = new THREE.Group();
+        scene.add(particles);
 
-        function positionEggs() {
-            const containerWidth = container.offsetWidth;
-            const eggWidth = 60;
-            const totalWidth = eggWidth * numEggs;
-            const startX = (containerWidth - totalWidth) / 2;
+        const particleCount = 2000;
+        const shapes = ['snowflake', 'star', 'circle', 'triangle', 'square'];
+        const colors = [0xFFFFFF, 0xFF00FF, 0x00FFFF, 0xFFFF00, 0x00FF00, 0xFF0000];
 
-            eggs.forEach(({ egg }, index) => {
-                const offset = (index - 1) * 12;
-                egg.style.left = `${startX + index * eggWidth + offset}px`;
-            });
-        }
-
-        function createFood() {
-            let food;
-            if (foodPool.length > 0) {
-                food = foodPool.pop();
-                if (food && food.style) {
-                    food.style.display = 'block';
-                } else {
-                    food = document.createElement('div');
-                    food.classList.add('food');
-                }
-            } else {
-                food = document.createElement('div');
-                food.classList.add('food');
-            }
-            container.appendChild(food);
-            food.textContent = foodItems[Math.floor(Math.random() * foodItems.length)];
-            food.style.left = `${Math.random() * (container.offsetWidth - 20)}px`;
-            food.style.top = '-30px';
-            return food;
-        }
-
-        function animateFood(food) {
-            if (!food || !food.style) return;
-            const duration = 2 + Math.random() * 2;
-            gsap.to(food, {
-                duration: duration,
-                y: container.offsetHeight + 30,
-                ease: 'none',
-                onComplete: () => recycleFood(food)
-            });
-        }
-
-        function recycleFood(food) {
-            if (!food || !food.style) return;
-            gsap.killTweensOf(food);
-            food.style.display = 'none';
-            foodPool.push(food);
-        }
-
-        function checkCollision(food, egg) {
-            if (!food || !egg) return false;
-            const foodRect = food.getBoundingClientRect();
-            const eggRect = egg.getBoundingClientRect();
-            return !(foodRect.right < eggRect.left || 
-                     foodRect.left > eggRect.right || 
-                     foodRect.bottom < eggRect.top || 
-                     foodRect.top > eggRect.bottom);
-        }
-
-        function animateMouth(mouth, tongue) {
-            if (!mouth || !tongue) return;
-            gsap.timeline()
-                .to(mouth, { duration: 0.15, scaleY: 1, ease: 'power1.out' })
-                .to(tongue, { duration: 0.15, bottom: 0, ease: 'power1.out' }, 0)
-                .to(mouth, { duration: 0.15, scaleY: 0.1, ease: 'power1.in' }, 0.15)
-                .to(tongue, { duration: 0.15, bottom: -6, ease: 'power1.in' }, 0.15);
-        }
-
-        function eatFood(food, eggIndex) {
-            const { egg, mouth, tongue } = eggs[eggIndex];
-            if (!food || !egg) return;
-            gsap.killTweensOf(food);
-            
-            gsap.to(food, {
-                duration: 0.3,
-                scale: 0,
-                x: egg.offsetLeft + egg.offsetWidth / 2,
-                y: egg.offsetTop + egg.offsetHeight / 2,
-                onComplete: () => recycleFood(food)
-            });
-
-            gsap.to(egg, {
-                duration: 0.2,
-                scale: 1.1,
-                yoyo: true,
-                repeat: 1
-            });
-
-            animateMouth(mouth, tongue);
-        }
-
-        function gameLoop() {
-            if (!isGameActive) return;
-
-            const currentTime = Date.now();
-            if (currentTime - gameStartTime >= gameDuration) {
-                endGame();
-                return;
-            }
-
-            const activeFood = container.querySelectorAll('.food:not([style*="display: none"])');
-            activeFood.forEach(food => {
-                eggs.forEach((egg, index) => {
-                    if (checkCollision(food, egg.egg)) {
-                        eatFood(food, index);
+        function createShape(type) {
+            let shape = new THREE.Shape();
+            switch (type) {
+                case 'snowflake':
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (i / 6) * Math.PI * 2;
+                        shape.lineTo(Math.cos(angle) * 0.5, Math.sin(angle) * 0.5);
+                        shape.lineTo(Math.cos(angle + Math.PI / 6) * 0.2, Math.sin(angle + Math.PI / 6) * 0.2);
                     }
-                });
+                    shape.lineTo(0.5, 0);
+                    break;
+                case 'star':
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (i / 5) * Math.PI * 2;
+                        shape.lineTo(Math.cos(angle) * 0.5, Math.sin(angle) * 0.5);
+                        shape.lineTo(Math.cos(angle + Math.PI / 5) * 0.2, Math.sin(angle + Math.PI / 5) * 0.2);
+                    }
+                    shape.lineTo(0.5, 0);
+                    break;
+                case 'circle':
+                    shape.absarc(0, 0, 0.5, 0, Math.PI * 2, false);
+                    break;
+                case 'triangle':
+                    shape.moveTo(0, 0.5);
+                    shape.lineTo(-0.5, -0.5);
+                    shape.lineTo(0.5, -0.5);
+                    shape.lineTo(0, 0.5);
+                    break;
+                case 'square':
+                    shape.moveTo(-0.5, -0.5);
+                    shape.lineTo(0.5, -0.5);
+                    shape.lineTo(0.5, 0.5);
+                    shape.lineTo(-0.5, 0.5);
+                    shape.lineTo(-0.5, -0.5);
+                    break;
+            }
+            return shape;
+        }
+
+        function createParticle() {
+            const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const shape = createShape(shapeType);
+            const geometry = new THREE.ShapeGeometry(shape);
+            const material = new THREE.MeshBasicMaterial({
+                color: color,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.8
             });
-
-            requestAnimationFrame(gameLoop);
+            const particle = new THREE.Mesh(geometry, material);
+            
+            particle.position.set(
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20
+            );
+            particle.rotation.set(
+                Math.random() * Math.PI,
+                Math.random() * Math.PI,
+                Math.random() * Math.PI
+            );
+            particle.scale.set(0.05, 0.05, 0.05);
+            particle.userData = {
+                velocity: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02
+                ),
+                rotationSpeed: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02
+                ),
+                originalColor: color,
+                originalShape: shapeType
+            };
+            return particle;
         }
 
-        function createFoodInterval() {
-            // if (container.querySelectorAll('.food:not([style*="display: none"])').length < maxFood) {
-                const food = createFood();
-                if (food) animateFood(food);
-            // }
+        for (let i = 0; i < particleCount; i++) {
+            particles.add(createParticle());
         }
 
-        function endGame() {
-            isGameActive = false;
-            clearInterval(foodCreationInterval);
-            gsap.to('.food', {
-                duration: 0.5,
-                opacity: 0,
-                y: '+=50',
-                stagger: 0.02,
-                onComplete: function(target) {
-                    if (target && target.style) target.style.display = 'none';
+        camera.position.set(0, 0, 15);
+
+        const scenes = [
+            {
+                name: 'scatter',
+                duration: 300,
+                setup: () => {},
+                update: (particle, time, t) => {
+                    particle.position.add(particle.userData.velocity.clone().multiplyScalar(t));
+                    if (Math.abs(particle.position.x) > 10) particle.userData.velocity.x *= -1;
+                    if (Math.abs(particle.position.y) > 10) particle.userData.velocity.y *= -1;
+                    if (Math.abs(particle.position.z) > 10) particle.userData.velocity.z *= -1;
+                }
+            },
+            {
+                name: 'vortex',
+                duration: 400,
+                setup: () => {},
+                update: (particle, time, t) => {
+                    const radius = particle.position.length();
+                    const newX = Math.cos(time * 0.5 + radius) * radius;
+                    const newZ = Math.sin(time * 0.5 + radius) * radius;
+                    const newY = particle.position.y + Math.sin(time + radius) * 0.05;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            },
+            {
+                name: 'spiral',
+                duration: 400,
+                setup: (particle) => {
+                    particle.userData.initialAngle = Math.random() * Math.PI * 2;
+                    particle.userData.initialRadius = Math.random() * 10;
+                },
+                update: (particle, time, t) => {
+                    const angle = time * 0.5 + particle.userData.initialAngle;
+                    const radius = (particle.userData.initialRadius + time * 0.1) % 10;
+                    const newX = Math.cos(angle) * radius;
+                    const newY = Math.sin(angle) * radius;
+                    const newZ = (particle.position.z + 0.05 * t) % 20 - 10;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            },
+            {
+                name: 'wave',
+                duration: 350,
+                setup: () => {},
+                update: (particle, time, t) => {
+                    const newY = Math.sin(time + particle.position.x * 0.1) * 5;
+                    const newX = particle.position.x + 0.05 * t;
+                    particle.position.lerp(new THREE.Vector3(newX > 10 ? -10 : newX, newY, particle.position.z), t);
+                }
+            },
+            {
+                name: 'explosion',
+                duration: 250,
+                setup: (particle) => {
+                    particle.userData.explosionVelocity = new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.2,
+                        (Math.random() - 0.5) * 0.2,
+                        (Math.random() - 0.5) * 0.2
+                    );
+                },
+                update: (particle, time, t) => {
+                    particle.position.add(particle.userData.explosionVelocity.clone().multiplyScalar(t));
+                }
+            },
+            {
+                name: 'implosion',
+                duration: 300,
+                setup: (particle) => {
+                    particle.userData.targetPosition = new THREE.Vector3(0, 0, 0);
+                },
+                update: (particle, time, t) => {
+                    particle.position.lerp(particle.userData.targetPosition, 0.02 * t);
+                }
+            },
+            {
+                name: 'orbit',
+                duration: 450,
+                setup: (particle) => {
+                    particle.userData.orbitRadius = Math.random() * 10;
+                    particle.userData.orbitSpeed = (Math.random() + 0.5) * 0.01;
+                    particle.userData.orbitAngle = Math.random() * Math.PI * 2;
+                },
+                update: (particle, time, t) => {
+                    particle.userData.orbitAngle += particle.userData.orbitSpeed * t;
+                    const newX = Math.cos(particle.userData.orbitAngle) * particle.userData.orbitRadius;
+                    const newZ = Math.sin(particle.userData.orbitAngle) * particle.userData.orbitRadius;
+                    const newY = Math.sin(time * 0.5) * 5;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            },
+            {
+                name: 'dna',
+                duration: 400,
+                setup: (particle, index) => {
+                    particle.userData.dnaOffset = index * 0.01;
+                },
+                update: (particle, time, t) => {
+                    const localTime = time + particle.userData.dnaOffset;
+                    const newX = Math.sin(localTime * 2) * 5;
+                    const newY = (localTime * 0.5) % 20 - 10;
+                    const newZ = Math.cos(localTime * 2) * 5;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            }
+        ];
+
+        let currentScene;
+        let nextScene;
+        let transitionProgress = 0;
+        const transitionDuration = 100; // frames
+
+        function selectNextScene() {
+            do {
+                nextScene = scenes[Math.floor(Math.random() * scenes.length)];
+            } while (nextScene === currentScene);
+            
+            transitionProgress = 0;
+            particles.children.forEach((particle, index) => {
+                nextScene.setup(particle, index);
+                
+                // Random shape transformation
+                if (Math.random() < 0.2) {
+                    const newShape = shapes[Math.floor(Math.random() * shapes.length)];
+                    const newGeometry = new THREE.ShapeGeometry(createShape(newShape));
+                    particle.geometry.dispose();
+                    particle.geometry = newGeometry;
+                }
+                
+                // Random color transformation
+                if (Math.random() < 0.2) {
+                    const newColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.material.color.setHex(newColor);
                 }
             });
         }
 
-        // Initialize game
-        for (let i = 0; i < numEggs; i++) {
-            eggs.push(createEgg(i));
+        function updateCameraPosition(time) {
+            const radius = 15 + Math.sin(time * 0.3) * 5;
+            const theta = time * 0.2;
+            const phi = Math.sin(time * 0.1) * Math.PI * 0.1;
+
+            camera.position.x = radius * Math.sin(theta) * Math.cos(phi);
+            camera.position.y = radius * Math.sin(phi);
+            camera.position.z = radius * Math.cos(theta) * Math.cos(phi);
+
+            camera.lookAt(scene.position);
         }
 
-        gsap.from(eggs.map(e => e.egg), {
-            duration: 1,
-            scale: 0,
-            rotation: 360,
-            ease: 'back.out(1.7)'
-        });
+        let sceneTime = 0;
+        currentScene = scenes[Math.floor(Math.random() * scenes.length)];
+        selectNextScene();
 
-        positionEggs();
-        window.addEventListener('resize', positionEggs);
+        function animate() {
+            requestAnimationFrame(animate);
 
-        // Start the game
-        gameStartTime = Date.now();
-        gameLoop();
-        foodCreationInterval = setInterval(createFoodInterval, 100); // Create food every 100ms
+            const time = Date.now() * 0.001;
+            updateCameraPosition(time);
 
-        // End the game after 20 seconds
-        setTimeout(endGame, gameDuration);
+            sceneTime++;
 
-        // Touch event for mobile
-        container.addEventListener('touchstart', (e) => {
-            if (!isGameActive) return;
-            const touch = e.touches[0];
-            const food = createFood();
-            if (food && food.style) {
-                food.style.left = `${touch.clientX}px`;
-                food.style.top = `${touch.clientY}px`;
-                animateFood(food);
+            if (transitionProgress < transitionDuration) {
+                transitionProgress++;
+                const t = transitionProgress / transitionDuration;
+                const easeT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOutQuad
+
+                particles.children.forEach((particle, index) => {
+                    particle.rotation.x += particle.userData.rotationSpeed.x;
+                    particle.rotation.y += particle.userData.rotationSpeed.y;
+                    particle.rotation.z += particle.userData.rotationSpeed.z;
+
+                    const currentPosition = particle.position.clone();
+                    currentScene.update(particle, time, 1 - easeT);
+                    const midPosition = particle.position.clone();
+                    particle.position.copy(currentPosition);
+                    nextScene.update(particle, time, easeT);
+                    const nextPosition = particle.position.clone();
+                    particle.position.lerpVectors(midPosition, nextPosition, easeT);
+
+                    // Gentle size variation
+                    const scale = 0.05 + Math.sin(time * 0.5 + index * 0.1) * 0.01;
+                    particle.scale.set(scale, scale, scale);
+
+                    // Subtle shimmer effect
+                    particle.material.opacity = 0.6 + Math.sin(time * 2 + index * 0.5) * 0.2;
+                });
+            } else {
+                particles.children.forEach((particle, index) => {
+                    particle.rotation.x += particle.userData.rotationSpeed.x;
+                    particle.rotation.y += particle.userData.rotationSpeed.y;
+                    particle.rotation.z += particle.userData.rotationSpeed.z;
+
+                    currentScene.update(particle, time, 1);
+
+                    // Gentle size variation
+                    const scale = 0.05 + Math.sin(time * 0.5 + index * 0.1) * 0.01;
+                    particle.scale.set(scale, scale, scale);
+
+                    // Subtle shimmer effect
+                    particle.material.opacity = 0.6 + Math.sin(time * 2 + index * 0.5) * 0.2;
+                });
             }
+
+            if (sceneTime >= currentScene.duration) {
+                currentScene = nextScene;
+                selectNextScene();
+                sceneTime = 0;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        //window.addEventListener('resize', () =>
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
