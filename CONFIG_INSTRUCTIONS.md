@@ -4,7 +4,7 @@ This document provides detailed instructions on how to create and modify the JSO
 
 ## File Structure
 
-The configuration file should be named `game-config.json` and placed in the root directory of the project.
+The configuration file should be named `game-config.json` and placed in the root directory of the project./ask
 
 ## JSON Structure
 
