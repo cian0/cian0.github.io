@@ -312,7 +312,9 @@
                 scale: Math.random() * 0.5 + 0.5,
                 ease: "power1.inOut",
                 onComplete: () => {
-                    container.removeChild(element);
+                    if (container.contains(element)) {
+                        container.removeChild(element);
+                    }
                     createAndAnimateBackgroundElement(theme);
                 }
             });
