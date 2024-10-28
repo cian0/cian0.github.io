@@ -12,46 +12,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @page {
+            margin: 1.5cm;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: white;
+            color: #1a1a1a;
+            line-height: 1.6;
+            max-width: 210mm; /* A4 width */
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        .gradient-text {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .section-title {
+            color: #2563eb;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-bottom: 2px solid #2563eb;
+            margin-bottom: 1rem;
+            padding-bottom: 0.25rem;
         }
-        .card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .skill-pill {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
+        .skill-item {
             display: inline-block;
+            border: 1px solid #2563eb;
+            color: #2563eb;
+            padding: 0.25rem 0.75rem;
             margin: 0.25rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            a {
+                text-decoration: none;
+                color: #1a1a1a;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="max-w-5xl mx-auto px-4 py-12">
+<body class="print:bg-white">
+    <div class="max-w-[210mm] mx-auto py-8">
         <!-- Header Section -->
-        <div data-aos="fade-down" class="card p-8 mb-8 bg-white relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+        <div class="mb-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="text-center md:text-left">
-                    <h1 class="text-4xl font-bold gradient-text mb-2">John Doe</h1>
-                    <h2 class="text-xl text-gray-600 font-medium">Senior Software Engineer</h2>
+                    <h1 class="text-4xl font-bold text-[#2563eb] mb-2">John Doe</h1>
+                    <h2 class="text-xl text-gray-700 font-medium">Senior Software Engineer</h2>
                 </div>
                 <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end space-y-2">
                     <a href="mailto:john.doe@email.com" class="text-gray-600 hover:text-blue-500 transition-colors">
@@ -71,16 +82,16 @@
         </div>
 
         <!-- Summary Section -->
-        <div data-aos="fade-up" class="card p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-4 gradient-text">Professional Summary</h2>
+        <div class="mb-8">
+            <h2 class="section-title">Professional Summary</h2>
             <p class="text-gray-700 leading-relaxed">
                 Results-driven software engineer with 5+ years of experience in developing scalable web applications and implementing efficient solutions. Proven track record in leading technical teams and delivering high-impact projects. Passionate about creating innovative solutions and maintaining code quality.
             </p>
         </div>
 
         <!-- Experience Section -->
-        <div data-aos="fade-up" class="card p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-6 gradient-text">Work Experience</h2>
+        <div class="mb-8">
+            <h2 class="section-title">Work Experience</h2>
             
             <div class="mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
@@ -158,28 +169,28 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Programming Languages</h3>
                     <div class="flex flex-wrap">
-                        <span class="skill-pill">JavaScript/TypeScript</span>
-                        <span class="skill-pill">Python</span>
-                        <span class="skill-pill">Java</span>
-                        <span class="skill-pill">SQL</span>
+                        <span class="skill-item">JavaScript/TypeScript</span>
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">Java</span>
+                        <span class="skill-item">SQL</span>
                     </div>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Frameworks & Tools</h3>
                     <div class="flex flex-wrap">
-                        <span class="skill-pill">React.js</span>
-                        <span class="skill-pill">Node.js</span>
-                        <span class="skill-pill">Docker</span>
-                        <span class="skill-pill">Kubernetes</span>
+                        <span class="skill-item">React.js</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">Docker</span>
+                        <span class="skill-item">Kubernetes</span>
                     </div>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Soft Skills</h3>
                     <div class="flex flex-wrap">
-                        <span class="skill-pill">Team Leadership</span>
-                        <span class="skill-pill">Problem Solving</span>
-                        <span class="skill-pill">Project Management</span>
-                        <span class="skill-pill">Communication</span>
+                        <span class="skill-item">Team Leadership</span>
+                        <span class="skill-item">Problem Solving</span>
+                        <span class="skill-item">Project Management</span>
+                        <span class="skill-item">Communication</span>
                     </div>
                 </div>
             </div>
