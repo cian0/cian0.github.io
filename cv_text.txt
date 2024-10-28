@@ -45,6 +45,55 @@ Other Tools: NGINX
 Experience
 Page 1 of 11
 
+Lazada Group
+3 years 11 months
+
+Manager - Performance Management, Strategy and Planning
+June 2019 - June 2021 (2 years 1 month)
+Philippines
+
+Provide end to end insights on company performance, trends and overall health of the business through Big Data technologies and data mining tools. Use prescriptive analytics and data science to generate data models, hypotheses and finally: resolutions in order for business process to run smoothly and minimize risks from edge cases. Responsibilities may include: being on top of process issues, designing new KPI models, automating resolutions and issue deep dives using exploratory analytics, documentation and presentation.
+
+Skills:
+- KPI Modeling
+- Data Modeling
+- Business Intelligence
+- Prescriptive Analytics
+- Data Automation
+- Data Engineering
+
+Data Tools used:
+- MaxCompute (similar to Hive)
+- Python (Pandas, Scipy, Numpy)
+- Laravel + Vue
+- Nodejs
+- PowerBI
+- Qliksense
+
+Senior Associate, Performance Management and Planning (Business Intelligence/Process Automation)
+August 2017 - June 2019 (1 year 11 months)
+Philippines
+
+Provide insights, data analytics, visibility, drive business decisions through Big Data technologies using MaxCompute (similar to hive)
+
+Technologies used:
+- PowerBI
+- FBI
+- QlikSense
+- MaxCompute (formerly known as ODPS, similar to Hive/Hadoop)
+- PostgreSQL
+- Github
+- MySQL
+- NodeJS
+- Python (scipy, numpy, matplotlib)
+- Laravel
+- NGINX
+
+Main Functions:
+- Business insights, data analytics, visibility, decision-making through data visualizations
+- Process automation - provide business efficiency through tech tools and programming
+- Support team for local tech issues, data issues
+
 Remote Philippines - Client: Worldwide Palm Oil Regulatory Organization
 Data Engineer
 June 2024 - Present
@@ -68,6 +117,97 @@ Tech Stack:
 
 Experience
 Page 2 of 11
+
+Imfree, Inc.
+Mobile Software Architect
+July 2015 - August 2017 (2 years 2 months)
+BGC, Taguig
+
+Tech Stack Used:
+- Android Studio
+- Objective C
+- CircleCI
+- Docker
+- Command line scripting (UNIX/Bash)
+- Github
+
+Freelance
+Full Stack Engineer
+October 2014 - June 2015 (9 months)
+
+Manages teams, facilitates code reviews, web/mobile/backend developer, interfaces with clients and analyzes their business needs and provides costings/project estimations.
+
+Accenture
+Team Lead
+July 2014 - October 2014 (4 months)
+
+[24]7
+Applications Engineer - Mobile
+October 2013 - June 2014 (9 months)
+Makati
+
+- Design and develop new components of the mobile application platform
+- Develop frameworks suitable for inclusion in third party applications
+- Provide technical documentation, guidance and support on mobile platform capabilities
+- Work with Product Management and User Experience teams to design, prototype and deliver best-in class customer service mobile applications
+- Research emerging technologies related to mobile applications, such as multi-modal user interfaces, natural language processing, speech recognition and predictive analytics
+- Work with Engineering management team to establish and reinforce disciplined software development process and best practices
+
+UST Global
+Senior Software Developer
+August 2013 - September 2013 (2 months)
+McKinley Hill, Taguig
+
+- Work with the team to develop code within the stipulated time
+- Apply generally accepted programming standards and techniques to assure efficient program logic and data manipulation
+- Participate in design, coding, testing, debugging, configuring, analysis, code review and documenting operating systems and software
+- Present innovative ideas for system improvements
+- Adhere to the coding standards and all policies identified for the project specified
+- Coordinate with project team members
+- Document the approach and actions taken for production/development, testing the code
+- Report the progress of work to supervisor and team in team meetings
+- Perform other duties as assigned or requested
+
+EScience Corp.
+Mid Software Analyst/Developer
+January 2012 - July 2013 (1 year 7 months)
+Alabang
+
+- Implement all software developments according to set methodologies and coding standards
+- Implement applications that adhere to technical designs
+- Accomplish change request forms prior to any changes/enhancements to codes
+- Makes sure that all source codes are promoted to the code repository (SVN) according to the guidelines
+- Responds to non-development tasks assigned by TLs and PMs
+- Application monitoring (performance, functional, etc)
+- Project meetings (kick-off, project status, project review, project appraisals, etc.)
+- Maintains and supports existing products of the company
+- Analyzes various ways of coding and take up efficient approach to create quality application
+- Performs appropriate testing of applications prior to QA process
+- Documents programming problems and resolutions for future reference
+
+Summit Media
+Flash Developer
+August 2011 - January 2012 (6 months)
+Boni Avenue
+
+- Creation of in-house rich media applications, games, ads, etc.
+- Responsible for all programming projects needed in the department
+- Handle programming of web projects
+- Work closely with the Media Designer for various projects
+- Help the group conceptualize new programs for the website
+
+WideOut Technology Services Incorporated
+Flash Developer
+June 2010 - July 2011 (1 year 2 months)
+Taguig
+
+- Receive tasks from Team Leaders and develop assigned projects for Clients
+- Monitor delivery status and slack time and takes measures to ensure productivity
+- Learn new production design, development methodologies, trade tools
+- Contribute in the documentation of bugs and their fixes shared in production
+- Contribute in the formulation of team-centric policies and standards
+- Offer advice to team personnel on production design, development and testing
+- Develop online rich media ads
 Les Bonnes Choses
 Data Engineer (Part-time)
 June 2023 - Present (1 year 5 months)
