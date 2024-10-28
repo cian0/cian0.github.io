@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -100,7 +99,7 @@
                         <i class="fab fa-github mr-2"></i>github.com/cian0
                     </a>
                     <a href="https://personaexis.ai/portfolio/" target="_blank" class="text-gray-600 hover:text-blue-500 transition-colors">
-                        <i class="fas fa-briefcase mr-2"></i>Portfolio
+                        <i class="fas fa-briefcase mr-2"></i>https://personaexis.ai/portfolio/
                     </a>
                 </div>
             </div>
@@ -160,20 +159,6 @@
             </div>
         </div>
 
-        <!-- Skills Visualization Section -->
-        <div class="mb-8">
-            <h2 class="section-title">Skills Overview</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Technical Expertise</h3>
-                    <canvas id="technicalChart" width="400" height="300"></canvas>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Domain Knowledge</h3>
-                    <canvas id="domainChart" width="400" height="300"></canvas>
-                </div>
-            </div>
-        </div>
 
         <!-- Experience Section -->
         <div class="mb-8">
@@ -543,68 +528,6 @@
             duration: 1000,
             once: true,
             offset: 100
-        });
-
-        // Technical Skills Chart
-        const technicalCtx = document.getElementById('technicalChart').getContext('2d');
-        new Chart(technicalCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Cloud Platforms', 'Data Engineering', 'Python/JS', 'DevOps', 'ML Ops', 'Analytics'],
-                datasets: [{
-                    label: 'Expertise Level',
-                    data: [90, 95, 88, 85, 92, 90],
-                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
-                    borderColor: 'rgba(37, 99, 235, 1)',
-                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
-                    pointBorderColor: '#fff',
-                }]
-            },
-            options: {
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-
-        // Domain Knowledge Chart
-        const domainCtx = document.getElementById('domainChart').getContext('2d');
-        new Chart(domainCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Data Pipeline Design', 'Cloud Infrastructure', 'Product Development', 'Business Analytics'],
-                datasets: [{
-                    data: [95, 90, 85, 92],
-                    backgroundColor: 'rgba(37, 99, 235, 0.7)',
-                    borderColor: 'rgba(37, 99, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
         });
     </script>
 </body>
