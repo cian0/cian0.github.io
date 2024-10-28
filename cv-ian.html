@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyril Ian Icasiano | Data Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            margin: 0.75in;
+            size: letter;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white;
+            color: #1a1a1a;
+            line-height: 1.6;
+            width: 8.5in;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 0.75in;
+            box-sizing: border-box;
+        }
+        .section-title {
+            color: #2563eb;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-bottom: 2px solid #2563eb;
+            margin-bottom: 1rem;
+            padding-bottom: 0.25rem;
+        }
+        .skill-item {
+            display: inline-block;
+            border: 1px solid #2563eb;
+            color: #2563eb;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        @media print {
+            body {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .print\:flex-row {
+                flex-direction: row !important;
+            }
+            .print\:text-left {
+                text-align: left !important;
+            }
+            .print\:items-end {
+                align-items: flex-end !important;
+            }
+            a {
+                text-decoration: none;
+                color: #1a1a1a;
+            }
+            * {
+                overflow: visible !important;
+            }
+            .page-break-inside-avoid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="print:bg-white">
+    <div class="w-full mx-auto py-8">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="flex flex-row items-center justify-between print:flex-row">
+                <div class="text-left print:text-left">
+                    <h1 class="text-4xl font-bold text-[#2563eb] mb-2">Cyril Ian Icasiano</h1>
+                    <h2 class="text-xl text-gray-700 font-medium">Data Engineer | ML Ops Specialist</h2>
+                </div>
+                <div class="flex flex-col items-end space-y-2 print:items-end">
+                    <a href="mailto:icasiano_ian@yahoo.com" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fas fa-envelope mr-2"></i>icasiano_ian@yahoo.com
+                    </a>
+                    <a href="tel:+639175051599" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fas fa-phone mr-2"></i>+63 917 505 1599
+                    </a>
+                    <div class="text-gray-600">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Paranaque, Manila, NCR 1700
+                    </div>
+                    <a href="https://www.linkedin.com/in/ianicasiano" target="_blank" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fab fa-linkedin mr-2"></i>linkedin.com/in/ianicasiano
+                    </a>
+                    <a href="https://www.github.com/cian0" target="_blank" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fab fa-github mr-2"></i>github.com/cian0
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="mb-8">
+            <h2 class="section-title">Professional Summary</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Dynamic Software Engineer with over 10 years of diverse experience across Data Engineering, DevOps, and Product Design and Development. Well-versed in developing and modernizing IT operations through robust data pipeline design, advanced automation, and strategic use of cloud infrastructure, primarily AWS. Currently engaged in the development of AI-driven applications, with a focus on machine learning operations and model optimization.
+            </p>
+        </div>
+
+        <!-- Technical Skills Section -->
+        <div class="mb-8">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Cloud & Infrastructure</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-item">AWS</span>
+                        <span class="skill-item">GCP</span>
+                        <span class="skill-item">Docker</span>
+                        <span class="skill-item">Terraform</span>
+                        <span class="skill-item">NGINX</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Data Engineering</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-item">Apache Airflow</span>
+                        <span class="skill-item">Snowflake</span>
+                        <span class="skill-item">BigQuery</span>
+                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">MySQL</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Programming</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">NodeJS</span>
+                        <span class="skill-item">VueJS</span>
+                        <span class="skill-item">Laravel PHP</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Analytics & BI</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-item">Looker Studio</span>
+                        <span class="skill-item">PowerBI</span>
+                        <span class="skill-item">Qliksense</span>
+                        <span class="skill-item">Google Analytics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="mb-8">
+            <h2 class="section-title">Professional Experience</h2>
+            
+            <div class="mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800">Les Bonnes Choses</h3>
+                    <span class="text-blue-500 font-medium">June 2023 - Present</span>
+                </div>
+                <h4 class="text-lg text-gray-600 mb-3">Data Engineer</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Design and implement robust data pipelines using Apache Airflow, managing ETL processes efficiently</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Manage and optimize data storage solutions using Snowflake and Google BigQuery</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Create compelling data visualizations using Looker Studio for stakeholder communication</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800">Glimp.AI</h3>
+                    <span class="text-blue-500 font-medium">June 2023 - Present</span>
+                </div>
+                <h4 class="text-lg text-gray-600 mb-3">Full Stack | DevOps, Data Analytics, ML Ops</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Lead development of AI applications focusing on stable diffusion models and MLOps</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Design and implement data pipelines and analytics platforms using AWS infrastructure</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Implement automation solutions to improve efficiency across operations</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800">Lazada Group</h3>
+                    <span class="text-blue-500 font-medium">August 2017 - June 2021</span>
+                </div>
+                <h4 class="text-lg text-gray-600 mb-3">Manager - Performance Management, Strategy and Planning</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Led end-to-end business insights and analytics using Big Data technologies</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Developed KPI models and automated resolutions using Python and MaxCompute</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Implemented BI solutions using PowerBI and Qliksense for data visualization</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="mb-8">
+            <h2 class="section-title">Education</h2>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                <h3 class="text-xl font-semibold text-gray-800">First Asia Institute of Technology and Humanities</h3>
+                <span class="text-blue-500 font-medium">2007 - 2010</span>
+            </div>
+            <h4 class="text-lg text-gray-600">Bachelor's degree, Computer Science</h4>
+        </div>
+    </div>
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
