@@ -141,21 +141,21 @@ EZIE App
 BI Manager Consultant
 July 2022 - December 2022 (6 months)
 Page 3 of 10
-- Building interactive analytics dashboards using tools
-- Developing data pipelines, extracting data from sources, strong SQL-skills
-are a must have
-- Working with Logistics data – including claims/administrative/financial data
-and/or ops data
-- Proven experience operating successfully within ambiguity; you are a results-
-oriented professional who can make sense of chaos to continually deliver
-desired results
-- Demonstrated organizational skills and the ability to effectively manage
-competing priorities
-- Excellent interpersonal communication and critical problem-solving skills;
-willingness to challenge yourself and others and take calculated risks to grow
-the business
-- Ability to collaborate with both technical and non-technical stakeholders and
-can communicate information appropriately based on your audience
+Key Responsibilities:
+- Building interactive analytics dashboards for logistics, claims, administrative, financial, and operations data
+- Developing complex data pipelines and extracting data from multiple sources using strong SQL skills
+- Managing and analyzing logistics data including claims, administrative, financial, and operational metrics
+- Operating effectively in ambiguous environments while delivering consistent results
+- Managing competing priorities and demonstrating strong organizational skills
+- Providing critical problem-solving and interpersonal communication across technical and non-technical stakeholders
+- Leading cross-functional collaboration and effectively communicating technical information to diverse audiences
+
+Key Achievements:
+- Successfully implemented end-to-end data pipeline solutions using AWS Lambda and Snowflake
+- Developed comprehensive analytics dashboards using D3.js and Looker Studio
+- Automated key reporting processes using Python and JavaScript
+- Established effective communication channels between technical and business teams
+
 Tech stack used:
 - Python
 - Terraform
@@ -163,10 +163,9 @@ Tech stack used:
 - Google Analytics
 - UNIX
 - Looker Studio
-- Python
 - Snowflake
-- JS automation
-- D3
+- JavaScript automation
+- D3.js
 Real Deal Guild
 Technical Lead
 November 2021 - June 2022 (8 months)
