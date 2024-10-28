@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -188,33 +189,14 @@
         <!-- Skills Section -->
         <div data-aos="fade-up" class="card p-8 mb-8">
             <h2 class="text-2xl font-bold mb-6 gradient-text">Skills</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Programming Languages</h3>
-                    <div class="flex flex-wrap">
-                        <span class="skill-item">JavaScript/TypeScript</span>
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">Java</span>
-                        <span class="skill-item">SQL</span>
-                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Technical Proficiency</h3>
+                    <canvas id="technicalChart" width="400" height="300"></canvas>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Frameworks & Tools</h3>
-                    <div class="flex flex-wrap">
-                        <span class="skill-item">React.js</span>
-                        <span class="skill-item">Node.js</span>
-                        <span class="skill-item">Docker</span>
-                        <span class="skill-item">Kubernetes</span>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Soft Skills</h3>
-                    <div class="flex flex-wrap">
-                        <span class="skill-item">Team Leadership</span>
-                        <span class="skill-item">Problem Solving</span>
-                        <span class="skill-item">Project Management</span>
-                        <span class="skill-item">Communication</span>
-                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Soft Skills Rating</h3>
+                    <canvas id="softSkillsChart" width="400" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -244,6 +226,68 @@
             duration: 1000,
             once: true,
             offset: 100
+        });
+
+        // Technical Skills Chart
+        const technicalCtx = document.getElementById('technicalChart').getContext('2d');
+        new Chart(technicalCtx, {
+            type: 'radar',
+            data: {
+                labels: ['JavaScript/TypeScript', 'Python', 'Java', 'SQL', 'React.js', 'Node.js'],
+                datasets: [{
+                    label: 'Skill Level',
+                    data: [95, 90, 85, 88, 92, 89],
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                    pointBorderColor: '#fff',
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Soft Skills Chart
+        const softSkillsCtx = document.getElementById('softSkillsChart').getContext('2d');
+        new Chart(softSkillsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Leadership', 'Problem Solving', 'Communication', 'Project Management'],
+                datasets: [{
+                    data: [92, 95, 88, 90],
+                    backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
         });
     </script>
 </body>
