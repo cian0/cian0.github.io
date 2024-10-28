@@ -43,7 +43,31 @@ Software Development Practices: Agile Methodologies, Code
 Reviews, Test Automation
 Other Tools: NGINX
 Experience
-Page 1 of 10
+Page 1 of 11
+
+Remote Philippines - Client: Worldwide Palm Oil Regulatory Organization
+Data Engineer
+June 2024 - Present
+Key Responsibilities:
+- Design and implement sophisticated data transformation pipelines using Apache Beam, Google Cloud Dataflow, and dbt for BigQuery
+- Develop and maintain complex data models and transformations across warehouse layers
+- Create comprehensive data validation frameworks and quality assurance systems
+- Implement efficient batch synchronization and migration processes
+- Architect scalable data processing solutions using Google Cloud Platform
+
+Key Achievements:
+- Developed 200 models and transformation pipelines within 3 months using DBT, SQL, BigQuery, and PostgreSQL
+- Created complex dashboards with polygon calculations and geopoints for mapping database using Looker Studio
+- Developed efficient migration pipeline solutions with complete data cleansing and validation strategy using Apache Beam, DBT, YAML, and Python
+
+Tech Stack:
+- Apache Beam, Google Cloud Dataflow, dbt
+- BigQuery, PostgreSQL, Google Cloud Storage
+- Python, SQL, YAML, Jinja
+- Looker Studio
+
+Experience
+Page 2 of 11
 Les Bonnes Choses
 Data Engineer
 June 2023 - Present (11 months)
