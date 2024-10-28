@@ -53,6 +53,16 @@
             .no-print {
                 display: none;
             }
+            /* Force flex layout in print */
+            .print\:flex-row {
+                flex-direction: row !important;
+            }
+            .print\:text-left {
+                text-align: left !important;
+            }
+            .print\:items-end {
+                align-items: flex-end !important;
+            }
             a {
                 text-decoration: none;
                 color: #1a1a1a;
@@ -72,12 +82,12 @@
     <div class="w-full mx-auto py-8">
         <!-- Header Section -->
         <div class="mb-8">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="text-center md:text-left">
+            <div class="flex flex-row items-center justify-between print:flex-row">
+                <div class="text-left print:text-left">
                     <h1 class="text-4xl font-bold text-[#2563eb] mb-2">John Doe</h1>
                     <h2 class="text-xl text-gray-700 font-medium">Senior Software Engineer</h2>
                 </div>
-                <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end space-y-2">
+                <div class="flex flex-col items-end space-y-2 print:items-end">
                     <a href="mailto:john.doe@email.com" class="text-gray-600 hover:text-blue-500 transition-colors">
                         <i class="fas fa-envelope mr-2"></i>john.doe@email.com
                     </a>
