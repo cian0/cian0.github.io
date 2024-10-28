@@ -5,233 +5,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional CV</title>
+    <title>John Doe | Senior Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --text-color: #333;
-            --light-gray: #f5f5f5;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem;
-            background-color: var(--primary-color);
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .skill-pill {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
             color: white;
-            border-radius: 5px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-info {
-            margin-top: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .section {
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            color: var(--secondary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .experience-item, .education-item {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background-color: var(--light-gray);
-            border-radius: 5px;
-        }
-
-        .experience-header, .education-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .company, .institution {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .date {
-            color: var(--secondary-color);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .skill-category {
-            background-color: var(--light-gray);
-            padding: 1rem;
-            border-radius: 5px;
-        }
-
-        .skill-category h3 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        ul {
-            list-style-position: inside;
-            margin-left: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .experience-header, .education-header {
-                flex-direction: column;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .summary {
-            text-align: justify;
-            margin-bottom: 2rem;
-            line-height: 1.8;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0.25rem;
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <h1>John Doe</h1>
-        <div class="contact-info">
-            <p>📧 john.doe@email.com | 📱 (123) 456-7890</p>
-            <p>🌍 New York, NY | 💼 linkedin.com/in/johndoe</p>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="section-title">Professional Summary</h2>
-        <div class="summary">
-            Results-driven software engineer with 5+ years of experience in developing scalable web applications and implementing efficient solutions. Proven track record in leading technical teams and delivering high-impact projects. Passionate about creating innovative solutions and maintaining code quality.
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="section-title">Work Experience</h2>
-        
-        <div class="experience-item">
-            <div class="experience-header">
-                <span class="company">Tech Solutions Inc.</span>
-                <span class="date">Jan 2020 - Present</span>
+<body class="bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4 py-12">
+        <!-- Header Section -->
+        <div data-aos="fade-down" class="card p-8 mb-8 bg-white relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="text-center md:text-left">
+                    <h1 class="text-4xl font-bold gradient-text mb-2">John Doe</h1>
+                    <h2 class="text-xl text-gray-600 font-medium">Senior Software Engineer</h2>
+                </div>
+                <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end space-y-2">
+                    <a href="mailto:john.doe@email.com" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fas fa-envelope mr-2"></i>john.doe@email.com
+                    </a>
+                    <a href="tel:1234567890" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fas fa-phone mr-2"></i>(123) 456-7890
+                    </a>
+                    <div class="text-gray-600">
+                        <i class="fas fa-map-marker-alt mr-2"></i>New York, NY
+                    </div>
+                    <a href="https://linkedin.com/in/johndoe" target="_blank" class="text-gray-600 hover:text-blue-500 transition-colors">
+                        <i class="fab fa-linkedin mr-2"></i>linkedin.com/in/johndoe
+                    </a>
+                </div>
             </div>
-            <div class="position">Senior Software Engineer</div>
-            <ul>
-                <li>Led the development of a microservices-based architecture that improved system scalability by 200%</li>
-                <li>Managed a team of 5 developers and implemented agile methodologies that increased productivity by 40%</li>
-                <li>Optimized database queries resulting in a 50% reduction in response time</li>
-            </ul>
         </div>
 
-        <div class="experience-item">
-            <div class="experience-header">
-                <span class="company">Digital Innovations Corp</span>
-                <span class="date">Jun 2017 - Dec 2019</span>
-            </div>
-            <div class="position">Software Developer</div>
-            <ul>
-                <li>Developed and maintained RESTful APIs serving 100k+ daily users</li>
-                <li>Implemented automated testing procedures that reduced bug reports by 60%</li>
-                <li>Collaborated with UX team to improve user interface, resulting in 35% increase in user satisfaction</li>
-            </ul>
+        <!-- Summary Section -->
+        <div data-aos="fade-up" class="card p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-4 gradient-text">Professional Summary</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Results-driven software engineer with 5+ years of experience in developing scalable web applications and implementing efficient solutions. Proven track record in leading technical teams and delivering high-impact projects. Passionate about creating innovative solutions and maintaining code quality.
+            </p>
         </div>
-    </div>
 
-    <div class="section">
-        <h2 class="section-title">Education</h2>
-        
-        <div class="education-item">
-            <div class="education-header">
-                <span class="institution">University of Technology</span>
-                <span class="date">2013 - 2017</span>
-            </div>
-            <div class="degree">Bachelor of Science in Computer Science</div>
-            <ul>
-                <li>GPA: 3.8/4.0</li>
-                <li>Dean's List: All semesters</li>
-                <li>Senior Project: AI-powered Traffic Management System</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="section-title">Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h3>Programming Languages</h3>
-                <ul>
-                    <li>JavaScript/TypeScript</li>
-                    <li>Python</li>
-                    <li>Java</li>
-                    <li>SQL</li>
+        <!-- Experience Section -->
+        <div data-aos="fade-up" class="card p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 gradient-text">Work Experience</h2>
+            
+            <div class="mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800">Tech Solutions Inc.</h3>
+                    <span class="text-blue-500 font-medium">Jan 2020 - Present</span>
+                </div>
+                <h4 class="text-lg text-gray-600 mb-3">Senior Software Engineer</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Led the development of a microservices-based architecture that improved system scalability by 200%</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Managed a team of 5 developers and implemented agile methodologies that increased productivity by 40%</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Optimized database queries resulting in a 50% reduction in response time</span>
+                    </li>
                 </ul>
             </div>
 
-            <div class="skill-category">
-                <h3>Frameworks & Tools</h3>
-                <ul>
-                    <li>React.js</li>
-                    <li>Node.js</li>
-                    <li>Docker</li>
-                    <li>Kubernetes</li>
+            <div>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800">Digital Innovations Corp</h3>
+                    <span class="text-blue-500 font-medium">Jun 2017 - Dec 2019</span>
+                </div>
+                <h4 class="text-lg text-gray-600 mb-3">Software Developer</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Developed and maintained RESTful APIs serving 100k+ daily users</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Implemented automated testing procedures that reduced bug reports by 60%</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700">Collaborated with UX team to improve user interface, resulting in 35% increase in user satisfaction</span>
+                    </li>
                 </ul>
             </div>
+        </div>
 
-            <div class="skill-category">
-                <h3>Soft Skills</h3>
-                <ul>
-                    <li>Team Leadership</li>
-                    <li>Problem Solving</li>
-                    <li>Project Management</li>
-                    <li>Communication</li>
-                </ul>
+        <!-- Education Section -->
+        <div data-aos="fade-up" class="card p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 gradient-text">Education</h2>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                <h3 class="text-xl font-semibold text-gray-800">University of Technology</h3>
+                <span class="text-blue-500 font-medium">2013 - 2017</span>
+            </div>
+            <h4 class="text-lg text-gray-600 mb-3">Bachelor of Science in Computer Science</h4>
+            <ul class="space-y-2">
+                <li class="flex items-start">
+                    <i class="fas fa-graduation-cap text-blue-500 mt-1 mr-2"></i>
+                    <span class="text-gray-700">GPA: 3.8/4.0</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-award text-blue-500 mt-1 mr-2"></i>
+                    <span class="text-gray-700">Dean's List: All semesters</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-project-diagram text-blue-500 mt-1 mr-2"></i>
+                    <span class="text-gray-700">Senior Project: AI-powered Traffic Management System</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Skills Section -->
+        <div data-aos="fade-up" class="card p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 gradient-text">Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Programming Languages</h3>
+                    <div class="flex flex-wrap">
+                        <span class="skill-pill">JavaScript/TypeScript</span>
+                        <span class="skill-pill">Python</span>
+                        <span class="skill-pill">Java</span>
+                        <span class="skill-pill">SQL</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Frameworks & Tools</h3>
+                    <div class="flex flex-wrap">
+                        <span class="skill-pill">React.js</span>
+                        <span class="skill-pill">Node.js</span>
+                        <span class="skill-pill">Docker</span>
+                        <span class="skill-pill">Kubernetes</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Soft Skills</h3>
+                    <div class="flex flex-wrap">
+                        <span class="skill-pill">Team Leadership</span>
+                        <span class="skill-pill">Problem Solving</span>
+                        <span class="skill-pill">Project Management</span>
+                        <span class="skill-pill">Communication</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certifications Section -->
+        <div data-aos="fade-up" class="card p-8">
+            <h2 class="text-2xl font-bold mb-6 gradient-text">Certifications</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 bg-gray-50 rounded-lg text-center">
+                    <i class="fab fa-aws text-3xl text-blue-500 mb-2"></i>
+                    <p class="text-gray-700">AWS Certified Solutions Architect</p>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg text-center">
+                    <i class="fab fa-google text-3xl text-blue-500 mb-2"></i>
+                    <p class="text-gray-700">Google Cloud Professional Developer</p>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg text-center">
+                    <i class="fas fa-certificate text-3xl text-blue-500 mb-2"></i>
+                    <p class="text-gray-700">Certified Scrum Master</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="section">
-        <h2 class="section-title">Certifications</h2>
-        <ul>
-            <li>AWS Certified Solutions Architect</li>
-            <li>Google Cloud Professional Developer</li>
-            <li>Certified Scrum Master</li>
-        </ul>
-    </div>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
 </body>
 </html>
