@@ -13,16 +13,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         @page {
-            margin: 1.5cm;
+            margin: 0.75in;
+            size: letter;
         }
         body {
             font-family: 'Inter', sans-serif;
             background-color: white;
             color: #1a1a1a;
             line-height: 1.6;
-            max-width: 210mm; /* A4 width */
+            width: 8.5in; /* US Letter width */
+            max-width: 100%;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 0.75in;
+            box-sizing: border-box;
         }
         .section-title {
             color: #2563eb;
@@ -43,7 +46,9 @@
         }
         @media print {
             body {
+                width: 100%;
                 padding: 0;
+                margin: 0;
             }
             .no-print {
                 display: none;
@@ -52,11 +57,19 @@
                 text-decoration: none;
                 color: #1a1a1a;
             }
+            /* Ensure content stays within page bounds */
+            * {
+                overflow: visible !important;
+            }
+            /* Prevent unwanted page breaks */
+            .page-break-inside-avoid {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
 <body class="print:bg-white">
-    <div class="max-w-[210mm] mx-auto py-8">
+    <div class="w-full mx-auto py-8">
         <!-- Header Section -->
         <div class="mb-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
