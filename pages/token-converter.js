@@ -13,11 +13,8 @@ const TokenConverter = () => {
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [amount, setAmount] = useState('');
-  const [fromCurrency, setFromCurrency] = useState('');
-  const [toCurrency, setToCurrency] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [tokenSymbols, setTokenSymbols] = useState({
+  const [tokenSelect, setTokenSelect] = useState('');
+  const [initialTokenSymbols] = useState({
     'bitcoin': 'BTC',
     'ethereum': 'ETH',
     'ripple': 'XRP',
