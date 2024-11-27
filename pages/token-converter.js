@@ -433,9 +433,11 @@ const TokenConverter = () => {
                   Current tokenSelect value: {tokenSelect}
                 </div>
                 {tokenSelect === 'other' && (
-                  <div className={`${styles.customTokenInput} show`}>
+                  <div className={styles.customTokenInput}>
                     <div className="nes-field">
+                      <label htmlFor="tokenSearch">Search for token:</label>
                       <input
+                        id="tokenSearch"
                         type="text"
                         className="nes-input"
                         value={searchQuery}

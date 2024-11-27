@@ -76,16 +76,11 @@
 }
 
 .customTokenInput {
-  display: none;
   margin-top: 15px;
   padding: 15px;
   background: #3c3c3c;
   border-radius: 4px;
   width: 100%;
-}
-
-.customTokenInput.show {
-  display: block !important;
 }
 
 .customTokenInput input {
