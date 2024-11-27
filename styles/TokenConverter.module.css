@@ -35,7 +35,8 @@
 }
 
 .tokenPair select,
-.nes-select {
+.nes-select,
+.cryptoSelect {
   appearance: none;
   background-color: #1a1a1a;
   color: #ffffff;
@@ -162,6 +163,18 @@
   gap: 10px;
   margin-bottom: 20px;
   justify-content: center;
+}
+
+.cryptoLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.cryptoSelect {
+  width: 100%;
+  margin-bottom: 16px;
 }
 
 .status-message {

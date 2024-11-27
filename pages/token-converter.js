@@ -538,9 +538,10 @@ const TokenConverter = () => {
             {activeTab === 'crypto' ? (
               <>
                 <div className="nes-field">
-                  <label>From Cryptocurrency:</label>
+                  <label htmlFor="fromCrypto" className={styles.cryptoLabel}>From Cryptocurrency:</label>
                   <select 
-                    className="nes-select"
+                    id="fromCrypto"
+                    className={`nes-select ${styles.cryptoSelect}`}
                     onChange={(e) => setFromCurrency(e.target.value)}
                     value={fromCurrency}
                   >
@@ -558,9 +559,10 @@ const TokenConverter = () => {
                 </div>
 
                 <div className="nes-field">
-                  <label>To Cryptocurrency:</label>
+                  <label htmlFor="toCrypto" className={styles.cryptoLabel}>To Cryptocurrency:</label>
                   <select 
-                    className="nes-select"
+                    id="toCrypto"
+                    className={`nes-select ${styles.cryptoSelect}`}
                     onChange={(e) => setToCurrency(e.target.value)}
                     value={toCurrency}
                   >
