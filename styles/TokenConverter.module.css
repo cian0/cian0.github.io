@@ -24,6 +24,10 @@
 
 .tokenPair input {
   max-width: 120px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #4c4c4c;
+  padding: 8px;
 }
 
 .tokenPair span {
@@ -86,9 +90,11 @@
 .customTokenInput input {
   width: 100%;
   margin-bottom: 10px;
-  background: #2c2c2c;
-  color: #e0e0e0;
+  background: #1a1a1a;
+  color: #ffffff;
   border: 1px solid #4c4c4c;
+  padding: 8px;
+  font-size: 1rem;
 }
 
 .customTokenInput.show {

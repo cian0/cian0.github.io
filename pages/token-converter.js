@@ -439,7 +439,7 @@ const TokenConverter = () => {
                       <input
                         id="tokenSearch"
                         type="text"
-                        className="nes-input"
+                        className="nes-input is-dark"
                         value={searchQuery}
                         placeholder="Search token (e.g., POL, KAS)"
                         onChange={(e) => searchToken(e.target.value)}
