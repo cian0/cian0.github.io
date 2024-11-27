@@ -12,8 +12,18 @@ const TokenConverter = () => {
   const [customPairs, setCustomPairs] = useState([{ amount1: 1, token1: '', amount2: '', token2: '' }]);
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
-
-  const [tokenSymbols, setTokenSymbols] = useState({});
+  const [amount, setAmount] = useState('');
+  const [fromCurrency, setFromCurrency] = useState('');
+  const [toCurrency, setToCurrency] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [tokenSymbols, setTokenSymbols] = useState({
+    'bitcoin': 'BTC',
+    'ethereum': 'ETH',
+    'ripple': 'XRP',
+    'cardano': 'ADA',
+    'solana': 'SOL',
+    'dogecoin': 'DOGE'
+  });
   const [isLoadingTokens, setIsLoadingTokens] = useState(true);
 
   useEffect(() => {
@@ -152,85 +162,118 @@ const TokenConverter = () => {
   const [toCurrency, setToCurrency] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const fetchMarketRate = async (from, to, amount) => {
-    if (!from || !to || !amount) {
-      setStatus({ message: 'Please fill in all fields', type: 'error' });
-      return;
+  const fetchMarketRate = async () => {
+    const statusMessage = { message: '', type: '' };
+    const tokenSelect = document.getElementById('quick-add-token');
+    const currency = document.getElementById('quick-add-currency').value.toLowerCase();
+    
+    let tokenId, tokenSymbol;
+    
+    if (tokenSelect.value === 'other') {
+      if (!selectedCustomToken) {
+        setStatus({ message: 'Please select a token from the search results', type: 'error' });
+        return;
+      }
+      tokenId = selectedCustomToken.id;
+      tokenSymbol = selectedCustomToken.symbol.toUpperCase();
+    } else {
+      if (!tokenSelect.value || !currency) {
+        setStatus({ message: 'Please select both token and currency', type: 'error' });
+        return;
+      }
+      tokenId = tokenSelect.value;
+      tokenSymbol = tokenSymbols[tokenId];
     }
 
-    try {
-      setLoading(true);
-      setStatus({ message: 'Fetching market rate...', type: 'loading' });
-      
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${from}&vs_currencies=${to}`
-      );
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch market rate');
-      }
+    setLoading(true);
+    setStatus({ message: 'Fetching current market rate...', type: 'loading' });
 
+    try {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${tokenId}&vs_currencies=${currency}`
+      );
       const data = await response.json();
-      if (data[from] && data[from][to.toLowerCase()]) {
-        const rate = data[from][to.toLowerCase()];
-        const result = amount * rate;
-        setConversionResult(result.toFixed(8));
-        setStatus({ message: 'Conversion successful!', type: 'success' });
+      
+      if (data[tokenId] && data[tokenId][currency]) {
+        const rate = data[tokenId][currency];
+        const currencySymbol = currency.toUpperCase();
         
-        // Add to conversion history
-        setAllConversions(prev => [...prev, {
-          from,
-          to,
-          amount,
-          result: result.toFixed(8),
-          timestamp: new Date().toISOString()
-        }]);
+        addTokenPairWithValues(1, tokenSymbol, rate, currencySymbol);
+        
+        setStatus({ 
+          message: `Successfully added market rate: 1 ${tokenSymbol} = ${rate} ${currencySymbol}`,
+          type: 'success'
+        });
+
+        // Reset custom token search if it was used
+        if (tokenSelect.value === 'other') {
+          setSelectedCustomToken(null);
+        }
+      } else {
+        throw new Error('Invalid response from API');
       }
     } catch (error) {
-      console.error('Error fetching market rate:', error);
-      setStatus({ message: 'Error fetching market rate. Please try again.', type: 'error' });
+      console.error('Error:', error);
+      setStatus({ 
+        message: 'Error fetching market rate. Please try again later.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchForexRate = async (from, to, amount) => {
-    if (!from || !to || !amount) {
-      setStatus({ message: 'Please fill in all fields', type: 'error' });
+  const addTokenPairWithValues = (amount1, token1, amount2, token2) => {
+    setCustomPairs(prev => [...prev, {
+      amount1,
+      token1,
+      amount2,
+      token2
+    }]);
+  };
+
+  const fetchForexRate = async () => {
+    const fromCurrency = document.getElementById('forex-from').value;
+    const toCurrency = document.getElementById('forex-to').value;
+
+    if (!fromCurrency || !toCurrency) {
+      setStatus({ message: 'Please select both currencies', type: 'error' });
       return;
     }
 
-    try {
-      setLoading(true);
-      setStatus({ message: 'Fetching forex rate...', type: 'loading' });
-      
-      const response = await fetch(
-        `https://api.exchangerate-api.com/v4/latest/${from}`
-      );
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch forex rate');
-      }
+    if (fromCurrency === toCurrency) {
+      setStatus({ message: 'Please select different currencies', type: 'error' });
+      return;
+    }
 
+    setLoading(true);
+    setStatus({ message: 'Fetching current forex rate...', type: 'loading' });
+
+    try {
+      const response = await fetch(
+        `https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}`
+      );
       const data = await response.json();
-      if (data.rates && data.rates[to]) {
-        const rate = data.rates[to];
-        const result = amount * rate;
-        setConversionResult(result.toFixed(2));
-        setStatus({ message: 'Conversion successful!', type: 'success' });
+
+      if (data.success && data.result) {
+        const rate = data.result;
         
-        // Add to conversion history
-        setAllConversions(prev => [...prev, {
-          from,
-          to,
-          amount,
-          result: result.toFixed(2),
-          timestamp: new Date().toISOString()
-        }]);
+        // Add the forex pair to our conversion system
+        addTokenPairWithValues(1, fromCurrency, rate, toCurrency);
+        
+        setStatus({
+          message: `Successfully added forex rate: 1 ${fromCurrency} = ${rate.toFixed(6)} ${toCurrency}`,
+          type: 'success'
+        });
+      } else {
+        throw new Error('Invalid response from API');
       }
     } catch (error) {
-      console.error('Error fetching forex rate:', error);
-      setStatus({ message: 'Error fetching forex rate. Please try again.', type: 'error' });
+      console.error('Error:', error);
+      setStatus({
+        message: 'Error fetching forex rate. Please try again later.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
