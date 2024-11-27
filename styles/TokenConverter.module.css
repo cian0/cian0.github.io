@@ -81,6 +81,19 @@
   padding: 15px;
   background: #3c3c3c;
   border-radius: 4px;
+  width: 100%;
+}
+
+.customTokenInput.show {
+  display: block !important;
+}
+
+.customTokenInput input {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #2c2c2c;
+  color: #e0e0e0;
+  border: 1px solid #4c4c4c;
 }
 
 .customTokenInput.show {

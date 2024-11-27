@@ -421,14 +421,16 @@ const TokenConverter = () => {
 
                 {/* Custom token search section */}
                 {tokenSelect === 'other' && (
-                  <div className={styles.customTokenInput + ' show'}>
-                    <input
-                      type="text"
-                      className="nes-input"
-                      value={searchQuery}
-                      placeholder="Search token (e.g., POL, KAS)"
-                      onChange={(e) => searchToken(e.target.value)}
-                    />
+                  <div className={`${styles.customTokenInput} show`}>
+                    <div className="nes-field">
+                      <input
+                        type="text"
+                        className="nes-input"
+                        value={searchQuery}
+                        placeholder="Search token (e.g., POL, KAS)"
+                        onChange={(e) => searchToken(e.target.value)}
+                      />
+                    </div>
                     {searchResults.length > 0 && (
                       <div className={styles.tokenSearchResults}>
                         {searchResults.map((coin) => (
