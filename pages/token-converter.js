@@ -164,28 +164,6 @@ const TokenConverter = () => {
     setStatus({ message: `Selected: ${coin.name}`, type: 'success' });
   };
 
-  const searchToken = async (query) => {
-    if (!query || query.length < 2) {
-      return;
-    }
-
-    try {
-      setStatus({ message: 'Searching for token...', type: 'loading' });
-      const response = await fetch(`https://api.coingecko.com/api/v3/search?query=${query}`);
-      const data = await response.json();
-
-      if (data.coins && data.coins.length > 0) {
-        return data.coins.slice(0, 5);
-      }
-      setStatus({ message: 'No matching tokens found', type: 'error' });
-      return [];
-    } catch (error) {
-      console.error('Error searching tokens:', error);
-      setStatus({ message: 'Error searching for tokens. Please try again.', type: 'error' });
-      return [];
-    }
-  };
-
   const [amount, setAmount] = useState('');
   const [fromCurrency, setFromCurrency] = useState('');
   const [toCurrency, setToCurrency] = useState('');
