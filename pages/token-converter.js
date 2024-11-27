@@ -9,6 +9,9 @@ const TokenConverter = () => {
   const [activeTab, setActiveTab] = useState('crypto');
   const [conversionResult, setConversionResult] = useState('');
   const [allConversions, setAllConversions] = useState([]);
+  const [customPairs, setCustomPairs] = useState([{ amount1: 1, token1: '', amount2: '', token2: '' }]);
+  const [availableTokens, setAvailableTokens] = useState(new Set());
+  const [searchResults, setSearchResults] = useState([]);
 
   const tokenSymbols = {
     'bitcoin': 'BTC',
@@ -18,6 +21,72 @@ const TokenConverter = () => {
     'solana': 'SOL',
     'dogecoin': 'DOGE'
   };
+
+  const findConversionRate = (fromToken, toToken, visited = new Set()) => {
+    if (tokenPairs[fromToken] && tokenPairs[fromToken][toToken]) {
+      return tokenPairs[fromToken][toToken];
+    }
+    
+    if (visited.has(fromToken)) {
+      return null;
+    }
+    
+    visited.add(fromToken);
+    
+    if (tokenPairs[fromToken]) {
+      for (const intermediateToken in tokenPairs[fromToken]) {
+        const rate1 = tokenPairs[fromToken][intermediateToken];
+        const rate2 = findConversionRate(intermediateToken, toToken, new Set(visited));
+        
+        if (rate2 !== null) {
+          return rate1 * rate2;
+        }
+      }
+    }
+    
+    return null;
+  };
+
+  const updateTokenLists = () => {
+    const tokens = new Set();
+    const pairs = {};
+    
+    customPairs.forEach(pair => {
+      const { amount1, token1, amount2, token2 } = pair;
+      if (token1 && token2 && !isNaN(amount1) && !isNaN(amount2) && amount1 > 0 && amount2 > 0) {
+        tokens.add(token1.toUpperCase());
+        tokens.add(token2.toUpperCase());
+        
+        if (!pairs[token1]) pairs[token1] = {};
+        if (!pairs[token2]) pairs[token2] = {};
+        
+        pairs[token1][token2] = amount2 / amount1;
+        pairs[token2][token1] = amount1 / amount2;
+      }
+    });
+    
+    setTokenPairs(pairs);
+    setAvailableTokens(tokens);
+  };
+
+  const addTokenPair = () => {
+    setCustomPairs([...customPairs, { amount1: 1, token1: '', amount2: '', token2: '' }]);
+  };
+
+  const removeTokenPair = (index) => {
+    const newPairs = customPairs.filter((_, i) => i !== index);
+    setCustomPairs(newPairs);
+  };
+
+  const updateTokenPair = (index, field, value) => {
+    const newPairs = [...customPairs];
+    newPairs[index] = { ...newPairs[index], [field]: value };
+    setCustomPairs(newPairs);
+  };
+
+  useEffect(() => {
+    updateTokenLists();
+  }, [customPairs]);
 
   const handleTokenSelect = (value) => {
     const customTokenDiv = document.getElementById('customTokenInput');
@@ -145,6 +214,75 @@ const TokenConverter = () => {
       <div className="retro-post">
         <div className="retro-header">
           💱 Token Conversion Calculator 💹
+        </div>
+
+        <div className={styles.tokenPairsSection}>
+          <h3 className="nes-text">Custom Token Pairs</h3>
+          {customPairs.map((pair, index) => (
+            <div key={index} className={styles.tokenPair}>
+              <input
+                type="number"
+                className="nes-input"
+                value={pair.amount1}
+                onChange={(e) => updateTokenPair(index, 'amount1', parseFloat(e.target.value))}
+                placeholder="Amount"
+                step="any"
+              />
+              <input
+                type="text"
+                className="nes-input"
+                value={pair.token1}
+                onChange={(e) => updateTokenPair(index, 'token1', e.target.value.toUpperCase())}
+                placeholder="From Token"
+              />
+              <span>equals</span>
+              <input
+                type="number"
+                className="nes-input"
+                value={pair.amount2}
+                onChange={(e) => updateTokenPair(index, 'amount2', parseFloat(e.target.value))}
+                placeholder="Amount"
+                step="any"
+              />
+              <input
+                type="text"
+                className="nes-input"
+                value={pair.token2}
+                onChange={(e) => updateTokenPair(index, 'token2', e.target.value.toUpperCase())}
+                placeholder="To Token"
+              />
+              <button 
+                className="nes-btn is-error"
+                onClick={() => removeTokenPair(index)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button className="nes-btn is-primary" onClick={addTokenPair}>
+            Add Token Pair
+          </button>
+        </div>
+
+        <div className={styles.allConversions}>
+          <h3 className="nes-text">All Available Conversions (Base 1)</h3>
+          <div className={styles.conversionGrid}>
+            {Array.from(availableTokens).sort().map(fromToken => (
+              Array.from(availableTokens).sort().map(toToken => {
+                if (fromToken !== toToken) {
+                  const rate = findConversionRate(fromToken, toToken);
+                  if (rate !== null) {
+                    return (
+                      <div key={`${fromToken}-${toToken}`} className={styles.conversionRow}>
+                        1 {fromToken} = {rate.toFixed(8)} {toToken}
+                      </div>
+                    );
+                  }
+                }
+                return null;
+              })
+            ))}
+          </div>
         </div>
         
         <div className="quick-add retro-section">
