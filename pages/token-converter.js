@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import styles from '../styles/TokenConverter.module.css';
 
@@ -9,7 +9,13 @@ const TokenConverter = () => {
   const [activeTab, setActiveTab] = useState('crypto');
   const [conversionResult, setConversionResult] = useState('');
   const [allConversions, setAllConversions] = useState([]);
-  const [customPairs, setCustomPairs] = useState([{ amount1: 1, token1: '', amount2: '', token2: '' }]);
+  const [customPairs, setCustomPairs] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('tokenConverter_customPairs');
+      return saved ? JSON.parse(saved) : [{ amount1: 1, token1: '', amount2: '', token2: '' }];
+    }
+    return [{ amount1: 1, token1: '', amount2: '', token2: '' }];
+  });
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -119,9 +125,44 @@ const TokenConverter = () => {
     setCustomPairs(newPairs);
   };
 
+  // Save to localStorage whenever customPairs changes
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tokenConverter_customPairs', JSON.stringify(customPairs));
+    }
     updateTokenLists();
   }, [customPairs]);
+
+  // Load saved state on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Load conversion history
+      const savedHistory = localStorage.getItem('tokenConverter_history');
+      if (savedHistory) {
+        setAllConversions(JSON.parse(savedHistory));
+      }
+
+      // Load active tab
+      const savedTab = localStorage.getItem('tokenConverter_activeTab');
+      if (savedTab) {
+        setActiveTab(savedTab);
+      }
+    }
+  }, []);
+
+  // Save conversion history when it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && allConversions.length > 0) {
+      localStorage.setItem('tokenConverter_history', JSON.stringify(allConversions));
+    }
+  }, [allConversions]);
+
+  // Save active tab when it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tokenConverter_activeTab', activeTab);
+    }
+  }, [activeTab]);
 
   const handleTokenSelect = (value) => {
     console.log('handleTokenSelect called with value:', value);
@@ -235,14 +276,20 @@ const TokenConverter = () => {
     }
   };
 
-  const addTokenPairWithValues = (amount1, token1, amount2, token2) => {
-    setCustomPairs(prev => [...prev, {
-      amount1,
-      token1,
-      amount2,
-      token2
-    }]);
-  };
+  const addTokenPairWithValues = useCallback((amount1, token1, amount2, token2) => {
+    setCustomPairs(prev => {
+      const newPairs = [...prev, {
+        amount1,
+        token1,
+        amount2,
+        token2
+      }];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('tokenConverter_customPairs', JSON.stringify(newPairs));
+      }
+      return newPairs;
+    });
+  }, []);
 
   const fetchForexRate = async () => {
     const fromCurrency = document.getElementById('forex-from').value;
