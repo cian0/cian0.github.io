@@ -13,7 +13,7 @@ const TokenConverter = () => {
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [tokenSelect, setTokenSelect] = useState('');
+  const [tokenSelect, setTokenSelect] = useState('default');
   const [tokenSymbols, setTokenSymbols] = useState({
     'bitcoin': 'BTC',
     'ethereum': 'ETH',
@@ -124,6 +124,7 @@ const TokenConverter = () => {
   }, [customPairs]);
 
   const handleTokenSelect = (value) => {
+    setTokenSelect(value);
     if (value === 'other') {
       setSelectedCustomToken(null);
       setSearchQuery('');
@@ -388,7 +389,10 @@ const TokenConverter = () => {
                   <select 
                     id="quick-add-token" 
                     className="nes-select"
-                    onChange={(e) => handleTokenSelect(e.target.value)}
+                    onChange={(e) => {
+                      setTokenSelect(e.target.value);
+                      handleTokenSelect(e.target.value);
+                    }}
                   >
                     <option value="">Select Token</option>
                     {Object.entries(tokenSymbols).map(([id, symbol]) => (
