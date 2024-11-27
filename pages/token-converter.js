@@ -14,7 +14,7 @@ const TokenConverter = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [tokenSelect, setTokenSelect] = useState('');
-  const [initialTokenSymbols] = useState({
+  const [tokenSymbols, setTokenSymbols] = useState({
     'bitcoin': 'BTC',
     'ethereum': 'ETH',
     'ripple': 'XRP',
