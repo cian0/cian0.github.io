@@ -9,26 +9,36 @@ const TokenConverter = () => {
   const [activeTab, setActiveTab] = useState('crypto');
   const [conversionResult, setConversionResult] = useState('');
   const [allConversions, setAllConversions] = useState([]);
-  const [customPairs, setCustomPairs] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('tokenConverter_customPairs');
-      return saved ? JSON.parse(saved) : [{ amount1: 1, token1: '', amount2: '', token2: '' }];
-    }
-    return [{ amount1: 1, token1: '', amount2: '', token2: '' }];
-  });
+  const [customPairs, setCustomPairs] = useState([{ amount1: 1, token1: '', amount2: '', token2: '' }]);
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [tokenSelect, setTokenSelect] = useState('default');
-  const [tokenSymbols, setTokenSymbols] = useState({
-    'bitcoin': 'BTC',
-    'ethereum': 'ETH',
-    'ripple': 'XRP',
-    'cardano': 'ADA',
-    'solana': 'SOL',
-    'dogecoin': 'DOGE'
-  });
+  const [tokenSymbols, setTokenSymbols] = useState({});
   const [isLoadingTokens, setIsLoadingTokens] = useState(true);
+
+  // Handle localStorage after mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Load custom pairs
+      const savedPairs = localStorage.getItem('tokenConverter_customPairs');
+      if (savedPairs) {
+        setCustomPairs(JSON.parse(savedPairs));
+      }
+
+      // Load conversion history
+      const savedHistory = localStorage.getItem('tokenConverter_history');
+      if (savedHistory) {
+        setAllConversions(JSON.parse(savedHistory));
+      }
+
+      // Load active tab
+      const savedTab = localStorage.getItem('tokenConverter_activeTab');
+      if (savedTab) {
+        setActiveTab(savedTab);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchTopTokens = async () => {
