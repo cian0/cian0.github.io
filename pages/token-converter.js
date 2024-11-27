@@ -371,6 +371,131 @@ const TokenConverter = () => {
             </button>
           </div>
 
+          <div className="nes-container with-title is-dark">
+            <p className="title">Quick Add Rates</p>
+            
+            {activeTab === 'crypto' && (
+              <div className="crypto-rate-section">
+                <h4>Add Cryptocurrency Rate</h4>
+                <div className={styles.tokenPair}>
+                  <select 
+                    id="quick-add-token" 
+                    className="nes-select"
+                    onChange={(e) => handleTokenSelect(e.target.value)}
+                  >
+                    <option value="">Select Token</option>
+                    {Object.entries(tokenSymbols).map(([id, symbol]) => (
+                      <option key={id} value={id}>
+                        {symbol} - {id}
+                      </option>
+                    ))}
+                    <option value="other">Other (Search)</option>
+                  </select>
+                  
+                  <select 
+                    id="quick-add-currency"
+                    className="nes-select"
+                  >
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="gbp">GBP</option>
+                    <option value="jpy">JPY</option>
+                    <option value="php">PHP</option>
+                  </select>
+                  
+                  <button 
+                    className="nes-btn is-primary"
+                    onClick={fetchMarketRate}
+                    disabled={loading}
+                  >
+                    {loading ? 'Loading...' : 'Add Market Rate'}
+                  </button>
+                </div>
+
+                {/* Custom token search section */}
+                <div 
+                  id="customTokenInput" 
+                  className={styles.customTokenInput + (selectedCustomToken ? ' show' : '')}
+                >
+                  <input
+                    type="text"
+                    className="nes-input"
+                    id="tokenSymbolSearch"
+                    placeholder="Search token (e.g., POL, KAS)"
+                    onChange={(e) => searchToken(e.target.value)}
+                  />
+                  <div id="tokenSearchResults" className={styles.tokenSearchResults}>
+                    {searchResults.map((coin) => (
+                      <div
+                        key={coin.id}
+                        className={styles.tokenSearchResult}
+                        onClick={() => selectCustomToken(coin)}
+                      >
+                        {coin.name} ({coin.symbol.toUpperCase()})
+                        <small>ID: {coin.id}</small>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'forex' && (
+              <div className="forex-rate-section">
+                <h4>Add Forex Rate</h4>
+                <div className={styles.tokenPair}>
+                  <select 
+                    id="forex-from"
+                    className="nes-select"
+                    value={fromCurrency}
+                    onChange={(e) => setFromCurrency(e.target.value)}
+                  >
+                    <option value="">Select Currency</option>
+                    <option value="USD">US Dollar (USD)</option>
+                    <option value="EUR">Euro (EUR)</option>
+                    <option value="GBP">British Pound (GBP)</option>
+                    <option value="JPY">Japanese Yen (JPY)</option>
+                    <option value="AUD">Australian Dollar (AUD)</option>
+                  </select>
+                  
+                  <span>to</span>
+                  
+                  <select 
+                    id="forex-to"
+                    className="nes-select"
+                    value={toCurrency}
+                    onChange={(e) => setToCurrency(e.target.value)}
+                  >
+                    <option value="">Select Currency</option>
+                    <option value="USD">US Dollar (USD)</option>
+                    <option value="EUR">Euro (EUR)</option>
+                    <option value="GBP">British Pound (GBP)</option>
+                    <option value="JPY">Japanese Yen (JPY)</option>
+                    <option value="AUD">Australian Dollar (AUD)</option>
+                  </select>
+                  
+                  <button 
+                    className="nes-btn is-primary"
+                    onClick={fetchForexRate}
+                    disabled={loading}
+                  >
+                    {loading ? 'Loading...' : 'Add Forex Rate'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {status.message && (
+              <div className={`nes-container is-rounded ${
+                status.type === 'error' ? 'is-error' : 
+                status.type === 'success' ? 'is-success' : 
+                'is-dark'
+              }`}>
+                <p>{status.message}</p>
+              </div>
+            )}
+          </div>
+
           <div className="converter-form nes-container with-title">
             <p className="title">Convert</p>
             

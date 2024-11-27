@@ -75,6 +75,45 @@
   margin-bottom: 10px;
 }
 
+.customTokenInput {
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  background: #3c3c3c;
+  border-radius: 4px;
+}
+
+.customTokenInput.show {
+  display: block;
+}
+
+.tokenSearchResults {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #2c2c2c;
+  border: 1px solid #4c4c4c;
+  border-radius: 4px;
+}
+
+.tokenSearchResult {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #4c4c4c;
+  transition: background-color 0.2s;
+}
+
+.tokenSearchResult:hover {
+  background-color: #3c3c3c;
+}
+
+.tokenSearchResult small {
+  display: block;
+  color: #888;
+  font-size: 0.8em;
+  margin-top: 4px;
+}
+
 .tab-buttons {
   display: flex;
   gap: 10px;
