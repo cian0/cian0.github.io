@@ -124,8 +124,10 @@ const TokenConverter = () => {
   }, [customPairs]);
 
   const handleTokenSelect = (value) => {
+    console.log('handleTokenSelect called with value:', value);
     setTokenSelect(value);
     if (value === 'other') {
+      console.log('Other selected, resetting states');
       setSelectedCustomToken(null);
       setSearchQuery('');
       setSearchResults([]);
@@ -133,8 +135,10 @@ const TokenConverter = () => {
   };
 
   const searchToken = async (query) => {
+    console.log('searchToken called with query:', query);
     setSearchQuery(query);
     if (!query || query.length < 2) {
+      console.log('Query too short, clearing results');
       setSearchResults([]);
       return;
     }
@@ -424,6 +428,10 @@ const TokenConverter = () => {
                 </div>
 
                 {/* Custom token search section */}
+                {/* Debug info */}
+                <div style={{color: 'yellow', fontSize: '12px'}}>
+                  Current tokenSelect value: {tokenSelect}
+                </div>
                 {tokenSelect === 'other' && (
                   <div className={`${styles.customTokenInput} show`}>
                     <div className="nes-field">
