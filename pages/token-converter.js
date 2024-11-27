@@ -585,38 +585,34 @@ const TokenConverter = () => {
             {activeTab === 'crypto' ? (
               <>
                 <div className="nes-field">
-                  <label htmlFor="fromCrypto" className={styles.cryptoLabel}>From Cryptocurrency:</label>
+                  <label htmlFor="fromToken" className={styles.tokenLabel}>From Token:</label>
                   <select 
-                    id="fromCrypto"
-                    className={`nes-select ${styles.cryptoSelect}`}
+                    id="fromToken"
+                    className={`nes-select ${styles.tokenSelect}`}
                     onChange={(e) => setFromCurrency(e.target.value)}
                     value={fromCurrency}
                   >
                     <option value="">Select token</option>
-                    {isLoadingTokens ? (
-                      <option value="" disabled>Loading tokens...</option>
-                    ) : (
-                      Object.entries(tokenSymbols).map(([name, symbol]) => (
-                        <option key={symbol} value={name}>
-                          {symbol} - {name}
-                        </option>
-                      ))
-                    )}
+                    {Array.from(availableTokens).sort().map(token => (
+                      <option key={token} value={token}>
+                        {token}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="nes-field">
-                  <label htmlFor="toCrypto" className={styles.cryptoLabel}>To Cryptocurrency:</label>
+                  <label htmlFor="toToken" className={styles.tokenLabel}>To Token:</label>
                   <select 
-                    id="toCrypto"
-                    className={`nes-select ${styles.cryptoSelect}`}
+                    id="toToken"
+                    className={`nes-select ${styles.tokenSelect}`}
                     onChange={(e) => setToCurrency(e.target.value)}
                     value={toCurrency}
                   >
                     <option value="">Select token</option>
-                    {Object.entries(tokenSymbols).map(([name, symbol]) => (
-                      <option key={symbol} value={name}>
-                        {symbol} - {name}
+                    {Array.from(availableTokens).sort().map(token => (
+                      <option key={token} value={token}>
+                        {token}
                       </option>
                     ))}
                   </select>
@@ -625,34 +621,36 @@ const TokenConverter = () => {
             ) : (
               <>
                 <div className="nes-field">
-                  <label>From Currency:</label>
+                  <label htmlFor="fromToken" className={styles.tokenLabel}>From Token:</label>
                   <select 
-                    className="nes-select"
+                    id="fromToken"
+                    className={`nes-select ${styles.tokenSelect}`}
                     onChange={(e) => setFromCurrency(e.target.value)}
                     value={fromCurrency}
                   >
-                    <option value="">Select currency</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                    <option value="AUD">AUD</option>
+                    <option value="">Select token</option>
+                    {Array.from(availableTokens).sort().map(token => (
+                      <option key={token} value={token}>
+                        {token}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="nes-field">
-                  <label>To Currency:</label>
+                  <label htmlFor="toToken" className={styles.tokenLabel}>To Token:</label>
                   <select 
-                    className="nes-select"
+                    id="toToken"
+                    className={`nes-select ${styles.tokenSelect}`}
                     onChange={(e) => setToCurrency(e.target.value)}
                     value={toCurrency}
                   >
-                    <option value="">Select currency</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                    <option value="AUD">AUD</option>
+                    <option value="">Select token</option>
+                    {Array.from(availableTokens).sort().map(token => (
+                      <option key={token} value={token}>
+                        {token}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </>
