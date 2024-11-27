@@ -12,6 +12,7 @@ const TokenConverter = () => {
   const [customPairs, setCustomPairs] = useState([{ amount1: 1, token1: '', amount2: '', token2: '' }]);
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [amount, setAmount] = useState('');
   const [fromCurrency, setFromCurrency] = useState('');
   const [toCurrency, setToCurrency] = useState('');
@@ -126,13 +127,44 @@ const TokenConverter = () => {
   }, [customPairs]);
 
   const handleTokenSelect = (value) => {
-    const customTokenDiv = document.getElementById('customTokenInput');
     if (value === 'other') {
-      customTokenDiv.classList.add('show');
-    } else {
-      customTokenDiv.classList.remove('show');
       setSelectedCustomToken(null);
+      setSearchQuery('');
+      setSearchResults([]);
     }
+  };
+
+  const searchToken = async (query) => {
+    setSearchQuery(query);
+    if (!query || query.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      setStatus({ message: 'Searching for token...', type: 'loading' });
+      const response = await fetch(`https://api.coingecko.com/api/v3/search?query=${query}`);
+      const data = await response.json();
+
+      if (data.coins && data.coins.length > 0) {
+        setSearchResults(data.coins.slice(0, 5));
+        setStatus({ message: '', type: '' });
+      } else {
+        setSearchResults([]);
+        setStatus({ message: 'No matching tokens found', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Error searching tokens:', error);
+      setStatus({ message: 'Error searching for tokens. Please try again.', type: 'error' });
+      setSearchResults([]);
+    }
+  };
+
+  const selectCustomToken = (coin) => {
+    setSelectedCustomToken(coin);
+    setSearchQuery(`${coin.name} (${coin.symbol.toUpperCase()})`);
+    setSearchResults([]);
+    setStatus({ message: `Selected: ${coin.name}`, type: 'success' });
   };
 
   const searchToken = async (query) => {
@@ -413,30 +445,31 @@ const TokenConverter = () => {
                 </div>
 
                 {/* Custom token search section */}
-                <div 
-                  id="customTokenInput" 
-                  className={styles.customTokenInput + (selectedCustomToken ? ' show' : '')}
-                >
-                  <input
-                    type="text"
-                    className="nes-input"
-                    id="tokenSymbolSearch"
-                    placeholder="Search token (e.g., POL, KAS)"
-                    onChange={(e) => searchToken(e.target.value)}
-                  />
-                  <div id="tokenSearchResults" className={styles.tokenSearchResults}>
-                    {searchResults.map((coin) => (
-                      <div
-                        key={coin.id}
-                        className={styles.tokenSearchResult}
-                        onClick={() => selectCustomToken(coin)}
-                      >
-                        {coin.name} ({coin.symbol.toUpperCase()})
-                        <small>ID: {coin.id}</small>
+                {tokenSelect === 'other' && (
+                  <div className={styles.customTokenInput + ' show'}>
+                    <input
+                      type="text"
+                      className="nes-input"
+                      value={searchQuery}
+                      placeholder="Search token (e.g., POL, KAS)"
+                      onChange={(e) => searchToken(e.target.value)}
+                    />
+                    {searchResults.length > 0 && (
+                      <div className={styles.tokenSearchResults}>
+                        {searchResults.map((coin) => (
+                          <div
+                            key={coin.id}
+                            className={styles.tokenSearchResult}
+                            onClick={() => selectCustomToken(coin)}
+                          >
+                            {coin.name} ({coin.symbol.toUpperCase()})
+                            <small>ID: {coin.id}</small>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
+                )}
               </div>
             )}
 
