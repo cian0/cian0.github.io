@@ -34,6 +34,35 @@
   margin: 0 10px;
 }
 
+.tokenPair select,
+.nes-select {
+  appearance: none;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #4c4c4c;
+  padding: 8px 32px 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  min-width: 160px;
+}
+
+.tokenPair select:hover,
+.nes-select:hover {
+  border-color: #666;
+  background-color: #222;
+}
+
+.tokenPair select:focus,
+.nes-select:focus {
+  outline: none;
+  border-color: #888;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
+}
+
 .nes-field {
   margin-bottom: 20px;
 }
