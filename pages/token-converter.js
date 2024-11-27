@@ -13,14 +13,41 @@ const TokenConverter = () => {
   const [availableTokens, setAvailableTokens] = useState(new Set());
   const [searchResults, setSearchResults] = useState([]);
 
-  const tokenSymbols = {
-    'bitcoin': 'BTC',
-    'ethereum': 'ETH',
-    'ripple': 'XRP',
-    'cardano': 'ADA',
-    'solana': 'SOL',
-    'dogecoin': 'DOGE'
-  };
+  const [tokenSymbols, setTokenSymbols] = useState({});
+  const [isLoadingTokens, setIsLoadingTokens] = useState(true);
+
+  useEffect(() => {
+    const fetchTopTokens = async () => {
+      try {
+        setIsLoadingTokens(true);
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&sparkline=false'
+        );
+        const data = await response.json();
+        const symbols = {};
+        data.forEach(token => {
+          symbols[token.id] = token.symbol.toUpperCase();
+        });
+        setTokenSymbols(symbols);
+      } catch (error) {
+        console.error('Error fetching top tokens:', error);
+        setStatus({ message: 'Error loading tokens. Using default list.', type: 'error' });
+        // Fallback to basic tokens if API fails
+        setTokenSymbols({
+          'bitcoin': 'BTC',
+          'ethereum': 'ETH',
+          'ripple': 'XRP',
+          'cardano': 'ADA',
+          'solana': 'SOL',
+          'dogecoin': 'DOGE'
+        });
+      } finally {
+        setIsLoadingTokens(false);
+      }
+    };
+
+    fetchTopTokens();
+  }, []);
 
   const findConversionRate = (fromToken, toToken, visited = new Set()) => {
     if (tokenPairs[fromToken] && tokenPairs[fromToken][toToken]) {
@@ -326,11 +353,15 @@ const TokenConverter = () => {
                     value={fromCurrency}
                   >
                     <option value="">Select token</option>
-                    {Object.entries(tokenSymbols).map(([name, symbol]) => (
-                      <option key={symbol} value={name}>
-                        {symbol} - {name}
-                      </option>
-                    ))}
+                    {isLoadingTokens ? (
+                      <option value="" disabled>Loading tokens...</option>
+                    ) : (
+                      Object.entries(tokenSymbols).map(([name, symbol]) => (
+                        <option key={symbol} value={name}>
+                          {symbol} - {name}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </div>
 
