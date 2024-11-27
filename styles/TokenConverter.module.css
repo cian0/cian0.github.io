@@ -1,0 +1,42 @@
+.converter-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.nes-field {
+  margin-bottom: 20px;
+}
+
+.conversion-history {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.history-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-list > div {
+  margin-bottom: 10px;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.status-message {
+  margin: 15px 0;
+  padding: 10px;
+}
+
+.result-container {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.2em;
+}
