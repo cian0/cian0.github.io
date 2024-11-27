@@ -669,26 +669,32 @@ const TokenConverter = () => {
             <button
               className="nes-btn is-primary"
               onClick={() => {
-                if (activeTab === 'crypto') {
-                  fetchMarketRate(fromCurrency, toCurrency, amount);
+                if (!amount || !fromCurrency || !toCurrency) {
+                  setStatus({ message: 'Please fill in all fields', type: 'error' });
+                  return;
+                }
+                const rate = findConversionRate(fromCurrency, toCurrency);
+                if (rate !== null) {
+                  const result = (parseFloat(amount) * rate).toFixed(8);
+                  setConversionResult(`${amount} ${fromCurrency} = ${result} ${toCurrency}`);
+                  // Add to conversion history
+                  const newConversion = {
+                    amount,
+                    from: fromCurrency,
+                    to: toCurrency,
+                    result,
+                    timestamp: new Date().toISOString()
+                  };
+                  setAllConversions(prev => [newConversion, ...prev]);
+                  setStatus({ message: 'Conversion successful!', type: 'success' });
                 } else {
-                  fetchForexRate(fromCurrency, toCurrency, amount);
+                  setStatus({ message: 'No conversion rate available for these tokens', type: 'error' });
                 }
               }}
               disabled={loading}
             >
-              {loading ? 'Converting...' : 'Convert'}
+              Convert
             </button>
-
-            {status.message && (
-              <div className={`nes-container is-rounded ${
-                status.type === 'error' ? 'is-error' : 
-                status.type === 'success' ? 'is-success' : 
-                'is-dark'
-              }`}>
-                <p>{status.message}</p>
-              </div>
-            )}
 
             {conversionResult && (
               <div className="nes-container is-rounded is-dark">
