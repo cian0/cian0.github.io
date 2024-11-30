@@ -151,6 +151,8 @@ def get_market_info(symbol):
                     'status': symbol_info.get('status', 'TRADING'),
                     'baseAsset': symbol_info.get('baseAsset'),
                     'quoteAsset': symbol_info.get('quoteAsset'),
+                    'baseAssetPrecision': symbol_info.get('baseAssetPrecision'),
+                    'quoteAssetPrecision': symbol_info.get('quoteAssetPrecision'),
                     'filters': [
                         {
                             'filterType': 'PRICE_FILTER',
