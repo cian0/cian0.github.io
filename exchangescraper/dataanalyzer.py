@@ -172,7 +172,7 @@ Note: This is an automated analysis. Please conduct your own research and risk a
 """
         return report
 
-def analyze_market_data(json_file: str, output_dir: str = "reports") -> str:
+def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/reports") -> str:
     """Main function to analyze market data and generate report.
     
     Args:
@@ -204,7 +204,7 @@ def analyze_market_data(json_file: str, output_dir: str = "reports") -> str:
 
 # Example usage:
 if __name__ == "__main__":
-    report_file = analyze_market_data('exchangescraper/output.log.json')
+    report_file = analyze_market_data('exchangescraper/market_data2.log.json')
     print(f"Report saved to: {report_file}")
     
     # Optionally print the report to console

@@ -4,7 +4,7 @@ A Python script to fetch cryptocurrency trading data from Biconomy exchange.
 
 ## to run:
 
-python exchangescraper/scraper.py --symbol WADU_USDT --type all --log-path ./data/market_data.log
+python exchangescraper/scraper.py --symbol WADU_USDT --type all --log-path ./exchangescraper/marketdata/market_data2.log
 
 ## Features
 
