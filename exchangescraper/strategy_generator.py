@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from market_analyzer import MarketAnalysisSystem, MarketType, TimeFrame, MarketCondition
 from strategy_selector import StrategySelector, StrategyType, StrategyWeight
+from risk_manager import RiskManager, RiskParameters, PositionSize
 
 @dataclass
 class MarketPosition:
@@ -31,6 +32,7 @@ class MarketAnalyzer:
         # Initialize analysis systems
         self.market_analysis = MarketAnalysisSystem()
         self.strategy_selector = StrategySelector()
+        self.risk_manager = RiskManager()
         
         # Extract price and volume data
         self.price_data = self._extract_price_data()
@@ -86,26 +88,32 @@ class MarketAnalyzer:
         }
 
     def generate_positions(self) -> Dict[str, MarketPosition]:
-        """Generate position recommendations."""
+        """Generate position recommendations with risk management."""
         immediate = self.analysis_data['strategies']['immediate']
         short_term = self.analysis_data['strategies']['short_term']
         long_term = self.analysis_data['strategies']['long_term']
         
+        # Get risk parameters for each timeframe
+        conservative_risk = self.risk_manager.calculate_risk_parameters(
+            float(immediate['scalp_targets']['entry']),
+            self.market_condition,
+            self.holder_data['risk_metrics']
+        )
+        
+        conservative_size = self.risk_manager.calculate_position_size(
+            self.market_condition,
+            self.holder_data['risk_metrics'],
+            StrategyType.SCALPING
+        )
+        
         positions = {
             'conservative': MarketPosition(
                 entry=float(immediate['scalp_targets']['entry']),
-                stop_loss=float(immediate['scalp_targets']['stop']),
-                take_profit=float(immediate['scalp_targets']['take_profit']),
-                position_size="2-3%",
-                risk_reward=self._calculate_risk_reward(
-                    float(immediate['scalp_targets']['entry']),
-                    float(immediate['scalp_targets']['stop']),
-                    float(immediate['scalp_targets']['take_profit'])
-                ),
-                max_drawdown=self._calculate_drawdown(
-                    float(immediate['scalp_targets']['entry']),
-                    float(immediate['scalp_targets']['stop'])
-                )
+                stop_loss=float(immediate['scalp_targets']['entry']) * (1 - conservative_risk.stop_loss_percentage),
+                take_profit=float(immediate['scalp_targets']['entry']) * (1 + conservative_risk.take_profit_percentage),
+                position_size=f"{conservative_size.percentage*100:.1f}% (max leverage: {conservative_size.recommended_leverage:.1f}x)",
+                risk_reward=conservative_risk.risk_reward_ratio,
+                max_drawdown=conservative_risk.max_drawdown
             ),
             'moderate': MarketPosition(
                 entry=float(short_term['accumulation_zone']['start']),
