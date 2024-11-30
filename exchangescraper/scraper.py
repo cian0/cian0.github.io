@@ -69,7 +69,7 @@ def get_ticker(symbol):
 def get_recent_trades(symbol, limit=20):
     """Fetch recent trades for the trading pair"""
     url = f"https://api.biconomy.com/api/v1/trades"
-    formatted_symbol = symbol.upper().replace('_', '')
+    formatted_symbol = symbol.upper()  # Keep underscore for this endpoint
     params = {
         'symbol': formatted_symbol,
         'size': str(limit)
@@ -119,9 +119,11 @@ def get_recent_trades(symbol, limit=20):
 def get_market_info(symbol):
     """Fetch market information for the trading pair"""
     url = "https://api.biconomy.com/api/v1/exchangeInfo"
+    formatted_symbol = symbol.upper()  # Keep underscore
     headers = {
         'X-SITE-ID': '127',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
     }
     
     try:
