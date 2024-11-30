@@ -5,7 +5,7 @@ from datetime import datetime
 
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
-    url = f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={symbol}"
+    url = f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={symbol.upper()}"
     
     try:
         headers = {
@@ -25,12 +25,17 @@ def get_ticker(symbol):
                 error_msg = data.get('message', 'Unknown error')
                 if '暂无记录' in str(error_msg):
                     print(f"No ticker data available for symbol: {symbol}")
+                elif 'Invalid symbol' in str(error_msg):
+                    print(f"Invalid trading pair symbol: {symbol}")
                 else:
                     print(f"API Error: {error_msg}")
                 return None
             
-        print("Ticker Response:", json.dumps(data, indent=2))
-        return data
+            if 'result' in data:
+                return data
+            else:
+                print(f"No ticker data found for symbol: {symbol}")
+                return None
     except requests.exceptions.Timeout:
         print("Request timed out while fetching ticker")
         return None
@@ -93,7 +98,7 @@ def get_market_info(symbol):
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
         }
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
         
@@ -102,12 +107,18 @@ def get_market_info(symbol):
             return None
             
         if isinstance(data, dict):
+            if data.get('code') not in [0, 200]:
+                error_msg = data.get('message', 'Unknown error')
+                print(f"API Error: {error_msg}")
+                return None
+                
             if 'symbols' in data:
+                # Convert symbol to uppercase for comparison
+                symbol = symbol.upper()
                 # Find the specific symbol info
-                symbol_info = next((s for s in data['symbols'] if s.get('symbol') == symbol), None)
+                symbol_info = next((s for s in data['symbols'] if s.get('symbol', '').upper() == symbol), None)
                 if symbol_info:
                     if symbol_info.get('status') == 'TRADING':
-                        print("Market Info:", json.dumps(symbol_info, indent=2))
                         return symbol_info
                     else:
                         print(f"Trading pair {symbol} is not currently active")
@@ -115,7 +126,7 @@ def get_market_info(symbol):
                 print(f"Trading pair {symbol} not found in exchange")
                 return None
             else:
-                print("Invalid market info response format")
+                print("Invalid market info response format - missing symbols data")
                 return None
     except Exception as e:
         print(f"Error fetching market info: {e}")
