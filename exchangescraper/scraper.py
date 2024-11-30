@@ -141,34 +141,34 @@ def get_market_info(symbol):
             return None
             
         if isinstance(data, dict) and 'data' in data and isinstance(data['data'], list):
-                # Convert symbol to uppercase for comparison
-                formatted_symbol = formatted_symbol.upper()
-                # Find the specific symbol info
-                symbol_info = next((s for s in data['data'] if s.get('symbol', '').upper() == formatted_symbol), None)
-                if symbol_info:
-                    return {
-                        'symbol': symbol_info.get('symbol'),
-                        'status': symbol_info.get('status', 'TRADING'),
-                        'baseAsset': symbol_info.get('base_currency'),
-                        'quoteAsset': symbol_info.get('quote_currency'),
-                        'filters': [
-                            {
-                                'filterType': 'PRICE_FILTER',
-                                'minPrice': symbol_info.get('min_price', '0'),
-                                'maxPrice': symbol_info.get('max_price', '0')
-                            },
-                            {
-                                'filterType': 'LOT_SIZE',
-                                'minQty': symbol_info.get('min_amount', '0'),
-                                'maxQty': symbol_info.get('max_amount', '0')
-                            }
-                        ]
-                    }
-                print(f"Trading pair {formatted_symbol} not found in exchange")
-                return None
-            else:
-                print("Invalid market info response format - missing data array")
-                return None
+            # Convert symbol to uppercase for comparison
+            formatted_symbol = formatted_symbol.upper()
+            # Find the specific symbol info
+            symbol_info = next((s for s in data['data'] if s.get('symbol', '').upper() == formatted_symbol), None)
+            if symbol_info:
+                return {
+                    'symbol': symbol_info.get('symbol'),
+                    'status': symbol_info.get('status', 'TRADING'),
+                    'baseAsset': symbol_info.get('base_currency'),
+                    'quoteAsset': symbol_info.get('quote_currency'),
+                    'filters': [
+                        {
+                            'filterType': 'PRICE_FILTER',
+                            'minPrice': symbol_info.get('min_price', '0'),
+                            'maxPrice': symbol_info.get('max_price', '0')
+                        },
+                        {
+                            'filterType': 'LOT_SIZE',
+                            'minQty': symbol_info.get('min_amount', '0'),
+                            'maxQty': symbol_info.get('max_amount', '0')
+                        }
+                    ]
+                }
+            print(f"Trading pair {formatted_symbol} not found in exchange")
+            return None
+        else:
+            print("Invalid market info response format - missing data array")
+            return None
     except Exception as e:
         print(f"Error fetching market info: {e}")
         return None
