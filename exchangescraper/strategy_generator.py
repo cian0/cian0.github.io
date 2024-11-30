@@ -3,6 +3,7 @@ import pandas as pd
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
+from market_analyzer import MarketAnalysisSystem, MarketType, TimeFrame, MarketCondition
 
 @dataclass
 class MarketPosition:
@@ -25,6 +26,23 @@ class MarketAnalyzer:
         
         self.current_price = float(self.market_data['ticker']['result']['lastPrice'])
         self.volume_24h = float(self.market_data['ticker']['result']['volume'])
+        
+        # Initialize market analysis system
+        self.market_analysis = MarketAnalysisSystem()
+        
+        # Extract price and volume data
+        self.price_data = self._extract_price_data()
+        self.volume_data = self._extract_volume_data()
+        
+    def _extract_price_data(self) -> List[float]:
+        """Extract price data from trades."""
+        trades = self.market_data.get('trades', [])
+        return [float(trade['price']) for trade in trades] if trades else []
+        
+    def _extract_volume_data(self) -> List[float]:
+        """Extract volume data from trades."""
+        trades = self.market_data.get('trades', [])
+        return [float(trade['amount']) for trade in trades] if trades else []
 
     def calculate_market_metrics(self) -> Dict:
         """Calculate key market metrics."""
