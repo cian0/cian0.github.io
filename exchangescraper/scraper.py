@@ -5,20 +5,29 @@ from datetime import datetime
 
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
-    # Convert underscore to standard format
-    symbol = symbol.upper().replace('_', '')
-    url = f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={symbol}"
+    # Try both formats of the symbol
+    symbols_to_try = [
+        symbol.upper().replace('_', ''),  # BTCUSDT
+        symbol.upper(),                   # BTC_USDT
+    ]
     
-    print(f"Requesting ticker with URL: {url}")
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+    }
     
-    try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-        }
-        response = requests.get(url, headers=headers, timeout=10)
-        print(f"Response status code: {response.status_code}")
-        print(f"Response headers: {response.headers}")
-        print(f"Response content: {response.text[:500]}")  # Print first 500 chars of response
+    for sym in symbols_to_try:
+        # Try both endpoint formats
+        urls = [
+            f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={sym}",
+            f"https://www.biconomy.com/api/v1/ticker?symbol={sym}"
+        ]
+        
+        for url in urls:
+            print(f"Attempting ticker request with URL: {url}")
+            try:
+                response = requests.get(url, headers=headers, timeout=10)
+                print(f"Response status code: {response.status_code}")
+                print(f"Response content: {response.text[:500]}")
         response.raise_for_status()
         data = response.json()
         
@@ -30,31 +39,33 @@ def get_ticker(symbol):
         if isinstance(data, dict):
             if data.get('code') not in [0, 200]:
                 error_msg = data.get('message', 'Unknown error')
-                if '暂无记录' in str(error_msg):
-                    print(f"No ticker data available for symbol: {symbol}")
-                elif 'Invalid symbol' in str(error_msg):
-                    print(f"Invalid trading pair symbol: {symbol}")
+                if data.get('code') == 0 and data.get('result'):
+                    return data
+                
+                error_msg = data.get('message', 'Unknown error')
+                if '暂无记录' in str(error_msg) or 'Invalid symbol' in str(error_msg):
+                    # Continue to try next URL/format
+                    continue
                 else:
                     print(f"API Error: {error_msg}")
-                return None
             
-            if 'result' in data:
-                return data
-            else:
-                print(f"No ticker data found for symbol: {symbol}")
-                return None
-    except requests.exceptions.Timeout:
-        print("Request timed out while fetching ticker")
-        return None
-    except requests.exceptions.RequestException as e:
-        print(f"Network error fetching ticker: {e}")
-        return None
-    except json.JSONDecodeError:
-        print("Invalid JSON response from ticker endpoint")
-        return None
-    except Exception as e:
-        print(f"Unexpected error fetching ticker: {e}")
-        return None
+            # If we got a response but couldn't parse it as expected, try next URL
+            continue
+            except requests.exceptions.Timeout:
+                print(f"Request timed out for URL: {url}")
+                continue
+            except requests.exceptions.RequestException as e:
+                print(f"Network error for URL {url}: {e}")
+                continue
+            except json.JSONDecodeError:
+                print(f"Invalid JSON response from URL: {url}")
+                continue
+            except Exception as e:
+                print(f"Unexpected error for URL {url}: {e}")
+                continue
+    
+    print(f"No valid ticker data found for symbol {symbol} after trying all variations")
+    return None
 
 def get_recent_trades(symbol, limit=20):
     """Fetch recent trades for the trading pair"""
