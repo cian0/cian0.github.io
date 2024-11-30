@@ -49,11 +49,13 @@ def get_market_info(symbol):
         response.raise_for_status()
         data = response.json()
         
-        # Find the specific symbol info
-        symbol_info = next((s for s in data.get('symbols', []) if s.get('symbol') == symbol), None)
-        if symbol_info:
-            print("Market Info:", json.dumps(symbol_info, indent=2))
-            return symbol_info
+        if isinstance(data, dict) and 'symbols' in data:
+            # Find the specific symbol info
+            symbol_info = next((s for s in data['symbols'] if s.get('symbol') == symbol), None)
+            if symbol_info:
+                print("Market Info:", json.dumps(symbol_info, indent=2))
+                return symbol_info
+        print(f"No market info found for symbol: {symbol}")
         return None
     except Exception as e:
         print(f"Error fetching market info: {e}")
@@ -109,9 +111,15 @@ def format_orderbook_data(orderbook):
     for ask in orderbook['asks'][:5]:
         print(f"{float(ask[0]):.8f}\t{float(ask[1]):.8f}")
 
-def format_ticker_data(ticker):
+def format_ticker_data(ticker_response):
     """Format ticker data for display"""
+    if not ticker_response or ticker_response.get('code') != 0:
+        print("\nNo ticker data available")
+        return
+        
+    ticker = ticker_response.get('result', {})
     if not ticker:
+        print("\nNo ticker statistics found")
         return
     
     print("\nTicker 24h Statistics:")
@@ -123,17 +131,23 @@ def format_ticker_data(ticker):
     print(f"24h Change: {ticker.get('priceChange', 'N/A')}")
     print(f"24h Change %: {ticker.get('priceChangePercent', 'N/A')}%")
 
-def format_trades_data(trades):
+def format_trades_data(trades_response):
     """Format recent trades data for display"""
-    if not trades:
+    if not trades_response or trades_response.get('code') != 0:
+        print("\nNo trades data available")
         return
     
+    trades = trades_response.get('result', [])
+    if not trades:
+        print("\nNo recent trades found")
+        return
+        
     print("\nRecent Trades:")
     print("Time\t\t\tPrice\t\tQuantity\tSide")
     print("-" * 60)
     for trade in trades[:5]:  # Show last 5 trades
         timestamp = datetime.fromtimestamp(int(trade.get('time', 0))/1000)
-        print(f"{timestamp}\t{trade.get('price', 'N/A')}\t{trade.get('qty', 'N/A')}\t{trade.get('isBuyerMaker', 'N/A')}")
+        print(f"{timestamp}\t{trade.get('price', 'N/A')}\t{trade.get('qty', 'N/A')}\t{'Sell' if trade.get('isBuyerMaker') else 'Buy'}")
 
 def format_market_info(info):
     """Format market information for display"""
