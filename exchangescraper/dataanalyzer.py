@@ -172,12 +172,13 @@ Note: This is an automated analysis. Please conduct your own research and risk a
 """
         return report
 
-def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/reports") -> Tuple[str, str]:
+def analyze_market_data(json_file: str, output_dir: str, base_name: str) -> Tuple[str, str]:
     """Main function to analyze market data and generate reports.
     
     Args:
         json_file: Path to JSON input file
-        output_dir: Directory to save the reports (default: "reports")
+        output_dir: Directory to save the reports
+        base_name: Base name for output files (includes symbol and timestamp)
     
     Returns:
         Tuple containing paths to the text and JSON report files
@@ -230,10 +231,9 @@ def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/repor
         }
     }
     
-    # Save reports with timestamp
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    text_output = os.path.join(output_dir, f"market_report_{timestamp}.txt")
-    json_output = os.path.join(output_dir, f"market_report_{timestamp}.json")
+    # Save reports with consistent naming
+    text_output = os.path.join(output_dir, f"{base_name}_analysis.txt")
+    json_output = os.path.join(output_dir, f"{base_name}_analysis.json")
     
     with open(text_output, 'w') as f:
         f.write(text_report)

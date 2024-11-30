@@ -348,15 +348,23 @@ if __name__ == "__main__":
         logger = logging.getLogger()
         logger.info(f"Starting data collection for {args.symbol}")
         
-        # Create JSON output alongside log file
-        json_path = args.log_path + '.json'
+        # Create output directory
+        output_dir = os.path.join('exchangescraper', 'output')
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Generate timestamp for consistent file naming
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        base_name = f"{args.symbol.lower()}_{timestamp}"
+        
+        # Save market data JSON
+        json_path = os.path.join(output_dir, f"{base_name}_market_data.json")
         all_data = collect_all_data(args.symbol)
         with open(json_path, 'w') as f:
             json.dump(all_data, f, indent=2)
             
         # Generate analysis reports using dataanalyzer
         try:
-            text_report, json_report = analyze_market_data(json_path)
+            text_report, json_report = analyze_market_data(json_path, output_dir, base_name)
             print(f"\nAnalysis reports generated:")
             print(f"Text report: {text_report}")
             print(f"JSON report: {json_report}")
