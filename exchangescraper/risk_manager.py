@@ -3,6 +3,7 @@ from typing import Dict, Optional
 from enum import Enum
 from market_analyzer import MarketCondition, MarketType
 from strategy_selector import StrategyType
+from position_calculator import PositionCalculator, PositionMetrics, LiquidityMetrics
 
 class RiskLevel(Enum):
     LOW = "low"
@@ -14,6 +15,8 @@ class PositionSize:
     percentage: float  # Account percentage to risk
     max_leverage: float  # Maximum allowed leverage
     recommended_leverage: float  # Recommended leverage based on risk
+    liquidity_score: float  # 0-1 scale of available liquidity
+    risk_score: float  # 0-1 scale of position risk
 
 @dataclass
 class RiskParameters:
@@ -28,36 +31,32 @@ class RiskManager:
         self.max_risk_per_trade = 0.02  # 2% max risk per trade
         self.max_account_risk = 0.15    # 15% max total account risk
         self.min_risk_reward = 2.0      # Minimum risk/reward ratio
+        self.position_calculator = PositionCalculator()
         
     def calculate_position_size(self,
                               market_condition: MarketCondition,
                               holder_metrics: Dict,
-                              strategy_type: StrategyType) -> PositionSize:
+                              strategy_type: StrategyType,
+                              orderbook: Dict) -> PositionSize:
         """Calculate safe position size based on market conditions and holder metrics."""
         
-        # Base position size on market type and volatility
-        base_size = self._get_base_position_size(market_condition.market_type)
+        # Analyze orderbook liquidity
+        liquidity = self.position_calculator.analyze_liquidity(orderbook)
         
-        # Adjust for volatility
-        volatility_factor = 1 - market_condition.volatility
-        
-        # Adjust for holder concentration
-        holder_factor = 1 - holder_metrics.get('holder_concentration', 0)
-        
-        # Adjust for whale consensus
-        whale_factor = abs(holder_metrics.get('whale_consensus', 0))
-        
-        # Calculate final position size
-        adjusted_size = base_size * volatility_factor * holder_factor * (1 + whale_factor)
-        
-        # Calculate leverage recommendations
-        max_leverage = self._calculate_max_leverage(market_condition, holder_metrics)
-        recommended_leverage = max_leverage * 0.7  # 70% of max as recommended
+        # Calculate comprehensive position metrics
+        position_metrics = self.position_calculator.calculate_position_metrics(
+            market_condition=market_condition,
+            liquidity=liquidity,
+            risk_metrics=holder_metrics,
+            risk_reward=self.min_risk_reward
+        )
         
         return PositionSize(
-            percentage=min(adjusted_size, self.max_risk_per_trade),
-            max_leverage=max_leverage,
-            recommended_leverage=recommended_leverage
+            percentage=position_metrics.adjusted_size,
+            max_leverage=position_metrics.recommended_leverage * 1.5,  # Max is 50% above recommended
+            recommended_leverage=position_metrics.recommended_leverage,
+            liquidity_score=min(liquidity.bid_depth, liquidity.ask_depth) / max(liquidity.bid_depth, liquidity.ask_depth),
+            risk_score=position_metrics.risk_score
         )
         
     def calculate_risk_parameters(self,
