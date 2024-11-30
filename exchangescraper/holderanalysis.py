@@ -321,10 +321,17 @@ class EnhancedKaspaAnalyzer:
             'suggested_position': 'aggressive' if strength > 0.5 else 'conservative' if strength < -0.5 else 'neutral'
         }
 
-def get_wadu_top_holders():
-    """Fetch top WADU token holders from KAS API"""
+def get_token_top_holders(symbol: str):
+    """Fetch top token holders from KAS API for any KRC20 token
+    
+    Args:
+        symbol: Token symbol (e.g. 'WADU', 'KAS')
+    """
     try:
-        url = "https://api-v2-do.kas.fyi/token/krc20/WADU/info"
+        # Extract token symbol from trading pair (e.g. WADU_USDT -> WADU)
+        token = symbol.split('_')[0].upper()
+        
+        url = f"https://api-v2-do.kas.fyi/token/krc20/{token}/info"
         params = {
             "includeCharts": "false",
             "interval": "1d"
@@ -340,7 +347,7 @@ def get_wadu_top_holders():
             
         return holders[:10]  # Return top 10 holders
     except Exception as e:
-        print(f"Error fetching WADU holders: {e}")
+        print(f"Error fetching {token} holders: {e}")
         return []
 
 def save_analysis_to_files(analysis: Dict, base_path: str) -> None:

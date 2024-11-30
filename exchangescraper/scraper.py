@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 import logging
 from dataanalyzer import analyze_market_data
-from holderanalysis import EnhancedKaspaAnalyzer, get_wadu_top_holders
+from holderanalysis import EnhancedKaspaAnalyzer, get_token_top_holders
 
 def collect_all_data(symbol):
     """Collect all data types into a single JSON structure"""
@@ -376,7 +376,7 @@ if __name__ == "__main__":
         # Generate holder analysis
         print("\nGenerating holder analysis...")
         analyzer = EnhancedKaspaAnalyzer()
-        top_holders = get_wadu_top_holders()
+        top_holders = get_token_top_holders(args.symbol)
         
         if top_holders:
             holder_analysis = analyzer.generate_holder_analysis_report(top_holders)
