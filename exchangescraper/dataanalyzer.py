@@ -172,15 +172,15 @@ Note: This is an automated analysis. Please conduct your own research and risk a
 """
         return report
 
-def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/reports") -> str:
-    """Main function to analyze market data and generate report.
+def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/reports") -> Tuple[str, str]:
+    """Main function to analyze market data and generate reports.
     
     Args:
         json_file: Path to JSON input file
-        output_dir: Directory to save the report (default: "reports")
+        output_dir: Directory to save the reports (default: "reports")
     
     Returns:
-        Path to the saved report file
+        Tuple containing paths to the text and JSON report files
     """
     import os
     from pathlib import Path
@@ -188,25 +188,67 @@ def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/repor
     # Create output directory if it doesn't exist
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     
-    # Generate report
+    # Generate reports
     with open(json_file, 'r') as f:
         analyzer = MarketAnalyzer(f.read())
-    report = analyzer.generate_report()
     
-    # Save report with timestamp
+    text_report = analyzer.generate_report()
+    
+    # Generate structured data for JSON report
+    metrics = analyzer.calculate_metrics()
+    scenarios = analyzer.generate_scenarios(metrics)
+    strategies = analyzer.generate_strategies(metrics)
+    
+    json_data = {
+        "timestamp": datetime.now().isoformat(),
+        "symbol": analyzer.market_info['symbol'],
+        "market_status": {
+            "current_price": metrics['current_price'],
+            "price_change_24h": metrics['price_change_percent'],
+            "buy_sell_ratio": metrics['buy_sell_ratio'],
+            "vwap": metrics['vwap']
+        },
+        "market_structure": {
+            "support_levels": metrics['major_supports'],
+            "resistance_levels": metrics['major_resistances']
+        },
+        "scenarios": scenarios,
+        "strategies": strategies,
+        "risk_management": {
+            "immediate_term": {
+                "position_size": "2-3%",
+                "stop_loss_range": "-3% to -5%"
+            },
+            "short_term": {
+                "position_size": "5-7%",
+                "stop_loss_range": "-10% to -15%"
+            },
+            "long_term": {
+                "position_size": "10-15%",
+                "stop_loss_range": "-25% to -30%"
+            }
+        }
+    }
+    
+    # Save reports with timestamp
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_file = os.path.join(output_dir, f"market_report_{timestamp}.txt")
+    text_output = os.path.join(output_dir, f"market_report_{timestamp}.txt")
+    json_output = os.path.join(output_dir, f"market_report_{timestamp}.json")
     
-    with open(output_file, 'w') as f:
-        f.write(report)
+    with open(text_output, 'w') as f:
+        f.write(text_report)
+        
+    with open(json_output, 'w') as f:
+        json.dump(json_data, f, indent=2)
     
-    return output_file
+    return text_output, json_output
 
 # Example usage:
 if __name__ == "__main__":
-    report_file = analyze_market_data('exchangescraper/market_data2.log.json')
-    print(f"Report saved to: {report_file}")
+    text_file, json_file = analyze_market_data('exchangescraper/market_data2.log.json')
+    print(f"Text report saved to: {text_file}")
+    print(f"JSON report saved to: {json_file}")
     
-    # Optionally print the report to console
-    with open(report_file, 'r') as f:
+    # Optionally print the text report to console
+    with open(text_file, 'r') as f:
         print(f.read())
