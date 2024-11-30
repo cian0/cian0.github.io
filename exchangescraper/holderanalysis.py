@@ -16,34 +16,49 @@ def analyze_holder_transactions(address: str) -> Dict:
     """
     url = f"https://api-v2-do.kas.fyi/addresses/{address}/transactions"
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()  # Raise exception for bad status codes
         data = response.json()
         
+        # Default response for addresses with no transactions
+        default_response = {
+            'total_txns': 0,
+            'behavior': 'inactive',
+            'activity_level': 'none',
+            'net_flow': 0,
+            'last_activity': None
+        }
+        
         if not data.get('transactions'):
-            return {
-                'total_txns': 0,
-                'behavior': 'inactive',
-                'avg_amount': 0,
-                'last_activity': None
-            }
+            print(f"No transactions found for {address}")
+            return default_response
             
         txns = data['transactions']
         
         # Calculate metrics
         total_txns = len(txns)
-        latest_time = max(int(tx['blockTime']) for tx in txns)
-        latest_date = datetime.fromtimestamp(latest_time/1000)
+        try:
+            latest_time = max(int(tx['blockTime']) for tx in txns)
+            latest_date = datetime.fromtimestamp(latest_time/1000)
+        except (ValueError, KeyError) as e:
+            print(f"Error processing timestamp for {address}: {e}")
+            latest_date = None
         
         # Analyze transaction patterns
         inflow = 0
         outflow = 0
         for tx in txns:
-            for output in tx['outputs']:
-                if output['scriptPublicKeyAddress'] == address:
-                    inflow += int(output['amount'])
-            for inp in tx['inputs']:
-                if inp['previousOutput']['scriptPublicKeyAddress'] == address:
-                    outflow += int(inp['previousOutput']['amount'])
+            try:
+                for output in tx.get('outputs', []):
+                    if output.get('scriptPublicKeyAddress') == address:
+                        inflow += int(output.get('amount', 0))
+                for inp in tx.get('inputs', []):
+                    prev_output = inp.get('previousOutput', {})
+                    if prev_output.get('scriptPublicKeyAddress') == address:
+                        outflow += int(prev_output.get('amount', 0))
+            except (ValueError, KeyError) as e:
+                print(f"Error processing transaction for {address}: {e}")
+                continue
         
         # Determine behavior pattern
         if total_txns < 5:
@@ -55,17 +70,40 @@ def analyze_holder_transactions(address: str) -> Dict:
         else:
             behavior = 'trader'
             
+        # Determine activity level
+        if total_txns > 20:
+            activity_level = 'high'
+        elif total_txns > 10:
+            activity_level = 'medium'
+        else:
+            activity_level = 'low'
+            
         return {
             'total_txns': total_txns,
             'behavior': behavior,
             'net_flow': inflow - outflow,
-            'last_activity': latest_date.strftime('%Y-%m-%d'),
-            'activity_level': 'high' if total_txns > 20 else 'medium' if total_txns > 10 else 'low'
+            'last_activity': latest_date.strftime('%Y-%m-%d') if latest_date else None,
+            'activity_level': activity_level
         }
         
+    except requests.RequestException as e:
+        print(f"API request error for {address}: {e}")
+        return {
+            'total_txns': 0,
+            'behavior': 'unknown',
+            'activity_level': 'error',
+            'net_flow': 0,
+            'last_activity': None
+        }
     except Exception as e:
-        print(f"Error analyzing transactions for {address}: {e}")
-        return None
+        print(f"Unexpected error analyzing transactions for {address}: {e}")
+        return {
+            'total_txns': 0,
+            'behavior': 'unknown',
+            'activity_level': 'error',
+            'net_flow': 0,
+            'last_activity': None
+        }
 
 def get_token_holders(symbol):
     """
