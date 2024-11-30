@@ -15,17 +15,27 @@ class MarketAnalyzer:
     def parse_data(self) -> None:
         """Parse the raw data into structured format."""
         # Parse orderbook
-        orderbook_section = self.raw_data.split('Orderbook at')[1].split('2024')[0]
-        bids_section = orderbook_section.split('Asks')[0].split('Price\t\tQuantity\n------------------------------\n')[1]
-        asks_section = orderbook_section.split('Asks')[1].split('Price\t\tQuantity\n------------------------------\n')[1]
+        orderbook_section = self.raw_data.split('Orderbook at')[1].split('Ticker data:')[0]
+        bids_section = orderbook_section.split('Asks')[0].split('------------------------------\n')[1]
+        asks_section = orderbook_section.split('Asks')[1].split('------------------------------\n')[1]
         
-        self.bids = [{'price': float(line.split('\t')[0]), 
-                     'quantity': float(line.split('\t')[1])} 
-                    for line in bids_section.strip().split('\n')]
+        self.bids = []
+        for line in bids_section.strip().split('\n'):
+            if line.strip():
+                price, quantity = line.split('\t')
+                self.bids.append({
+                    'price': float(price.strip()),
+                    'quantity': float(quantity.strip())
+                })
         
-        self.asks = [{'price': float(line.split('\t')[0]), 
-                     'quantity': float(line.split('\t')[1])} 
-                    for line in asks_section.strip().split('\n')]
+        self.asks = []
+        for line in asks_section.strip().split('\n'):
+            if line.strip():
+                price, quantity = line.split('\t')
+                self.asks.append({
+                    'price': float(price.strip()),
+                    'quantity': float(quantity.strip())
+                })
         
         # Parse trades
         trades_section = self.raw_data.split('Recent Trades:')[1].split('Market info:')[0]
