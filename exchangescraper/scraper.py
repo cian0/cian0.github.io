@@ -6,7 +6,7 @@ from datetime import datetime
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
     # Format symbol and build URL
-    formatted_symbol = symbol.upper().replace('_', '')
+    formatted_symbol = symbol.upper()  # Keep the underscore for now
     url = "https://api.biconomy.com/api/v1/tickers"
     
     headers = {
@@ -31,9 +31,9 @@ def get_ticker(symbol):
             
         # Check for success response and find the ticker for the requested symbol
         if 'ticker' in data:
-            formatted_symbol = symbol.replace('_', '')
+            search_symbol = formatted_symbol.replace('_', '')  # Remove underscore only for comparison
             for tick in data['ticker']:
-                if tick['symbol'] == formatted_symbol:
+                if tick['symbol'] == search_symbol:
                     return {
                         'code': 0,
                         'result': {
