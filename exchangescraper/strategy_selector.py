@@ -9,6 +9,7 @@ class StrategyType(Enum):
     MEAN_REVERSION = "mean_reversion"
     BREAKOUT = "breakout"
     ACCUMULATION = "accumulation"
+    SUPPORT_RESISTANCE = "support_resistance"
 
 @dataclass
 class StrategyWeight:
@@ -26,8 +27,9 @@ class StrategySelector:
                 StrategyType.MEAN_REVERSION: 0.1
             },
             MarketType.RANGING: {
-                StrategyType.MEAN_REVERSION: 0.7,
-                StrategyType.SCALPING: 0.2,
+                StrategyType.MEAN_REVERSION: 0.5,
+                StrategyType.SUPPORT_RESISTANCE: 0.3,
+                StrategyType.SCALPING: 0.1,
                 StrategyType.MOMENTUM: 0.1
             },
             MarketType.VOLATILE: {
