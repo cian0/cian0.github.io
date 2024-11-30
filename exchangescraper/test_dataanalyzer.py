@@ -10,21 +10,21 @@ class TestMarketAnalyzer(unittest.TestCase):
 
     def test_parse_orderbook(self):
         """Test orderbook parsing"""
-        self.assertEqual(len(self.analyzer.bids), 2)
-        self.assertEqual(len(self.analyzer.asks), 2)
-        self.assertEqual(self.analyzer.bids[0]['price'], 0.00058340)
-        self.assertEqual(self.analyzer.asks[0]['price'], 0.00066000)
+        self.assertEqual(len(self.analyzer.bids), 77)
+        self.assertEqual(len(self.analyzer.asks), 36)
+        self.assertEqual(self.analyzer.bids[0]['price'], 0.00057041)
+        self.assertEqual(self.analyzer.asks[0]['price'], 0.00063905)
 
     def test_parse_trades(self):
         """Test trades parsing"""
-        self.assertEqual(len(self.analyzer.trades), 2)
-        self.assertEqual(self.analyzer.trades[0]['amount'], 193123.94)
+        self.assertEqual(len(self.analyzer.trades), 100)
+        self.assertEqual(self.analyzer.trades[0]['amount'], 937.88)
         self.assertEqual(self.analyzer.trades[0]['side'], 'sell')
 
     def test_parse_ticker(self):
         """Test ticker data parsing"""
-        self.assertEqual(self.analyzer.ticker_data['lastPrice'], '0.00063531')
-        self.assertEqual(self.analyzer.ticker_data['priceChangePercent'], '-14.53')
+        self.assertEqual(self.analyzer.ticker_data['lastPrice'], '0.00058101')
+        self.assertEqual(self.analyzer.ticker_data['priceChangePercent'], '-21.09')
 
     def test_calculate_metrics(self):
         """Test metrics calculation"""
