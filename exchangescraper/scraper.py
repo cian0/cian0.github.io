@@ -31,11 +31,11 @@ def get_ticker(symbol):
             
         # Check for success response and find the ticker for the requested symbol
         if 'ticker' in data:
-            search_symbol = formatted_symbol.replace('_', '')  # Remove underscore only for comparison
-            print(f"Looking for symbol: {search_symbol}")
+            # Keep the underscore in the symbol
+            print(f"Looking for symbol: {formatted_symbol}")
             print("Available symbols:", [t['symbol'] for t in data['ticker']])
             for tick in data['ticker']:
-                if tick['symbol'].upper() == search_symbol.upper():  # Case-insensitive comparison
+                if tick['symbol'].upper() == formatted_symbol.upper():  # Case-insensitive comparison with underscore
                     return {
                         'code': 0,
                         'result': {
