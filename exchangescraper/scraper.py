@@ -4,6 +4,19 @@ import argparse
 from datetime import datetime
 import os
 import logging
+import json
+
+def collect_all_data(symbol):
+    """Collect all data types into a single JSON structure"""
+    data = {
+        'timestamp': datetime.now().isoformat(),
+        'symbol': symbol,
+        'ticker': get_ticker(symbol),
+        'orderbook': get_orderbook_rest(symbol),
+        'trades': get_recent_trades(symbol),
+        'market_info': get_market_info(symbol)
+    }
+    return data
 
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
@@ -334,6 +347,12 @@ if __name__ == "__main__":
         )
         logger = logging.getLogger()
         logger.info(f"Starting data collection for {args.symbol}")
+        
+        # Create JSON output alongside log file
+        json_path = args.log_path + '.json'
+        all_data = collect_all_data(args.symbol)
+        with open(json_path, 'w') as f:
+            json.dump(all_data, f, indent=2)
     
     if args.type in ['orderbook', 'all']:
         orderbook = get_orderbook_rest(args.symbol)
