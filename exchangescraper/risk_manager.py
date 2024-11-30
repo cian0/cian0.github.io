@@ -32,6 +32,7 @@ class RiskManager:
         self.max_account_risk = 0.15    # 15% max total account risk
         self.min_risk_reward = 2.0      # Minimum risk/reward ratio
         self.position_calculator = PositionCalculator()
+        self.position_calculator = PositionCalculator()
         
     def calculate_position_size(self,
                               market_condition: MarketCondition,
@@ -39,6 +40,11 @@ class RiskManager:
                               strategy_type: StrategyType,
                               orderbook: Dict) -> PositionSize:
         """Calculate safe position size based on market conditions and holder metrics."""
+        
+        # Get base position size from Kelly Criterion
+        win_rate = market_condition.confidence
+        kelly_size = self.position_calculator.calculate_kelly_fraction(win_rate, self.min_risk_reward)
+        base_size = kelly_size * self.max_risk_per_trade
         
         # Analyze orderbook liquidity
         liquidity = self.position_calculator.analyze_liquidity(orderbook)
@@ -51,11 +57,17 @@ class RiskManager:
             risk_reward=self.min_risk_reward
         )
         
+        # Calculate final position size with all adjustments
+        adjusted_size = min(
+            base_size * position_metrics.adjusted_size,
+            self.max_risk_per_trade
+        )
+        
         return PositionSize(
-            percentage=position_metrics.adjusted_size,
+            percentage=adjusted_size,
             max_leverage=position_metrics.recommended_leverage * 1.5,  # Max is 50% above recommended
             recommended_leverage=position_metrics.recommended_leverage,
-            liquidity_score=min(liquidity.bid_depth, liquidity.ask_depth) / max(liquidity.bid_depth, liquidity.ask_depth),
+            liquidity_score=liquidity.imbalance,
             risk_score=position_metrics.risk_score
         )
         

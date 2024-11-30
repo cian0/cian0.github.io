@@ -103,7 +103,8 @@ class MarketAnalyzer:
         conservative_size = self.risk_manager.calculate_position_size(
             self.market_condition,
             self.holder_data['risk_metrics'],
-            StrategyType.SCALPING
+            StrategyType.SCALPING,
+            self.market_data['orderbook']
         )
         
         positions = {
