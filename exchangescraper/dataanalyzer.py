@@ -4,61 +4,26 @@ from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 
 class MarketAnalyzer:
-    def __init__(self, raw_data: str):
-        self.raw_data = raw_data
-        self.bids: List[Dict] = []
-        self.asks: List[Dict] = []
-        self.trades: List[Dict] = []
-        self.ticker_data: Dict = {}
-        self.market_info: Dict = {}
+    def __init__(self, json_data: str):
+        """Initialize with JSON data string."""
+        data = json.loads(json_data)
+        self.timestamp = data['timestamp']
+        self.symbol = data['symbol']
+        self.ticker_data = data['ticker']['result']
+        self.bids = [{'price': float(bid[0]), 'quantity': float(bid[1])} 
+                    for bid in data['orderbook']['bids']]
+        self.asks = [{'price': float(ask[0]), 'quantity': float(ask[1])} 
+                    for ask in data['orderbook']['asks']]
+        self.trades = [{'amount': float(trade['amount']),
+                       'price': float(trade['price']),
+                       'side': trade['side'],
+                       'time': trade['timestamp']} 
+                      for trade in data['trades']]
+        self.market_info = data['market_info']
         
     def parse_data(self) -> None:
-        """Parse the raw data into structured format."""
-        # Parse orderbook
-        orderbook_section = self.raw_data.split('Orderbook at')[1].split('Ticker data:')[0]
-        bids_section = orderbook_section.split('Asks')[0].split('------------------------------\n')[1]
-        asks_section = orderbook_section.split('Asks')[1].split('------------------------------\n')[1]
-        
-        self.bids = []
-        for line in bids_section.strip().split('\n'):
-            if line.strip():
-                price, quantity = line.split('\t')
-                self.bids.append({
-                    'price': float(price.strip()),
-                    'quantity': float(quantity.strip())
-                })
-        
-        self.asks = []
-        for line in asks_section.strip().split('\n'):
-            if line.strip():
-                price, quantity = line.split('\t')
-                self.asks.append({
-                    'price': float(price.strip()),
-                    'quantity': float(quantity.strip())
-                })
-        
-        # Parse trades
-        trades_section = self.raw_data.split('Recent Trades:')[1].split('Market info:')[0]
-        self.trades = []
-        for line in trades_section.split('\n'):
-            if '\t\t' in line:
-                amount, price, side, time = line.strip().split('\t\t')
-                self.trades.append({
-                    'amount': float(amount),
-                    'price': float(price),
-                    'side': side,
-                    'time': time
-                })
-        
-        # Parse ticker data
-        ticker_match = re.search(r'Ticker data: ({.*?})}', self.raw_data, re.DOTALL)
-        if ticker_match:
-            self.ticker_data = json.loads(ticker_match.group(1))['result']
-        
-        # Parse market info
-        market_match = re.search(r'Market info: ({.*?})}', self.raw_data, re.DOTALL)
-        if market_match:
-            self.market_info = json.loads(market_match.group(1))
+        """No parsing needed as JSON is already structured."""
+        pass
 
     def calculate_metrics(self) -> Dict:
         """Calculate key market metrics."""
@@ -207,9 +172,10 @@ Note: This is an automated analysis. Please conduct your own research and risk a
 """
         return report
 
-def analyze_market_data(raw_data: str) -> str:
+def analyze_market_data(json_file: str) -> str:
     """Main function to analyze market data and generate report."""
-    analyzer = MarketAnalyzer(raw_data)
+    with open(json_file, 'r') as f:
+        analyzer = MarketAnalyzer(f.read())
     return analyzer.generate_report()
 
 # Example usage:

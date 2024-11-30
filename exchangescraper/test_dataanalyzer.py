@@ -3,49 +3,8 @@ from .dataanalyzer import MarketAnalyzer
 
 class TestMarketAnalyzer(unittest.TestCase):
     def setUp(self):
-        # Sample market data for testing
-        self.sample_data = """2024-11-30 11:37:34 - Starting data collection for WADU_USDT
-2024-11-30 11:37:34 - 
-Orderbook at 2024-11-30 11:37:34.693000
-
-Bids (Buy Orders):
-Price\t\tQuantity
-------------------------------
-0.00058340\t1875915.94000000
-0.00058330\t5783.43000000
-
-Asks (Sell Orders):
-Price\t\tQuantity
-------------------------------
-0.00066000\t94969.69000000
-0.00070000\t2440069.99000000
-
-2024-11-30 11:37:35 - Ticker data: {
-  "code": 0,
-  "result": {
-    "lastPrice": "0.00063531",
-    "highPrice": "0.00077144",
-    "lowPrice": "0.00012874",
-    "volume": "177442708.17",
-    "priceChange": "-14.53",
-    "priceChangePercent": "-14.53"
-  }
-}
-
-Recent Trades:
-Amount (WADU)\tPrice (USDT)\tSide\t\tTime
---------------------------------------------------------------------------------
-193123.94\t\t0.00063531\t\tsell\t\t2024-11-30 11:36:32
-201485.55\t\t0.00063687\t\tsell\t\t2024-11-30 11:35:26
-
-Market info: {
-  "symbol": "WADU_USDT",
-  "status": "trading",
-  "baseAsset": "WADU",
-  "quoteAsset": "USDT",
-  "baseAssetPrecision": 2,
-  "quoteAssetPrecision": 8
-}"""
+        with open('exchangescraper/output.log.json', 'r') as f:
+            self.sample_data = f.read()
         self.analyzer = MarketAnalyzer(self.sample_data)
         self.analyzer.parse_data()
 
