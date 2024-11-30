@@ -2,230 +2,136 @@ import requests
 import pandas as pd
 from datetime import datetime
 import time
-from typing import Dict, List, Optional
+import json
 
-def analyze_holder_transactions(address: str) -> Dict:
-    """
-    Analyze transaction patterns for a specific holder address
-    
-    Args:
-        address (str): Holder's Kaspa address
-    
-    Returns:
-        Dict containing transaction analysis metrics
-    """
-    url = f"https://api-v2-do.kas.fyi/addresses/{address}/transactions"
-    try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()  # Raise exception for bad status codes
-        data = response.json()
+class KaspaAnalyzer:
+    def __init__(self):
+        self.base_url = "https://api.kaspa.org"
+        self.session = requests.Session()
+        self.KAS_DECIMALS = 100000000  # 10^8 conversion factor
         
-        # Default response for addresses with no transactions
-        default_response = {
-            'total_txns': 0,
-            'behavior': 'inactive',
-            'activity_level': 'none',
-            'net_flow': 0,
-            'last_activity': None
-        }
-        
-        if not data.get('transactions'):
-            print(f"No transactions found for {address}")
-            return default_response
-            
-        txns = data['transactions']
-        
-        # Calculate metrics
-        total_txns = len(txns)
+    def get_address_transactions(self, address, limit=50, offset=0):
         try:
-            latest_time = max(int(tx['blockTime']) for tx in txns)
-            latest_date = datetime.fromtimestamp(latest_time/1000)
-        except (ValueError, KeyError) as e:
-            print(f"Error processing timestamp for {address}: {e}")
-            latest_date = None
-        
-        # Analyze transaction patterns
-        inflow = 0
-        outflow = 0
-        for tx in txns:
-            try:
-                for output in tx.get('outputs', []):
-                    if output.get('scriptPublicKeyAddress') == address:
-                        inflow += int(output.get('amount', 0))
-                for inp in tx.get('inputs', []):
-                    prev_output = inp.get('previousOutput', {})
-                    if prev_output.get('scriptPublicKeyAddress') == address:
-                        outflow += int(prev_output.get('amount', 0))
-            except (ValueError, KeyError) as e:
-                print(f"Error processing transaction for {address}: {e}")
-                continue
-        
-        # Determine behavior pattern
-        if total_txns < 5:
-            behavior = 'hodler'
-        elif outflow > inflow:
-            behavior = 'seller'
-        elif inflow > outflow:
-            behavior = 'accumulator'
-        else:
-            behavior = 'trader'
+            url = f"{self.base_url}/addresses/{address}/full-transactions"
+            params = {
+                'limit': limit,
+                'offset': offset,
+                'resolve_previous_outpoints': 'light'
+            }
             
-        # Determine activity level
-        if total_txns > 20:
-            activity_level = 'high'
-        elif total_txns > 10:
-            activity_level = 'medium'
-        else:
-            activity_level = 'low'
+            response = self.session.get(url, params=params)
+            response.raise_for_status()
+            transactions = response.json()
             
-        return {
-            'total_txns': total_txns,
-            'behavior': behavior,
-            'net_flow': inflow - outflow,
-            'last_activity': latest_date.strftime('%Y-%m-%d') if latest_date else None,
-            'activity_level': activity_level
-        }
-        
-    except requests.RequestException as e:
-        print(f"API request error for {address}: {e}")
-        return {
-            'total_txns': 0,
-            'behavior': 'unknown',
-            'activity_level': 'error',
-            'net_flow': 0,
-            'last_activity': None
-        }
-    except Exception as e:
-        print(f"Unexpected error analyzing transactions for {address}: {e}")
-        return {
-            'total_txns': 0,
-            'behavior': 'unknown',
-            'activity_level': 'error',
-            'net_flow': 0,
-            'last_activity': None
-        }
+            return self.process_transactions(transactions)
+            
+        except Exception as e:
+            print(f"Error fetching transactions for {address}: {e}")
+            return None
 
-def get_token_holders(symbol):
-    """
-    Fetch and analyze top holders for a given KRC20 token
-    
-    Args:
-        symbol (str): Token symbol (e.g., 'WADU')
-    """
-    # API endpoint
-    url = f"https://api-v2-do.kas.fyi/token/krc20/{symbol}/info?includeCharts=false&interval=1d"
-    # to get transactions: https://api-v2-do.kas.fyi/addresses/kaspa:qzjeargt4jywj48qsxcdfx99g4m9yfypxvyp3nm76f7qvju0x23e5nsqwyeku/transactions?nonce=1732953590064%3A32d09968b2152310598e03f8c4a6f190bab11e0113478c43eeb45f08f29b09cd&offset=0&limit=20
-    try:
-        # Fetch data
-        response = requests.get(url)
-        data = response.json()
-        
-        # Create DataFrame of holders
-        holders_df = pd.DataFrame(data['holders'])
-        
-        # Convert amounts to actual token values (considering decimals)
-        decimal = data['decimal']
-        holders_df['amount'] = holders_df['amount'] / (10 ** decimal)
-        
-        # Calculate percentage of total supply
-        total_supply = data['totalMinted'] / (10 ** decimal)
-        holders_df['percentage'] = (holders_df['amount'] / total_supply) * 100
-        
-        # Add rank column
-        holders_df['rank'] = range(1, len(holders_df) + 1)
-        
-        # Reorder columns
-        holders_df = holders_df[['rank', 'address', 'amount', 'percentage', 'tags']]
-        
-        # Print token info
-        print(f"\n{symbol} Token Analysis")
-        print(f"='='='='='='='='='='='='='='='='='='='='='")
-        print(f"Total Supply: {total_supply:,.2f}")
-        print(f"Total Holders: {data['holderTotal']:,}")
-        print(f"Current Price: ${data['price']['priceInUsd']:,.8f}")
-        print(f"Market Cap: ${data['price']['marketCapInUsd']:,.2f}")
-        print(f"24h Change: {data['price']['change24h']:,.2f}%")
-        
-        # Print top holders analysis
-        print(f"\nTop Holders Analysis")
-        print(f"='='='='='='='='='='='='='='='='='='='='='")
-        
-        # Calculate concentration metrics
-        top10_pct = holders_df.head(10)['percentage'].sum()
-        top20_pct = holders_df.head(20)['percentage'].sum()
-        top50_pct = holders_df.head(50)['percentage'].sum()
-        
-        print(f"Top 10 holders control: {top10_pct:.2f}%")
-        print(f"Top 20 holders control: {top20_pct:.2f}%")
-        print(f"Top 50 holders control: {top50_pct:.2f}%")
-        
-        # Analyze transaction patterns for top holders
-        print("\nAnalyzing holder behaviors...")
-        behaviors = []
-        for idx, address in enumerate(holders_df.head(50)['address'], 1):
-            print(f"\nAnalyzing holder {idx}/50: {address}")
+    def process_transactions(self, transactions):
+        if not transactions:
+            return pd.DataFrame()
+            
+        processed_txs = []
+        for tx in transactions:
             try:
-                analysis = analyze_holder_transactions(address)
-                if analysis:
-                    analysis['address'] = address  # Add address to behavior data
-                    behaviors.append(analysis)
-                    print(f"Analysis complete - Behavior: {analysis['behavior']}, "
-                          f"Transactions: {analysis['total_txns']}, "
-                          f"Activity Level: {analysis['activity_level']}")
-                else:
-                    print("No analysis data returned")
-            except Exception as e:
-                print(f"Error analyzing holder: {str(e)}")
-            time.sleep(0.5)  # Rate limiting
-            
-        # Add behavior analysis to dataframe
-        if behaviors:
-            behavior_df = pd.DataFrame(behaviors)
-            behavior_df = behavior_df.set_index('address')  # Set address as index for joining
-            holders_df = holders_df.head(50).set_index('address')
-            holders_df = holders_df.join(behavior_df)
-            holders_df = holders_df.reset_index()  # Restore address as column
-        else:
-            print("\nNo behavior data collected!")
-            return holders_df.head(50)
-        
-        # Print behavior summary
-        print("\nHolder Behavior Analysis")
-        print("='='='='='='='='='='='='='='='='='='='='='")
-        if 'behavior' in holders_df.columns:
-            behavior_counts = holders_df['behavior'].value_counts()
-            print("\nBehavior Distribution:")
-            for behavior, count in behavior_counts.items():
-                print(f"{behavior.title()} addresses: {count}")
-            
-            if 'activity_level' in holders_df.columns:
-                activity_counts = holders_df['activity_level'].value_counts()
-                print("\nActivity Level Distribution:")
-                for level, count in activity_counts.items():
-                    print(f"{level.title()} activity: {count}")
+                total_input = sum(float(inp.get('previous_outpoint_amount', 0)) for inp in tx.get('inputs', []))
+                outputs = tx.get('outputs', [])
                 
-                active_holders = len(holders_df[holders_df['activity_level'] == 'high'])
-                print(f"\nHighly active holders: {active_holders}")
-        else:
-            print("No behavior data available")
+                # Sort outputs by amount to identify the actual transfer vs change
+                sorted_outputs = sorted(outputs, key=lambda x: float(x.get('amount', 0)))
+                
+                # If there's more than one output, typically the smaller one is the actual transfer
+                # and the larger one is change back to sender
+                actual_transfer = float(sorted_outputs[0]['amount']) if outputs else 0
+                
+                processed_tx = {
+                    'transaction_id': tx['transaction_id'],
+                    'block_time': datetime.fromtimestamp(int(tx['block_time'])/1000),
+                    'block_blue_score': int(tx['accepting_block_blue_score']),
+                    'is_accepted': tx['is_accepted'],
+                    'mass': int(tx['mass']) if tx.get('mass') else 0,
+                    'inputs_count': len(tx.get('inputs', [])),
+                    'outputs_count': len(outputs),
+                    'total_input': total_input / self.KAS_DECIMALS,
+                    'total_output': sum(float(out.get('amount', 0)) for out in outputs) / self.KAS_DECIMALS,
+                    'actual_transfer': actual_transfer / self.KAS_DECIMALS,
+                    'fee': (total_input - sum(float(out.get('amount', 0)) for out in outputs)) / self.KAS_DECIMALS
+                }
+                
+                # Process detailed outputs
+                outputs_detail = []
+                for out in outputs:
+                    amount = float(out.get('amount', 0)) / self.KAS_DECIMALS
+                    address = out.get('script_public_key_address')
+                    outputs_detail.append({
+                        'amount': amount,
+                        'address': address,
+                        'is_change': amount > actual_transfer / self.KAS_DECIMALS  # Identify change output
+                    })
+                processed_tx['outputs_detail'] = outputs_detail
+                
+                processed_txs.append(processed_tx)
+                
+            except (ValueError, TypeError) as e:
+                print(f"Error processing transaction {tx.get('transaction_id')}: {e}")
+                continue
+            
+        df = pd.DataFrame(processed_txs)
         
-        # Return enhanced dataframe
-        return holders_df
+        # Ensure numeric types
+        numeric_columns = ['mass', 'total_input', 'total_output', 'actual_transfer', 'fee', 'block_blue_score']
+        for col in numeric_columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+            
+        return df
+
+    def analyze_address_transactions(self, address, days_back=30):
+        df = self.get_address_transactions(address)
         
-    except Exception as e:
-        print(f"Error fetching data: {e}")
-        return None
+        if df is None or df.empty:
+            print(f"No transactions found for {address}")
+            return
+        
+        print(f"\nTransaction Analysis for {address}")
+        print("="*50)
+        print(f"Total transactions analyzed: {len(df)}")
+        print(f"First transaction: {df['block_time'].min()}")
+        print(f"Last transaction: {df['block_time'].max()}")
+        
+        if df['mass'].notna().any():
+            print(f"Average transaction mass: {df['mass'].mean():.2f}")
+        
+        if df['fee'].notna().any():
+            print(f"Average fee: {df['fee'].mean():.8f} KAS")
+        
+        print("\nTransaction Patterns:")
+        print("-"*30)
+        print(f"Average actual transfer: {df['actual_transfer'].mean():.8f} KAS")
+        print(f"Total volume transferred: {df['actual_transfer'].sum():.8f} KAS")
+        print(f"Largest transfer: {df['actual_transfer'].max():.8f} KAS")
+        print(f"Smallest transfer: {df['actual_transfer'].min():.8f} KAS")
+        
+        # Print recent transactions
+        print("\nRecent Transactions:")
+        print("-"*30)
+        recent_txs = df.sort_values('block_time', ascending=False).head(5)
+        for _, tx in recent_txs.iterrows():
+            print(f"ID: {tx['transaction_id']}")
+            print(f"Time: {tx['block_time']}")
+            print(f"Actual transfer amount: {tx['actual_transfer']:.8f} KAS")
+            print("Outputs:")
+            for output in tx['outputs_detail']:
+                print(f"  {'(CHANGE) ' if output['is_change'] else ''}{output['amount']:.8f} KAS to {output['address']}")
+            print("-"*30)
 
 def main():
-    # Example usage
-    symbol = "WADU"  # Can be changed to any KRC20 token
-    holders_df = get_token_holders(symbol)
+    analyzer = KaspaAnalyzer()
+    address = "kaspa:qz9z99fck3kxx3mpawh30h3x3h5zdmxdjefagyw34uzngzuhfnszvc9w5j0ua"
     
-    if holders_df is not None:
-        print("\nDetailed Top 50 Holders")
-        print("='='='='='='='='='='='='='='='='='='='='='")
-        pd.set_option('display.float_format', lambda x: '%.8f' % x)
-        print(holders_df.to_string(index=False))
+    print("Analyzing transaction history...")
+    analyzer.analyze_address_transactions(address)
 
 if __name__ == "__main__":
     main()
