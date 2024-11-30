@@ -1,0 +1,5 @@
+
+.DS_Store
+.aider*
+.env
+bq/venv/*
