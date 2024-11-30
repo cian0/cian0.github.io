@@ -328,43 +328,40 @@ if __name__ == "__main__":
     parser.add_argument('--symbol', type=str, default='WADU_USDT', help='Trading pair symbol (e.g., WADU_USDT)')
     parser.add_argument('--type', type=str, choices=['orderbook', 'ticker', 'trades', 'market', 'all'],
                       default='all', help='Type of information to fetch')
-    parser.add_argument('--log-path', type=str, help='Path to save the log file')
+    parser.add_argument('--output-dir', type=str, default='exchangescraper/output', 
+                      help='Directory to save output files (default: exchangescraper/output)')
     
     args = parser.parse_args()
     
     # Setup logging if path provided
     logger = None
-    if args.log_path:
-        log_dir = os.path.dirname(args.log_path)
-        if log_dir and not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-            
-        logging.basicConfig(
-            filename=args.log_path,
-            level=logging.INFO,
-            format='%(asctime)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
-        logger = logging.getLogger()
-        logger.info(f"Starting data collection for {args.symbol}")
+    # Create output directory
+    os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Generate timestamp for consistent file naming
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    base_name = f"{args.symbol.lower()}_{timestamp}"
+    
+    # Setup logging
+    log_path = os.path.join(args.output_dir, f"{base_name}.log")
+    logging.basicConfig(
+        filename=log_path,
+        level=logging.INFO,
+        format='%(asctime)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    logger = logging.getLogger()
+    logger.info(f"Starting data collection for {args.symbol}")
         
-        # Create output directory
-        output_dir = os.path.join('exchangescraper', 'output')
-        os.makedirs(output_dir, exist_ok=True)
-        
-        # Generate timestamp for consistent file naming
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        base_name = f"{args.symbol.lower()}_{timestamp}"
-        
-        # Save market data JSON
-        json_path = os.path.join(output_dir, f"{base_name}_market_data.json")
+    # Save market data JSON
+    json_path = os.path.join(args.output_dir, f"{base_name}_market_data.json")
         all_data = collect_all_data(args.symbol)
         with open(json_path, 'w') as f:
             json.dump(all_data, f, indent=2)
             
         # Generate analysis reports using dataanalyzer
         try:
-            text_report, json_report = analyze_market_data(json_path, output_dir, base_name)
+            text_report, json_report = analyze_market_data(json_path, args.output_dir, base_name)
             print(f"\nAnalysis reports generated:")
             print(f"Text report: {text_report}")
             print(f"JSON report: {json_report}")
