@@ -174,7 +174,7 @@ def get_orderbook_rest(symbol):
     url = "https://api.biconomy.com/api/v1/depth"
     params = {
         'symbol': formatted_symbol,
-        'limit': '500'  # Increased depth limit
+        'size': '100'  # Using size parameter for depth
     }
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
