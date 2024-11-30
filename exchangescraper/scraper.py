@@ -6,6 +6,7 @@ from datetime import datetime
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
     # Format symbol and build URL
+    formatted_symbol = symbol.upper().replace('_', '')
     url = "https://api.biconomy.com/api/v1/tickers"
     
     headers = {
