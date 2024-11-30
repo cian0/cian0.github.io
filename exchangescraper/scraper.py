@@ -5,22 +5,60 @@ from datetime import datetime
 
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
-    # Try both formats of the symbol
-    symbols_to_try = [
-        symbol.upper().replace('_', ''),  # BTCUSDT
-        symbol.upper(),                   # BTC_USDT
-    ]
+    # Format symbol and build URL
+    formatted_symbol = symbol.upper().replace('_', '')
+    url = f"https://www.biconomy.com/api/v1/market/detail/merged?symbol={formatted_symbol.lower()}"
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        'Accept': 'application/json'
     }
     
-    for sym in symbols_to_try:
-        # Try both endpoint formats
-        urls = [
-            f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={sym}",
-            f"https://www.biconomy.com/api/v1/ticker?symbol={sym}"
-        ]
+    print(f"Attempting ticker request with URL: {url}")
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        print(f"Response status code: {response.status_code}")
+        print(f"Response content: {response.text[:500]}")
+        
+        response.raise_for_status()
+        data = response.json()
+        
+        # Handle empty response
+        if not data:
+            print("Empty response received from ticker endpoint")
+            return None
+            
+        # Check for success response
+        if data.get('status') == 'ok' and data.get('tick'):
+            tick_data = data['tick']
+            # Transform Biconomy format to our standard format
+            return {
+                'code': 0,
+                'result': {
+                    'lastPrice': str(tick_data.get('close', 0)),
+                    'highPrice': str(tick_data.get('high', 0)),
+                    'lowPrice': str(tick_data.get('low', 0)),
+                    'volume': str(tick_data.get('vol', 0)),
+                    'priceChange': str(tick_data.get('close', 0) - tick_data.get('open', 0)),
+                    'priceChangePercent': str(((tick_data.get('close', 0) - tick_data.get('open', 0)) / tick_data.get('open', 1)) * 100)
+                }
+            }
+        
+        error_msg = data.get('err-msg', 'Unknown error')
+        print(f"API Error: {error_msg}")
+        return None
+        
+    except requests.exceptions.Timeout:
+        print(f"Request timed out for URL: {url}")
+    except requests.exceptions.RequestException as e:
+        print(f"Network error: {e}")
+    except json.JSONDecodeError:
+        print(f"Invalid JSON response from URL: {url}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    
+    return None
         
         for url in urls:
             print(f"Attempting ticker request with URL: {url}")
