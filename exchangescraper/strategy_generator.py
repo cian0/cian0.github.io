@@ -34,6 +34,17 @@ class MarketAnalyzer:
         self.price_data = self._extract_price_data()
         self.volume_data = self._extract_volume_data()
         
+        # Analyze market conditions
+        self.market_condition = self.market_analysis.analyze_market_type(
+            self.price_data,
+            self.volume_data,
+            self.holder_data['risk_metrics'],
+            TimeFrame.INTRADAY  # Default timeframe
+        )
+        
+        # Get optimal timeframe
+        self.optimal_timeframe = self.market_analysis.get_optimal_timeframe(self.market_condition)
+        
     def _extract_price_data(self) -> List[float]:
         """Extract price data from trades."""
         trades = self.market_data.get('trades', [])
@@ -149,9 +160,24 @@ class MarketAnalyzer:
         positions = self.generate_positions()
         holder_analysis = self.analyze_holder_behavior()
         
+        # Add market condition analysis
+        market_analysis = f"""
+Market Condition Analysis:
+------------------------
+Market Type: {self.market_condition.market_type.value}
+Volatility Score: {self.market_condition.volatility:.2%}
+Trend Strength: {self.market_condition.trend_strength:.2%}
+Volume Profile: {self.market_condition.volume_profile:.2%}
+Optimal Timeframe: {self.optimal_timeframe.value}
+Analysis Confidence: {self.market_condition.confidence:.2%}
+Timestamp: {self.market_condition.timestamp}
+"""
+        
         report = f"""
 Market Analysis Report - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 =================================================================
+
+{market_analysis}
 
 Current Market Status:
 ---------------------
