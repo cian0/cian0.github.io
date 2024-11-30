@@ -32,7 +32,7 @@ def get_ticker(symbol):
         # Find the ticker for the requested symbol
         if 'ticker' in data:
             for tick in data['ticker']:
-                if tick['symbol'] == symbol:
+                if tick['symbol'] == formatted_symbol:
                     return {
                         'code': 0,
                         'result': {
@@ -64,8 +64,9 @@ def get_ticker(symbol):
 def get_recent_trades(symbol, limit=20):
     """Fetch recent trades for the trading pair"""
     url = f"https://api.biconomy.com/api/v1/trades"
+    formatted_symbol = symbol.replace('_', '')
     params = {
-        'symbol': symbol,
+        'symbol': formatted_symbol,
         'size': str(limit)
     }
     headers = {
@@ -158,9 +159,10 @@ def get_market_info(symbol):
 
 def get_orderbook_rest(symbol):
     """Fetch orderbook data from Biconomy exchange"""
+    formatted_symbol = symbol.replace('_', '')
     url = "https://api.biconomy.com/api/v1/depth"
     params = {
-        'symbol': symbol,
+        'symbol': formatted_symbol,
         'size': '50'  # Default depth size
     }
     headers = {
