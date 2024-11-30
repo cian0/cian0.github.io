@@ -1,6 +1,71 @@
 import requests
 import pandas as pd
 from datetime import datetime
+import time
+from typing import Dict, List, Optional
+
+def analyze_holder_transactions(address: str) -> Dict:
+    """
+    Analyze transaction patterns for a specific holder address
+    
+    Args:
+        address (str): Holder's Kaspa address
+    
+    Returns:
+        Dict containing transaction analysis metrics
+    """
+    url = f"https://api-v2-do.kas.fyi/addresses/{address}/transactions"
+    try:
+        response = requests.get(url)
+        data = response.json()
+        
+        if not data.get('transactions'):
+            return {
+                'total_txns': 0,
+                'behavior': 'inactive',
+                'avg_amount': 0,
+                'last_activity': None
+            }
+            
+        txns = data['transactions']
+        
+        # Calculate metrics
+        total_txns = len(txns)
+        latest_time = max(int(tx['blockTime']) for tx in txns)
+        latest_date = datetime.fromtimestamp(latest_time/1000)
+        
+        # Analyze transaction patterns
+        inflow = 0
+        outflow = 0
+        for tx in txns:
+            for output in tx['outputs']:
+                if output['scriptPublicKeyAddress'] == address:
+                    inflow += int(output['amount'])
+            for inp in tx['inputs']:
+                if inp['previousOutput']['scriptPublicKeyAddress'] == address:
+                    outflow += int(inp['previousOutput']['amount'])
+        
+        # Determine behavior pattern
+        if total_txns < 5:
+            behavior = 'hodler'
+        elif outflow > inflow:
+            behavior = 'seller'
+        elif inflow > outflow:
+            behavior = 'accumulator'
+        else:
+            behavior = 'trader'
+            
+        return {
+            'total_txns': total_txns,
+            'behavior': behavior,
+            'net_flow': inflow - outflow,
+            'last_activity': latest_date.strftime('%Y-%m-%d'),
+            'activity_level': 'high' if total_txns > 20 else 'medium' if total_txns > 10 else 'low'
+        }
+        
+    except Exception as e:
+        print(f"Error analyzing transactions for {address}: {e}")
+        return None
 
 def get_token_holders(symbol):
     """
@@ -56,8 +121,32 @@ def get_token_holders(symbol):
         print(f"Top 20 holders control: {top20_pct:.2f}%")
         print(f"Top 50 holders control: {top50_pct:.2f}%")
         
-        # Return detailed dataframe of top 50 holders
-        return holders_df.head(50)
+        # Analyze transaction patterns for top holders
+        print("\nAnalyzing holder behaviors...")
+        behaviors = []
+        for address in holders_df.head(50)['address']:
+            analysis = analyze_holder_transactions(address)
+            if analysis:
+                behaviors.append(analysis)
+            time.sleep(0.5)  # Rate limiting
+            
+        # Add behavior analysis to dataframe
+        behavior_df = pd.DataFrame(behaviors)
+        holders_df = holders_df.head(50).reset_index(drop=True)
+        holders_df = pd.concat([holders_df, behavior_df], axis=1)
+        
+        # Print behavior summary
+        print("\nHolder Behavior Analysis")
+        print("='='='='='='='='='='='='='='='='='='='='='")
+        behavior_counts = holders_df['behavior'].value_counts()
+        for behavior, count in behavior_counts.items():
+            print(f"{behavior.title()} addresses: {count}")
+            
+        active_holders = len(holders_df[holders_df['activity_level'] == 'high'])
+        print(f"\nHighly active holders: {active_holders}")
+        
+        # Return enhanced dataframe
+        return holders_df
         
     except Exception as e:
         print(f"Error fetching data: {e}")
