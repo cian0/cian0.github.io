@@ -17,7 +17,7 @@ def get_ticker(symbol):
     print(f"Attempting ticker request with URL: {url}")
     
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, params=params, headers=headers, timeout=10)
         print(f"Response status code: {response.status_code}")
         print(f"Response content: {response.text[:500]}")
         
@@ -76,7 +76,8 @@ def get_recent_trades(symbol, limit=20):
     }
     headers = {
         'X-SITE-ID': '127',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
     }
     
     try:
@@ -120,6 +121,9 @@ def get_market_info(symbol):
     """Fetch market information for the trading pair"""
     url = "https://api.biconomy.com/api/v1/exchangeInfo"
     formatted_symbol = symbol.upper()  # Keep underscore
+    params = {
+        'symbol': formatted_symbol
+    }
     headers = {
         'X-SITE-ID': '127',
         'Content-Type': 'application/x-www-form-urlencoded',
