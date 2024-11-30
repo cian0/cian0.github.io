@@ -124,26 +124,52 @@ def get_token_holders(symbol):
         # Analyze transaction patterns for top holders
         print("\nAnalyzing holder behaviors...")
         behaviors = []
-        for address in holders_df.head(50)['address']:
-            analysis = analyze_holder_transactions(address)
-            if analysis:
-                behaviors.append(analysis)
+        for idx, address in enumerate(holders_df.head(50)['address'], 1):
+            print(f"\nAnalyzing holder {idx}/50: {address}")
+            try:
+                analysis = analyze_holder_transactions(address)
+                if analysis:
+                    analysis['address'] = address  # Add address to behavior data
+                    behaviors.append(analysis)
+                    print(f"Analysis complete - Behavior: {analysis['behavior']}, "
+                          f"Transactions: {analysis['total_txns']}, "
+                          f"Activity Level: {analysis['activity_level']}")
+                else:
+                    print("No analysis data returned")
+            except Exception as e:
+                print(f"Error analyzing holder: {str(e)}")
             time.sleep(0.5)  # Rate limiting
             
         # Add behavior analysis to dataframe
-        behavior_df = pd.DataFrame(behaviors)
-        holders_df = holders_df.head(50).reset_index(drop=True)
-        holders_df = pd.concat([holders_df, behavior_df], axis=1)
+        if behaviors:
+            behavior_df = pd.DataFrame(behaviors)
+            behavior_df = behavior_df.set_index('address')  # Set address as index for joining
+            holders_df = holders_df.head(50).set_index('address')
+            holders_df = holders_df.join(behavior_df)
+            holders_df = holders_df.reset_index()  # Restore address as column
+        else:
+            print("\nNo behavior data collected!")
+            return holders_df.head(50)
         
         # Print behavior summary
         print("\nHolder Behavior Analysis")
         print("='='='='='='='='='='='='='='='='='='='='='")
-        behavior_counts = holders_df['behavior'].value_counts()
-        for behavior, count in behavior_counts.items():
-            print(f"{behavior.title()} addresses: {count}")
+        if 'behavior' in holders_df.columns:
+            behavior_counts = holders_df['behavior'].value_counts()
+            print("\nBehavior Distribution:")
+            for behavior, count in behavior_counts.items():
+                print(f"{behavior.title()} addresses: {count}")
             
-        active_holders = len(holders_df[holders_df['activity_level'] == 'high'])
-        print(f"\nHighly active holders: {active_holders}")
+            if 'activity_level' in holders_df.columns:
+                activity_counts = holders_df['activity_level'].value_counts()
+                print("\nActivity Level Distribution:")
+                for level, count in activity_counts.items():
+                    print(f"{level.title()} activity: {count}")
+                
+                active_holders = len(holders_df[holders_df['activity_level'] == 'high'])
+                print(f"\nHighly active holders: {active_holders}")
+        else:
+            print("No behavior data available")
         
         # Return enhanced dataframe
         return holders_df
