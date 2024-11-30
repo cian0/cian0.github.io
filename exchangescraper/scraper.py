@@ -164,10 +164,11 @@ def get_market_info(symbol):
 
 def get_orderbook_rest(symbol):
     """Fetch orderbook data from Biconomy exchange"""
-    formatted_symbol = symbol.upper()
-    url = "https://www.biconomy.com/api/v1/depth"
+    formatted_symbol = symbol.upper()  # Keep the underscore
+    url = "https://api.biconomy.com/api/v1/depth"
     params = {
-        'symbol': formatted_symbol
+        'symbol': formatted_symbol,
+        'limit': '100'  # Add depth limit parameter
     }
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
@@ -182,8 +183,8 @@ def get_orderbook_rest(symbol):
         # Print response for debugging
         print("API Response:", json.dumps(data, indent=2))
         
-        if data.get('code') == 0 and 'data' in data:
-            orderbook_data = data['data']
+        if 'asks' in data and 'bids' in data:  # Direct access to orderbook data
+            orderbook_data = data
             return {
                 'bids': orderbook_data.get('bids', []),
                 'asks': orderbook_data.get('asks', []),
