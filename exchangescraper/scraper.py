@@ -160,27 +160,31 @@ def get_market_info(symbol):
 
 def get_orderbook_rest(symbol):
     """Fetch orderbook data from Biconomy exchange"""
-    formatted_symbol = symbol.upper().replace('_', '')
-    url = f"https://www.biconomy.com/api/v1/market/detail/merged?symbol={formatted_symbol.lower()}"
-    
+    formatted_symbol = symbol.replace('_', '')
+    url = "https://api.biconomy.com/api/v1/depth"
+    params = {
+        'symbol': formatted_symbol,
+        'size': '50'  # Default depth size
+    }
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-        'Accept': 'application/json'
+        'X-SITE-ID': '127',
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
     
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()  # Raise an exception for bad status codes
         
         data = response.json()
         # Print response for debugging
         print("API Response:", json.dumps(data, indent=2))
         
-        if 'bids' in data and 'asks' in data:
+        if data.get('code') == 0 and 'data' in data:
+            orderbook_data = data['data']
             return {
-                'bids': data['bids'],
-                'asks': data['asks'],
-                'timestamp': int(datetime.now().timestamp() * 1000)  # Using current timestamp since API doesn't provide one
+                'bids': orderbook_data.get('bids', []),
+                'asks': orderbook_data.get('asks', []),
+                'timestamp': int(datetime.now().timestamp() * 1000)
             }
         else:
             print(f"Missing orderbook data in response: {data}")
