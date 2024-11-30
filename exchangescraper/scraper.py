@@ -142,17 +142,15 @@ def get_market_info(symbol):
             print("Empty response received from market info endpoint")
             return None
             
-        if isinstance(data, dict) and 'symbols' in data:
-            # Convert symbol to uppercase for comparison
-            formatted_symbol = formatted_symbol.upper()
-            # Find the specific symbol info
-            symbol_info = next((s for s in data['symbols'] if s.get('symbol', '').upper() == formatted_symbol), None)
-            if symbol_info:
+        if isinstance(data, dict) and 'symbol' in data:
+            # The API returns direct symbol info, no need to search
+            symbol_info = data
+            if symbol_info['symbol'].upper() == formatted_symbol:
                 return {
                     'symbol': symbol_info.get('symbol'),
                     'status': symbol_info.get('status', 'TRADING'),
-                    'baseAsset': symbol_info.get('base_currency'),
-                    'quoteAsset': symbol_info.get('quote_currency'),
+                    'baseAsset': symbol_info.get('baseAsset'),
+                    'quoteAsset': symbol_info.get('quoteAsset'),
                     'filters': [
                         {
                             'filterType': 'PRICE_FILTER',
