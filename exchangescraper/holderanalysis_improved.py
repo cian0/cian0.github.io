@@ -355,14 +355,50 @@ def main():
     print("=" * 50)
     
     print("\nRisk Metrics:")
-    for metric, value in analysis['risk_metrics'].items():
-        print(f"{metric}: {value:.4f}")
+    print("------------")
+    print(f"holder_concentration: {analysis['risk_metrics']['holder_concentration']:.4f}")
+    print("  (0-1 scale: Higher values indicate fewer holders control more tokens)")
     
+    print(f"accumulation_pressure: {analysis['risk_metrics']['accumulation_pressure']:.4f}")
+    print("  (-1 to 1 scale: Positive values suggest buying pressure, negative suggests selling)")
+    
+    print(f"collective_volatility: {analysis['risk_metrics']['collective_volatility']:.4f}")
+    print("  (0-1 scale: Higher values indicate more price swings)")
+    
+    print(f"whale_consensus: {analysis['risk_metrics']['whale_consensus']:.4f}")
+    print("  (-1 to 1 scale: Positive when whales agree on accumulating, negative when distributing)")
+
     print("\nMarket Signals:")
-    for signal, data in analysis['market_signals'].items():
-        print(f"\n{signal}:")
-        for key, value in data.items():
-            print(f"  {key}: {value}")
+    print("--------------")
+    
+    # Accumulation Signal
+    acc_signal = analysis['market_signals']['accumulation_signal']
+    print("\nAccumulation Signal:")
+    print(f"  Signal: {acc_signal['signal']} (accumulate/hold/distribute)")
+    print(f"  Strength: {acc_signal['strength']:.4f} (0-1 scale)")
+    print(f"  Confidence: {acc_signal['confidence']:.4f} (0-1 scale)")
+
+    # Volatility Warning
+    vol_warning = analysis['market_signals']['volatility_warning']
+    print("\nVolatility Warning:")
+    print(f"  Risk Level: {vol_warning['level']:.4f} (0-1 scale)")
+    print(f"  Category: {vol_warning['risk_category']}")
+    print(f"  Trend: {vol_warning['volatility_trend']}")
+
+    # Whale Movement
+    whale_alert = analysis['market_signals']['whale_movement_alert']
+    print("\nWhale Movement:")
+    print(f"  Alert Level: {whale_alert['alert_level']}")
+    print(f"  Movement Type: {whale_alert['movement_type']}")
+    print(f"  Activity Ratio: {whale_alert['activity_ratio']:.4f} (0-1 scale)")
+
+    # Market Strength
+    strength = analysis['market_signals']['market_strength']
+    print("\nMarket Strength:")
+    print(f"  Overall Strength: {strength['strength']:.4f} (-1 to 1 scale)")
+    print(f"  Confidence: {strength['confidence']:.4f} (0-1 scale)")
+    print(f"  Market Phase: {strength['market_phase']}")
+    print(f"  Suggested Position: {strength['suggested_position']}")
 
 if __name__ == "__main__":
     main()
