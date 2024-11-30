@@ -17,10 +17,12 @@ class TestScraper(unittest.TestCase):
     def test_get_recent_trades(self):
         trades = get_recent_trades(self.test_symbol)
         self.assertIsNotNone(trades)
-        self.assertTrue(isinstance(trades, list))
-        if trades:
-            self.assertTrue('amount' in trades[0])
-            self.assertTrue('price' in trades[0])
+        if trades and 'result' in trades:
+            trades_list = trades['result']
+            self.assertTrue(isinstance(trades_list, list))
+            if trades_list:
+                self.assertTrue('qty' in trades_list[0])
+                self.assertTrue('price' in trades_list[0])
             
     def test_get_market_info(self):
         info = get_market_info(self.test_symbol)
@@ -28,6 +30,8 @@ class TestScraper(unittest.TestCase):
         self.assertTrue('symbol' in info)
         self.assertTrue('baseAsset' in info)
         self.assertTrue('quoteAsset' in info)
+        self.assertTrue('baseAssetPrecision' in info)
+        self.assertTrue('quoteAssetPrecision' in info)
         
     def test_get_orderbook(self):
         orderbook = get_orderbook_rest(self.test_symbol)
