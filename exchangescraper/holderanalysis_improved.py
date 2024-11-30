@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 import matplotlib.pyplot as plt
 from scipy import stats
 import sys
@@ -18,6 +18,9 @@ class HolderMetrics:
     avg_transaction_size: float
     transaction_frequency: float
     whale_correlation: float  # correlation with other whale movements
+
+    def to_dict(self):
+        return asdict(self)
 
 class EnhancedKaspaAnalyzer:
     def __init__(self):
@@ -231,7 +234,7 @@ class EnhancedKaspaAnalyzer:
             if df is not None and not df.empty:
                 metrics = self.calculate_holder_behavior(df)
                 holder_metrics.append(metrics)
-                detailed_metrics[address] = metrics
+                detailed_metrics[address] = metrics.to_dict() if metrics else None
         
         risk_metrics = self.analyze_holder_risk(holder_metrics)
         
