@@ -355,11 +355,11 @@ if __name__ == "__main__":
         
     # Save market data JSON
     json_path = os.path.join(args.output_dir, f"{base_name}_market_data.json")
-        all_data = collect_all_data(args.symbol)
-        with open(json_path, 'w') as f:
-            json.dump(all_data, f, indent=2)
-            
-        # Generate analysis reports using dataanalyzer
+    all_data = collect_all_data(args.symbol)
+    with open(json_path, 'w') as f:
+        json.dump(all_data, f, indent=2)
+        
+    # Generate analysis reports using dataanalyzer
         try:
             text_report, json_report = analyze_market_data(json_path, args.output_dir, base_name)
             print(f"\nAnalysis reports generated:")
