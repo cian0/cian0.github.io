@@ -59,53 +59,6 @@ def get_ticker(symbol):
         print(f"Unexpected error: {e}")
     
     return None
-        
-        for url in urls:
-            print(f"Attempting ticker request with URL: {url}")
-            try:
-                response = requests.get(url, headers=headers, timeout=10)
-                print(f"Response status code: {response.status_code}")
-                print(f"Response content: {response.text[:500]}")
-                
-                response.raise_for_status()
-                data = response.json()
-                
-                # Handle empty or error responses
-                if not data:
-                    print("Empty response received from ticker endpoint")
-                    continue
-                    
-                if isinstance(data, dict):
-                    if data.get('code') not in [0, 200]:
-                        error_msg = data.get('message', 'Unknown error')
-                        if data.get('code') == 0 and data.get('result'):
-                            return data
-                        
-                        error_msg = data.get('message', 'Unknown error')
-                        if '暂无记录' in str(error_msg) or 'Invalid symbol' in str(error_msg):
-                            # Continue to try next URL/format
-                            continue
-                        else:
-                            print(f"API Error: {error_msg}")
-                    
-                    # If we got a response but couldn't parse it as expected, try next URL
-                    continue
-                
-            except requests.exceptions.Timeout:
-                print(f"Request timed out for URL: {url}")
-                continue
-            except requests.exceptions.RequestException as e:
-                print(f"Network error for URL {url}: {e}")
-                continue
-            except json.JSONDecodeError:
-                print(f"Invalid JSON response from URL: {url}")
-                continue
-            except Exception as e:
-                print(f"Unexpected error for URL {url}: {e}")
-                continue
-    
-    print(f"No valid ticker data found for symbol {symbol} after trying all variations")
-    return None
 
 def get_recent_trades(symbol, limit=20):
     """Fetch recent trades for the trading pair"""
