@@ -2,6 +2,8 @@ import requests
 import json
 import argparse
 from datetime import datetime
+import os
+import logging
 
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
@@ -64,7 +66,7 @@ def get_ticker(symbol):
     
     return None
 
-def get_recent_trades(symbol, limit=20):
+def get_recent_trades(symbol, limit=100):
     """Fetch recent trades for the trading pair"""
     url = f"https://api.biconomy.com/api/v1/trades"
     formatted_symbol = symbol.upper()  # Keep underscore for this endpoint
@@ -172,7 +174,7 @@ def get_orderbook_rest(symbol):
     url = "https://api.biconomy.com/api/v1/depth"
     params = {
         'symbol': formatted_symbol,
-        'limit': '100'  # Add depth limit parameter
+        'limit': '500'  # Increased depth limit
     }
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
@@ -201,24 +203,30 @@ def get_orderbook_rest(symbol):
         print(f"Error fetching orderbook: {e}")
     return None
 
-def format_orderbook_data(orderbook):
+def format_orderbook_data(orderbook, logger=None):
     """Format orderbook data for display"""
     if not orderbook:
         return
     
     timestamp = datetime.fromtimestamp(orderbook['timestamp']/1000)
-    print(f"\nOrderbook at {timestamp}")
-    print("\nTop 5 Bids (Buy Orders):")
-    print("Price\t\tQuantity")
-    print("-" * 30)
-    for bid in orderbook['bids'][:5]:
-        print(f"{float(bid[0]):.8f}\t{float(bid[1]):.8f}")
+    output = [f"\nOrderbook at {timestamp}"]
     
-    print("\nTop 5 Asks (Sell Orders):")
-    print("Price\t\tQuantity")
-    print("-" * 30)
-    for ask in orderbook['asks'][:5]:
-        print(f"{float(ask[0]):.8f}\t{float(ask[1]):.8f}")
+    output.append("\nBids (Buy Orders):")
+    output.append("Price\t\tQuantity")
+    output.append("-" * 30)
+    for bid in orderbook['bids'][:20]:  # Increased to 20 entries
+        output.append(f"{float(bid[0]):.8f}\t{float(bid[1]):.8f}")
+    
+    output.append("\nAsks (Sell Orders):")
+    output.append("Price\t\tQuantity")
+    output.append("-" * 30)
+    for ask in orderbook['asks'][:20]:  # Increased to 20 entries
+        output.append(f"{float(ask[0]):.8f}\t{float(ask[1]):.8f}")
+    
+    # Print to console and log if logger provided
+    print('\n'.join(output))
+    if logger:
+        logger.info('\n'.join(output))
 
 def format_ticker_data(ticker_response):
     """Format ticker data for display"""
@@ -240,24 +248,42 @@ def format_ticker_data(ticker_response):
     print(f"24h Change: {ticker.get('priceChange', 'N/A')}")
     print(f"24h Change %: {ticker.get('priceChangePercent', 'N/A')}%")
 
-def format_trades_data(trades_response):
+def format_trades_data(trades_response, logger=None):
     """Format recent trades data for display"""
     if not trades_response:
-        print("\nNo trades data available")
+        msg = "\nNo trades data available"
+        print(msg)
+        if logger:
+            logger.info(msg)
         return
     
     # Handle both list and dictionary response formats
     trades = trades_response if isinstance(trades_response, list) else trades_response.get('result', [])
     if not trades:
-        print("\nNo recent trades found")
+        msg = "\nNo recent trades found"
+        print(msg)
+        if logger:
+            logger.info(msg)
         return
         
-    print("\nRecent Trades:")
-    print("Time\t\t\tPrice\t\tQuantity\tSide")
-    print("-" * 60)
-    for trade in trades[:5]:  # Show last 5 trades
+    output = ["\nRecent Trades:"]
+    output.append("Time\t\t\tPrice\t\tQuantity\tSide\tTotal Value")
+    output.append("-" * 80)
+    
+    for trade in trades[:50]:  # Increased to 50 trades
         timestamp = datetime.fromtimestamp(int(trade.get('time', 0))/1000)
-        print(f"{timestamp}\t{trade.get('price', 'N/A')}\t{trade.get('qty', 'N/A')}\t{'Sell' if trade.get('isBuyerMaker') else 'Buy'}")
+        price = float(trade.get('price', 0))
+        qty = float(trade.get('qty', 0))
+        total_value = price * qty
+        output.append(
+            f"{timestamp}\t{price:.8f}\t{qty:.8f}\t"
+            f"{'Sell' if trade.get('isBuyerMaker') else 'Buy'}\t{total_value:.8f}"
+        )
+    
+    # Print to console and log if logger provided
+    print('\n'.join(output))
+    if logger:
+        logger.info('\n'.join(output))
 
 def format_market_info(info):
     """Format market information for display"""
@@ -285,21 +311,42 @@ if __name__ == "__main__":
     parser.add_argument('--symbol', type=str, default='WADU_USDT', help='Trading pair symbol (e.g., WADU_USDT)')
     parser.add_argument('--type', type=str, choices=['orderbook', 'ticker', 'trades', 'market', 'all'],
                       default='all', help='Type of information to fetch')
+    parser.add_argument('--log-path', type=str, help='Path to save the log file')
     
     args = parser.parse_args()
     
+    # Setup logging if path provided
+    logger = None
+    if args.log_path:
+        log_dir = os.path.dirname(args.log_path)
+        if log_dir and not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+            
+        logging.basicConfig(
+            filename=args.log_path,
+            level=logging.INFO,
+            format='%(asctime)s - %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        logger = logging.getLogger()
+        logger.info(f"Starting data collection for {args.symbol}")
+    
     if args.type in ['orderbook', 'all']:
         orderbook = get_orderbook_rest(args.symbol)
-        format_orderbook_data(orderbook)
+        format_orderbook_data(orderbook, logger)
     
     if args.type in ['ticker', 'all']:
         ticker = get_ticker(args.symbol)
         format_ticker_data(ticker)
+        if logger:
+            logger.info(f"Ticker data: {json.dumps(ticker, indent=2)}")
     
     if args.type in ['trades', 'all']:
         trades = get_recent_trades(args.symbol)
-        format_trades_data(trades)
+        format_trades_data(trades, logger)
     
     if args.type in ['market', 'all']:
         market_info = get_market_info(args.symbol)
         format_market_info(market_info)
+        if logger:
+            logger.info(f"Market info: {json.dumps(market_info, indent=2)}")
