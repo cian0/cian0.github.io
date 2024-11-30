@@ -1,0 +1,58 @@
+
+Market Analysis Report - 2024-11-30 22:24:57
+=================================================================
+
+Current Market Status:
+---------------------
+Price: $0.00067505
+24h Change: 5.02%
+Buy/Sell Ratio: 3.02
+VWAP: $0.00067505
+
+Risk Assessment:
+--------------
+Risk Level: HIGH
+Volatility Trend: increasing
+Whale Activity: accumulation
+Market Strength: 8.37%
+Market Confidence: 13.89%
+
+Position Recommendations:
+----------------------
+1. Conservative Position:
+   Entry: $0.00066155
+   Stop Loss: $0.00065345
+   Take Profit: $0.00067000
+   Position Size: 2-3%
+   Risk/Reward: 1.04
+   Max Drawdown: -1.22%
+
+2. Moderate Position:
+   Entry: $0.00057379
+   Stop Loss: $0.00040000
+   Take Profit: $0.00067000
+   Position Size: 5-7%
+   Risk/Reward: 0.55
+   Max Drawdown: -30.29%
+
+3. Aggressive Position:
+   Entry: $0.00050629
+   Stop Loss: $0.00040000
+   Take Profit: $0.00087386
+   Position Size: 10-15%
+   Risk/Reward: 3.46
+   Max Drawdown: -20.99%
+
+Holder Analysis:
+--------------
+Holder Concentration: 58.34%
+Accumulation Pressure: 16.78%
+Whale Consensus: -0.33
+Current Signal: HOLD
+Signal Strength: 8.28%
+Signal Confidence: 66.67%
+
+Key Levels:
+----------
+Support Levels: $0.00040000, $0.00038000, $0.00033000
+Resistance Levels: $0.00067000, $0.00069000, $0.00095680
