@@ -309,19 +309,38 @@ class EnhancedKaspaAnalyzer:
             'suggested_position': 'aggressive' if strength > 0.5 else 'conservative' if strength < -0.5 else 'neutral'
         }
 
+def get_wadu_top_holders():
+    """Fetch top WADU token holders from KAS API"""
+    try:
+        url = "https://api-v2-do.kas.fyi/token/krc20/WADU/info"
+        params = {
+            "includeCharts": "false",
+            "interval": "1d"
+        }
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        # Extract holder addresses from the response
+        holders = []
+        if "holders" in data:
+            holders = [holder["address"] for holder in data["holders"]]
+            
+        return holders[:10]  # Return top 10 holders
+    except Exception as e:
+        print(f"Error fetching WADU holders: {e}")
+        return []
+
 def main():
     analyzer = EnhancedKaspaAnalyzer()
     
-    # Example top holder addresses (you would need to provide actual addresses)
-    top_holders = [
-        "kaspa:qr5lj3uyfvduuhy38wwnl8942t4ckznjsma3pgnsc552qmpdga4959pae88u0",
-        "kaspa:qr65v089lu499hkuc2z8c95r9nklc8v5wqgyqx8v7y9wn6plqkah27c4pghjk",
-        "kaspa:qrztyfqsvr0fq094sm5ljau9dx69vmnnmf9k0y0zu3g9vdlvfwfuslf6vhxch",
-        "kaspa:qryg3yagxctrrlyavzpj44q86wf79el7fcxnwc788xp45207w02p5qa6w9f6l",
-        "kaspa:qpvdfd9f5nhwqtxq2xnx6v2aq2j20melygcmzzl69l0hg4f3daltqq28mkagz",
-        "kaspa:qpjdkp4rde5mzrmtkujzazry2zj7xxmxwu7kc5rvqcg0yfjau3a9zeulevaqj"
-        # Add more addresses here
-    ]
+    # Fetch top WADU token holders
+    top_holders = get_wadu_top_holders()
+    if not top_holders:
+        print("Failed to fetch top holders, using default addresses")
+        top_holders = [
+            "kaspa:qr5lj3uyfvduuhy38wwnl8942t4ckznjsma3pgnsc552qmpdga4959pae88u0"
+        ]
     
     print("Generating comprehensive holder analysis...")
     analysis = analyzer.generate_holder_analysis_report(top_holders)
