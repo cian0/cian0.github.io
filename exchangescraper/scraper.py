@@ -14,16 +14,12 @@ def get_ticker(symbol):
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     
-    print(f"Attempting ticker request with URL: {url}")
-    
     params = {
         'symbol': formatted_symbol
     }
     
     try:
         response = requests.get(url, params=params, headers=headers, timeout=10)
-        print(f"Response status code: {response.status_code}")
-        print(f"Response content: {response.text[:500]}")
         
         response.raise_for_status()
         data = response.json()
@@ -36,8 +32,6 @@ def get_ticker(symbol):
         # Check for success response and find the ticker for the requested symbol
         if 'ticker' in data:
             # Keep the underscore in the symbol
-            print(f"Looking for symbol: {formatted_symbol}")
-            print("Available symbols:", [t['symbol'] for t in data['ticker']])
             for tick in data['ticker']:
                 if tick['symbol'].upper() == formatted_symbol.upper():  # Case-insensitive comparison with underscore
                     return {
@@ -103,7 +97,6 @@ def get_recent_trades(symbol, limit=20):
                     print(f"API Error: {error_msg}")
                 return None
             
-        print("Trades Response:", json.dumps(data, indent=2))
         return data
     except requests.exceptions.Timeout:
         print("Request timed out while fetching trades")
@@ -135,8 +128,6 @@ def get_market_info(symbol):
         response = requests.get(url, params=params, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
-        
-        print(f"Market Info Response: {json.dumps(data, indent=2)}")
         
         if not data:
             print("Empty response received from market info endpoint")
@@ -193,9 +184,6 @@ def get_orderbook_rest(symbol):
         response.raise_for_status()  # Raise an exception for bad status codes
         
         data = response.json()
-        # Print response for debugging
-        print("API Response:", json.dumps(data, indent=2))
-        
         if 'asks' in data and 'bids' in data:  # Direct access to orderbook data
             orderbook_data = data
             return {
