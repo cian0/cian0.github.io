@@ -1,54 +1,49 @@
 import requests
 import json
-import websockets  # If websocket connection is needed
-import asyncio
+from datetime import datetime
 
-# REST API approach
 def get_orderbook_rest(symbol):
-    # Replace with actual API endpoint
-    url = f"https://api.exchange.com/v1/orderbook/{symbol}"
+    """Fetch orderbook data from Biconomy exchange"""
+    url = f"https://www.biconomy.com/api/v1/depth?symbol={symbol}"
     
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            return {
-                'bids': data['bids'],  # Usually format is [[price, quantity], ...]
-                'asks': data['asks']
-            }
+            if data['code'] == 200:  # Biconomy specific success code
+                return {
+                    'bids': data['data']['bids'],
+                    'asks': data['data']['asks'],
+                    'timestamp': data['data']['timestamp']
+                }
+            else:
+                print(f"API Error: {data['msg']}")
+        else:
+            print(f"HTTP Error: {response.status_code}")
     except Exception as e:
         print(f"Error fetching orderbook: {e}")
     return None
 
-# Websocket approach (if real-time updates are needed)
-async def get_orderbook_ws(symbol):
-    # Replace with actual websocket endpoint
-    uri = "wss://ws.exchange.com"
+def format_orderbook_data(orderbook):
+    """Format orderbook data for display"""
+    if not orderbook:
+        return
     
-    async with websockets.connect(uri) as websocket:
-        # Subscribe to orderbook
-        subscribe_message = {
-            "method": "subscribe",
-            "params": [f"orderbook.{symbol}"],
-            "id": 1
-        }
-        await websocket.send(json.dumps(subscribe_message))
-        
-        while True:
-            response = await websocket.recv()
-            data = json.loads(response)
-            # Process the orderbook data
-            print(data)
+    timestamp = datetime.fromtimestamp(orderbook['timestamp']/1000)
+    print(f"\nOrderbook for WADU/USDT at {timestamp}")
+    print("\nTop 5 Bids (Buy Orders):")
+    print("Price\t\tQuantity")
+    print("-" * 30)
+    for bid in orderbook['bids'][:5]:
+        print(f"{float(bid[0]):.8f}\t{float(bid[1]):.8f}")
+    
+    print("\nTop 5 Asks (Sell Orders):")
+    print("Price\t\tQuantity")
+    print("-" * 30)
+    for ask in orderbook['asks'][:5]:
+        print(f"{float(ask[0]):.8f}\t{float(ask[1]):.8f}")
 
-# Usage example
 if __name__ == "__main__":
     symbol = "WADU_USDT"
-    
-    # For REST API
     orderbook = get_orderbook_rest(symbol)
-    if orderbook:
-        print("Bids:", orderbook['bids'][:5])  # Show top 5 bids
-        print("Asks:", orderbook['asks'][:5])  # Show top 5 asks
-    
-    # For Websocket
-    # asyncio.run(get_orderbook_ws(symbol))
+    format_orderbook_data(orderbook)
