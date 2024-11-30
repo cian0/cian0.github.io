@@ -29,9 +29,9 @@ def get_ticker(symbol):
             print("Empty response received from ticker endpoint")
             return None
             
-        # Check for success response
-        # Find the ticker for the requested symbol
+        # Check for success response and find the ticker for the requested symbol
         if 'ticker' in data:
+            formatted_symbol = symbol.replace('_', '')
             for tick in data['ticker']:
                 if tick['symbol'] == formatted_symbol:
                     return {
@@ -42,13 +42,15 @@ def get_ticker(symbol):
                             'lowPrice': tick['low'],
                             'volume': tick['vol'],
                             'buy': tick['buy'],
-                            'sell': tick['sell']
+                            'sell': tick['sell'],
+                            'priceChange': tick['change'],
+                            'priceChangePercent': tick['change']
                         }
                     }
-        return None
+            print(f"Symbol {formatted_symbol} not found in ticker data")
+            return None
         
-        error_msg = data.get('err-msg', 'Unknown error')
-        print(f"API Error: {error_msg}")
+        print("No ticker data found in response")
         return None
         
     except requests.exceptions.Timeout:
