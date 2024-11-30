@@ -64,7 +64,7 @@ def get_ticker(symbol):
 def get_recent_trades(symbol, limit=20):
     """Fetch recent trades for the trading pair"""
     url = f"https://api.biconomy.com/api/v1/trades"
-    formatted_symbol = symbol.replace('_', '')
+    formatted_symbol = symbol.upper().replace('_', '')
     params = {
         'symbol': formatted_symbol,
         'size': str(limit)
