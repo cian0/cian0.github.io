@@ -15,9 +15,19 @@ def get_ticker(symbol):
         response.raise_for_status()
         data = response.json()
         
-        if data.get('code') not in [0, 200]:
-            print(f"API Error: {data.get('message', 'Unknown error')}")
+        # Handle empty or error responses
+        if not data:
+            print("Empty response received from ticker endpoint")
             return None
+            
+        if isinstance(data, dict):
+            if data.get('code') not in [0, 200]:
+                error_msg = data.get('message', 'Unknown error')
+                if '暂无记录' in str(error_msg):
+                    print(f"No ticker data available for symbol: {symbol}")
+                else:
+                    print(f"API Error: {error_msg}")
+                return None
             
         print("Ticker Response:", json.dumps(data, indent=2))
         return data
@@ -46,9 +56,19 @@ def get_recent_trades(symbol, limit=20):
         response.raise_for_status()
         data = response.json()
         
-        if data.get('code') not in [0, 200]:
-            print(f"API Error: {data.get('message', 'Unknown error')}")
+        # Handle empty or error responses
+        if not data:
+            print("Empty response received from trades endpoint")
             return None
+            
+        if isinstance(data, dict):
+            if data.get('code') not in [0, 200]:
+                error_msg = data.get('message', 'Unknown error')
+                if 'Illegal parameter' in str(error_msg):
+                    print(f"Invalid trading pair symbol: {symbol}")
+                else:
+                    print(f"API Error: {error_msg}")
+                return None
             
         print("Trades Response:", json.dumps(data, indent=2))
         return data
@@ -77,14 +97,26 @@ def get_market_info(symbol):
         response.raise_for_status()
         data = response.json()
         
-        if isinstance(data, dict) and 'symbols' in data:
-            # Find the specific symbol info
-            symbol_info = next((s for s in data['symbols'] if s.get('symbol') == symbol), None)
-            if symbol_info:
-                print("Market Info:", json.dumps(symbol_info, indent=2))
-                return symbol_info
-        print(f"No market info found for symbol: {symbol}")
-        return None
+        if not data:
+            print("Empty response received from market info endpoint")
+            return None
+            
+        if isinstance(data, dict):
+            if 'symbols' in data:
+                # Find the specific symbol info
+                symbol_info = next((s for s in data['symbols'] if s.get('symbol') == symbol), None)
+                if symbol_info:
+                    if symbol_info.get('status') == 'TRADING':
+                        print("Market Info:", json.dumps(symbol_info, indent=2))
+                        return symbol_info
+                    else:
+                        print(f"Trading pair {symbol} is not currently active")
+                        return None
+                print(f"Trading pair {symbol} not found in exchange")
+                return None
+            else:
+                print("Invalid market info response format")
+                return None
     except Exception as e:
         print(f"Error fetching market info: {e}")
         return None
