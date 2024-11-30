@@ -6,6 +6,7 @@ import os
 import logging
 from dataanalyzer import analyze_market_data
 from holderanalysis import EnhancedKaspaAnalyzer, get_token_top_holders
+from strategy_generator import MarketAnalyzer as StrategyAnalyzer
 
 def collect_all_data(symbol):
     """Collect all data types into a single JSON structure"""
@@ -405,10 +406,30 @@ if __name__ == "__main__":
             print(f"Text report: {holder_text_path}")
             print(f"JSON report: {holder_json_path}")
             
-            # Log holder analysis if logger is available
+            # Generate final strategy recommendation
+            print("\nGenerating final strategy recommendation...")
+            strategy_analyzer = StrategyAnalyzer(
+                analysis_path=json_report,
+                holder_path=holder_json_path,
+                market_data_path=json_path
+            )
+            
+            # Generate and save the final report
+            final_report = strategy_analyzer.generate_market_report()
+            final_report_path = os.path.join(args.output_dir, f"{base_name}_final_strategy.txt")
+            
+            with open(final_report_path, 'w') as f:
+                f.write(final_report)
+                
+            print(f"\nFinal strategy report generated: {final_report_path}")
+            print("\nFinal Strategy Recommendation:")
+            print("-" * 80)
+            print(final_report)
+            
+            # Log analysis completion if logger is available
             if logger:
-                logger.info("Holder analysis completed successfully")
-                logger.info(f"Reports saved to: {holder_text_path} and {holder_json_path}")
+                logger.info("All analyses completed successfully")
+                logger.info(f"Final strategy report saved to: {final_report_path}")
         else:
             print("No holder data available for analysis")
             if logger:
