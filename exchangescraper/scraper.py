@@ -5,13 +5,20 @@ from datetime import datetime
 
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
-    url = f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={symbol.upper()}"
+    # Convert underscore to standard format
+    symbol = symbol.upper().replace('_', '')
+    url = f"https://www.biconomy.com/api/v1/ticker/24hr?symbol={symbol}"
+    
+    print(f"Requesting ticker with URL: {url}")
     
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
         }
         response = requests.get(url, headers=headers, timeout=10)
+        print(f"Response status code: {response.status_code}")
+        print(f"Response headers: {response.headers}")
+        print(f"Response content: {response.text[:500]}")  # Print first 500 chars of response
         response.raise_for_status()
         data = response.json()
         
