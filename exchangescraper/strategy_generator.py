@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 from market_analyzer import MarketAnalysisSystem, MarketType, TimeFrame, MarketCondition
+from strategy_selector import StrategySelector, StrategyType, StrategyWeight
 
 @dataclass
 class MarketPosition:
@@ -27,8 +28,9 @@ class MarketAnalyzer:
         self.current_price = float(self.market_data['ticker']['result']['lastPrice'])
         self.volume_24h = float(self.market_data['ticker']['result']['volume'])
         
-        # Initialize market analysis system
+        # Initialize analysis systems
         self.market_analysis = MarketAnalysisSystem()
+        self.strategy_selector = StrategySelector()
         
         # Extract price and volume data
         self.price_data = self._extract_price_data()
@@ -173,11 +175,30 @@ Analysis Confidence: {self.market_condition.confidence:.2%}
 Timestamp: {self.market_condition.timestamp}
 """
         
+        # Get strategy recommendations
+        strategies = self.strategy_selector.select_strategy(
+            self.market_condition,
+            self.holder_data['risk_metrics']
+        )
+        
+        # Format strategy recommendations
+        strategy_analysis = "\nStrategy Recommendations:\n"
+        strategy_analysis += "-" * 25 + "\n"
+        for strat in strategies:
+            strategy_analysis += f"""
+Strategy: {strat.strategy_type.value}
+Weight: {strat.weight:.2%}
+Confidence: {strat.confidence:.2%}
+Timeframe: {strat.timeframe.value}
+"""
+        
         report = f"""
 Market Analysis Report - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 =================================================================
 
 {market_analysis}
+
+{strategy_analysis}
 
 Current Market Status:
 ---------------------
