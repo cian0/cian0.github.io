@@ -1,5 +1,5 @@
 import unittest
-from scraper import get_ticker, get_recent_trades, get_market_info, get_orderbook_rest
+from .scraper import get_ticker, get_recent_trades, get_market_info, get_orderbook_rest
 
 class TestScraper(unittest.TestCase):
     def setUp(self):
