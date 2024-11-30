@@ -160,15 +160,14 @@ def get_market_info(symbol):
 
 def get_orderbook_rest(symbol):
     """Fetch orderbook data from Biconomy exchange"""
-    formatted_symbol = symbol.replace('_', '').lower()
-    url = "https://api.biconomy.com/api/v1/depth"
+    formatted_symbol = symbol.upper()
+    url = "https://www.biconomy.com/api/v1/depth"
     params = {
-        'symbol': formatted_symbol,
-        'size': '50'  # Default depth size
+        'symbol': formatted_symbol
     }
     headers = {
-        'X-SITE-ID': '127',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        'Accept': 'application/json'
     }
     
     try:
