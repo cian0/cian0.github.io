@@ -132,10 +132,7 @@ def get_market_info(symbol):
     }
     
     try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-        }
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, params=params, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
         
@@ -143,13 +140,7 @@ def get_market_info(symbol):
             print("Empty response received from market info endpoint")
             return None
             
-        if isinstance(data, dict):
-            if data.get('code') not in [0, 200]:
-                error_msg = data.get('message', 'Unknown error')
-                print(f"API Error: {error_msg}")
-                return None
-                
-            if 'data' in data and isinstance(data['data'], list):
+        if isinstance(data, dict) and 'data' in data and isinstance(data['data'], list):
                 # Convert symbol to uppercase for comparison
                 formatted_symbol = formatted_symbol.upper()
                 # Find the specific symbol info

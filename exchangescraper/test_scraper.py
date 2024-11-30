@@ -17,8 +17,10 @@ class TestScraper(unittest.TestCase):
     def test_get_recent_trades(self):
         trades = get_recent_trades(self.test_symbol)
         self.assertIsNotNone(trades)
-        if trades.get('code') == 0:
-            self.assertTrue('result' in trades)
+        self.assertTrue(isinstance(trades, list))
+        if trades:
+            self.assertTrue('amount' in trades[0])
+            self.assertTrue('price' in trades[0])
             
     def test_get_market_info(self):
         info = get_market_info(self.test_symbol)
