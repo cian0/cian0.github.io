@@ -245,7 +245,7 @@ def analyze_market_data(json_file: str, output_dir: str = "exchangescraper/repor
 
 # Example usage:
 if __name__ == "__main__":
-    text_file, json_file = analyze_market_data('exchangescraper/market_data2.log.json')
+    text_file, json_file = analyze_market_data('exchangescraper/marketdata/market_data2.log.json')
     print(f"Text report saved to: {text_file}")
     print(f"JSON report saved to: {json_file}")
     
