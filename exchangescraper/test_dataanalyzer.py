@@ -4,22 +4,21 @@ from .dataanalyzer import MarketAnalyzer
 class TestMarketAnalyzer(unittest.TestCase):
     def setUp(self):
         # Sample market data for testing
-        self.sample_data = """
-2024-11-30 11:37:34 - Starting data collection for WADU_USDT
+        self.sample_data = """2024-11-30 11:37:34 - Starting data collection for WADU_USDT
 2024-11-30 11:37:34 - 
 Orderbook at 2024-11-30 11:37:34.693000
 
 Bids (Buy Orders):
-Price		Quantity
+Price\t\tQuantity
 ------------------------------
-0.00058340	1875915.94000000
-0.00058330	5783.43000000
+0.00058340\t1875915.94000000
+0.00058330\t5783.43000000
 
 Asks (Sell Orders):
-Price		Quantity
+Price\t\tQuantity
 ------------------------------
-0.00066000	94969.69000000
-0.00070000	2440069.99000000
+0.00066000\t94969.69000000
+0.00070000\t2440069.99000000
 
 2024-11-30 11:37:35 - Ticker data: {
   "code": 0,
@@ -34,10 +33,10 @@ Price		Quantity
 }
 
 Recent Trades:
-Amount (WADU)	Price (USDT)	Side		Time
+Amount (WADU)\tPrice (USDT)\tSide\t\tTime
 --------------------------------------------------------------------------------
-193123.94		0.00063531		sell		2024-11-30 11:36:32
-201485.55		0.00063687		sell		2024-11-30 11:35:26
+193123.94\t\t0.00063531\t\tsell\t\t2024-11-30 11:36:32
+201485.55\t\t0.00063687\t\tsell\t\t2024-11-30 11:35:26
 
 Market info: {
   "symbol": "WADU_USDT",
@@ -46,8 +45,7 @@ Market info: {
   "quoteAsset": "USDT",
   "baseAssetPrecision": 2,
   "quoteAssetPrecision": 8
-}
-"""
+}"""
         self.analyzer = MarketAnalyzer(self.sample_data)
         self.analyzer.parse_data()
 
