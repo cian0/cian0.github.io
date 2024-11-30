@@ -11,13 +11,27 @@ def get_ticker(symbol):
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
         }
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
+        
+        if data.get('code') not in [0, 200]:
+            print(f"API Error: {data.get('message', 'Unknown error')}")
+            return None
+            
         print("Ticker Response:", json.dumps(data, indent=2))
         return data
+    except requests.exceptions.Timeout:
+        print("Request timed out while fetching ticker")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"Network error fetching ticker: {e}")
+        return None
+    except json.JSONDecodeError:
+        print("Invalid JSON response from ticker endpoint")
+        return None
     except Exception as e:
-        print(f"Error fetching ticker: {e}")
+        print(f"Unexpected error fetching ticker: {e}")
         return None
 
 def get_recent_trades(symbol, limit=20):
@@ -28,13 +42,27 @@ def get_recent_trades(symbol, limit=20):
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
         }
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
+        
+        if data.get('code') not in [0, 200]:
+            print(f"API Error: {data.get('message', 'Unknown error')}")
+            return None
+            
         print("Trades Response:", json.dumps(data, indent=2))
         return data
+    except requests.exceptions.Timeout:
+        print("Request timed out while fetching trades")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"Network error fetching trades: {e}")
+        return None
+    except json.JSONDecodeError:
+        print("Invalid JSON response from trades endpoint")
+        return None
     except Exception as e:
-        print(f"Error fetching trades: {e}")
+        print(f"Unexpected error fetching trades: {e}")
         return None
 
 def get_market_info(symbol):
