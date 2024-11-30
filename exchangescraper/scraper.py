@@ -160,7 +160,7 @@ def get_market_info(symbol):
 
 def get_orderbook_rest(symbol):
     """Fetch orderbook data from Biconomy exchange"""
-    formatted_symbol = symbol.replace('_', '')
+    formatted_symbol = symbol.replace('_', '').lower()
     url = "https://api.biconomy.com/api/v1/depth"
     params = {
         'symbol': formatted_symbol,
