@@ -360,19 +360,19 @@ if __name__ == "__main__":
         json.dump(all_data, f, indent=2)
         
     # Generate analysis reports using dataanalyzer
-        try:
-            text_report, json_report = analyze_market_data(json_path, args.output_dir, base_name)
-            print(f"\nAnalysis reports generated:")
-            print(f"Text report: {text_report}")
-            print(f"JSON report: {json_report}")
-            
-            # Display the text report content
-            with open(text_report, 'r') as f:
-                print("\nMarket Analysis Report:")
-                print("-" * 80)
-                print(f.read())
-        except Exception as e:
-            print(f"\nError generating analysis reports: {e}")
+    try:
+        text_report, json_report = analyze_market_data(json_path, args.output_dir, base_name)
+        print(f"\nAnalysis reports generated:")
+        print(f"Text report: {text_report}")
+        print(f"JSON report: {json_report}")
+        
+        # Display the text report content
+        with open(text_report, 'r') as f:
+            print("\nMarket Analysis Report:")
+            print("-" * 80)
+            print(f.read())
+    except Exception as e:
+        print(f"\nError generating analysis reports: {e}")
     
     if args.type in ['orderbook', 'all']:
         orderbook = get_orderbook_rest(args.symbol)
