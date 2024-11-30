@@ -28,29 +28,31 @@ def get_ticker(symbol):
                 response = requests.get(url, headers=headers, timeout=10)
                 print(f"Response status code: {response.status_code}")
                 print(f"Response content: {response.text[:500]}")
-        response.raise_for_status()
-        data = response.json()
-        
-        # Handle empty or error responses
-        if not data:
-            print("Empty response received from ticker endpoint")
-            return None
-            
-        if isinstance(data, dict):
-            if data.get('code') not in [0, 200]:
-                error_msg = data.get('message', 'Unknown error')
-                if data.get('code') == 0 and data.get('result'):
-                    return data
                 
-                error_msg = data.get('message', 'Unknown error')
-                if '暂无记录' in str(error_msg) or 'Invalid symbol' in str(error_msg):
-                    # Continue to try next URL/format
+                response.raise_for_status()
+                data = response.json()
+                
+                # Handle empty or error responses
+                if not data:
+                    print("Empty response received from ticker endpoint")
                     continue
-                else:
-                    print(f"API Error: {error_msg}")
-            
-            # If we got a response but couldn't parse it as expected, try next URL
-            continue
+                    
+                if isinstance(data, dict):
+                    if data.get('code') not in [0, 200]:
+                        error_msg = data.get('message', 'Unknown error')
+                        if data.get('code') == 0 and data.get('result'):
+                            return data
+                        
+                        error_msg = data.get('message', 'Unknown error')
+                        if '暂无记录' in str(error_msg) or 'Invalid symbol' in str(error_msg):
+                            # Continue to try next URL/format
+                            continue
+                        else:
+                            print(f"API Error: {error_msg}")
+                    
+                    # If we got a response but couldn't parse it as expected, try next URL
+                    continue
+                
             except requests.exceptions.Timeout:
                 print(f"Request timed out for URL: {url}")
                 continue
