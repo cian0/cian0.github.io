@@ -125,7 +125,13 @@ class EnhancedKaspaAnalyzer:
         
         # Calculate transaction metrics
         avg_tx_size = df['actual_transfer'].mean()
-        tx_frequency = len(df) / (df['block_time'].max() - df['block_time'].min()).days
+        
+        # Calculate transaction frequency with error handling
+        time_diff = df['block_time'].max() - df['block_time'].min()
+        if time_diff.total_seconds() == 0:
+            tx_frequency = 0  # If all transactions happened at the same time
+        else:
+            tx_frequency = len(df) / (time_diff.days + 1)  # Add 1 to avoid division by zero
         
         # Calculate whale correlation
         whale_corr = self._calculate_whale_correlation(df)
