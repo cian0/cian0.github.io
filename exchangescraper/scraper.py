@@ -136,15 +136,17 @@ def get_market_info(symbol):
         response.raise_for_status()
         data = response.json()
         
+        print(f"Market Info Response: {json.dumps(data, indent=2)}")
+        
         if not data:
             print("Empty response received from market info endpoint")
             return None
             
-        if isinstance(data, dict) and 'data' in data and isinstance(data['data'], list):
+        if isinstance(data, dict) and 'symbols' in data:
             # Convert symbol to uppercase for comparison
             formatted_symbol = formatted_symbol.upper()
             # Find the specific symbol info
-            symbol_info = next((s for s in data['data'] if s.get('symbol', '').upper() == formatted_symbol), None)
+            symbol_info = next((s for s in data['symbols'] if s.get('symbol', '').upper() == formatted_symbol), None)
             if symbol_info:
                 return {
                     'symbol': symbol_info.get('symbol'),
