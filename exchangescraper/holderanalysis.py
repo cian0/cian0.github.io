@@ -1,14 +1,38 @@
 import requests
 import pandas as pd
-from datetime import datetime
-import time
+import numpy as np
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional
+from dataclasses import dataclass, asdict
+import matplotlib.pyplot as plt
+from scipy import stats
+import sys
 import json
+import os
 
-class KaspaAnalyzer:
+@dataclass
+class HolderMetrics:
+    accumulation_score: float  # -1 to 1, where 1 is heavy accumulation
+    volatility_score: float   # 0 to 1, where 1 is highly volatile
+    holding_pattern: str      # 'accumulating', 'distributing', 'hodling'
+    avg_transaction_size: float
+    transaction_frequency: float
+    whale_correlation: float  # correlation with other whale movements
+
+    def to_dict(self):
+        return asdict(self)
+
+class EnhancedKaspaAnalyzer:
     def __init__(self):
         self.base_url = "https://api.kaspa.org"
         self.session = requests.Session()
-        self.KAS_DECIMALS = 100000000  # 10^8 conversion factor
+        self.KAS_DECIMALS = 100000000
+        self.market_data = {}
+
+    # def __init__(self):
+    #     self.base_url = "https://api.kaspa.org"
+    #     self.session = requests.Session()
+    #     self.KAS_DECIMALS = 100000000  # 10^8 conversion factor
         
     def get_address_transactions(self, address, limit=50, offset=0):
         try:
@@ -86,52 +110,317 @@ class KaspaAnalyzer:
             df[col] = pd.to_numeric(df[col], errors='coerce')
             
         return df
+    
+    def calculate_holder_behavior(self, df: pd.DataFrame) -> HolderMetrics:
+        """Calculate sophisticated holder behavior metrics."""
+        if df.empty:
+            return None
+            
+        # Calculate accumulation score
+        recent_window = df.sort_values('block_time', ascending=False).head(10)
+        net_flow = recent_window['actual_transfer'].sum()
+        total_volume = recent_window['total_output'].sum()
+        accumulation_score = net_flow / total_volume if total_volume != 0 else 0
+        
+        # Calculate volatility score
+        volatility = df['actual_transfer'].std() / df['actual_transfer'].mean() if len(df) > 1 else 0
+        volatility_score = min(1, volatility)
+        
+        # Determine holding pattern
+        recent_pattern = self._analyze_holding_pattern(df)
+        
+        # Calculate transaction metrics
+        avg_tx_size = df['actual_transfer'].mean()
+        
+        # Calculate transaction frequency with error handling
+        time_diff = df['block_time'].max() - df['block_time'].min()
+        if time_diff.total_seconds() == 0:
+            tx_frequency = 0  # If all transactions happened at the same time
+        else:
+            tx_frequency = len(df) / (time_diff.days + 1)  # Add 1 to avoid division by zero
+        
+        # Calculate whale correlation
+        whale_corr = self._calculate_whale_correlation(df)
+        
+        return HolderMetrics(
+            accumulation_score=accumulation_score,
+            volatility_score=volatility_score,
+            holding_pattern=recent_pattern,
+            avg_transaction_size=avg_tx_size,
+            transaction_frequency=tx_frequency,
+            whale_correlation=whale_corr
+        )
+    
+    def _analyze_holding_pattern(self, df: pd.DataFrame) -> str:
+        """Analyze the holding pattern based on transaction history."""
+        df = df.sort_values('block_time')
+        
+        # Calculate moving averages
+        df['ma_7'] = df['actual_transfer'].rolling(7).mean()
+        df['ma_30'] = df['actual_transfer'].rolling(30).mean()
+        
+        if len(df) < 30:
+            return 'insufficient_data'
+            
+        recent_ma7 = df['ma_7'].iloc[-1]
+        recent_ma30 = df['ma_30'].iloc[-1]
+        
+        if recent_ma7 > recent_ma30 * 1.1:
+            return 'accumulating'
+        elif recent_ma7 < recent_ma30 * 0.9:
+            return 'distributing'
+        else:
+            return 'hodling'
+    
+    def _calculate_whale_correlation(self, df: pd.DataFrame) -> float:
+        """Calculate correlation with typical whale behavior patterns."""
+        # This would normally correlate with other whale addresses
+        # For now, using a simplified metric based on transaction sizes
+        large_tx_ratio = len(df[df['actual_transfer'] > df['actual_transfer'].mean()]) / len(df)
+        return large_tx_ratio
 
-    def analyze_address_transactions(self, address, days_back=30):
-        df = self.get_address_transactions(address)
+    def analyze_holder_risk(self, holder_metrics: List[HolderMetrics]) -> Dict:
+        """Analyze collective holder behavior for risk assessment."""
+        accumulation_scores = [h.accumulation_score for h in holder_metrics if h]
+        volatility_scores = [h.volatility_score for h in holder_metrics if h]
         
-        if df is None or df.empty:
-            print(f"No transactions found for {address}")
-            return
+        risk_metrics = {
+            'holder_concentration': self._calculate_holder_concentration(holder_metrics),
+            'accumulation_pressure': np.mean(accumulation_scores) if accumulation_scores else 0,
+            'collective_volatility': np.mean(volatility_scores) if volatility_scores else 0,
+            'whale_consensus': self._calculate_whale_consensus(holder_metrics)
+        }
         
-        print(f"\nTransaction Analysis for {address}")
-        print("="*50)
-        print(f"Total transactions analyzed: {len(df)}")
-        print(f"First transaction: {df['block_time'].min()}")
-        print(f"Last transaction: {df['block_time'].max()}")
+        return risk_metrics
+    
+    def _calculate_holder_concentration(self, holder_metrics: List[HolderMetrics]) -> float:
+        """Calculate holder concentration (Herfindahl-Hirschman Index adapted)."""
+        if not holder_metrics:
+            return 0
         
-        if df['mass'].notna().any():
-            print(f"Average transaction mass: {df['mass'].mean():.2f}")
+        tx_sizes = [h.avg_transaction_size for h in holder_metrics if h]
+        total_size = sum(tx_sizes)
         
-        if df['fee'].notna().any():
-            print(f"Average fee: {df['fee'].mean():.8f} KAS")
+        if total_size == 0:
+            return 0
+            
+        market_shares = [size/total_size for size in tx_sizes]
+        hhi = sum(share * share for share in market_shares)
         
-        print("\nTransaction Patterns:")
-        print("-"*30)
-        print(f"Average actual transfer: {df['actual_transfer'].mean():.8f} KAS")
-        print(f"Total volume transferred: {df['actual_transfer'].sum():.8f} KAS")
-        print(f"Largest transfer: {df['actual_transfer'].max():.8f} KAS")
-        print(f"Smallest transfer: {df['actual_transfer'].min():.8f} KAS")
+        return hhi
+
+    def _calculate_whale_consensus(self, holder_metrics: List[HolderMetrics]) -> float:
+        """Calculate degree of consensus among whale behavior."""
+        if not holder_metrics:
+            return 0
+            
+        patterns = [h.holding_pattern for h in holder_metrics if h]
+        if not patterns:
+            return 0
+            
+        accumulating = patterns.count('accumulating') / len(patterns)
+        distributing = patterns.count('distributing') / len(patterns)
         
-        # Print recent transactions
-        print("\nRecent Transactions:")
-        print("-"*30)
-        recent_txs = df.sort_values('block_time', ascending=False).head(5)
-        for _, tx in recent_txs.iterrows():
-            print(f"ID: {tx['transaction_id']}")
-            print(f"Time: {tx['block_time']}")
-            print(f"Actual transfer amount: {tx['actual_transfer']:.8f} KAS")
-            print("Outputs:")
-            for output in tx['outputs_detail']:
-                print(f"  {'(CHANGE) ' if output['is_change'] else ''}{output['amount']:.8f} KAS to {output['address']}")
-            print("-"*30)
+        # Return consensus score (-1 to 1, where 1 is strong accumulation consensus)
+        return accumulating - distributing
+
+    def generate_holder_analysis_report(self, addresses: List[str]) -> Dict:
+        """Generate comprehensive holder analysis report."""
+        holder_metrics = []
+        detailed_metrics = {}
+        
+        for address in addresses:
+            df = self.get_address_transactions(address)
+            if df is not None and not df.empty:
+                metrics = self.calculate_holder_behavior(df)
+                holder_metrics.append(metrics)
+                detailed_metrics[address] = metrics.to_dict() if metrics else None
+        
+        risk_metrics = self.analyze_holder_risk(holder_metrics)
+        
+        report = {
+            'risk_metrics': risk_metrics,
+            'holder_metrics': detailed_metrics,
+            'market_signals': self._generate_market_signals(risk_metrics, holder_metrics)
+        }
+        
+        return report
+
+    def _generate_market_signals(self, risk_metrics: Dict, holder_metrics: List[HolderMetrics]) -> Dict:
+        """Generate actionable market signals based on holder analysis."""
+        signals = {
+            'accumulation_signal': self._calculate_accumulation_signal(risk_metrics, holder_metrics),
+            'volatility_warning': self._calculate_volatility_warning(risk_metrics, holder_metrics),
+            'whale_movement_alert': self._calculate_whale_alert(holder_metrics),
+            'market_strength': self._calculate_market_strength(risk_metrics)
+        }
+        
+        return signals
+
+    def _calculate_accumulation_signal(self, risk_metrics: Dict, holder_metrics: List[HolderMetrics]) -> Dict:
+        """Calculate accumulation signal strength."""
+        accumulation_pressure = risk_metrics.get('accumulation_pressure', 0)
+        whale_consensus = risk_metrics.get('whale_consensus', 0)
+        
+        signal_strength = (accumulation_pressure + whale_consensus) / 2
+        
+        return {
+            'signal': 'accumulate' if signal_strength > 0.3 else 'hold' if signal_strength > -0.3 else 'distribute',
+            'strength': abs(signal_strength),
+            'confidence': min(1, abs(whale_consensus) * 2)
+        }
+
+    def _calculate_volatility_warning(self, risk_metrics: Dict, holder_metrics: List[HolderMetrics]) -> Dict:
+        """Calculate volatility warning level."""
+        collective_volatility = risk_metrics.get('collective_volatility', 0)
+        concentration = risk_metrics.get('holder_concentration', 0)
+        
+        warning_level = (collective_volatility + concentration) / 2
+        
+        return {
+            'level': warning_level,
+            'risk_category': 'high' if warning_level > 0.7 else 'medium' if warning_level > 0.3 else 'low',
+            'volatility_trend': 'increasing' if collective_volatility > 0.5 else 'stable'
+        }
+
+    def _calculate_whale_alert(self, holder_metrics: List[HolderMetrics]) -> Dict:
+        """Generate whale movement alerts."""
+        if not holder_metrics:
+            return {'alert_level': 'none', 'movement_type': None}
+            
+        active_whales = sum(1 for h in holder_metrics if h and h.transaction_frequency > 0.5)
+        total_whales = len([h for h in holder_metrics if h])
+        
+        if total_whales == 0:
+            return {'alert_level': 'none', 'movement_type': None}
+            
+        whale_activity_ratio = active_whales / total_whales
+        
+        return {
+            'alert_level': 'high' if whale_activity_ratio > 0.3 else 'medium' if whale_activity_ratio > 0.1 else 'low',
+            'movement_type': 'accumulation' if sum(h.accumulation_score > 0 for h in holder_metrics if h) > total_whales/2 else 'distribution',
+            'activity_ratio': whale_activity_ratio
+        }
+
+    def _calculate_market_strength(self, risk_metrics: Dict) -> Dict:
+        """Calculate overall market strength indicator."""
+        if not risk_metrics:
+            return {'strength': 0, 'confidence': 0}
+            
+        accumulation = risk_metrics.get('accumulation_pressure', 0)
+        concentration = risk_metrics.get('holder_concentration', 0)
+        consensus = risk_metrics.get('whale_consensus', 0)
+        
+        strength = (accumulation + (1-concentration) + consensus) / 3
+        confidence = min(1, abs(consensus) * (1-concentration))
+        
+        return {
+            'strength': strength,
+            'confidence': confidence,
+            'market_phase': 'accumulation' if strength > 0.3 else 'distribution' if strength < -0.3 else 'consolidation',
+            'suggested_position': 'aggressive' if strength > 0.5 else 'conservative' if strength < -0.5 else 'neutral'
+        }
+
+def get_wadu_top_holders():
+    """Fetch top WADU token holders from KAS API"""
+    try:
+        url = "https://api-v2-do.kas.fyi/token/krc20/WADU/info"
+        params = {
+            "includeCharts": "false",
+            "interval": "1d"
+        }
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        # Extract holder addresses from the response
+        holders = []
+        if "holders" in data:
+            holders = [holder["address"] for holder in data["holders"]]
+            
+        return holders[:10]  # Return top 10 holders
+    except Exception as e:
+        print(f"Error fetching WADU holders: {e}")
+        return []
+
+def save_analysis_to_files(analysis: Dict, base_path: str) -> None:
+    """Save analysis results to both text and JSON files."""
+    # Save JSON
+    json_path = f"{base_path}.json"
+    with open(json_path, 'w') as f:
+        json.dump(analysis, f, indent=2)
+
+    # Save text report
+    txt_path = f"{base_path}.txt"
+    with open(txt_path, 'w') as f:
+        f.write("Market Analysis Report\n")
+        f.write("=" * 50 + "\n\n")
+        
+        f.write("Risk Metrics:\n")
+        f.write("------------\n")
+        f.write(f"holder_concentration: {analysis['risk_metrics']['holder_concentration']:.4f}\n")
+        f.write("  (0-1 scale: Higher values indicate fewer holders control more tokens)\n\n")
+        
+        f.write(f"accumulation_pressure: {analysis['risk_metrics']['accumulation_pressure']:.4f}\n")
+        f.write("  (-1 to 1 scale: Positive values suggest buying pressure, negative suggests selling)\n\n")
+        
+        f.write(f"collective_volatility: {analysis['risk_metrics']['collective_volatility']:.4f}\n")
+        f.write("  (0-1 scale: Higher values indicate more price swings)\n\n")
+        
+        f.write(f"whale_consensus: {analysis['risk_metrics']['whale_consensus']:.4f}\n")
+        f.write("  (-1 to 1 scale: Positive when whales agree on accumulating, negative when distributing)\n\n")
+
+        f.write("Market Signals:\n")
+        f.write("--------------\n")
+        
+        acc_signal = analysis['market_signals']['accumulation_signal']
+        f.write("\nAccumulation Signal:\n")
+        f.write(f"  Signal: {acc_signal['signal']} (accumulate/hold/distribute)\n")
+        f.write(f"  Strength: {acc_signal['strength']:.4f} (0-1 scale)\n")
+        f.write(f"  Confidence: {acc_signal['confidence']:.4f} (0-1 scale)\n")
+
+        vol_warning = analysis['market_signals']['volatility_warning']
+        f.write("\nVolatility Warning:\n")
+        f.write(f"  Risk Level: {vol_warning['level']:.4f} (0-1 scale)\n")
+        f.write(f"  Category: {vol_warning['risk_category']}\n")
+        f.write(f"  Trend: {vol_warning['volatility_trend']}\n")
+
+        whale_alert = analysis['market_signals']['whale_movement_alert']
+        f.write("\nWhale Movement:\n")
+        f.write(f"  Alert Level: {whale_alert['alert_level']}\n")
+        f.write(f"  Movement Type: {whale_alert['movement_type']}\n")
+        f.write(f"  Activity Ratio: {whale_alert['activity_ratio']:.4f} (0-1 scale)\n")
+
+        strength = analysis['market_signals']['market_strength']
+        f.write("\nMarket Strength:\n")
+        f.write(f"  Overall Strength: {strength['strength']:.4f} (-1 to 1 scale)\n")
+        f.write(f"  Confidence: {strength['confidence']:.4f} (0-1 scale)\n")
+        f.write(f"  Market Phase: {strength['market_phase']}\n")
+        f.write(f"  Suggested Position: {strength['suggested_position']}\n")
 
 def main():
-    analyzer = KaspaAnalyzer()
-    address = "kaspa:qz9z99fck3kxx3mpawh30h3x3h5zdmxdjefagyw34uzngzuhfnszvc9w5j0ua"
+    # Check if output path was provided
+    output_path = sys.argv[1] if len(sys.argv) > 1 else None
+    analyzer = EnhancedKaspaAnalyzer()
     
-    print("Analyzing transaction history...")
-    analyzer.analyze_address_transactions(address)
+    # Fetch top WADU token holders
+    top_holders = get_wadu_top_holders()
+    if not top_holders:
+        print("Failed to fetch top holders, using default addresses")
+        top_holders = [
+            "kaspa:qr5lj3uyfvduuhy38wwnl8942t4ckznjsma3pgnsc552qmpdga4959pae88u0"
+        ]
+    
+    print("Generating comprehensive holder analysis...")
+    analysis = analyzer.generate_holder_analysis_report(top_holders)
+    
+    if output_path:
+        # Save to files
+        save_analysis_to_files(analysis, output_path)
+        print(f"Analysis saved to {output_path}.json and {output_path}.txt")
+    else:
+        # Print to console
+        print(json.dumps(analysis, indent=2))
 
 if __name__ == "__main__":
     main()

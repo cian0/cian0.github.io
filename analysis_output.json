@@ -1,0 +1,105 @@
+{
+  "risk_metrics": {
+    "holder_concentration": 0.5834164410928718,
+    "accumulation_pressure": 0.16776052273166414,
+    "collective_volatility": 1.0,
+    "whale_consensus": -0.33333333333333337
+  },
+  "holder_metrics": {
+    "kaspa:qr5lj3uyfvduuhy38wwnl8942t4ckznjsma3pgnsc552qmpdga4959pae88u0": {
+      "accumulation_score": 0.03400682558401075,
+      "volatility_score": 1,
+      "holding_pattern": "accumulating",
+      "avg_transaction_size": 18622.34410105,
+      "transaction_frequency": 8.333333333333334,
+      "whale_correlation": 0.14
+    },
+    "kaspa:qrztyfqsvr0fq094sm5ljau9dx69vmnnmf9k0y0zu3g9vdlvfwfuslf6vhxch": {
+      "accumulation_score": 0.1867208570790476,
+      "volatility_score": 1,
+      "holding_pattern": "insufficient_data",
+      "avg_transaction_size": 2333.2666029399998,
+      "transaction_frequency": 3.0,
+      "whale_correlation": 0.13333333333333333
+    },
+    "kaspa:qryg3yagxctrrlyavzpj44q86wf79el7fcxnwc788xp45207w02p5qa6w9f6l": {
+      "accumulation_score": 0.01595215586222097,
+      "volatility_score": 1,
+      "holding_pattern": "hodling",
+      "avg_transaction_size": 19.458832417,
+      "transaction_frequency": 1.4285714285714286,
+      "whale_correlation": 0.08
+    },
+    "kaspa:qpvdfd9f5nhwqtxq2xnx6v2aq2j20melygcmzzl69l0hg4f3daltqq28mkagz": {
+      "accumulation_score": 0.1381820461180977,
+      "volatility_score": 1,
+      "holding_pattern": "distributing",
+      "avg_transaction_size": 4.5969773046,
+      "transaction_frequency": 2.9411764705882355,
+      "whale_correlation": 0.08
+    },
+    "kaspa:qpjdkp4rde5mzrmtkujzazry2zj7xxmxwu7kc5rvqcg0yfjau3a9zeulevaqj": {
+      "accumulation_score": 0.099281558752677,
+      "volatility_score": 1,
+      "holding_pattern": "distributing",
+      "avg_transaction_size": 757.5498490184,
+      "transaction_frequency": 2.0,
+      "whale_correlation": 0.24
+    },
+    "kaspa:qzt7566msdms7h4q20sr6f64uk6xlnkd6q33g7v5l45rteyjwcqnqtt74rcvf": {
+      "accumulation_score": 0.4830795127638441,
+      "volatility_score": 1,
+      "holding_pattern": "distributing",
+      "avg_transaction_size": 707.6853393990243,
+      "transaction_frequency": 0.24550898203592814,
+      "whale_correlation": 0.12195121951219512
+    },
+    "kaspa:qz9awkm5fpmza2r7mtqu7ms0p3pm4mwla76ns5lftw2p5gm58zfl5rh36rthx": {
+      "accumulation_score": 0.148292989462978,
+      "volatility_score": 1,
+      "holding_pattern": "accumulating",
+      "avg_transaction_size": 176.79937131857142,
+      "transaction_frequency": 8.166666666666666,
+      "whale_correlation": 0.061224489795918366
+    },
+    "kaspa:qpkypygcdsmegkd9e362awjjevz2skqwx79evgdv0gkppdyf7h6njnsscw2x5": {
+      "accumulation_score": 0.3659157081962776,
+      "volatility_score": 1,
+      "holding_pattern": "distributing",
+      "avg_transaction_size": 72.724811257,
+      "transaction_frequency": 1.4705882352941178,
+      "whale_correlation": 0.18
+    },
+    "kaspa:qznlfae354k3s3urjcw5ar50jneua9akq6lwe756zgev4vh8wun5xnp3azvqc": {
+      "accumulation_score": 0.03841305076582374,
+      "volatility_score": 1,
+      "holding_pattern": "distributing",
+      "avg_transaction_size": 2063.4010250881997,
+      "transaction_frequency": 50.0,
+      "whale_correlation": 0.08
+    }
+  },
+  "market_signals": {
+    "accumulation_signal": {
+      "signal": "hold",
+      "strength": 0.08278640530083461,
+      "confidence": 0.6666666666666667
+    },
+    "volatility_warning": {
+      "level": 0.7917082205464359,
+      "risk_category": "high",
+      "volatility_trend": "increasing"
+    },
+    "whale_movement_alert": {
+      "alert_level": "high",
+      "movement_type": "accumulation",
+      "activity_ratio": 0.8888888888888888
+    },
+    "market_strength": {
+      "strength": 0.083670249435153,
+      "confidence": 0.13886118630237607,
+      "market_phase": "consolidation",
+      "suggested_position": "neutral"
+    }
+  }
+}

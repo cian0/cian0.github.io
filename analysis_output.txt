@@ -1,0 +1,40 @@
+Market Analysis Report
+==================================================
+
+Risk Metrics:
+------------
+holder_concentration: 0.5834
+  (0-1 scale: Higher values indicate fewer holders control more tokens)
+
+accumulation_pressure: 0.1678
+  (-1 to 1 scale: Positive values suggest buying pressure, negative suggests selling)
+
+collective_volatility: 1.0000
+  (0-1 scale: Higher values indicate more price swings)
+
+whale_consensus: -0.3333
+  (-1 to 1 scale: Positive when whales agree on accumulating, negative when distributing)
+
+Market Signals:
+--------------
+
+Accumulation Signal:
+  Signal: hold (accumulate/hold/distribute)
+  Strength: 0.0828 (0-1 scale)
+  Confidence: 0.6667 (0-1 scale)
+
+Volatility Warning:
+  Risk Level: 0.7917 (0-1 scale)
+  Category: high
+  Trend: increasing
+
+Whale Movement:
+  Alert Level: high
+  Movement Type: accumulation
+  Activity Ratio: 0.8889 (0-1 scale)
+
+Market Strength:
+  Overall Strength: 0.0837 (-1 to 1 scale)
+  Confidence: 0.1389 (0-1 scale)
+  Market Phase: consolidation
+  Suggested Position: neutral
