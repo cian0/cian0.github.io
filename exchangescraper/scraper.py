@@ -4,7 +4,7 @@ import argparse
 from datetime import datetime
 import os
 import logging
-import json
+from dataanalyzer import analyze_market_data
 
 def collect_all_data(symbol):
     """Collect all data types into a single JSON structure"""
@@ -353,6 +353,21 @@ if __name__ == "__main__":
         all_data = collect_all_data(args.symbol)
         with open(json_path, 'w') as f:
             json.dump(all_data, f, indent=2)
+            
+        # Generate analysis reports using dataanalyzer
+        try:
+            text_report, json_report = analyze_market_data(json_path)
+            print(f"\nAnalysis reports generated:")
+            print(f"Text report: {text_report}")
+            print(f"JSON report: {json_report}")
+            
+            # Display the text report content
+            with open(text_report, 'r') as f:
+                print("\nMarket Analysis Report:")
+                print("-" * 80)
+                print(f.read())
+        except Exception as e:
+            print(f"\nError generating analysis reports: {e}")
     
     if args.type in ['orderbook', 'all']:
         orderbook = get_orderbook_rest(args.symbol)
