@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import logging
 from dataanalyzer import analyze_market_data
+from holderanalysis import EnhancedKaspaAnalyzer, get_wadu_top_holders
 
 def collect_all_data(symbol):
     """Collect all data types into a single JSON structure"""
@@ -371,8 +372,52 @@ if __name__ == "__main__":
             print("\nMarket Analysis Report:")
             print("-" * 80)
             print(f.read())
+
+        # Generate holder analysis
+        print("\nGenerating holder analysis...")
+        analyzer = EnhancedKaspaAnalyzer()
+        top_holders = get_wadu_top_holders()
+        
+        if top_holders:
+            holder_analysis = analyzer.generate_holder_analysis_report(top_holders)
+            
+            # Save holder analysis reports
+            holder_text_path = os.path.join(args.output_dir, f"{base_name}_holder_analysis.txt")
+            holder_json_path = os.path.join(args.output_dir, f"{base_name}_holder_analysis.json")
+            
+            with open(holder_json_path, 'w') as f:
+                json.dump(holder_analysis, f, indent=2)
+                
+            with open(holder_text_path, 'w') as f:
+                f.write("HOLDER ANALYSIS REPORT\n")
+                f.write("=" * 50 + "\n\n")
+                f.write(f"Generated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+                f.write("Risk Metrics:\n")
+                f.write("-" * 50 + "\n")
+                for key, value in holder_analysis['risk_metrics'].items():
+                    f.write(f"{key}: {value}\n")
+                f.write("\nMarket Signals:\n")
+                f.write("-" * 50 + "\n")
+                for key, value in holder_analysis['market_signals'].items():
+                    f.write(f"{key}: {json.dumps(value, indent=2)}\n")
+                    
+            print(f"\nHolder analysis reports generated:")
+            print(f"Text report: {holder_text_path}")
+            print(f"JSON report: {holder_json_path}")
+            
+            # Log holder analysis if logger is available
+            if logger:
+                logger.info("Holder analysis completed successfully")
+                logger.info(f"Reports saved to: {holder_text_path} and {holder_json_path}")
+        else:
+            print("No holder data available for analysis")
+            if logger:
+                logger.warning("No holder data available for analysis")
+                
     except Exception as e:
         print(f"\nError generating analysis reports: {e}")
+        if logger:
+            logger.error(f"Error generating analysis reports: {e}")
     
     if args.type in ['orderbook', 'all']:
         orderbook = get_orderbook_rest(args.symbol)
