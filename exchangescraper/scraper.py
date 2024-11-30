@@ -7,19 +7,28 @@ def get_orderbook_rest(symbol):
     url = f"https://www.biconomy.com/api/v1/depth?symbol={symbol}"
     
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            if data['code'] == 200:  # Biconomy specific success code
-                return {
-                    'bids': data['data']['bids'],
-                    'asks': data['data']['asks'],
-                    'timestamp': data['data']['timestamp']
-                }
-            else:
-                print(f"API Error: {data['msg']}")
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for bad status codes
+        
+        data = response.json()
+        # Print response for debugging
+        print("API Response:", json.dumps(data, indent=2))
+        
+        if 'data' in data:
+            return {
+                'bids': data.get('data', {}).get('bids', []),
+                'asks': data.get('data', {}).get('asks', []),
+                'timestamp': data.get('data', {}).get('timestamp', int(datetime.now().timestamp() * 1000))
+            }
         else:
-            print(f"HTTP Error: {response.status_code}")
+            print(f"Unexpected API response structure: {data}")
+    except requests.exceptions.RequestException as e:
+        print(f"Request Error: {e}")
+    except json.JSONDecodeError as e:
+        print(f"JSON Decode Error: {e}")
     except Exception as e:
         print(f"Error fetching orderbook: {e}")
     return None
