@@ -266,9 +266,8 @@ def format_trades_data(trades_response, logger=None):
             logger.info(msg)
         return
         
-    # Extract base and quote assets from the first trade's symbol
-    symbol = trades[0].get('symbol', '') if trades else ''
-    base_asset, quote_asset = symbol.split('_') if '_' in symbol else ('', '')
+    # Extract base and quote assets from the command line symbol argument
+    base_asset, quote_asset = args.symbol.split('_')
     
     output = ["\nRecent Trades:"]
     output.append(f"Amount ({base_asset})\tPrice ({quote_asset})\tSide\t\tTime")
