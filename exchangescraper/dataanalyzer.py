@@ -172,15 +172,41 @@ Note: This is an automated analysis. Please conduct your own research and risk a
 """
         return report
 
-def analyze_market_data(json_file: str) -> str:
-    """Main function to analyze market data and generate report."""
+def analyze_market_data(json_file: str, output_dir: str = "reports") -> str:
+    """Main function to analyze market data and generate report.
+    
+    Args:
+        json_file: Path to JSON input file
+        output_dir: Directory to save the report (default: "reports")
+    
+    Returns:
+        Path to the saved report file
+    """
+    import os
+    from pathlib import Path
+    
+    # Create output directory if it doesn't exist
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    
+    # Generate report
     with open(json_file, 'r') as f:
         analyzer = MarketAnalyzer(f.read())
-    return analyzer.generate_report()
+    report = analyzer.generate_report()
+    
+    # Save report with timestamp
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    output_file = os.path.join(output_dir, f"market_report_{timestamp}.txt")
+    
+    with open(output_file, 'w') as f:
+        f.write(report)
+    
+    return output_file
 
 # Example usage:
 if __name__ == "__main__":
-    # with open('exchangescraper/output.log.json', 'r') as f:
-    #     raw_data = f.read()
-    report = analyze_market_data('exchangescraper/output.log.json')
-    print(report)
+    report_file = analyze_market_data('exchangescraper/output.log.json')
+    print(f"Report saved to: {report_file}")
+    
+    # Optionally print the report to console
+    with open(report_file, 'r') as f:
+        print(f.read())
