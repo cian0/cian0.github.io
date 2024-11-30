@@ -23,22 +23,39 @@ pip install requests
 
 ## Usage
 
+### Running the Script
+
 Basic usage with default symbol (WADU_USDT):
 ```bash
-python scraper.py
+PYTHONPATH=. python3 scraper.py
 ```
 
 Specify a trading pair:
 ```bash
-python scraper.py --symbol BTC_USDT
+PYTHONPATH=. python3 scraper.py --symbol BTC_USDT
 ```
 
 Fetch specific data type:
 ```bash
-python scraper.py --symbol BTC_USDT --type orderbook
-python scraper.py --symbol BTC_USDT --type ticker
-python scraper.py --symbol BTC_USDT --type trades
-python scraper.py --symbol BTC_USDT --type market
+PYTHONPATH=. python3 scraper.py --symbol BTC_USDT --type orderbook
+PYTHONPATH=. python3 scraper.py --symbol BTC_USDT --type ticker
+PYTHONPATH=. python3 scraper.py --symbol BTC_USDT --type trades
+PYTHONPATH=. python3 scraper.py --symbol BTC_USDT --type market
+```
+
+### Running Tests
+
+Run all tests:
+```bash
+PYTHONPATH=. python3 -m unittest exchangescraper/test_scraper.py -v
+```
+
+Run specific test:
+```bash
+PYTHONPATH=. python3 -m unittest exchangescraper.test_scraper.TestScraper.test_get_ticker -v
+PYTHONPATH=. python3 -m unittest exchangescraper.test_scraper.TestScraper.test_get_orderbook -v
+PYTHONPATH=. python3 -m unittest exchangescraper.test_scraper.TestScraper.test_get_recent_trades -v
+PYTHONPATH=. python3 -m unittest exchangescraper.test_scraper.TestScraper.test_get_market_info -v
 ```
 
 ## Data Types
@@ -49,6 +66,58 @@ python scraper.py --symbol BTC_USDT --type market
 - `market`: Trading pair information and rules
 - `all`: Fetch all available data (default)
 
+## Response Format
+
+### Orderbook
+```json
+{
+  "bids": [["price", "quantity"], ...],
+  "asks": [["price", "quantity"], ...],
+  "timestamp": 1234567890123
+}
+```
+
+### Ticker
+```json
+{
+  "code": 0,
+  "result": {
+    "lastPrice": "0.12345",
+    "highPrice": "0.12400",
+    "lowPrice": "0.12300",
+    "volume": "123456.78",
+    "priceChange": "-0.12",
+    "priceChangePercent": "-0.1"
+  }
+}
+```
+
+### Recent Trades
+```json
+{
+  "result": [
+    {
+      "price": "0.12345",
+      "qty": "100.0",
+      "time": "1234567890123",
+      "isBuyerMaker": false
+    }
+  ]
+}
+```
+
+### Market Info
+```json
+{
+  "symbol": "BTC_USDT",
+  "status": "TRADING",
+  "baseAsset": "BTC",
+  "quoteAsset": "USDT",
+  "baseAssetPrecision": 8,
+  "quoteAssetPrecision": 2
+}
+```
+
 ## Error Handling
 
 The script includes robust error handling for:
@@ -56,11 +125,4 @@ The script includes robust error handling for:
 - Invalid API responses
 - Missing or malformed data
 - Rate limiting
-
-## Example Output
-
-The script provides formatted output for easy reading of:
-- Orderbook depth with top 5 bids and asks
-- 24h price statistics
-- Recent trades with timestamps
-- Market rules and limitations
+- Invalid trading pairs
