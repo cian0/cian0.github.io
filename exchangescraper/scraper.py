@@ -6,12 +6,11 @@ from datetime import datetime
 def get_ticker(symbol):
     """Fetch 24h ticker data for the trading pair"""
     # Format symbol and build URL
-    formatted_symbol = symbol.upper().replace('_', '')
-    url = f"https://www.biconomy.com/api/v1/market/detail/merged?symbol={formatted_symbol.lower()}"
+    url = "https://api.biconomy.com/api/v1/tickers"
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-        'Accept': 'application/json'
+        'X-SITE-ID': '127',
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
     
     print(f"Attempting ticker request with URL: {url}")
@@ -30,20 +29,22 @@ def get_ticker(symbol):
             return None
             
         # Check for success response
-        if data.get('status') == 'ok' and data.get('tick'):
-            tick_data = data['tick']
-            # Transform Biconomy format to our standard format
-            return {
-                'code': 0,
-                'result': {
-                    'lastPrice': str(tick_data.get('close', 0)),
-                    'highPrice': str(tick_data.get('high', 0)),
-                    'lowPrice': str(tick_data.get('low', 0)),
-                    'volume': str(tick_data.get('vol', 0)),
-                    'priceChange': str(tick_data.get('close', 0) - tick_data.get('open', 0)),
-                    'priceChangePercent': str(((tick_data.get('close', 0) - tick_data.get('open', 0)) / tick_data.get('open', 1)) * 100)
-                }
-            }
+        # Find the ticker for the requested symbol
+        if 'ticker' in data:
+            for tick in data['ticker']:
+                if tick['symbol'] == symbol:
+                    return {
+                        'code': 0,
+                        'result': {
+                            'lastPrice': tick['last'],
+                            'highPrice': tick['high'],
+                            'lowPrice': tick['low'],
+                            'volume': tick['vol'],
+                            'buy': tick['buy'],
+                            'sell': tick['sell']
+                        }
+                    }
+        return None
         
         error_msg = data.get('err-msg', 'Unknown error')
         print(f"API Error: {error_msg}")
@@ -62,7 +63,15 @@ def get_ticker(symbol):
 
 def get_recent_trades(symbol, limit=20):
     """Fetch recent trades for the trading pair"""
-    url = f"https://www.biconomy.com/api/v1/trades?symbol={symbol}&limit={limit}"
+    url = f"https://api.biconomy.com/api/v1/trades"
+    params = {
+        'symbol': symbol,
+        'size': str(limit)
+    }
+    headers = {
+        'X-SITE-ID': '127',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
     
     try:
         headers = {
@@ -103,7 +112,11 @@ def get_recent_trades(symbol, limit=20):
 
 def get_market_info(symbol):
     """Fetch market information for the trading pair"""
-    url = f"https://www.biconomy.com/api/v1/exchangeInfo"
+    url = "https://api.biconomy.com/api/v1/exchangeInfo"
+    headers = {
+        'X-SITE-ID': '127',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
     
     try:
         headers = {
@@ -145,7 +158,15 @@ def get_market_info(symbol):
 
 def get_orderbook_rest(symbol):
     """Fetch orderbook data from Biconomy exchange"""
-    url = f"https://www.biconomy.com/api/v1/depth?symbol={symbol}"
+    url = "https://api.biconomy.com/api/v1/depth"
+    params = {
+        'symbol': symbol,
+        'size': '50'  # Default depth size
+    }
+    headers = {
+        'X-SITE-ID': '127',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
     
     try:
         headers = {
