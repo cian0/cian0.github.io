@@ -267,17 +267,21 @@ def format_trades_data(trades_response, logger=None):
         return
         
     output = ["\nRecent Trades:"]
-    output.append("Time\t\t\tPrice\t\tQuantity\tSide\tTotal Value")
-    output.append("-" * 80)
+    output.append("Time\t\t\tPrice\t\tQuantity\tSide\tMaker/Taker\tFee\tFee Asset")
+    output.append("-" * 120)
     
-    for trade in trades[:50]:  # Increased to 50 trades
+    for trade in trades[:50]:  # Show 50 trades
         timestamp = datetime.fromtimestamp(int(trade.get('time', 0))/1000)
         price = float(trade.get('price', 0))
         qty = float(trade.get('qty', 0))
-        total_value = price * qty
+        side = 'Sell' if trade.get('isBuyerMaker') else 'Buy'
+        maker_taker = 'Maker' if trade.get('isMaker') else 'Taker'
+        fee = float(trade.get('fee', 0))
+        fee_asset = trade.get('feeAsset', 'N/A')
+        
         output.append(
             f"{timestamp}\t{price:.8f}\t{qty:.8f}\t"
-            f"{'Sell' if trade.get('isBuyerMaker') else 'Buy'}\t{total_value:.8f}"
+            f"{side}\t{maker_taker}\t\t{fee:.8f}\t{fee_asset}"
         )
     
     # Print to console and log if logger provided
