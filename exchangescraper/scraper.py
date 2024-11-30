@@ -17,14 +17,14 @@ def get_orderbook_rest(symbol):
         # Print response for debugging
         print("API Response:", json.dumps(data, indent=2))
         
-        if 'data' in data:
+        if 'bids' in data and 'asks' in data:
             return {
-                'bids': data.get('data', {}).get('bids', []),
-                'asks': data.get('data', {}).get('asks', []),
-                'timestamp': data.get('data', {}).get('timestamp', int(datetime.now().timestamp() * 1000))
+                'bids': data['bids'],
+                'asks': data['asks'],
+                'timestamp': int(datetime.now().timestamp() * 1000)  # Using current timestamp since API doesn't provide one
             }
         else:
-            print(f"Unexpected API response structure: {data}")
+            print(f"Missing orderbook data in response: {data}")
     except requests.exceptions.RequestException as e:
         print(f"Request Error: {e}")
     except json.JSONDecodeError as e:
