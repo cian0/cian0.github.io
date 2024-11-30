@@ -267,17 +267,18 @@ def format_trades_data(trades_response, logger=None):
         return
         
     output = ["\nRecent Trades:"]
-    output.append("Amount\t\tPrice\t\tSide\t\tTimestamp")
+    output.append("Amount\t\tPrice\t\tSide\t\tTime")
     output.append("-" * 80)
     
     for trade in trades[:50]:  # Show 50 trades
         amount = trade.get('amount', '0')
         price = trade.get('price', '0')
         side = trade.get('side', 'unknown')
-        timestamp = trade.get('timestamp', '0')
+        timestamp = int(trade.get('timestamp', '0'))
+        readable_time = datetime.fromtimestamp(timestamp/1000).strftime('%Y-%m-%d %H:%M:%S')
         
         output.append(
-            f"{amount}\t\t{price}\t\t{side}\t\t{timestamp}"
+            f"{amount}\t\t{price}\t\t{side}\t\t{readable_time}"
         )
     
     # Print to console and log if logger provided
