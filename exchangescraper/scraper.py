@@ -266,8 +266,9 @@ def format_trades_data(trades_response, logger=None):
             logger.info(msg)
         return
         
-    # Extract base and quote assets from the symbol (e.g., BTC_USDT -> BTC and USDT)
-    base_asset, quote_asset = trades[0].get('symbol', '_').split('_') if trades and '_' in trades[0].get('symbol', '_') else ('', '')
+    # Extract base and quote assets from the first trade's symbol
+    symbol = trades[0].get('symbol', '') if trades else ''
+    base_asset, quote_asset = symbol.split('_') if '_' in symbol else ('', '')
     
     output = ["\nRecent Trades:"]
     output.append(f"Amount ({base_asset})\tPrice ({quote_asset})\tSide\t\tTime")
