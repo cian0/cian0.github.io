@@ -254,11 +254,12 @@ def format_ticker_data(ticker_response):
 
 def format_trades_data(trades_response):
     """Format recent trades data for display"""
-    if not trades_response or trades_response.get('code') != 0:
+    if not trades_response:
         print("\nNo trades data available")
         return
     
-    trades = trades_response.get('result', [])
+    # Handle both list and dictionary response formats
+    trades = trades_response if isinstance(trades_response, list) else trades_response.get('result', [])
     if not trades:
         print("\nNo recent trades found")
         return
