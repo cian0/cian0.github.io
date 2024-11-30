@@ -16,6 +16,10 @@ def get_ticker(symbol):
     
     print(f"Attempting ticker request with URL: {url}")
     
+    params = {
+        'symbol': formatted_symbol
+    }
+    
     try:
         response = requests.get(url, params=params, headers=headers, timeout=10)
         print(f"Response status code: {response.status_code}")
