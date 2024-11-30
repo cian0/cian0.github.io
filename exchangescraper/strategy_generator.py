@@ -275,6 +275,56 @@ Resistance Levels: {', '.join([f'${x:.8f}' for x in metrics['resistance_levels']
     def _calculate_drawdown(self, entry: float, stop: float) -> float:
         """Calculate maximum drawdown percentage."""
         return (stop - entry) / entry if entry != 0 else 0
+        
+    def get_flattened_strategy_data(self, symbol: str) -> dict:
+        """Get strategy data in a flat format suitable for CSV."""
+        metrics = self.calculate_market_metrics()
+        risk = self.analyze_risk_profile()
+        positions = self.generate_positions()
+        holder_analysis = self.analyze_holder_behavior()
+        
+        return {
+            'symbol': symbol,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'current_price': metrics['current_price'],
+            'price_change_24h': metrics['price_change_24h'],
+            'buy_sell_ratio': metrics['buy_sell_ratio'],
+            'vwap': metrics['vwap'],
+            'risk_level': risk['risk_level'],
+            'volatility_trend': risk['volatility_trend'],
+            'market_strength': risk['market_strength'],
+            'market_confidence': risk['market_confidence'],
+            'conservative_entry': positions['conservative'].entry,
+            'conservative_stop_loss': positions['conservative'].stop_loss,
+            'conservative_take_profit': positions['conservative'].take_profit,
+            'conservative_position_size': positions['conservative'].position_size,
+            'conservative_risk_reward': positions['conservative'].risk_reward,
+            'conservative_max_drawdown': positions['conservative'].max_drawdown,
+            'moderate_entry': positions['moderate'].entry,
+            'moderate_stop_loss': positions['moderate'].stop_loss,
+            'moderate_take_profit': positions['moderate'].take_profit,
+            'moderate_position_size': positions['moderate'].position_size,
+            'moderate_risk_reward': positions['moderate'].risk_reward,
+            'moderate_max_drawdown': positions['moderate'].max_drawdown,
+            'aggressive_entry': positions['aggressive'].entry,
+            'aggressive_stop_loss': positions['aggressive'].stop_loss,
+            'aggressive_take_profit': positions['aggressive'].take_profit,
+            'aggressive_position_size': positions['aggressive'].position_size,
+            'aggressive_risk_reward': positions['aggressive'].risk_reward,
+            'aggressive_max_drawdown': positions['aggressive'].max_drawdown,
+            'holder_concentration': holder_analysis['holder_concentration'],
+            'accumulation_pressure': holder_analysis['accumulation_pressure'],
+            'whale_consensus': holder_analysis['whale_consensus'],
+            'signal': holder_analysis['signal'],
+            'signal_strength': holder_analysis['signal_strength'],
+            'signal_confidence': holder_analysis['signal_confidence'],
+            'market_type': self.market_condition.market_type.value,
+            'volatility_score': self.market_condition.volatility,
+            'trend_strength': self.market_condition.trend_strength,
+            'volume_profile': self.market_condition.volume_profile,
+            'optimal_timeframe': self.optimal_timeframe.value,
+            'analysis_confidence': self.market_condition.confidence
+        }
 
 def main():
     """Main function to run the analysis."""

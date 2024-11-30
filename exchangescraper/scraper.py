@@ -421,7 +421,22 @@ if __name__ == "__main__":
             with open(final_report_path, 'w') as f:
                 f.write(final_report)
                 
+            # Save strategy data to CSV
+            csv_path = os.path.join(args.output_dir, 'strategy_data.csv')
+            flat_data = strategy_analyzer.get_flattened_strategy_data(args.symbol)
+            
+            # Check if file exists to determine if we need headers
+            file_exists = os.path.isfile(csv_path)
+            
+            import csv
+            with open(csv_path, mode='a', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=flat_data.keys())
+                if not file_exists:
+                    writer.writeheader()
+                writer.writerow(flat_data)
+            
             print(f"\nFinal strategy report generated: {final_report_path}")
+            print(f"Strategy data appended to CSV: {csv_path}")
             print("\nFinal Strategy Recommendation:")
             print("-" * 80)
             print(final_report)
@@ -430,6 +445,7 @@ if __name__ == "__main__":
             if logger:
                 logger.info("All analyses completed successfully")
                 logger.info(f"Final strategy report saved to: {final_report_path}")
+                logger.info(f"Strategy data appended to CSV: {csv_path}")
         else:
             print("No holder data available for analysis")
             if logger:
