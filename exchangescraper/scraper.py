@@ -85,10 +85,7 @@ def get_recent_trades(symbol, limit=20):
     }
     
     try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-        }
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, params=params, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
         
@@ -152,21 +149,34 @@ def get_market_info(symbol):
                 print(f"API Error: {error_msg}")
                 return None
                 
-            if 'symbols' in data:
+            if 'data' in data and isinstance(data['data'], list):
                 # Convert symbol to uppercase for comparison
-                symbol = symbol.upper()
+                formatted_symbol = formatted_symbol.upper()
                 # Find the specific symbol info
-                symbol_info = next((s for s in data['symbols'] if s.get('symbol', '').upper() == symbol), None)
+                symbol_info = next((s for s in data['data'] if s.get('symbol', '').upper() == formatted_symbol), None)
                 if symbol_info:
-                    if symbol_info.get('status') == 'TRADING':
-                        return symbol_info
-                    else:
-                        print(f"Trading pair {symbol} is not currently active")
-                        return None
-                print(f"Trading pair {symbol} not found in exchange")
+                    return {
+                        'symbol': symbol_info.get('symbol'),
+                        'status': symbol_info.get('status', 'TRADING'),
+                        'baseAsset': symbol_info.get('base_currency'),
+                        'quoteAsset': symbol_info.get('quote_currency'),
+                        'filters': [
+                            {
+                                'filterType': 'PRICE_FILTER',
+                                'minPrice': symbol_info.get('min_price', '0'),
+                                'maxPrice': symbol_info.get('max_price', '0')
+                            },
+                            {
+                                'filterType': 'LOT_SIZE',
+                                'minQty': symbol_info.get('min_amount', '0'),
+                                'maxQty': symbol_info.get('max_amount', '0')
+                            }
+                        ]
+                    }
+                print(f"Trading pair {formatted_symbol} not found in exchange")
                 return None
             else:
-                print("Invalid market info response format - missing symbols data")
+                print("Invalid market info response format - missing data array")
                 return None
     except Exception as e:
         print(f"Error fetching market info: {e}")
