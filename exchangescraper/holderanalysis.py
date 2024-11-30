@@ -410,10 +410,11 @@ def main():
     output_path = sys.argv[1] if len(sys.argv) > 1 else None
     analyzer = EnhancedKaspaAnalyzer()
     
-    # Fetch top WADU token holders
-    top_holders = get_wadu_top_holders()
+    # Fetch top token holders (default to WADU if no argument provided)
+    symbol = sys.argv[1] if len(sys.argv) > 1 else "WADU_USDT"
+    top_holders = get_token_top_holders(symbol)
     if not top_holders:
-        print("Failed to fetch top holders, using default addresses")
+        print(f"Failed to fetch top holders for {symbol}, using default addresses")
         top_holders = [
             "kaspa:qr5lj3uyfvduuhy38wwnl8942t4ckznjsma3pgnsc552qmpdga4959pae88u0"
         ]
