@@ -6,6 +6,9 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from scipy import stats
+import sys
+import json
+import os
 
 @dataclass
 class HolderMetrics:
@@ -337,7 +340,64 @@ def get_wadu_top_holders():
         print(f"Error fetching WADU holders: {e}")
         return []
 
+def save_analysis_to_files(analysis: Dict, base_path: str) -> None:
+    """Save analysis results to both text and JSON files."""
+    # Save JSON
+    json_path = f"{base_path}.json"
+    with open(json_path, 'w') as f:
+        json.dump(analysis, f, indent=2)
+
+    # Save text report
+    txt_path = f"{base_path}.txt"
+    with open(txt_path, 'w') as f:
+        f.write("Market Analysis Report\n")
+        f.write("=" * 50 + "\n\n")
+        
+        f.write("Risk Metrics:\n")
+        f.write("------------\n")
+        f.write(f"holder_concentration: {analysis['risk_metrics']['holder_concentration']:.4f}\n")
+        f.write("  (0-1 scale: Higher values indicate fewer holders control more tokens)\n\n")
+        
+        f.write(f"accumulation_pressure: {analysis['risk_metrics']['accumulation_pressure']:.4f}\n")
+        f.write("  (-1 to 1 scale: Positive values suggest buying pressure, negative suggests selling)\n\n")
+        
+        f.write(f"collective_volatility: {analysis['risk_metrics']['collective_volatility']:.4f}\n")
+        f.write("  (0-1 scale: Higher values indicate more price swings)\n\n")
+        
+        f.write(f"whale_consensus: {analysis['risk_metrics']['whale_consensus']:.4f}\n")
+        f.write("  (-1 to 1 scale: Positive when whales agree on accumulating, negative when distributing)\n\n")
+
+        f.write("Market Signals:\n")
+        f.write("--------------\n")
+        
+        acc_signal = analysis['market_signals']['accumulation_signal']
+        f.write("\nAccumulation Signal:\n")
+        f.write(f"  Signal: {acc_signal['signal']} (accumulate/hold/distribute)\n")
+        f.write(f"  Strength: {acc_signal['strength']:.4f} (0-1 scale)\n")
+        f.write(f"  Confidence: {acc_signal['confidence']:.4f} (0-1 scale)\n")
+
+        vol_warning = analysis['market_signals']['volatility_warning']
+        f.write("\nVolatility Warning:\n")
+        f.write(f"  Risk Level: {vol_warning['level']:.4f} (0-1 scale)\n")
+        f.write(f"  Category: {vol_warning['risk_category']}\n")
+        f.write(f"  Trend: {vol_warning['volatility_trend']}\n")
+
+        whale_alert = analysis['market_signals']['whale_movement_alert']
+        f.write("\nWhale Movement:\n")
+        f.write(f"  Alert Level: {whale_alert['alert_level']}\n")
+        f.write(f"  Movement Type: {whale_alert['movement_type']}\n")
+        f.write(f"  Activity Ratio: {whale_alert['activity_ratio']:.4f} (0-1 scale)\n")
+
+        strength = analysis['market_signals']['market_strength']
+        f.write("\nMarket Strength:\n")
+        f.write(f"  Overall Strength: {strength['strength']:.4f} (-1 to 1 scale)\n")
+        f.write(f"  Confidence: {strength['confidence']:.4f} (0-1 scale)\n")
+        f.write(f"  Market Phase: {strength['market_phase']}\n")
+        f.write(f"  Suggested Position: {strength['suggested_position']}\n")
+
 def main():
+    # Check if output path was provided
+    output_path = sys.argv[1] if len(sys.argv) > 1 else None
     analyzer = EnhancedKaspaAnalyzer()
     
     # Fetch top WADU token holders
@@ -351,54 +411,13 @@ def main():
     print("Generating comprehensive holder analysis...")
     analysis = analyzer.generate_holder_analysis_report(top_holders)
     
-    print("\nMarket Analysis Report")
-    print("=" * 50)
-    
-    print("\nRisk Metrics:")
-    print("------------")
-    print(f"holder_concentration: {analysis['risk_metrics']['holder_concentration']:.4f}")
-    print("  (0-1 scale: Higher values indicate fewer holders control more tokens)")
-    
-    print(f"accumulation_pressure: {analysis['risk_metrics']['accumulation_pressure']:.4f}")
-    print("  (-1 to 1 scale: Positive values suggest buying pressure, negative suggests selling)")
-    
-    print(f"collective_volatility: {analysis['risk_metrics']['collective_volatility']:.4f}")
-    print("  (0-1 scale: Higher values indicate more price swings)")
-    
-    print(f"whale_consensus: {analysis['risk_metrics']['whale_consensus']:.4f}")
-    print("  (-1 to 1 scale: Positive when whales agree on accumulating, negative when distributing)")
-
-    print("\nMarket Signals:")
-    print("--------------")
-    
-    # Accumulation Signal
-    acc_signal = analysis['market_signals']['accumulation_signal']
-    print("\nAccumulation Signal:")
-    print(f"  Signal: {acc_signal['signal']} (accumulate/hold/distribute)")
-    print(f"  Strength: {acc_signal['strength']:.4f} (0-1 scale)")
-    print(f"  Confidence: {acc_signal['confidence']:.4f} (0-1 scale)")
-
-    # Volatility Warning
-    vol_warning = analysis['market_signals']['volatility_warning']
-    print("\nVolatility Warning:")
-    print(f"  Risk Level: {vol_warning['level']:.4f} (0-1 scale)")
-    print(f"  Category: {vol_warning['risk_category']}")
-    print(f"  Trend: {vol_warning['volatility_trend']}")
-
-    # Whale Movement
-    whale_alert = analysis['market_signals']['whale_movement_alert']
-    print("\nWhale Movement:")
-    print(f"  Alert Level: {whale_alert['alert_level']}")
-    print(f"  Movement Type: {whale_alert['movement_type']}")
-    print(f"  Activity Ratio: {whale_alert['activity_ratio']:.4f} (0-1 scale)")
-
-    # Market Strength
-    strength = analysis['market_signals']['market_strength']
-    print("\nMarket Strength:")
-    print(f"  Overall Strength: {strength['strength']:.4f} (-1 to 1 scale)")
-    print(f"  Confidence: {strength['confidence']:.4f} (0-1 scale)")
-    print(f"  Market Phase: {strength['market_phase']}")
-    print(f"  Suggested Position: {strength['suggested_position']}")
+    if output_path:
+        # Save to files
+        save_analysis_to_files(analysis, output_path)
+        print(f"Analysis saved to {output_path}.json and {output_path}.txt")
+    else:
+        # Print to console
+        print(json.dumps(analysis, indent=2))
 
 if __name__ == "__main__":
     main()
