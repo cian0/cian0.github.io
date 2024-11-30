@@ -180,7 +180,7 @@ def analyze_market_data(json_file: str) -> str:
 
 # Example usage:
 if __name__ == "__main__":
-    with open('exchangescraper/market_data.log', 'r') as f:
-        raw_data = f.read()
-    report = analyze_market_data(raw_data)
+    # with open('exchangescraper/output.log.json', 'r') as f:
+    #     raw_data = f.read()
+    report = analyze_market_data('exchangescraper/output.log.json')
     print(report)
