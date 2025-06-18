@@ -1,0 +1,189 @@
+.converter-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #2c2c2c;
+  color: #e0e0e0;
+}
+
+.tokenPairsSection {
+  margin: 20px 0;
+  padding: 20px;
+  background: #2c2c2c;
+  border-radius: 8px;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+}
+
+.tokenPair {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tokenPair input {
+  max-width: 120px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #4c4c4c;
+  padding: 8px;
+}
+
+.tokenPair span {
+  margin: 0 10px;
+}
+
+.tokenPair select,
+.nes-select,
+.cryptoSelect {
+  appearance: none;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #4c4c4c;
+  padding: 8px 32px 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  min-width: 160px;
+}
+
+.tokenPair select:hover,
+.nes-select:hover {
+  border-color: #666;
+  background-color: #222;
+}
+
+.tokenPair select:focus,
+.nes-select:focus {
+  outline: none;
+  border-color: #888;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
+}
+
+.nes-field {
+  margin-bottom: 20px;
+}
+
+.conversion-history {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.allConversions {
+  margin-top: 20px;
+  padding: 20px;
+  background: #2c2c2c;
+  border-radius: 8px;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+}
+
+.conversionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.conversionRow {
+  padding: 8px;
+  background: #3c3c3c;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  color: #00ff00;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.history-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-list > div {
+  margin-bottom: 10px;
+}
+
+.customTokenInput {
+  margin-top: 15px;
+  padding: 15px;
+  background: #3c3c3c;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.customTokenInput input {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #4c4c4c;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.customTokenInput.show {
+  display: block;
+}
+
+.tokenSearchResults {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #2c2c2c;
+  border: 1px solid #4c4c4c;
+  border-radius: 4px;
+}
+
+.tokenSearchResult {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #4c4c4c;
+  transition: background-color 0.2s;
+}
+
+.tokenSearchResult:hover {
+  background-color: #3c3c3c;
+}
+
+.tokenSearchResult small {
+  display: block;
+  color: #888;
+  font-size: 0.8em;
+  margin-top: 4px;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.cryptoLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.cryptoSelect {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.status-message {
+  margin: 15px 0;
+  padding: 10px;
+}
+
+.result-container {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.2em;
+}
