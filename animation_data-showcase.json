@@ -1,0 +1,784 @@
+{
+    "elements": {
+        "background": {
+            "class": "background",
+            "style": {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background": "linear-gradient(to bottom, #87CEEB 60%, #228B22 60%)",
+                "opacity": "1",
+                "z-index": "1"
+            },
+            "scenes": ["scene1", "scene2", "scene3"]
+        },
+        "sun": {
+            "class": "celestial",
+            "content": "☀️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "top": "10%",
+                "left": "10%",
+                "z-index": "2"
+            },
+            "scenes": ["scene1", "scene2"]
+        },
+        "cloud": {
+            "class": "weather",
+            "content": "☁️",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "top": "15%",
+                "right": "20%",
+                "z-index": "2",
+                "opacity": "0"
+            }
+        },
+        "tree": {
+            "class": "scenery",
+            "content": "🌳",
+            "style": {
+                "position": "absolute",
+                "font-size": "100px",
+                "bottom": "30%",
+                "left": "15%",
+                "z-index": "3"
+            }
+        },
+        "house": {
+            "class": "building",
+            "content": "🏠",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "bottom": "35%",
+                "right": "20%",
+                "z-index": "3"
+            }
+        },
+        "girl": {
+            "class": "character",
+            "content": "👧",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "bottom": "25%",
+                "left": "50%",
+                "transform": "translateX(-50%)",
+                "z-index": "4"
+            }
+        },
+        "boy": {
+            "class": "character",
+            "content": "👦",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "bottom": "25%",
+                "left": "-10%",
+                "z-index": "4"
+            }
+        },
+        "dog": {
+            "class": "animal",
+            "content": "🐕",
+            "style": {
+                "position": "absolute",
+                "font-size": "40px",
+                "bottom": "22%",
+                "left": "60%",
+                "z-index": "4",
+                "opacity": "0"
+            }
+        },
+        "butterflies": {
+            "type": "particle",
+            "options": {
+                "emoji": "🦋",
+                "number": 10,
+                "size": 20,
+                "opacity": 0.7,
+                "duration": 5,
+                "durationVariation": 2
+            }
+        },
+        "raindrops": {
+            "type": "particle",
+            "options": {
+                "emoji": "💧",
+                "number": 50,
+                "size": 15,
+                "opacity": 0.5,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "rain"
+            }
+        },
+        "explosion": {
+            "type": "particle",
+            "options": {
+                "emoji": "💥",
+                "number": 30,
+                "size": 20,
+                "opacity": 1,
+                "duration": 1.5,
+                "durationVariation": 0.5,
+                "movementType": "explosion"
+            }
+        },
+        "transition": {
+            "class": "overlay",
+            "style": {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background-color": "#000000",
+                "opacity": "0",
+                "z-index": "10"
+            }
+        },
+        "futureBoy": {
+            "class": "character",
+            "content": "🏃",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "bottom": "25%",
+                "left": "50%",
+                "transform": "translateX(-50%)",
+                "z-index": "4",
+                "opacity": "0"
+            }
+        },
+        "explosion1": {
+            "class": "effect",
+            "content": "💥",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "opacity": "0",
+                "z-index": "3"
+            }
+        },
+        "explosion2": {
+            "class": "effect",
+            "content": "💥",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "opacity": "0",
+                "z-index": "3"
+            }
+        },
+        "explosion3": {
+            "class": "effect",
+            "content": "💥",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "opacity": "0",
+                "z-index": "3"
+            }
+        }
+    },
+    "steps": [
+        {
+            "type": "changeScene",
+            "sceneName": "scene1"
+        },
+        {
+            "type": "set",
+            "target": "girl",
+            "props": {
+                "scale": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props": {
+                "duration": 1,
+                "scale": 1,
+                "ease": "back.out(1.7)"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "What a beautiful day! 😊",
+            "duration": 2
+        },
+        {
+            "type": "startParticles",
+            "target": "butterflies"
+        },
+        {
+            "type": "to",
+            "target": "sun",
+            "props": {
+                "duration": 10,
+                "rotation": 360,
+                "repeat": -1,
+                "ease": "linear"
+            }
+        },
+        {
+            "type": "to",
+            "target": "boy",
+            "props": {
+                "duration": 2,
+                "left": "30%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "boy",
+            "text": "Hi there! Want to play? 🎾",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props": {
+                "duration": 0.5,
+                "y": -20,
+                "repeat": 3,
+                "yoyo": true
+            }
+        },
+        {
+            "type": "set",
+            "target": "dog",
+            "props": {
+                "opacity": 1,
+                "scale": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "dog",
+            "props": {
+                "duration": 1,
+                "scale": 1,
+                "ease": "back.out(1.7)"
+            }
+        },
+        {
+            "type": "to",
+            "target": "dog",
+            "props": {
+                "duration": 0.5,
+                "rotation": 10,
+                "repeat": 4,
+                "yoyo": true
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "Look, a cute puppy! 🐶",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "cloud",
+            "props": {
+                "duration": 3,
+                "opacity": 1,
+                "x": -100,
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "stopParticles",
+            "target": "butterflies"
+        },
+        {
+            "type": "startParticles",
+            "target": "raindrops"
+        },
+        {
+            "type": "to",
+            "target": "sun",
+            "props": {
+                "duration": 2,
+                "opacity": 0.3
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "boy",
+            "text": "Oh no, it's starting to rain! ☔",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props": {
+                "duration": 1.5,
+                "x": 100
+            }
+        },
+        {
+            "type": "to",
+            "target": "boy",
+            "props": {
+                "duration": 1.5,
+                "x": 100
+            }
+        },
+        {
+            "type": "to",
+            "target": "dog",
+            "props": {
+                "duration": 1.5,
+                "x": 100
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "Let's go inside! 🏠",
+            "duration": 2
+        },
+        {
+            "type": "startParticles",
+            "target": "explosion"
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "stopParticles",
+            "target": "raindrops"
+        },
+        {
+            "type": "stopParticles",
+            "target": "explosion"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #F0E68C 60%, #8B4513 60%)"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "sun",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "cloud",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "tree",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "house",
+            "content": "🏠🪑🛋️📺",
+            "props": {
+                "style": {
+                    "fontSize": "120px",
+                    "bottom": "30%",
+                    "right": "10%"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "content": "🏞️",
+                "style": {
+                    "fontSize": "300px",
+                    "opacity": "0.3",
+                    "zIndex": "1",
+                    "position": "absolute",
+                    "top": "50%",
+                    "left": "50%",
+                    "transform": "translate(-50%, -50%)"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "girl",
+            "props": {
+                "bottom": "25%",
+                "left": "30%"
+            }
+        },
+        {
+            "type": "set",
+            "target": "boy",
+            "props": {
+                "bottom": "25%",
+                "left": "50%"
+            }
+        },
+        {
+            "type": "set",
+            "target": "dog",
+            "props": {
+                "bottom": "22%",
+                "left": "40%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "boy",
+            "text": "That was fun! Let's play inside now. 🎮",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "girl",
+            "props": {
+                "duration": 0.5,
+                "rotation": 10,
+                "repeat": 2,
+                "yoyo": true
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "girl",
+            "text": "Great idea! What should we play? 🤔",
+            "duration": 2
+        },
+        {
+            "type": "to",
+            "target": "dog",
+            "props": {
+                "duration": 1,
+                "y": -30,
+                "repeat": 2,
+                "yoyo": true
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #FF6B6B 60%, #4A4A4A 60%)"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "girl",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "boy",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "dog",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "house",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "futureBoy",
+            "props": {
+                "opacity": 1,
+                "left": "10%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "futureBoy",
+            "text": "The future is not what we expected... 😰",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "futureBoy",
+            "props": {
+                "duration": 2,
+                "left": "80%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion1",
+            "props": {
+                "opacity": 1,
+                "left": "20%",
+                "bottom": "30%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion1",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion2",
+            "props": {
+                "opacity": 1,
+                "left": "50%",
+                "bottom": "40%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion2",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "futureBoy",
+            "props": {
+                "duration": 1,
+                "left": "20%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion3",
+            "props": {
+                "opacity": 1,
+                "left": "70%",
+                "bottom": "35%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion3",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "futureBoy",
+            "text": "We must change our past to save our future! 🕒",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #FF6B6B 60%, #4A4A4A 60%)"
+                }
+            }
+        },
+        {
+            "type": "set",
+            "target": "girl",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "boy",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "dog",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "house",
+            "props": {
+                "opacity": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "futureBoy",
+            "props": {
+                "opacity": 1,
+                "left": "10%"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "futureBoy",
+            "text": "The future is not what we expected... 😰",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "futureBoy",
+            "props": {
+                "duration": 2,
+                "left": "80%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion1",
+            "props": {
+                "opacity": 1,
+                "left": "20%",
+                "bottom": "30%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion1",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion2",
+            "props": {
+                "opacity": 1,
+                "left": "50%",
+                "bottom": "40%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion2",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "futureBoy",
+            "props": {
+                "duration": 1,
+                "left": "20%",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "set",
+            "target": "explosion3",
+            "props": {
+                "opacity": 1,
+                "left": "70%",
+                "bottom": "35%"
+            }
+        },
+        {
+            "type": "to",
+            "target": "explosion3",
+            "props": {
+                "duration": 0.5,
+                "scale": 1.5,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "futureBoy",
+            "text": "We must change our past to save our future! 🕒",
+            "duration": 3
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+{
+    "totalPuzzles": 10,
+    "timePerPuzzle": 8,
+    "initialRevealedLetters": 4,
+    "puzzles": [
+      {
+        "word": "SANDCASTLE",
+        "emojis": ["🏖️", "🏰"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #F4A460, #87CEEB)",
+        "elements": ["🐚", "🦀", "🌴", "☀️", "🏖️", "🌊"]
+      },
+      {
+        "word": "SUNSCREEN",
+        "emojis": ["☀️", "🧴"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #FFD700, #FF6347)",
+        "elements": ["👙", "🕶️", "🏄", "🌞", "💦", "🧢"]
+      },
+      {
+        "word": "BEACHBALL",
+        "emojis": ["🏖️", "🏐"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #00CED1, #FF69B4)",
+        "elements": ["🌺", "🍹", "🏄‍♀️", "🐠", "🌴", "☂️"]
+      },
+      {
+        "word": "SURFBOARD",
+        "emojis": ["🏄", "🛹"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #1E90FF, #98FB98)",
+        "elements": ["🌊", "🏄‍♂️", "🐬", "🌴", "☀️", "🏝️"]
+      },
+      {
+        "word": "SEASHELL",
+        "emojis": ["🌊", "🐚"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #4682B4, #FFF5EE)",
+        "elements": ["🦪", "🐙", "🦀", "🐠", "💎", "🏖️"]
+      },
+      {
+        "word": "LIGHTHOUSE",
+        "emojis": ["💡", "🏠"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #191970, #B0E0E6)",
+        "elements": ["⛵", "🌊", "🌙", "⚓", "🏝️", "🚢"]
+      },
+      {
+        "word": "SANDBAR",
+        "emojis": ["🏖️", "🍫"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #D2691E, #20B2AA)",
+        "elements": ["🐟", "🦈", "🏊‍♀️", "🌅", "🐚", "🌴"]
+      },
+      {
+        "word": "JELLYFISH",
+        "emojis": ["🍮", "🐠"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #9932CC, #00FFFF)",
+        "elements": ["🌊", "🐙", "🐡", "🦑", "🐳", "🏊"]
+      },
+      {
+        "word": "STARFISH",
+        "emojis": ["⭐", "🐠"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #FF69B4, #FFA500)",
+        "elements": ["🐚", "🦀", "🐙", "🌊", "🏖️", "🐳"]
+      },
+      {
+        "word": "PALMTREE",
+        "emojis": ["🌴", "🌳"],
+        "theme": "beach",
+        "background": "linear-gradient(135deg, #32CD32, #FFD700)",
+        "elements": ["🥥", "🍌", "🦜", "☀️", "🏝️", "🌺"]
+      }
+    ]
+  }

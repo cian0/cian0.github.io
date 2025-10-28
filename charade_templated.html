@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 2 Charade - 5 Puzzles</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1c1c3d, #3d1c4f);
+            transition: background 1s ease;
+        }
+        #animation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        #center-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 10px;
+        }
+        .grid-item {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .emoji {
+            font-size: 60px;
+        }
+        #plus {
+            font-size: 40px;
+            color: #ffffff;
+        }
+        #guess-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+        }
+        .guess-box {
+            width: 30px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 2px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 40px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #timer-value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+        #magnified-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+        }
+        .magnified-box {
+            width: 40px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 3px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .celebration-emoji {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0;
+        }
+        .background-element {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+        }
+        #puzzle-counter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <div id="center-container">
+            <div class="grid-item"><div id="component1" class="emoji">🌊</div></div>
+            <div class="grid-item"><div id="plus">+</div></div>
+            <div class="grid-item"><div id="component2" class="emoji">📞</div></div>
+        </div>
+        <div id="timer">
+            <span id="timer-emoji">⏰</span>
+            <span id="timer-value">20</span>
+        </div>
+        <div id="puzzle-counter">Puzzle 1/5</div>
+    </div>
+    <div id="guess-container"></div>
+    <div id="magnified-container"></div>
+    <script>
+        const container = document.getElementById('animation-container');
+        const guessContainer = document.getElementById('guess-container');
+        const magnifiedContainer = document.getElementById('magnified-container');
+        const timerValue = document.getElementById('timer-value');
+        const timerEmoji = document.getElementById('timer-emoji');
+        const puzzleCounter = document.getElementById('puzzle-counter');
+        const component1 = document.getElementById('component1');
+        const component2 = document.getElementById('component2');
+
+        const puzzles = [
+            {word: "SEASHELL", emojis: ["🌊", "🐚"], theme: "ocean", background: "linear-gradient(135deg, #006994, #00FFFF)", elements: ['🐙', '🦀', '🐠', '🌊', '🏖️', '🐳']},
+            {word: "EARPHONE", emojis: ["👂", "📞"], theme: "music", background: "linear-gradient(135deg, #8B008B, #FF1493)", elements: ['🎵', '🎧', '🎼', '🎹', '🎸', '🥁']},
+            {word: "STARFISH", emojis: ["⭐", "🐠"], theme: "underwater", background: "linear-gradient(135deg, #000080, #0000FF)", elements: ['🐙', '🦈', '🐡', '🌊', '🐚', '🦑']},
+            {word: "SNOWBALL", emojis: ["❄️", "⚾"], theme: "winter", background: "linear-gradient(135deg, #E0FFFF, #87CEEB)", elements: ['☃️', '🏂', '🌨️', '🧊', '🏔️', '🧤']},
+            {word: "FIREWORK", emojis: ["🔥", "💼"], theme: "celebration", background: "linear-gradient(135deg, #FF4500, #FFD700)", elements: ['🎉', '🎊', '🎇', '🥳', '🍾', '🎆']}
+        ];
+
+        let currentPuzzleIndex = 0;
+        let timeLeft = 20;
+        let revealedIndices = new Set();
+        let timerInterval;
+
+        function setupPuzzle(index) {
+            const puzzle = puzzles[index];
+            document.body.style.background = puzzle.background;
+            component1.textContent = puzzle.emojis[0];
+            component2.textContent = puzzle.emojis[1];
+            puzzleCounter.textContent = `Puzzle ${index + 1}/${puzzles.length}`;
+
+            guessContainer.innerHTML = '';
+            magnifiedContainer.innerHTML = '';
+            revealedIndices.clear();
+
+            puzzle.word.split('').forEach(() => {
+                const box = document.createElement('div');
+                box.className = 'guess-box';
+                guessContainer.appendChild(box);
+                
+                const magnifiedBox = document.createElement('div');
+                magnifiedBox.className = 'magnified-box';
+                magnifiedContainer.appendChild(magnifiedBox);
+            });
+
+            timeLeft = 20;
+            timerValue.textContent = timeLeft;
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+
+            setBackgroundTheme(puzzle.theme, puzzle.elements);
+
+            for (let i = 0; i < 2; i++) {
+                revealLetter(puzzle.word);
+            }
+
+            gsap.set("#center-container", { opacity: 1 });
+            gsap.set("#timer", { opacity: 1 });
+            gsap.set(guessContainer, { opacity: 1, y: 0 });
+            gsap.set(magnifiedContainer, { opacity: 0 });
+
+            startAnimations(puzzle);
+        }
+
+        function startAnimations(puzzle) {
+            const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+
+            switch(puzzle.theme) {
+                case "ocean":
+                    tl.to("#component1", {
+                        duration: 2,
+                        y: "-=20",
+                        ease: "power1.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    });
+                    tl.to("#component2", {
+                        duration: 1,
+                        rotation: 360,
+                        ease: "none",
+                        repeat: -1
+                    }, 0);
+                    break;
+                case "music":
+                    tl.to("#component1", {
+                        duration: 0.5,
+                        scale: 1.2,
+                        ease: "power1.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    });
+                    tl.to("#component2", {
+                        duration: 0.2,
+                        x: "+=5",
+                        ease: "power1.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    }, 0);
+                    break;
+                case "underwater":
+                    tl.to("#component1", {
+                        duration: 3,
+                        rotation: 360,
+                        ease: "none",
+                        repeat: -1
+                    });
+                    tl.to("#component2", {
+                        duration: 2,
+                        y: "-=30",
+                        ease: "power1.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    }, 0);
+                    break;
+                case "winter":
+                    tl.to("#component1", {
+                        duration: 2,
+                        y: "+=30",
+                        ease: "power1.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    });
+                    tl.to("#component2", {
+                        duration: 1,
+                        rotation: 360,
+                        ease: "none",
+                        repeat: -1
+                    }, 0);
+                    break;
+                case "celebration":
+                    tl.to("#component1", {
+                        duration: 0.5,
+                        scale: 1.5,
+                        ease: "power1.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    });
+                    tl.to("#component2", {
+                        duration: 1,
+                        y: "-=20",
+                        ease: "bounce.out",
+                        yoyo: true,
+                        repeat: -1
+                    }, 0);
+                    break;
+            }
+
+            tl.to("#plus", {
+                duration: 0.5,
+                scale: 1.2,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut"
+            }, 0);
+        }
+
+        function createBackgroundElement(theme) {
+            const element = document.createElement('div');
+            element.className = 'background-element';
+            element.textContent = theme[Math.floor(Math.random() * theme.length)];
+            element.style.left = `${Math.random() * 100}%`;
+            element.style.top = `${Math.random() * 100}%`;
+            element.style.fontSize = `${Math.random() * 20 + 10}px`;
+            element.style.opacity = '0';
+            container.appendChild(element);
+            return element;
+        }
+
+        function animateBackgroundElement(element, theme) {
+            gsap.to(element, {
+                duration: Math.random() * 5 + 5,
+                x: `${(Math.random() - 0.5) * 50}%`,
+                y: `${(Math.random() - 0.5) * 50}%`,
+                opacity: 0.7,
+                scale: Math.random() * 0.5 + 0.5,
+                ease: "power1.inOut",
+                onComplete: () => {
+                    container.removeChild(element);
+                    createAndAnimateBackgroundElement(theme);
+                }
+            });
+        }
+
+        function createAndAnimateBackgroundElement(theme) {
+            const element = createBackgroundElement(theme);
+            animateBackgroundElement(element, theme);
+        }
+
+        function setBackgroundTheme(theme, elements) {
+            document.querySelectorAll('.background-element').forEach(el => el.remove());
+            for (let i = 0; i < 20; i++) {
+                createAndAnimateBackgroundElement(elements);
+            }
+        }
+
+        function revealLetter(word) {
+            if (revealedIndices.size >= word.length) return;
+
+            let index;
+            do {
+                index = Math.floor(Math.random() * word.length);
+            } while (revealedIndices.has(index));
+
+            guessContainer.children[index].textContent = word[index];
+            revealedIndices.add(index);
+
+            gsap.from(guessContainer.children[index], {
+                duration: 0.3,
+                scale: 0,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            });
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            timerValue.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                revealAllLetters();
+            } else {
+                gsap.to(timerEmoji, {
+                    duration: 0.1,
+                    x: "+=3",
+                    yoyo: true,
+                    repeat: 1
+                });
+            }
+        }
+
+        function createCelebrationEmoji(emoji) {
+            const element = document.createElement('div');
+            element.className = 'celebration-emoji';
+            element.textContent = emoji;
+            element.style.left = `${Math.random() * 100}%`;
+            element.style.top = `${Math.random() * 100}%`;
+            container.appendChild(element);
+            return element;
+        }
+
+        function revealAllLetters() {
+            const currentWord = puzzles[currentPuzzleIndex].word;
+            currentWord.split('').forEach((letter, index) => {
+                if (!revealedIndices.has(index)) {
+                    guessContainer.children[index].textContent = letter;
+                    gsap.from(guessContainer.children[index], {
+                        duration: 0.3,
+                        scale: 0,
+                        opacity: 0,
+                        ease: "back.out(1.7)",
+                        delay: index * 0.1
+                    });
+                }
+                magnifiedContainer.children[index].textContent = letter;
+            });
+
+            gsap.to(guessContainer, {
+                duration: 1,
+                opacity: 0,
+                y: 50,
+                ease: "power2.in",
+                onComplete: () => {
+                    gsap.to(magnifiedContainer, {
+                        duration: 1,
+                        opacity: 1,
+                        scale: 1.2,
+                        ease: "back.out(1.7)"
+                    });
+                    
+                    const celebrationEmojis = ['🎉', '✨', '🌟', '👏', '🙌', ...puzzles[currentPuzzleIndex].elements];
+                    celebrationEmojis.forEach(emoji => {
+                        const element = createCelebrationEmoji(emoji);
+                        gsap.to(element, {
+                            duration: 2,
+                            opacity: 1,
+                            scale: 1.5,
+                            y: -100,
+                            ease: "power1.out",
+                            onComplete: () => {
+                                gsap.to(element, {
+                                    duration: 1,
+                                    opacity: 0,
+                                    y: -50,
+                                    delay: 1,
+                                    ease: "power1.in",
+                                    onComplete: () => container.removeChild(element)
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+
+            gsap.to(['#center-container', '#timer'], {
+                duration: 1,
+                opacity: 0,
+                ease: "power2.in",
+                onComplete: () => {
+                    currentPuzzleIndex++;
+                    if (currentPuzzleIndex < puzzles.length) {
+                        setTimeout(() => {
+                            setupPuzzle(currentPuzzleIndex);
+                        }, 3000);
+                    } else {
+                        endGame();
+                    }
+                }
+            });
+        }
+
+        function endGame() {
+            container.innerHTML = '<h1 style="color: white; text-align: center;">Congratulations! You\'ve completed all puzzles!</h1>';
+        }
+
+        // Start the game
+        setupPuzzle(currentPuzzleIndex);
+    </script>
+</body>
+</html>

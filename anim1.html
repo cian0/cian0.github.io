@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooth Multi-Particle Animation with Transitions</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000000;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('particleCanvas'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const particles = new THREE.Group();
+        scene.add(particles);
+
+        const particleCount = 2000;
+        const shapes = ['snowflake', 'star', 'circle', 'triangle', 'square'];
+        const colors = [0xFFFFFF, 0xFF00FF, 0x00FFFF, 0xFFFF00, 0x00FF00, 0xFF0000];
+
+        function createShape(type) {
+            let shape = new THREE.Shape();
+            switch (type) {
+                case 'snowflake':
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (i / 6) * Math.PI * 2;
+                        shape.lineTo(Math.cos(angle) * 0.5, Math.sin(angle) * 0.5);
+                        shape.lineTo(Math.cos(angle + Math.PI / 6) * 0.2, Math.sin(angle + Math.PI / 6) * 0.2);
+                    }
+                    shape.lineTo(0.5, 0);
+                    break;
+                case 'star':
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (i / 5) * Math.PI * 2;
+                        shape.lineTo(Math.cos(angle) * 0.5, Math.sin(angle) * 0.5);
+                        shape.lineTo(Math.cos(angle + Math.PI / 5) * 0.2, Math.sin(angle + Math.PI / 5) * 0.2);
+                    }
+                    shape.lineTo(0.5, 0);
+                    break;
+                case 'circle':
+                    shape.absarc(0, 0, 0.5, 0, Math.PI * 2, false);
+                    break;
+                case 'triangle':
+                    shape.moveTo(0, 0.5);
+                    shape.lineTo(-0.5, -0.5);
+                    shape.lineTo(0.5, -0.5);
+                    shape.lineTo(0, 0.5);
+                    break;
+                case 'square':
+                    shape.moveTo(-0.5, -0.5);
+                    shape.lineTo(0.5, -0.5);
+                    shape.lineTo(0.5, 0.5);
+                    shape.lineTo(-0.5, 0.5);
+                    shape.lineTo(-0.5, -0.5);
+                    break;
+            }
+            return shape;
+        }
+
+        function createParticle() {
+            const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const shape = createShape(shapeType);
+            const geometry = new THREE.ShapeGeometry(shape);
+            const material = new THREE.MeshBasicMaterial({
+                color: color,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.8
+            });
+            const particle = new THREE.Mesh(geometry, material);
+            
+            particle.position.set(
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20
+            );
+            particle.rotation.set(
+                Math.random() * Math.PI,
+                Math.random() * Math.PI,
+                Math.random() * Math.PI
+            );
+            particle.scale.set(0.05, 0.05, 0.05);
+            particle.userData = {
+                velocity: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02
+                ),
+                rotationSpeed: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02
+                ),
+                originalColor: color,
+                originalShape: shapeType
+            };
+            return particle;
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.add(createParticle());
+        }
+
+        camera.position.set(0, 0, 15);
+
+        const scenes = [
+            {
+                name: 'scatter',
+                duration: 300,
+                setup: () => {},
+                update: (particle, time, t) => {
+                    particle.position.add(particle.userData.velocity.clone().multiplyScalar(t));
+                    if (Math.abs(particle.position.x) > 10) particle.userData.velocity.x *= -1;
+                    if (Math.abs(particle.position.y) > 10) particle.userData.velocity.y *= -1;
+                    if (Math.abs(particle.position.z) > 10) particle.userData.velocity.z *= -1;
+                }
+            },
+            {
+                name: 'vortex',
+                duration: 400,
+                setup: () => {},
+                update: (particle, time, t) => {
+                    const radius = particle.position.length();
+                    const newX = Math.cos(time * 0.5 + radius) * radius;
+                    const newZ = Math.sin(time * 0.5 + radius) * radius;
+                    const newY = particle.position.y + Math.sin(time + radius) * 0.05;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            },
+            {
+                name: 'spiral',
+                duration: 400,
+                setup: (particle) => {
+                    particle.userData.initialAngle = Math.random() * Math.PI * 2;
+                    particle.userData.initialRadius = Math.random() * 10;
+                },
+                update: (particle, time, t) => {
+                    const angle = time * 0.5 + particle.userData.initialAngle;
+                    const radius = (particle.userData.initialRadius + time * 0.1) % 10;
+                    const newX = Math.cos(angle) * radius;
+                    const newY = Math.sin(angle) * radius;
+                    const newZ = (particle.position.z + 0.05 * t) % 20 - 10;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            },
+            {
+                name: 'wave',
+                duration: 350,
+                setup: () => {},
+                update: (particle, time, t) => {
+                    const newY = Math.sin(time + particle.position.x * 0.1) * 5;
+                    const newX = particle.position.x + 0.05 * t;
+                    particle.position.lerp(new THREE.Vector3(newX > 10 ? -10 : newX, newY, particle.position.z), t);
+                }
+            },
+            {
+                name: 'explosion',
+                duration: 250,
+                setup: (particle) => {
+                    particle.userData.explosionVelocity = new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.2,
+                        (Math.random() - 0.5) * 0.2,
+                        (Math.random() - 0.5) * 0.2
+                    );
+                },
+                update: (particle, time, t) => {
+                    particle.position.add(particle.userData.explosionVelocity.clone().multiplyScalar(t));
+                }
+            },
+            {
+                name: 'implosion',
+                duration: 300,
+                setup: (particle) => {
+                    particle.userData.targetPosition = new THREE.Vector3(0, 0, 0);
+                },
+                update: (particle, time, t) => {
+                    particle.position.lerp(particle.userData.targetPosition, 0.02 * t);
+                }
+            },
+            {
+                name: 'orbit',
+                duration: 450,
+                setup: (particle) => {
+                    particle.userData.orbitRadius = Math.random() * 10;
+                    particle.userData.orbitSpeed = (Math.random() + 0.5) * 0.01;
+                    particle.userData.orbitAngle = Math.random() * Math.PI * 2;
+                },
+                update: (particle, time, t) => {
+                    particle.userData.orbitAngle += particle.userData.orbitSpeed * t;
+                    const newX = Math.cos(particle.userData.orbitAngle) * particle.userData.orbitRadius;
+                    const newZ = Math.sin(particle.userData.orbitAngle) * particle.userData.orbitRadius;
+                    const newY = Math.sin(time * 0.5) * 5;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            },
+            {
+                name: 'dna',
+                duration: 400,
+                setup: (particle, index) => {
+                    particle.userData.dnaOffset = index * 0.01;
+                },
+                update: (particle, time, t) => {
+                    const localTime = time + particle.userData.dnaOffset;
+                    const newX = Math.sin(localTime * 2) * 5;
+                    const newY = (localTime * 0.5) % 20 - 10;
+                    const newZ = Math.cos(localTime * 2) * 5;
+                    particle.position.lerp(new THREE.Vector3(newX, newY, newZ), t);
+                }
+            }
+        ];
+
+        let currentScene;
+        let nextScene;
+        let transitionProgress = 0;
+        const transitionDuration = 100; // frames
+
+        function selectNextScene() {
+            do {
+                nextScene = scenes[Math.floor(Math.random() * scenes.length)];
+            } while (nextScene === currentScene);
+            
+            transitionProgress = 0;
+            particles.children.forEach((particle, index) => {
+                nextScene.setup(particle, index);
+                
+                // Random shape transformation
+                if (Math.random() < 0.2) {
+                    const newShape = shapes[Math.floor(Math.random() * shapes.length)];
+                    const newGeometry = new THREE.ShapeGeometry(createShape(newShape));
+                    particle.geometry.dispose();
+                    particle.geometry = newGeometry;
+                }
+                
+                // Random color transformation
+                if (Math.random() < 0.2) {
+                    const newColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.material.color.setHex(newColor);
+                }
+            });
+        }
+
+        function updateCameraPosition(time) {
+            const radius = 15 + Math.sin(time * 0.3) * 5;
+            const theta = time * 0.2;
+            const phi = Math.sin(time * 0.1) * Math.PI * 0.1;
+
+            camera.position.x = radius * Math.sin(theta) * Math.cos(phi);
+            camera.position.y = radius * Math.sin(phi);
+            camera.position.z = radius * Math.cos(theta) * Math.cos(phi);
+
+            camera.lookAt(scene.position);
+        }
+
+        let sceneTime = 0;
+        currentScene = scenes[Math.floor(Math.random() * scenes.length)];
+        selectNextScene();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = Date.now() * 0.001;
+            updateCameraPosition(time);
+
+            sceneTime++;
+
+            if (transitionProgress < transitionDuration) {
+                transitionProgress++;
+                const t = transitionProgress / transitionDuration;
+                const easeT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOutQuad
+
+                particles.children.forEach((particle, index) => {
+                    particle.rotation.x += particle.userData.rotationSpeed.x;
+                    particle.rotation.y += particle.userData.rotationSpeed.y;
+                    particle.rotation.z += particle.userData.rotationSpeed.z;
+
+                    const currentPosition = particle.position.clone();
+                    currentScene.update(particle, time, 1 - easeT);
+                    const midPosition = particle.position.clone();
+                    particle.position.copy(currentPosition);
+                    nextScene.update(particle, time, easeT);
+                    const nextPosition = particle.position.clone();
+                    particle.position.lerpVectors(midPosition, nextPosition, easeT);
+
+                    // Gentle size variation
+                    const scale = 0.05 + Math.sin(time * 0.5 + index * 0.1) * 0.01;
+                    particle.scale.set(scale, scale, scale);
+
+                    // Subtle shimmer effect
+                    particle.material.opacity = 0.6 + Math.sin(time * 2 + index * 0.5) * 0.2;
+                });
+            } else {
+                particles.children.forEach((particle, index) => {
+                    particle.rotation.x += particle.userData.rotationSpeed.x;
+                    particle.rotation.y += particle.userData.rotationSpeed.y;
+                    particle.rotation.z += particle.userData.rotationSpeed.z;
+
+                    currentScene.update(particle, time, 1);
+
+                    // Gentle size variation
+                    const scale = 0.05 + Math.sin(time * 0.5 + index * 0.1) * 0.01;
+                    particle.scale.set(scale, scale, scale);
+
+                    // Subtle shimmer effect
+                    particle.material.opacity = 0.6 + Math.sin(time * 2 + index * 0.5) * 0.2;
+                });
+            }
+
+            if (sceneTime >= currentScene.duration) {
+                currentScene = nextScene;
+                selectNextScene();
+                sceneTime = 0;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        //window.addEventListener('resize', () =>
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+{
+    "elements": {
+        "background": {
+            "class": "background",
+            "style": {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "z-index": "1"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "superhero": {
+            "class": "character",
+            "content": "🦸‍♂️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "bottom": "20%",
+                "left": "20%",
+                "z-index": "3"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "wizard": {
+            "class": "character",
+            "content": "🧙‍♂️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "bottom": "20%",
+                "right": "20%",
+                "z-index": "3"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "buildings": {
+            "class": "prop",
+            "content": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><g fill='#2c3e50'><rect x='50' y='300' width='100' height='300'/><rect x='200' y='250' width='120' height='350'/><rect x='370' y='200' width='140' height='400'/><rect x='560' y='150' width='160' height='450'/><rect x='770' y='100' width='180' height='500'/></g><g fill='#34495e'><rect x='60' y='320' width='20' height='20'/><rect x='100' y='320' width='20' height='20'/><rect x='60' y='360' width='20' height='20'/><rect x='100' y='360' width='20' height='20'/><rect x='210' y='270' width='25' height='25'/><rect x='260' y='270' width='25' height='25'/><rect x='210' y='320' width='25' height='25'/><rect x='260' y='320' width='25' height='25'/><rect x='380' y='220' width='30' height='30'/><rect x='440' y='220' width='30' height='30'/><rect x='380' y='280' width='30' height='30'/><rect x='440' y='280' width='30' height='30'/><rect x='570' y='170' width='35' height='35'/><rect x='640' y='170' width='35' height='35'/><rect x='570' y='240' width='35' height='35'/><rect x='640' y='240' width='35' height='35'/><rect x='780' y='120' width='40' height='40'/><rect x='860' y='120' width='40' height='40'/><rect x='780' y='200' width='40' height='40'/><rect x='860' y='200' width='40' height='40'/></g></svg>",
+            "style": {
+                "position": "absolute",
+                "width": "100%",
+                "height": "60%",
+                "bottom": "0",
+                "left": "0",
+                "z-index": "2"
+            },
+            "scenes": ["city"]
+        },
+        "cloud1": {
+            "class": "prop",
+            "content": "☁️",
+            "style": {
+                "position": "absolute",
+                "font-size": "60px",
+                "top": "20%",
+                "left": "10%",
+                "z-index": "2"
+            },
+            "scenes": ["sky"]
+        },
+        "cloud2": {
+            "class": "prop",
+            "content": "☁️",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "top": "40%",
+                "right": "15%",
+                "z-index": "2"
+            },
+            "scenes": ["sky"]
+        },
+        "castle": {
+            "class": "prop",
+            "content": "🏰",
+            "style": {
+                "position": "absolute",
+                "font-size": "120px",
+                "bottom": "10%",
+                "right": "10%",
+                "z-index": "2"
+            },
+            "scenes": ["castle"]
+        },
+        "transition": {
+            "class": "overlay",
+            "style": {
+                "position": "absolute",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background-color": "#000000",
+                "opacity": "0",
+                "z-index": "10"
+            },
+            "scenes": ["city", "sky", "castle"]
+        },
+        "heroEnergy": {
+            "type": "particle",
+            "options": {
+                "emoji": "⚡",
+                "number": 30,
+                "size": 30,
+                "opacity": 0.7,
+                "duration": 1.5,
+                "durationVariation": 0.5,
+                "movementType": "explosion",
+                "centerX": "30%",
+                "centerY": "70%"
+            }
+        },
+        "wizardMagic": {
+            "type": "particle",
+            "options": {
+                "emoji": "✨",
+                "number": 30,
+                "size": 30,
+                "opacity": 0.7,
+                "duration": 1.5,
+                "durationVariation": 0.5,
+                "movementType": "explosion",
+                "centerX": "70%",
+                "centerY": "70%"
+            }
+        },
+        "cloudBurst": {
+            "type": "particle",
+            "options": {
+                "emoji": "☁️",
+                "number": 10,
+                "size": 50,
+                "opacity": 0.5,
+                "duration": 3,
+                "durationVariation": 1,
+                "movementType": "float"
+            }
+        },
+        "lightning": {
+            "type": "particle",
+            "options": {
+                "emoji": "⚡",
+                "number": 20,
+                "size": 40,
+                "opacity": 0.8,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "rain"
+            }
+        },
+        "heroAura": {
+            "type": "particle",
+            "options": {
+                "emoji": "🌟",
+                "number": 40,
+                "size": 30,
+                "opacity": 0.7,
+                "duration": 3,
+                "durationVariation": 1,
+                "movementType": "explosion"
+            }
+        },
+        "wizardDefeat": {
+            "type": "particle",
+            "options": {
+                "emoji": "💥",
+                "number": 30,
+                "size": 40,
+                "opacity": 0.8,
+                "duration": 2,
+                "durationVariation": 0.5,
+                "movementType": "explosion"
+            }
+        },
+        "victory": {
+            "type": "particle",
+            "options": {
+                "emoji": "🎉",
+                "number": 50,
+                "size": 40,
+                "opacity": 0.8,
+                "duration": 4,
+                "durationVariation": 1,
+                "movementType": "float"
+            }
+        },
+        "ufo1": {
+            "class": "prop",
+            "content": "🛸",
+            "style": {
+                "position": "absolute",
+                "font-size": "80px",
+                "top": "10%",
+                "left": "20%",
+                "z-index": "4"
+            },
+            "scenes": ["alien_invasion"]
+        },
+        "ufo2": {
+            "class": "prop",
+            "content": "🛸",
+            "style": {
+                "position": "absolute",
+                "font-size": "100px",
+                "top": "5%",
+                "right": "15%",
+                "z-index": "4"
+            },
+            "scenes": ["alien_invasion"]
+        },
+        "person1": {
+            "class": "character",
+            "content": "🧍",
+            "style": {
+                "position": "absolute",
+                "font-size": "40px",
+                "bottom": "20%",
+                "left": "30%",
+                "z-index": "3"
+            },
+            "scenes": ["alien_invasion"]
+        },
+        "person2": {
+            "class": "character",
+            "content": "🧍‍♀️",
+            "style": {
+                "position": "absolute",
+                "font-size": "40px",
+                "bottom": "20%",
+                "right": "40%",
+                "z-index": "3"
+            },
+            "scenes": ["alien_invasion"]
+        },
+        "cityscape": {
+            "class": "prop",
+            "content": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><defs><linearGradient id='skyGradient' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:#000033'/><stop offset='100%' style='stop-color:#0066cc'/></linearGradient></defs><rect width='800' height='600' fill='url(#skyGradient)'/><g fill='#1a1a1a'><rect x='50' y='300' width='100' height='300'/><rect x='200' y='250' width='120' height='350'/><rect x='370' y='200' width='140' height='400'/><rect x='560' y='150' width='160' height='450'/><rect x='770' y='100' width='180' height='500'/></g><g fill='#333333'><rect x='60' y='320' width='20' height='20'/><rect x='100' y='320' width='20' height='20'/><rect x='60' y='360' width='20' height='20'/><rect x='100' y='360' width='20' height='20'/><rect x='210' y='270' width='25' height='25'/><rect x='260' y='270' width='25' height='25'/><rect x='210' y='320' width='25' height='25'/><rect x='260' y='320' width='25' height='25'/><rect x='380' y='220' width='30' height='30'/><rect x='440' y='220' width='30' height='30'/><rect x='380' y='280' width='30' height='30'/><rect x='440' y='280' width='30' height='30'/><rect x='570' y='170' width='35' height='35'/><rect x='640' y='170' width='35' height='35'/><rect x='570' y='240' width='35' height='35'/><rect x='640' y='240' width='35' height='35'/><rect x='780' y='120' width='40' height='40'/><rect x='860' y='120' width='40' height='40'/><rect x='780' y='200' width='40' height='40'/><rect x='860' y='200' width='40' height='40'/></g><circle fill='#ffff00' cx='750' cy='50' r='30'/></svg>",
+            "style": {
+                "position": "absolute",
+                "width": "100%",
+                "height": "100%",
+                "bottom": "0",
+                "left": "0",
+                "z-index": "2"
+            },
+            "scenes": ["alien_invasion"]
+        },
+        "alienBeam": {
+            "type": "particle",
+            "options": {
+                "emoji": "✨",
+                "number": 30,
+                "size": 20,
+                "opacity": 0.7,
+                "duration": 3,
+                "durationVariation": 0.5,
+                "movementType": "beam"
+            }
+        }
+    },
+    "steps": [
+        {
+            "type": "changeScene",
+            "sceneName": "city"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #87CEEB 70%, #A9A9A9 70%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 1000 600\"><defs><linearGradient id=\"skyGradient\" x1=\"0%\" y1=\"0%\" x2=\"0%\" y2=\"100%\"><stop offset=\"0%\" style=\"stop-color:%2387CEEB\"/><stop offset=\"70%\" style=\"stop-color:%2387CEEB\"/><stop offset=\"70%\" style=\"stop-color:%23A9A9A9\"/><stop offset=\"100%\" style=\"stop-color:%23A9A9A9\"/></linearGradient></defs><rect width=\"1000\" height=\"600\" fill=\"url(%23skyGradient)\"/><g fill=\"%23696969\"><rect x=\"50\" y=\"300\" width=\"100\" height=\"300\"/><rect x=\"200\" y=\"250\" width=\"120\" height=\"350\"/><rect x=\"370\" y=\"200\" width=\"140\" height=\"400\"/><rect x=\"560\" y=\"150\" width=\"160\" height=\"450\"/><rect x=\"770\" y=\"100\" width=\"180\" height=\"500\"/></g><g fill=\"%23A9A9A9\"><rect x=\"60\" y=\"320\" width=\"20\" height=\"20\"/><rect x=\"100\" y=\"320\" width=\"20\" height=\"20\"/><rect x=\"60\" y=\"360\" width=\"20\" height=\"20\"/><rect x=\"100\" y=\"360\" width=\"20\" height=\"20\"/><rect x=\"210\" y=\"270\" width=\"25\" height=\"25\"/><rect x=\"260\" y=\"270\" width=\"25\" height=\"25\"/><rect x=\"210\" y=\"320\" width=\"25\" height=\"25\"/><rect x=\"260\" y=\"320\" width=\"25\" height=\"25\"/><rect x=\"380\" y=\"220\" width=\"30\" height=\"30\"/><rect x=\"440\" y=\"220\" width=\"30\" height=\"30\"/><rect x=\"380\" y=\"280\" width=\"30\" height=\"30\"/><rect x=\"440\" y=\"280\" width=\"30\" height=\"30\"/><rect x=\"570\" y=\"170\" width=\"35\" height=\"35\"/><rect x=\"640\" y=\"170\" width=\"35\" height=\"35\"/><rect x=\"570\" y=\"240\" width=\"35\" height=\"35\"/><rect x=\"640\" y=\"240\" width=\"35\" height=\"35\"/><rect x=\"780\" y=\"120\" width=\"40\" height=\"40\"/><rect x=\"860\" y=\"120\" width=\"40\" height=\"40\"/><rect x=\"780\" y=\"200\" width=\"40\" height=\"40\"/><rect x=\"860\" y=\"200\" width=\"40\" height=\"40\"/></g></svg>')"
+                }
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "Evil wizard! Your reign of terror ends now! ⚡️",
+            "duration": 3
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Foolish hero! You cannot stop my dark magic! 🔮",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "superhero",
+            "props": {
+                "duration": 1,
+                "x": "100px",
+                "y": "-50px",
+                "ease": "power2.out"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "heroEnergy",
+            "options": {
+                "emoji": "⚡",
+                "number": 30,
+                "size": 30,
+                "duration": 2,
+                "opacity": 0.7,
+                "movementType": "explosion",
+                "targetElement": "superhero"
+            }
+        },
+        {
+            "type": "function",
+            "function": "addCurrentParticleSystem",
+            "args": ["heroEnergy"]
+        },
+        {
+            "type": "to",
+            "target": "wizard",
+            "props": {
+                "duration": 1,
+                "x": "-100px",
+                "y": "-50px",
+                "ease": "power2.out"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "wizardMagic",
+            "options": {
+                "emoji": "✨",
+                "number": 30,
+                "size": 30,
+                "duration": 2,
+                "opacity": 0.7,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["buildings", 1.5, 2]
+        },
+        {
+            "type": "to",
+            "target": "buildings",
+            "props": {
+                "duration": 1,
+                "y": "50px",
+                "ease": "power1.in"
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "changeScene",
+            "sceneName": "sky"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #1E90FF, #87CEEB), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"200\" viewBox=\"0 0 300 200\"><defs><filter id=\"blur\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"2\" /></filter></defs><path fill=\"%23FFFFFF\" filter=\"url(%23blur)\" d=\"M50 30 Q70 10 90 30 T130 30 T170 30 T210 30 T250 30\" /><path fill=\"%23FFFFFF\" filter=\"url(%23blur)\" d=\"M30 60 Q50 40 70 60 T110 60 T150 60 T190 60 T230 60 T270 60\" /><path fill=\"%23FFFFFF\" filter=\"url(%23blur)\" d=\"M10 90 Q30 70 50 90 T90 90 T130 90 T170 90 T210 90 T250 90 T290 90\" /></svg>')"
+                }
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "to",
+            "target": "superhero",
+            "props": {
+                "duration": 2,
+                "x": "-100px",
+                "y": "-100px",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "to",
+            "target": "wizard",
+            "props": {
+                "duration": 2,
+                "x": "100px",
+                "y": "-100px",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "cloudBurst",
+            "options": {
+                "emoji": "☁️",
+                "number": 10,
+                "size": 50,
+                "duration": 3,
+                "opacity": 0.5,
+                "movementType": "float"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "Your dark clouds won't stop me! 🌟",
+            "duration": 3
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Then face the fury of my storm! ⚡️",
+            "duration": 3
+        },
+        {
+            "type": "startParticles",
+            "target": "lightning",
+            "options": {
+                "emoji": "⚡",
+                "number": 20,
+                "size": 40,
+                "duration": 2,
+                "opacity": 0.8,
+                "movementType": "rain"
+            }
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["cloud1", 1.8, 2]
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "changeScene",
+            "sceneName": "castle"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #4B0082 70%, #8B4513 70%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"200\" viewBox=\"0 0 300 200\"><rect fill=\"%238B4513\" width=\"300\" height=\"200\"/><path fill=\"%23A0522D\" d=\"M0 200 L150 50 L300 200 Z\"/><path fill=\"%23800000\" d=\"M50 200 L75 150 L100 200 Z M200 200 L225 150 L250 200 Z\"/><rect fill=\"%23800000\" x=\"125\" y=\"100\" width=\"50\" height=\"100\"/><rect fill=\"%23A0522D\" x=\"135\" y=\"110\" width=\"30\" height=\"40\"/><rect fill=\"%23A0522D\" x=\"135\" y=\"160\" width=\"30\" height=\"40\"/><path fill=\"%234B0082\" d=\"M0 0 L50 50 L100 0 L150 50 L200 0 L250 50 L300 0 L300 50 L250 100 L200 50 L150 100 L100 50 L50 100 L0 50 Z\"/><circle fill=\"%23FFD700\" cx=\"275\" cy=\"25\" r=\"15\"/></svg>')"
+                }
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "function",
+            "function": "resetCamera"
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Welcome to my domain, hero! Your journey ends here! 💀",
+            "duration": 3
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "Not if I can help it! Prepare to face justice! ⚖️",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "superhero",
+            "props": {
+                "duration": 1.5,
+                "x": "150px",
+                "y": "-100px",
+                "scale": 1.2,
+                "ease": "power2.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "heroAura",
+            "options": {
+                "emoji": "🌟",
+                "number": 40,
+                "size": 30,
+                "duration": 3,
+                "opacity": 0.7,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "to",
+            "target": "wizard",
+            "props": {
+                "duration": 1.5,
+                "x": "-100px",
+                "y": "-50px",
+                "scale": 0.8,
+                "ease": "power2.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "wizardDefeat",
+            "options": {
+                "emoji": "💥",
+                "number": 30,
+                "size": 40,
+                "duration": 2,
+                "opacity": 0.8,
+                "movementType": "explosion"
+            }
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["castle", 1.5, 2]
+        },
+        {
+            "type": "to",
+            "target": "castle",
+            "props": {
+                "duration": 2,
+                "scale": 0.8,
+                "opacity": 0.5,
+                "ease": "power2.inOut"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "The day is saved! Evil has been vanquished! 🌈",
+            "duration": 4
+        },
+        {
+            "type": "startParticles",
+            "target": "victory",
+            "options": {
+                "emoji": "🎉",
+                "number": 50,
+                "size": 40,
+                "duration": 4,
+                "opacity": 0.8,
+                "movementType": "float"
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 1
+            }
+        },
+        {
+            "type": "changeScene",
+            "sceneName": "alien_invasion"
+        },
+        {
+            "type": "set",
+            "target": "background",
+            "props": {
+                "style": {
+                    "background": "linear-gradient(to bottom, #000033 70%, #1a1a1a 70%), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect fill=\"%231a1a1a\" width=\"100\" height=\"100\"/><rect fill=\"%23333333\" width=\"10\" height=\"10\" x=\"0\" y=\"0\"/><rect fill=\"%23333333\" width=\"10\" height=\"10\" x=\"20\" y=\"20\"/><rect fill=\"%23333333\" width=\"10\" height=\"10\" x=\"40\" y=\"40\"/><rect fill=\"%23333333\" width=\"10\" height=\"10\" x=\"60\" y=\"60\"/><rect fill=\"%23333333\" width=\"10\" height=\"10\" x=\"80\" y=\"80\"/></svg>')"
+                }
+            }
+        },
+        {
+            "type": "to",
+            "target": "transition",
+            "props": {
+                "duration": 1,
+                "opacity": 0
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "What's happening? The city is under attack! 😱",
+            "duration": 3
+        },
+        {
+            "type": "to",
+            "target": "ufo1",
+            "props": {
+                "duration": 2,
+                "x": "100px",
+                "y": "50px",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "to",
+            "target": "ufo2",
+            "props": {
+                "duration": 2,
+                "x": "-100px",
+                "y": "30px",
+                "ease": "power1.inOut"
+            }
+        },
+        {
+            "type": "startParticles",
+            "target": "alienBeam",
+            "options": {
+                "emoji": "✨",
+                "number": 30,
+                "size": 20,
+                "duration": 3,
+                "opacity": 0.7,
+                "movementType": "rain"
+            }
+        },
+        {
+            "type": "to",
+            "target": "person1",
+            "props": {
+                "duration": 3,
+                "y": "-200px",
+                "ease": "power1.in"
+            }
+        },
+        {
+            "type": "to",
+            "target": "person2",
+            "props": {
+                "duration": 3,
+                "y": "-250px",
+                "ease": "power1.in"
+            }
+        },
+        {
+            "type": "dialog",
+            "target": "wizard",
+            "text": "Hero! We must join forces to save the city from this new threat! 🤝",
+            "duration": 4
+        },
+        {
+            "type": "dialog",
+            "target": "superhero",
+            "text": "You're right! Let's work together to defeat these aliens! 💪",
+            "duration": 4
+        },
+        {
+            "type": "function",
+            "function": "zoomCamera",
+            "args": ["cityscape", 1.5, 2]
+        }
+    ]
+}

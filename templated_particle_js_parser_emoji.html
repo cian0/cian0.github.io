@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON-Driven Animation with particles.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        gsap.registerPlugin(MotionPathPlugin);
+    </script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #animation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+        .dialog-bubble {
+            position: absolute;
+            transform-origin: bottom center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 16px;
+            opacity: 0;
+            z-index: 20;
+            max-width: 150px;
+            text-align: center;
+        }
+        .dialog-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent;
+            transform: translateX(-50%);
+        }
+        #controls-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        #controls {
+            padding: 20px;
+        }
+        #json-input {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
+        #play-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #drawer-toggle {
+            position: absolute;
+            top: -30px;
+            right: 20px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .drawer-closed {
+            transform: translateY(100%);
+        }
+        .drawer-open {
+            transform: translateY(0);
+        }
+        .emoji-particle {
+            position: absolute;
+            user-select: none;
+            pointer-events: none;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="animation-container"></div>
+    <div id="controls-drawer" class="drawer-closed">
+        <button id="drawer-toggle">☰ JSON</button>
+        <div id="controls">
+            <textarea id="json-input" placeholder="Paste your JSON here"></textarea>
+            <button id="play-button">Play Animation</button>
+            <button id="load-json-button">Load JSON</button>
+        </div>
+    </div>
+    <script>
+
+        // Wait for particles.js to load
+        window.addEventListener('load', function() {
+            if (typeof particlesJS === 'undefined') {
+                console.error('particles.js is not loaded. Please check your internet connection and try again.');
+                return;
+            }
+
+            class EmojiParticleSystem {
+                constructor(container, options, id) {
+                    this.container = container;
+                    this.options = options;
+                    this.id = id;
+                    this.particles = [];
+                    this.isRunning = false;
+                    this.animationTimeout = null;
+                }
+
+                create() {
+                    this.particlesContainer = document.createElement('div');
+                    this.particlesContainer.id = `particles-${this.id}`;
+                    this.particlesContainer.className = 'particle-container';
+                    this.container.appendChild(this.particlesContainer);
+                }
+
+                createParticle() {
+                    const particle = document.createElement('div');
+                    particle.className = 'emoji-particle';
+                    particle.textContent = this.options.emoji;
+                    particle.style.fontSize = `${this.options.size}px`;
+                    particle.style.opacity = this.options.opacity;
+                    particle.style.position = 'absolute';
+                    this.particlesContainer.appendChild(particle);
+                    if (this.particles.length < 5) {
+                        console.log(`Created particle: ${this.options.emoji} at (${particle.style.left}, ${particle.style.top})`);
+                    }
+                    return particle;
+                }
+
+                animateParticle(particle) {
+                    const duration = this.options.duration + (Math.random() - 0.5) * this.options.durationVariation;
+                    const centerX = this.options.centerX || this.container.clientWidth / 2;
+                    const centerY = this.options.centerY || this.container.clientHeight / 2;
+
+                    gsap.set(particle, { x: centerX, y: centerY });
+                    if (this.particles.length < 5) {
+                        console.log(`Particle initial position: (${centerX}, ${centerY})`);
+                    }
+
+                    let animationProps;
+
+                    switch (this.options.movementType) {
+                        case 'explosion':
+                            const angle = Math.random() * Math.PI * 2;
+                            const distance = Math.random() * 200 + 50;
+                            animationProps = {
+                                duration: duration,
+                                x: centerX + Math.cos(angle) * distance,
+                                y: centerY + Math.sin(angle) * distance,
+                                scale: 0,
+                                opacity: 0,
+                                ease: "power2.out"
+                            };
+                            if (this.particles.length < 5) {
+                                console.log(`Explosion animation: to (${animationProps.x}, ${animationProps.y})`);
+                            }
+                            break;
+                        case 'rain':
+                            animationProps = {
+                                duration: duration,
+                                y: this.container.clientHeight + 50,
+                                x: `+=${(Math.random() - 0.5) * 100}`,
+                                ease: "power1.in"
+                            };
+                            if (this.particles.length < 5) {
+                                console.log(`Rain animation: to y=${animationProps.y}, x offset=${animationProps.x}`);
+                            }
+                            break;
+                        case 'projectile':
+                            const projectileAngle = Math.random() * Math.PI / 4 + Math.PI / 4; // 45 to 90 degrees
+                            const projectileDistance = Math.random() * 300 + 200;
+                            const gravity = 500; // pixels per second squared
+                            animationProps = {
+                                duration: duration,
+                                x: centerX + Math.cos(projectileAngle) * projectileDistance,
+                                y: centerY - Math.sin(projectileAngle) * projectileDistance + 0.5 * gravity * Math.pow(duration, 2),
+                                ease: "power1.in"
+                            };
+                            if (this.particles.length < 5) {
+                                console.log(`Projectile animation: to (${animationProps.x}, ${animationProps.y})`);
+                            }
+                            break;
+                        case 'beam':
+                            animationProps = {
+                                duration: duration,
+                                y: this.container.clientHeight + 50,
+                                scale: 2,
+                                opacity: 0,
+                                ease: "power1.in"
+                            };
+                            if (this.particles.length < 5) {
+                                console.log(`Beam animation: to y=${animationProps.y}`);
+                            }
+                            break;
+                        default:
+                            animationProps = {
+                                duration: duration,
+                                motionPath: {
+                                    path: [
+                                        { x: centerX + (Math.random() - 0.5) * 100, y: centerY + (Math.random() - 0.5) * 100 },
+                                        { x: centerX + (Math.random() - 0.5) * 200, y: centerY + (Math.random() - 0.5) * 200 },
+                                        { x: centerX + (Math.random() - 0.5) * 100, y: centerY + (Math.random() - 0.5) * 100 }
+                                    ],
+                                    curviness: 1.5
+                                },
+                                rotation: (Math.random() - 0.5) * 360,
+                                ease: "power1.inOut"
+                            };
+                            if (this.particles.length < 5) {
+                                console.log(`Default animation: path=${JSON.stringify(animationProps.motionPath.path)}`);
+                            }
+                    }
+
+                    animationProps.onComplete = () => {
+                        this.removeParticle(particle);
+                    };
+
+                    gsap.to(particle, animationProps);
+                }
+
+                removeParticle(particle) {
+                    if (this.particlesContainer && this.particlesContainer.contains(particle)) {
+                        this.particlesContainer.removeChild(particle);
+                        if (this.particles.length < 5) {
+                            console.log(`Removed particle: ${particle.textContent}`);
+                        }
+                    }
+                }
+
+                start() {
+                    if (!this.particlesContainer) {
+                        this.create();
+                    }
+                    this.isRunning = true;
+                    // Get the current position of the target element
+                    const targetElement = document.querySelector(this.options.targetSelector);
+                    if (targetElement) {
+                        const rect = targetElement.getBoundingClientRect();
+                        this.options.centerX = rect.left + rect.width / 2;
+                        this.options.centerY = rect.top + rect.height / 2;
+                        console.log(`Target element position: (${this.options.centerX}, ${this.options.centerY})`);
+                    } else {
+                        console.log(`Target element not found: ${this.options.targetSelector}`);
+                    }
+                    this.animateParticles();
+                }
+
+                animateParticles() {
+                    if (!this.isRunning) return;
+
+                    const particle = this.createParticle();
+                    this.particles.push(particle);
+                    this.animateParticle(particle);
+
+                    if (this.particles.length < this.options.number) {
+                        this.animationTimeout = setTimeout(() => this.animateParticles(), this.options.duration / this.options.number);
+                    }
+                }
+
+                stop() {
+                    this.isRunning = false;
+                    if (this.animationTimeout) {
+                        clearTimeout(this.animationTimeout);
+                        this.animationTimeout = null;
+                    }
+                    if (this.particlesContainer) {
+                        gsap.killTweensOf(this.particlesContainer.children);
+                        while (this.particlesContainer.firstChild) {
+                            this.particlesContainer.removeChild(this.particlesContainer.firstChild);
+                        }
+                    }
+                    this.particles = [];
+                    console.log(`Stopped particle system: ${this.id}`);
+                }
+            }
+        class SceneManager {
+            constructor(elements) {
+                this.elements = elements;
+                this.currentScene = null;
+            }
+
+            changeScene(sceneName) {
+                if (this.currentScene) {
+                    // Hide all elements from the current scene
+                    this.elements.forEach(element => {
+                        if (element.scenes.includes(this.currentScene)) {
+                            element.domElement.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Show elements for the new scene
+                this.elements.forEach(element => {
+                    if (element.scenes.includes(sceneName)) {
+                        element.domElement.style.display = '';
+                        // Reset any transformations
+                        element.domElement.style.transform = element.domElement.style.transform.replace(/translate\([^)]*\)/, '');
+                    }
+                });
+
+                this.currentScene = sceneName;
+            }
+        }
+
+        class AnimationLibrary {
+            constructor(containerId, animationData) {
+                this.container = document.getElementById(containerId);
+                if (!this.container) {
+                    throw new Error(`Container with id "${containerId}" not found`);
+                }
+                this.animationData = animationData;
+                this.timeline = gsap.timeline();
+                this.elements = [];
+                this.particleSystems = {};
+                this.sceneManager = new SceneManager(this.elements);
+                this.currentScene = null;
+                this.currentParticleSystems = [];
+            }
+
+            init() {
+                this.createElements();
+                this.createParticleSystems();
+                // Delay creating animation steps to ensure all elements are ready
+                setTimeout(() => {
+                    this.createAnimationSteps();
+                    this.play();
+                }, 100);
+            }
+
+            stopAllParticleSystems() {
+                Object.values(this.particleSystems).forEach(system => system.stop());
+                this.currentParticleSystems = [];
+            }
+
+            createElements() {
+                this.container.innerHTML = ''; // Clear previous elements
+                for (const [id, data] of Object.entries(this.animationData.elements)) {
+                    if (data.type !== 'particle') {
+                        const element = document.createElement('div');
+                        element.id = id;
+                        element.className = data.class;
+                        if (data.content) {
+                            if (data.content.startsWith('<svg')) {
+                                element.innerHTML = data.content;
+                            } else {
+                                element.textContent = data.content;
+                            }
+                        }
+                        if (data.type === 'svg') {
+                            element.innerHTML = data.content;
+                        }
+                        Object.assign(element.style, data.style);
+                        element.style.display = 'none'; // Initially hide all elements
+                        this.container.appendChild(element);
+                        this.elements.push({
+                            id: id,
+                            domElement: element,
+                            scenes: data.scenes || []
+                        });
+                        console.log(`Created element: ${id}, scenes: ${data.scenes}, position: (${element.style.left}, ${element.style.top})`);
+                    }
+                }
+            }
+
+            changeScene(sceneName) {
+                console.log(`Changing scene to: ${sceneName}`);
+                if (this.currentScene) {
+                    // Hide all elements from the current scene
+                    this.elements.forEach(element => {
+                        if (element.scenes.includes(this.currentScene)) {
+                            element.domElement.style.display = 'none';
+                            console.log(`Hiding element: ${element.id}`);
+                        }
+                    });
+
+                    // Stop all particle systems
+                    this.stopAllParticleSystems();
+                }
+
+                // Show elements for the new scene
+                this.elements.forEach(element => {
+                    if (element.scenes.includes(sceneName)) {
+                        element.domElement.style.display = '';
+                        console.log(`Showing element: ${element.id}, position: (${element.domElement.style.left}, ${element.domElement.style.top})`);
+                    }
+                });
+
+                // Reset the camera
+                this.resetCamera();
+
+                this.currentScene = sceneName;
+            }
+
+            updateElement(id, props) {
+                const element = this.elements.find(el => el.id === id);
+                if (element) {
+                    if (props.content) {
+                        element.domElement.textContent = props.content;
+                    }
+                    if (props.style) {
+                        Object.assign(element.domElement.style, props.style);
+                    }
+                    console.log(`Updated element: ${id}, new position: (${element.domElement.style.left}, ${element.domElement.style.top})`);
+                }
+            }
+
+            createParticleSystems() {
+                for (const [id, data] of Object.entries(this.animationData.elements)) {
+                    if (data.type === 'particle') {
+                        this.particleSystems[id] = new EmojiParticleSystem(this.container, data.options, id);
+                        console.log(`Created particle system: ${id}`);
+                    }
+                }
+            }
+
+            createAnimationSteps() {
+                this.timeline.clear(); // Clear previous timeline
+                for (const step of this.animationData.steps) {
+                    switch (step.type) {
+                        case 'set':
+                            if (step.target && this.elements.find(el => el.id === step.target)) {
+                                this.timeline.call(() => {
+                                    this.updateElement(step.target, step.props);
+                                    console.log(`Set animation: ${step.target}, props: ${JSON.stringify(step.props)}`);
+                                });
+                            } else if (step.target === 'parent' || step.target === 'container') {
+                                this.timeline.set(this.container, step.props);
+                                console.log(`Set animation for container: ${JSON.stringify(step.props)}`);
+                            } else if (step.target) {
+                                console.warn(`Element "${step.target}" not found for set animation. Skipping this step.`);
+                            } else {
+                                console.warn(`Invalid target for set animation. Skipping this step.`);
+                            }
+                            break;
+                        case 'to':
+                            const element = this.elements.find(el => el.id === step.target);
+                            if (element) {
+                                if (element.domElement.tagName.toLowerCase() === 'svg') {
+                                    // Handle SVG elements differently
+                                    this.timeline.to(element.domElement, {
+                                        ...step.props,
+                                        attr: step.props, // Apply properties as attributes for SVG
+                                        onStart: () => console.log(`Starting SVG animation: ${step.target}, props: ${JSON.stringify(step.props)}`),
+                                        onComplete: () => console.log(`Completed SVG animation: ${step.target}`)
+                                    });
+                                } else {
+                                    this.timeline.to(element.domElement, {
+                                        ...step.props,
+                                        onStart: () => console.log(`Starting animation: ${step.target}, props: ${JSON.stringify(step.props)}`),
+                                        onComplete: () => console.log(`Completed animation: ${step.target}`)
+                                    });
+                                }
+                            } else if (step.target === 'parent' || step.target === 'container') {
+                                this.timeline.to(this.container, {
+                                    ...step.props,
+                                    onStart: () => console.log(`Starting container animation, props: ${JSON.stringify(step.props)}`),
+                                    onComplete: () => console.log(`Completed container animation`)
+                                });
+                            } else if (step.target) {
+                                console.warn(`Element "${step.target}" not found for to animation. Skipping this step.`);
+                            } else {
+                                console.warn(`Invalid target for to animation. Skipping this step.`);
+                            }
+                            break;
+                        case 'dialog':
+                            this.timeline.call(() => this.showDialog(step));
+                            break;
+                        case 'function':
+                            if (typeof this[step.function] === 'function') {
+                                this.timeline.call(() => {
+                                    console.log(`Calling function: ${step.function}`);
+                                    this[step.function](...(step.args || []));
+                                });
+                            } else {
+                                console.warn(`Function "${step.function}" not found`);
+                            }
+                            break;
+                        case 'startParticles':
+                            if (this.particleSystems[step.target]) {
+                                this.timeline.call(() => {
+                                    const targetElement = this.elements.find(el => el.id === step.options.targetElement);
+                                    if (targetElement) {
+                                        this.particleSystems[step.target].options.targetSelector = `#${targetElement.id}`;
+                                        console.log(`Starting particle system: ${step.target}, target: ${targetElement.id}`);
+                                    } else {
+                                        console.log(`Starting particle system: ${step.target}, no target element`);
+                                    }
+                                    this.particleSystems[step.target].start();
+                                    this.currentParticleSystems.push(this.particleSystems[step.target]);
+                                });
+                                this.timeline.call(() => {
+                                    console.log(`Stopping particle system: ${step.target}`);
+                                    this.particleSystems[step.target].stop();
+                                }, null, `+=${step.duration || this.particleSystems[step.target].options.duration}`);
+                            } else {
+                                console.warn(`Particle system "${step.target}" not found`);
+                            }
+                            break;
+                        case 'stopParticles':
+                            if (this.particleSystems[step.target]) {
+                                this.timeline.call(() => {
+                                    console.log(`Manually stopping particle system: ${step.target}`);
+                                    this.particleSystems[step.target].stop();
+                                    const index = this.currentParticleSystems.indexOf(this.particleSystems[step.target]);
+                                    if (index > -1) {
+                                        this.currentParticleSystems.splice(index, 1);
+                                    }
+                                });
+                            } else {
+                                console.warn(`Particle system "${step.target}" not found`);
+                            }
+                            break;
+                        case 'changeScene':
+                            this.timeline.call(() => this.changeScene(step.sceneName));
+                            break;
+                    }
+                }
+            }
+
+            showDialog(dialogData) {
+                const target = this.elements.find(el => el.id === dialogData.target);
+                if (!target) {
+                    console.warn(`Target "${dialogData.target}" not found for dialog`);
+                    return;
+                }
+
+                const dialog = document.createElement('div');
+                dialog.className = 'dialog-bubble';
+                dialog.textContent = dialogData.text;
+                this.container.appendChild(dialog);
+
+                const positionDialog = () => {
+                    const targetRect = target.domElement.getBoundingClientRect();
+                    const containerRect = this.container.getBoundingClientRect();
+
+                    dialog.style.left = `${(targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100}%`;
+                    dialog.style.top = `${(targetRect.top - containerRect.top) / containerRect.height * 100 - 10}%`;
+                    dialog.style.transform = 'translate(-50%, -100%)';
+                };
+
+                positionDialog();
+                window.addEventListener('resize', positionDialog);
+
+                gsap.timeline()
+                    .set(dialog, { opacity: 0, scale: 0 })
+                    .to(dialog, { duration: 0.5, opacity: 1, scale: 1, ease: 'back.out(1.7)' })
+                    .to(dialog, { duration: 0.5, opacity: 0, scale: 0, delay: dialogData.duration || 2 })
+                    .call(() => {
+                        dialog.remove();
+                        window.removeEventListener('resize', positionDialog);
+                    });
+            }
+
+            zoomCamera(target, scale = 1.5, duration = 2) {
+                const targetElement = this.elements.find(el => el.id === target);
+                if (!targetElement) {
+                    console.warn(`Target "${target}" not found for camera zoom`);
+                    return;
+                }
+
+                const targetRect = targetElement.domElement.getBoundingClientRect();
+                const containerRect = this.container.getBoundingClientRect();
+
+                const xCenter = (targetRect.left - containerRect.left + targetRect.width / 2) / containerRect.width * 100;
+                const yCenter = (targetRect.top - containerRect.top + targetRect.height / 2) / containerRect.height * 100;
+
+                // First, reset the camera smoothly
+                return this.resetCameraSmooth(duration / 2).then(() => {
+                    // Then, perform the zoom
+                    return gsap.to(this.container, {
+                        duration: duration / 2,
+                        scale: scale,
+                        x: `${-xCenter * (scale - 1)}%`,
+                        y: `${-yCenter * (scale - 1)}%`,
+                        ease: "power2.inOut"
+                    });
+                });
+            }
+
+            resetCamera(duration = 1.5) {
+                return gsap.to(this.container, {
+                    duration: duration,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    ease: "power2.inOut"
+                });
+            }
+
+            resetCameraSmooth(duration = 0.75) {
+                return gsap.to(this.container, {
+                    duration: duration,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    ease: "power2.inOut"
+                });
+            }
+
+            addCurrentParticleSystem(particleSystemId) {
+                const particleSystem = this.particleSystems[particleSystemId];
+                if (particleSystem) {
+                    this.currentParticleSystems.push(particleSystem);
+                }
+            }
+
+            play() {
+                this.timeline.play();
+            }
+
+            pause() {
+                this.timeline.pause();
+            }
+
+            reset() {
+                this.timeline.pause();
+                this.timeline.time(0);
+                this.resetCamera();
+                this.timeline.play();
+            }
+        }
+
+        let animation;
+            const controlsDrawer = document.getElementById('controls-drawer');
+            const drawerToggle = document.getElementById('drawer-toggle');
+            const playButton = document.getElementById('play-button');
+
+            drawerToggle.addEventListener('click', () => {
+                controlsDrawer.classList.toggle('drawer-closed');
+                controlsDrawer.classList.toggle('drawer-open');
+            });
+
+            playButton.addEventListener('click', () => {
+                const jsonInput = document.getElementById('json-input').value;
+                try {
+                    const animationData = JSON.parse(jsonInput);
+                    animation = new AnimationLibrary('animation-container', animationData);
+                    animation.init();
+                    
+                    // Automatically close the drawer when animation starts
+                    controlsDrawer.classList.add('drawer-closed');
+                    controlsDrawer.classList.remove('drawer-open');
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    alert('Invalid JSON input. Please check your JSON and try again.');
+                }
+            });
+
+            const loadJsonButton = document.getElementById('load-json-button');
+            loadJsonButton.addEventListener('click', () => {
+                fetch('superhero_wizard_battle.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('json-input').value = JSON.stringify(data, null, 2);
+                        alert('JSON data loaded successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error loading JSON:', error);
+                        alert('Error loading JSON file. Please check the console for details.');
+                    });
+            });
+
+            // Load and play the animation automatically when the page loads
+            window.addEventListener('load', () => {
+                fetch('superhero_wizard_battle.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        animation = new AnimationLibrary('animation-container', data);
+                        animation.init();
+                    })
+                    .catch(error => {
+                        console.error('Error loading JSON:', error);
+                        alert('Error loading JSON file. Please check the console for details.');
+                    });
+            });
+
+            // Add interactivity (click to pause/play)
+            document.getElementById('animation-container').addEventListener('click', () => {
+                if (animation && animation.timeline) {
+                    animation.timeline.paused() ? animation.play() : animation.pause();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
