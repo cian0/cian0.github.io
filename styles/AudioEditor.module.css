@@ -1,0 +1,688 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 100%;
+  min-height: 100vh;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.uploadButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: #4CAF50;
+  color: white;
+  border-radius: 8px;
+  font-size: 1.125rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 200px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.uploadButton:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.uploadButton:active {
+  transform: translateY(0);
+}
+
+.fileName {
+  font-size: 0.875rem;
+  color: #aaa;
+  text-align: center;
+  word-break: break-word;
+  max-width: 90vw;
+}
+
+.loadingMessage {
+  font-size: 0.875rem;
+  color: #ffaa00;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(255, 170, 0, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 170, 0, 0.3);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.waveformSection {
+  width: 100%;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+.waveform {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.timeDisplay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #00ff00;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: monospace;
+}
+
+.zoomControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border-radius: 8px;
+}
+
+.zoomControls button {
+  padding: 0.5rem 1rem;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.zoomControls button:active {
+  background: #555;
+}
+
+.zoomControls span {
+  font-size: 0.875rem;
+  color: #aaa;
+}
+
+.selectionInfo {
+  background: rgba(255, 255, 0, 0.2);
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #ffff00;
+  border: 1px solid rgba(255, 255, 0, 0.5);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.controlButton {
+  padding: 1rem;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controlButton:hover:not(:disabled) {
+  background: #1976D2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.controlButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.controlButton:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.instructions {
+  background: #2a2a2a;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.instructions p {
+  margin: 0.25rem 0;
+}
+
+.instructions strong {
+  color: #fff;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .controls {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .uploadButton {
+    font-size: 1.25rem;
+  }
+
+  .instructions {
+    font-size: 0.875rem;
+  }
+
+  .fileName {
+    font-size: 1rem;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1024px) {
+  .waveformSection {
+    min-height: 250px;
+  }
+
+  .controlButton {
+    min-height: 64px;
+    font-size: 1.125rem;
+  }
+}
+
+/* Extra small mobile optimization */
+@media (max-width: 360px) {
+  .container {
+    padding: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .uploadButton {
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+    min-width: 160px;
+  }
+
+  .controls {
+    gap: 0.5rem;
+  }
+
+  .controlButton {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    min-height: 48px;
+  }
+
+  .zoomControls {
+    gap: 0.5rem;
+  }
+
+  .zoomControls button {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .zoomControls span {
+    font-size: 0.75rem;
+  }
+}
+
+/* Modal styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: #2a2a2a;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid #444;
+}
+
+.modalTitle {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 1.5rem;
+  margin: 0;
+  font-size: 1.5rem;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 2px solid #4CAF50;
+}
+
+.modalContent {
+  padding: 1.5rem;
+}
+
+.fileInfo h3 {
+  color: #4CAF50;
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #3a3a3a;
+  gap: 1rem;
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #aaa;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.value {
+  color: #fff;
+  text-align: right;
+  word-break: break-word;
+}
+
+.changeNotice {
+  background: rgba(255, 152, 0, 0.15);
+  color: #ffaa00;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  text-align: center;
+  font-weight: 500;
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid #3a3a3a;
+  background: #1a1a1a;
+  border-radius: 0 0 12px 12px;
+}
+
+.cancelButton,
+.confirmButton {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  min-height: 56px;
+}
+
+.cancelButton {
+  background: #555;
+  color: #fff;
+}
+
+.cancelButton:hover {
+  background: #666;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cancelButton:active {
+  transform: translateY(0);
+}
+
+.confirmButton {
+  background: #4CAF50;
+  color: white;
+}
+
+.confirmButton:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.confirmButton:active {
+  transform: translateY(0);
+}
+
+.segmentsSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #3a3a3a;
+}
+
+.segmentsSection h3 {
+  color: #4CAF50;
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+}
+
+.segmentCard {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.segmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.segmentHeader h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.segmentDuration {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.segmentInfo {
+  margin-bottom: 0.75rem;
+}
+
+.segmentInfo .infoRow {
+  padding: 0.5rem 0;
+}
+
+.segmentExportButton {
+  width: 100%;
+  padding: 0.875rem;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.segmentExportButton:hover:not(:disabled) {
+  background: #1976D2;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(33, 150, 243, 0.4);
+}
+
+.segmentExportButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.segmentExportButton:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.bulkActions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.clearSplitsButton {
+  flex: 1;
+  padding: 0.875rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearSplitsButton:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(244, 67, 54, 0.4);
+}
+
+.clearSplitsButton:active {
+  transform: translateY(0);
+}
+
+.singleExportSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #3a3a3a;
+}
+
+@media (max-width: 640px) {
+  .modal {
+    max-width: 100%;
+    margin: 0;
+    max-height: 95vh;
+  }
+
+  .modalTitle {
+    font-size: 1.25rem;
+    padding: 1rem;
+  }
+
+  .modalContent {
+    padding: 1rem;
+  }
+
+  .modalActions {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .infoRow {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+  }
+
+  .value {
+    text-align: left;
+  }
+
+  .segmentCard {
+    padding: 0.875rem;
+  }
+
+  .segmentHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Export Panel Styles */
+.exportPanel {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border: 1px solid #444;
+}
+
+.exportPanelEmpty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #aaa;
+}
+
+.exportPanelEmpty p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.exportPanelContent h3 {
+  margin: 0 0 1rem 0;
+  color: #4CAF50;
+  font-size: 1.25rem;
+}
+
+.exportDetails {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.exportButton {
+  width: 100%;
+  padding: 1rem;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.exportButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.exportButton:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.segmentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.segmentItem {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.segmentDetails {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.clearButton {
+  width: 100%;
+  padding: 0.875rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearButton:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(244, 67, 54, 0.4);
+}
+
+.clearButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .exportPanel {
+    padding: 1rem;
+  }
+
+  .exportPanelContent h3 {
+    font-size: 1.125rem;
+  }
+
+  .segmentItem {
+    padding: 0.875rem;
+  }
+}
