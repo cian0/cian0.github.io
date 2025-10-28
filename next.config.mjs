@@ -10,14 +10,11 @@ const nextConfig = {
     };
     return config;
   },
-  // output: "export",
-  // basePath: "/portfolio",
-  // assetPrefix: "/portfolio",
   output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
-  basePath: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
+  basePath: '',
+  assetPrefix: '',
   publicRuntimeConfig: {
-    basePath: '/portfolio' || '',
+    basePath: '',
   },
   images: {
     unoptimized: true,
