@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import SEO from '../components/SEO';
 import portfolioData from '../data/portfolio-items.json';
 import { useCarousel } from "@/components/ui/carousel";
 import {
@@ -119,7 +120,14 @@ const CyberpunkSocialMediaLandingPage = () => {
   }
 
   return (
-    <div className="retro-container">
+    <>
+      <SEO 
+        title="Cian Portfolio - Interactive Web Apps & Games"
+        description="Explore a collection of interactive web applications, games, AI/ML projects, and creative experiments. Built with Next.js, React, and modern web technologies."
+        url="https://cian0.github.io"
+        keywords="web development portfolio, interactive apps, javascript games, AI experiments, ML projects, Next.js, React, retro games, web apps"
+      />
+      <div className="retro-container">
       <div className="retro-post">
       <div className="retro-header flex items-center justify-center">
         ⚡ DIGITAL VIBE CHECK 2.0 📡
@@ -233,7 +241,8 @@ const CyberpunkSocialMediaLandingPage = () => {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

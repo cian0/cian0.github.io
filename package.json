@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
-    "deploy": "next build && node scripts/create-nojekyll.js && gh-pages -d out -t true"
+    "generate-sitemap": "node scripts/generate-sitemap.js",
+    "deploy": "next build && node scripts/generate-sitemap.js && node scripts/create-nojekyll.js && gh-pages -d out -t true"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
