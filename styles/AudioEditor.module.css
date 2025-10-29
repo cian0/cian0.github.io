@@ -594,6 +594,54 @@
   font-size: 1.25rem;
 }
 
+.formatSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.formatSelector label {
+  color: #aaa;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.formatSelect {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  background: #2a2a2a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  min-height: 44px;
+}
+
+.formatSelect:hover {
+  border-color: #4CAF50;
+  background: #333;
+}
+
+.formatSelect:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.formatSelect option {
+  background: #2a2a2a;
+  color: #fff;
+  padding: 0.5rem;
+}
+
 .exportDetails {
   background: #1a1a1a;
   border-radius: 8px;

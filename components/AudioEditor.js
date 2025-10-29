@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../styles/AudioEditor.module.css';
+import lamejs from 'lamejs';
 
 const AudioEditor = () => {
   const [audioFile, setAudioFile] = useState(null);
@@ -13,6 +14,7 @@ const AudioEditor = () => {
   const [showExportModal, setShowExportModal] = useState(false);
   const [originalDuration, setOriginalDuration] = useState(0);
   const [splitPoints, setSplitPoints] = useState([]);
+  const [exportFormat, setExportFormat] = useState('wav');
   
   const audioContextRef = useRef(null);
   const sourceNodeRef = useRef(null);
@@ -333,6 +335,56 @@ const AudioEditor = () => {
     return segments;
   };
 
+  const encodeMP3 = async (audioBuffer, startSample, endSample) => {
+    const sampleRate = audioBuffer.sampleRate;
+    const numberOfChannels = audioBuffer.numberOfChannels;
+    const segmentLength = endSample - startSample;
+    
+    // Create MP3 encoder - 128kbps is a good default
+    const mp3encoder = new lamejs.Mp3Encoder(numberOfChannels, sampleRate, 128);
+    const mp3Data = [];
+    
+    const sampleBlockSize = 1152; // Must be a multiple of 576
+    
+    // Convert float samples to 16-bit PCM
+    const leftChannel = new Int16Array(segmentLength);
+    const rightChannel = numberOfChannels > 1 ? new Int16Array(segmentLength) : null;
+    
+    for (let i = 0; i < segmentLength; i++) {
+      const sample0 = audioBuffer.getChannelData(0)[startSample + i];
+      leftChannel[i] = sample0 < 0 ? sample0 * 0x8000 : sample0 * 0x7FFF;
+      
+      if (numberOfChannels > 1) {
+        const sample1 = audioBuffer.getChannelData(1)[startSample + i];
+        rightChannel[i] = sample1 < 0 ? sample1 * 0x8000 : sample1 * 0x7FFF;
+      }
+    }
+    
+    // Encode in blocks
+    for (let i = 0; i < segmentLength; i += sampleBlockSize) {
+      const leftChunk = leftChannel.subarray(i, i + sampleBlockSize);
+      const rightChunk = rightChannel ? rightChannel.subarray(i, i + sampleBlockSize) : leftChunk;
+      
+      const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
+      if (mp3buf.length > 0) {
+        mp3Data.push(mp3buf);
+      }
+      
+      // Yield to browser periodically
+      if (i % (sampleBlockSize * 10) === 0) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    }
+    
+    // Flush remaining data
+    const mp3buf = mp3encoder.flush();
+    if (mp3buf.length > 0) {
+      mp3Data.push(mp3buf);
+    }
+    
+    return new Blob(mp3Data, { type: 'audio/mp3' });
+  };
+
   const exportSegment = async (segment) => {
     if (!audioBuffer) return;
 
@@ -346,47 +398,63 @@ const AudioEditor = () => {
       const segmentLength = endSample - startSample;
       const numberOfChannels = audioBuffer.numberOfChannels;
 
-      const buffer = new ArrayBuffer(44 + segmentLength * numberOfChannels * 2);
-      const view = new DataView(buffer);
+      let blob;
+      let mimeType;
+      let fileExtension;
 
-      // WAV header
-      const writeString = (offset, string) => {
-        for (let i = 0; i < string.length; i++) {
-          view.setUint8(offset + i, string.charCodeAt(i));
-        }
-      };
+      if (exportFormat === 'mp3') {
+        // Export as MP3
+        blob = await encodeMP3(audioBuffer, startSample, endSample);
+        mimeType = 'audio/mp3';
+        fileExtension = 'mp3';
+      } else {
+        // Export as WAV
+        const buffer = new ArrayBuffer(44 + segmentLength * numberOfChannels * 2);
+        const view = new DataView(buffer);
 
-      writeString(0, 'RIFF');
-      view.setUint32(4, 36 + segmentLength * numberOfChannels * 2, true);
-      writeString(8, 'WAVE');
-      writeString(12, 'fmt ');
-      view.setUint32(16, 16, true);
-      view.setUint16(20, 1, true);
-      view.setUint16(22, numberOfChannels, true);
-      view.setUint32(24, sampleRate, true);
-      view.setUint32(28, sampleRate * numberOfChannels * 2, true);
-      view.setUint16(32, numberOfChannels * 2, true);
-      view.setUint16(34, 16, true);
-      writeString(36, 'data');
-      view.setUint32(40, segmentLength * numberOfChannels * 2, true);
+        // WAV header
+        const writeString = (offset, string) => {
+          for (let i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+          }
+        };
 
-      // Write audio data in chunks
-      let offset = 44;
-      const chunkSize = 50000;
-      
-      for (let i = startSample; i < endSample; i += chunkSize) {
-        const end = Math.min(i + chunkSize, endSample);
-        for (let j = i; j < end; j++) {
-          for (let channel = 0; channel < numberOfChannels; channel++) {
-            const sample = Math.max(-1, Math.min(1, audioBuffer.getChannelData(channel)[j]));
-            view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
-            offset += 2;
+        writeString(0, 'RIFF');
+        view.setUint32(4, 36 + segmentLength * numberOfChannels * 2, true);
+        writeString(8, 'WAVE');
+        writeString(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, numberOfChannels, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * numberOfChannels * 2, true);
+        view.setUint16(32, numberOfChannels * 2, true);
+        view.setUint16(34, 16, true);
+        writeString(36, 'data');
+        view.setUint32(40, segmentLength * numberOfChannels * 2, true);
+
+        // Write audio data in chunks
+        let offset = 44;
+        const chunkSize = 50000;
+        
+        for (let i = startSample; i < endSample; i += chunkSize) {
+          const end = Math.min(i + chunkSize, endSample);
+          for (let j = i; j < end; j++) {
+            for (let channel = 0; channel < numberOfChannels; channel++) {
+              const sample = Math.max(-1, Math.min(1, audioBuffer.getChannelData(channel)[j]));
+              view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+              offset += 2;
+            }
+          }
+          // Yield to browser every chunk
+          if (i + chunkSize < endSample) {
+            await new Promise(resolve => setTimeout(resolve, 0));
           }
         }
-        // Yield to browser every chunk
-        if (i + chunkSize < endSample) {
-          await new Promise(resolve => setTimeout(resolve, 0));
-        }
+
+        blob = new Blob([buffer], { type: 'audio/wav' });
+        mimeType = 'audio/wav';
+        fileExtension = 'wav';
       }
 
       // Generate filename
@@ -394,9 +462,8 @@ const AudioEditor = () => {
       const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5);
       const originalName = audioFile ? audioFile.name.replace(/\.[^/.]+$/, '') : 'edited-audio';
       const segmentName = splitPoints.length > 0 ? `_segment${segment.index + 1}` : '';
-      const filename = `${originalName}${segmentName}_${timestamp}.wav`;
+      const filename = `${originalName}${segmentName}_${timestamp}.${fileExtension}`;
 
-      const blob = new Blob([buffer], { type: 'audio/wav' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -613,6 +680,17 @@ const AudioEditor = () => {
             {selection && Math.abs(selection.end - selection.start) >= 0.1 && (
               <div className={styles.exportPanelContent}>
                 <h3>📤 Export Selected Range</h3>
+                <div className={styles.formatSelector}>
+                  <label>Export Format:</label>
+                  <select 
+                    value={exportFormat} 
+                    onChange={(e) => setExportFormat(e.target.value)}
+                    className={styles.formatSelect}
+                  >
+                    <option value="wav">WAV (Lossless)</option>
+                    <option value="mp3">MP3 (128kbps)</option>
+                  </select>
+                </div>
                 <div className={styles.exportDetails}>
                   <div className={styles.infoRow}>
                     <span className={styles.label}>Range:</span>
@@ -649,6 +727,17 @@ const AudioEditor = () => {
             {!selection && splitPoints.length > 0 && (
               <div className={styles.exportPanelContent}>
                 <h3>📤 Export Segments ({getSegments().length})</h3>
+                <div className={styles.formatSelector}>
+                  <label>Export Format:</label>
+                  <select 
+                    value={exportFormat} 
+                    onChange={(e) => setExportFormat(e.target.value)}
+                    className={styles.formatSelect}
+                  >
+                    <option value="wav">WAV (Lossless)</option>
+                    <option value="mp3">MP3 (128kbps)</option>
+                  </select>
+                </div>
                 <div className={styles.segmentsList}>
                   {getSegments().map((segment) => {
                     const segmentDuration = segment.end - segment.start;
